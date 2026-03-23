@@ -200,6 +200,44 @@ function renderMetricTexts(data) {
   });
 }
 
+function renderMobileMonthStack(data) {
+  const container = document.getElementById("mobile-month-stack");
+  if (!container) return;
+
+  const monthlyByYear = new Map();
+  data.monthlyReturns.forEach((row) => {
+    if (!monthlyByYear.has(row.year)) monthlyByYear.set(row.year, []);
+    monthlyByYear.get(row.year).push(row);
+  });
+
+  container.innerHTML = [...monthlyByYear.entries()]
+    .map(([year, rows]) => {
+      const cards = rows
+        .sort((a, b) => a.month - b.month)
+        .map((row) => {
+          const positive = Number(row.pnl_usd || 0) >= 0;
+          return `
+            <div class="mobile-month-card">
+              <div class="mobile-month-head">
+                <span class="mobile-month-label">${String(row.month).padStart(2, "0")} 月</span>
+                <strong class="mobile-month-return" style="color:${positive ? COLORS.positive : COLORS.negative}">${formatPercent(row.return_pct, 0)}</strong>
+              </div>
+              <strong class="mobile-month-pnl" style="color:${positive ? COLORS.positive : COLORS.negative}">${formatCurrency(row.pnl_usd, 0)}</strong>
+            </div>
+          `;
+        })
+        .join("");
+
+      return `
+        <section class="mobile-year-block">
+          <div class="mobile-year-title">${year}</div>
+          <div class="mobile-month-grid">${cards}</div>
+        </section>
+      `;
+    })
+    .join("");
+}
+
 function renderAssetCards(data) {
   const container = document.getElementById("asset-card-grid");
   const assetColors = { BTC: COLORS.btc, ETH: COLORS.eth, SOL: COLORS.sol };
@@ -509,6 +547,7 @@ function playAnimations(data) {
 function renderStatic(data) {
   setupHero(data);
   renderMetricTexts(data);
+  renderMobileMonthStack(data);
   renderAssetCards(data);
   drawHeatmap(document.getElementById("heatmap-canvas"), data);
 }
