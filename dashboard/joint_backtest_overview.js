@@ -17,6 +17,7 @@ const COLORS = {
 const state = {
   data: null,
   animationsPlayed: false,
+  mobileChartMode: "both",
 };
 
 function parseTimestamp(raw) {
@@ -290,6 +291,15 @@ function drawPerformanceCharts(data, progress = 1) {
     leftLabelFormatter: (value) => formatCompactCurrency(value),
     compact: true,
   });
+
+  const isMobile = window.matchMedia("(max-width: 760px)").matches;
+  if (isMobile) {
+    equityCanvas.style.display = state.mobileChartMode === "btc" ? "none" : "block";
+    btcCanvas.style.display = state.mobileChartMode === "equity" ? "none" : "block";
+  } else {
+    equityCanvas.style.display = "block";
+    btcCanvas.style.display = "block";
+  }
 }
 
 function drawTimeSeriesWithMarkers(canvas, series, stroke, markers, progress, options = {}) {
@@ -503,6 +513,20 @@ function renderStatic(data) {
   drawHeatmap(document.getElementById("heatmap-canvas"), data);
 }
 
+function setupMobileChartTabs() {
+  document.querySelectorAll(".mobile-chart-tab").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.mobileChartMode = button.dataset.chart;
+      document.querySelectorAll(".mobile-chart-tab").forEach((tab) => {
+        tab.classList.toggle("active", tab === button);
+      });
+      if (state.data) {
+        drawPerformanceCharts(state.data, 1);
+      }
+    });
+  });
+}
+
 function setupReveal(data) {
   const observer = new IntersectionObserver(
     (entries) => {
@@ -525,6 +549,7 @@ async function init() {
     throw new Error(`Failed to load data: ${response.status}`);
   }
   state.data = preprocess(await response.json());
+  setupMobileChartTabs();
   renderStatic(state.data);
   setupReveal(state.data);
   window.addEventListener("resize", () => {

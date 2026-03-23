@@ -83,6 +83,11 @@
                 <span><i class="swatch swatch-btc"></i>BTC 价格</span>
               </div>
             </div>
+            <div class="mobile-chart-tabs" id="mobile-chart-tabs">
+              <button class="mobile-chart-tab active" data-chart="both" type="button">双图</button>
+              <button class="mobile-chart-tab" data-chart="equity" type="button">净值</button>
+              <button class="mobile-chart-tab" data-chart="btc" type="button">BTC</button>
+            </div>
             <canvas id="performance-equity-canvas"></canvas>
             <canvas id="performance-btc-canvas"></canvas>
           </div>
@@ -95,7 +100,9 @@
           </div>
           <div class="heatmap-layout">
             <div class="heatmap-card">
-              <canvas id="heatmap-canvas"></canvas>
+              <div class="heatmap-scroll">
+                <canvas id="heatmap-canvas"></canvas>
+              </div>
             </div>
             <aside class="heatmap-summary">
               <div class="summary-line">

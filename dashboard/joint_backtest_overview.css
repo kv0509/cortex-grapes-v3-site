@@ -275,6 +275,10 @@ section {
   font-size: 13px;
 }
 
+.mobile-chart-tabs {
+  display: none;
+}
+
 .chart-legend span {
   display: inline-flex;
   align-items: center;
@@ -316,6 +320,11 @@ section {
   grid-template-columns: minmax(0, 1fr) 320px;
   gap: 32px;
   align-items: start;
+}
+
+.heatmap-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 #heatmap-canvas {
@@ -539,12 +548,19 @@ section {
 
   .site-nav {
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    overflow-x: auto;
     gap: 8px;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .site-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .site-nav a {
+    flex: 0 0 auto;
     text-align: center;
     padding: 12px 10px;
     background: rgba(255, 255, 255, 0.72);
@@ -614,7 +630,8 @@ section {
   }
 
   .metrics-grid {
-    gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
   }
 
   .metric-block strong {
@@ -637,8 +654,31 @@ section {
   }
 
   .chart-legend {
-    gap: 12px;
+    display: none;
+  }
+
+  .mobile-chart-tabs {
+    display: inline-flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .mobile-chart-tab {
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 8px 12px;
     font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .mobile-chart-tab.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
   }
 
   #performance-equity-canvas {
@@ -650,6 +690,7 @@ section {
   }
 
   #heatmap-canvas {
+    min-width: 720px;
     height: 320px;
   }
 
@@ -697,7 +738,22 @@ section {
   }
 
   .asset-card-grid {
-    gap: 18px;
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .asset-card-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .asset-card {
+    min-width: 84vw;
+    flex: 0 0 84vw;
+    scroll-snap-align: start;
   }
 
   .asset-card-head h4 {
