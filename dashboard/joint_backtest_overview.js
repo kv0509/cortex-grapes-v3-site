@@ -549,6 +549,8 @@ function renderStatic(data) {
   renderMetricTexts(data);
   renderMobileMonthStack(data);
   renderAssetCards(data);
+  drawHeroCurve(document.getElementById("hero-equity-canvas"), data.equityCurve, 1);
+  drawPerformanceCharts(data, 1);
   drawHeatmap(document.getElementById("heatmap-canvas"), data);
 }
 
