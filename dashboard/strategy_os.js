@@ -60,19 +60,19 @@ function renderHero(data) {
   const citrus = data.strategies.citrus;
   target.innerHTML = `
     <article class="hero-stat">
-      <div class="hero-stat-label">Dual Strategy Return</div>
+      <div class="hero-stat-label">Two Engines</div>
       <div class="hero-stat-value">${fmtPct(grapes.summary.total_return_pct)} / ${fmtPct(citrus.portfolio.total_return_pct_on_base)}</div>
-      <div class="hero-stat-sub">一边是已经走出稳定复利曲线的 🍇 Grapes，一边是正在把执行质量继续打磨的 🍊 Citrus。总控板先把两条收益线放在一起，看谁更强、谁更稳。</div>
+      <div class="hero-stat-sub"><strong>🍇 Grapes — The Compounding Engine</strong><br/>Built to survive regimes and extract structured trend alpha.<br/><br/><strong>🍊 Citrus — The Opportunistic Engine</strong><br/>Built to exploit dislocations, flow imbalances, and short-term inefficiencies.<br/><br/>One compounds. One adapts. Together, they capture what single strategies miss.</div>
     </article>
     <article class="hero-stat">
-      <div class="hero-stat-label">Per-Trade Nominal</div>
+      <div class="hero-stat-label">Unified Basis</div>
       <div class="hero-stat-value">${fmtUsd(2000)}</div>
-      <div class="hero-stat-sub">所有收益、回撤、胜率与月度表现统一按每笔 ${fmtUsd(2000)} 名义仓位换算，方便直接横向比较，不被仓位大小误导。</div>
+      <div class="hero-stat-sub">Every metric normalized.<br/>No leverage tricks. No sizing bias.<br/><br/>Pure strategy performance, comparable at a glance.</div>
     </article>
     <article class="hero-stat">
-      <div class="hero-stat-label">Current Snapshot</div>
+      <div class="hero-stat-label">Always Current</div>
       <div class="hero-stat-value">${fmtUsd(grapes.summary.final_equity)} / ${fmtUsd(citrus.portfolio.final_equity)}</div>
-      <div class="hero-stat-sub">页面会定时轮询最新数据；仓位平掉会自动从未平仓区消失，新仓出现会自动补进来，让主控板始终贴着当前状态走。</div>
+      <div class="hero-stat-sub">Live Capital State — ${fmtUsd(grapes.summary.final_equity)} / ${fmtUsd(citrus.portfolio.final_equity)}<br/><br/>No static reports. No outdated snapshots.<br/><br/>Positions update. PnL evolves. Capital shifts.<br/><br/>What you see is what is running — now.</div>
     </article>
   `;
 }
@@ -216,10 +216,10 @@ function renderActivePositions(targetId, positions) {
 function renderGrapesSummary(data) {
   const grapes = data.strategies.grapes;
   const rows = [
-    ["策略定位", "双引擎 4H 加密策略", "趋势跟随 + 均值回归并行，主资产用更严格的趋势质量过滤。"],
-    ["如何入场", "先看 Vegas 与模型共识", "趋势单要求方向站稳 Vegas 外，并通过概率、波动、OI 与同步 gate；均值回归只在极端偏离时触发。"],
-    ["如何出场", "先锁利润，再保护剩余仓位", "达到目标后执行 TP50 + Break-even；未达条件则用 retention、min hold 与风控规则决定退出。"],
-    ["当前特征", "生产版偏稳健", `当前组合 ${fmtPct(grapes.summary.total_return_pct)}，PF ${fmtNum(grapes.summary.profit_factor || 0)}，主要依赖 BTC / ETH 趋势段贡献。`],
+    ["策略定位", "面向趋势与结构机会的稳健策略", "这套策略更强调在高质量行情中参与，在不确定阶段减少噪音暴露，让收益曲线尽量平稳向上。"],
+    ["如何参与", "偏向清晰、可持续的机会", "系统会在更有延续性的价格结构里建立仓位，而不是追逐每一次短期波动。"],
+    ["如何管理", "先保护收益，再控制回撤", "当盈利出现后，系统更注重留住已经到手的利润，并把回撤管理放在优先位置。"],
+    ["当前特征", "偏稳健、偏耐心", `当前组合 ${fmtPct(grapes.summary.total_return_pct)}，PF ${fmtNum(grapes.summary.profit_factor || 0)}，更像一套追求长期复利质量的资产引擎。`],
   ];
   document.getElementById("grapes-summary").innerHTML = rows.map(([label, value, note]) => `
     <div class="stack-row narrative">
@@ -251,10 +251,10 @@ function renderGrapesRegime(data) {
 function renderCitrusSummary(data) {
   const p = data.strategies.citrus.portfolio;
   const rows = [
-    ["策略定位", "多资产 4H 执行组合", "以 majority 共识驱动 BTC / ETH / SOL，同一资金口径下比较各资产执行质量。"],
-    ["如何入场", "先确认方向，再确认市场是否支持", "先用 Vegas 判断市场方向，再结合价格位置、波动、仓位变化与资金结构确认这笔单是否值得做，避免在噪音段追进去。"],
-    ["如何出场", "执行型风控优先", "单笔以止盈、止损、最大持仓时长与 Break-even 管理为主，目标是减少假动作里的无效来回进出。"],
-    ["当前特征", "候选版偏质量优化", `当前组合 ${fmtPct(p.total_return_pct_on_base)}，Sharpe ${fmtNum(p.sharpe || 0)}，胜率 ${fmtPct(p.win_rate_pct, 1)}。`],
+    ["策略定位", "多资产执行与筛选策略", "这套策略更强调跨资产的一致性，希望在不同币种中维持更整洁的收益结构，而不是单押某一类机会。"],
+    ["如何参与", "只在更健康的机会里提高参与度", "系统会优先选择更有市场支持的机会，减少被假动作和噪音波动反复扫出的情况。"],
+    ["如何管理", "降低无效进出对组合的侵蚀", "核心目标不是提高频率，而是让每一次参与都更值得，把组合波动压到更可控的水平。"],
+    ["当前特征", "偏质量、偏筛选", `当前组合 ${fmtPct(p.total_return_pct_on_base)}，Sharpe ${fmtNum(p.sharpe || 0)}，胜率 ${fmtPct(p.win_rate_pct, 1)}，更像一套持续打磨执行质量的资产组合。`],
   ];
   document.getElementById("citrus-summary").innerHTML = rows.map(([label, value, note]) => `
     <div class="stack-row narrative">

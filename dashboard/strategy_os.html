@@ -11,32 +11,30 @@
       rel="stylesheet"
     />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="stylesheet" href="./strategy_os.css?v=20260324d" />
+    <link rel="stylesheet" href="./strategy_os.css?v=20260324f" />
   </head>
   <body>
     <div class="os-shell">
       <header class="os-header">
-        <div>
-          <p class="eyebrow">Where data happens</p>
-          <h1>NTS Alpha Lab</h1>
+        <div class="brand-block">
+          <img class="brand-logo" src="./assets/nts-alpha-lab-logo.png" alt="NTS Alpha Lab" />
         </div>
+        <nav class="top-switch" id="top-switch">
+          <button class="switch-tab active" data-view="all" type="button">总览</button>
+          <button class="switch-tab" data-view="grapes" type="button">🍇 Grapes</button>
+          <button class="switch-tab" data-view="citrus" type="button">🍊 Citrus</button>
+        </nav>
         <div class="header-meta">
           <span id="updated-at">--</span>
         </div>
       </header>
 
-      <nav class="top-switch" id="top-switch">
-        <button class="switch-tab active" data-view="all" type="button">总览</button>
-        <button class="switch-tab" data-view="grapes" type="button">Grapes</button>
-        <button class="switch-tab" data-view="citrus" type="button">Citrus</button>
-      </nav>
-
       <main class="os-main">
         <section class="panel hero-panel" id="master-board-hero">
           <div class="hero-copy">
             <p class="eyebrow">Master Board</p>
-            <h2>把两套策略放进同一张主控板，一眼看清谁在赚钱、谁更稳、谁在接管下一段行情。</h2>
-            <p class="hero-note">先看双策略总回报与收益曲线，再下钻到单策略的月度、阶段与当前仓位，让数据自己说明为什么这套系统值得托付资金。</p>
+            <h2>Where Capital Chooses Its Alpha</h2>
+            <p class="hero-note">两套策略，不是并列展示，而是竞争资本配置权。资金不会听故事，只会流向更强的那一边。NTS Alpha Lab 把策略变成一个系统：统一资金口径、统一风险衡量、统一执行标准。你看到的不是回测结果，而是正在运行的 Alpha 竞争场。</p>
           </div>
           <div class="hero-status" id="hero-status"></div>
         </section>
@@ -70,14 +68,14 @@
             <div class="panel subsection">
               <div class="card-head">
                 <p class="eyebrow">Grapes Sleeves</p>
-                <h4>资产收益分布</h4>
+                <h4>🍇 资产收益分布</h4>
               </div>
               <div id="grapes-asset-cards" class="asset-card-grid"></div>
             </div>
             <div class="panel subsection">
               <div class="card-head">
                 <p class="eyebrow">Citrus Sleeves</p>
-                <h4>资产执行配置</h4>
+                <h4>🍊 资产收益分布</h4>
               </div>
               <div id="citrus-asset-cards" class="asset-card-grid"></div>
             </div>
@@ -260,6 +258,6 @@
         </section>
       </main>
     </div>
-    <script type="module" src="./strategy_os.js?v=20260324d"></script>
+    <script type="module" src="./strategy_os.js?v=20260324f"></script>
   </body>
 </html>
