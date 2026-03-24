@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +11,7 @@
       rel="stylesheet"
     />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="stylesheet" href="./strategy_os.css?v=20260324f" />
+    <link rel="stylesheet" href="./strategy_os.css?v=20260324g" />
   </head>
   <body>
     <div class="os-shell">
@@ -20,11 +20,15 @@
           <img class="brand-logo" src="./assets/nts-alpha-lab-logo.png" alt="NTS Alpha Lab" />
         </div>
         <nav class="top-switch" id="top-switch">
-          <button class="switch-tab active" data-view="all" type="button">总览</button>
+          <button class="switch-tab active" data-view="all" type="button">Overview</button>
           <button class="switch-tab" data-view="grapes" type="button">🍇 Grapes</button>
           <button class="switch-tab" data-view="citrus" type="button">🍊 Citrus</button>
         </nav>
         <div class="header-meta">
+          <div class="lang-switch" id="lang-switch">
+            <button class="lang-tab active" data-lang="en" type="button">EN</button>
+            <button class="lang-tab" data-lang="zh" type="button">中文</button>
+          </div>
           <span id="updated-at">--</span>
         </div>
       </header>
@@ -34,7 +38,7 @@
           <div class="hero-copy">
             <p class="eyebrow">Master Board</p>
             <h2>Where Capital Chooses Its Alpha</h2>
-            <p class="hero-note">两套策略，不是并列展示，而是竞争资本配置权。资金不会听故事，只会流向更强的那一边。NTS Alpha Lab 把策略变成一个系统：统一资金口径、统一风险衡量、统一执行标准。你看到的不是回测结果，而是正在运行的 Alpha 竞争场。</p>
+            <p class="hero-note">Two engines do not sit side by side. They compete for capital. Money does not listen to stories. It flows toward the stronger engine. NTS Alpha Lab turns strategies into a system with one capital basis, one risk language, and one execution standard.</p>
           </div>
           <div class="hero-status" id="hero-status"></div>
         </section>
@@ -43,7 +47,7 @@
           <div class="panel-head">
             <div>
               <p class="eyebrow">Portfolio Overview</p>
-              <h3>双策略主控板</h3>
+              <h3>Dual-Strategy Command Board</h3>
             </div>
           </div>
           <div class="strategy-grid" id="strategy-grid"></div>
@@ -51,7 +55,7 @@
             <div class="comparison-card">
               <div class="card-head">
                 <p class="eyebrow">Overlay</p>
-                <h4>🍇 / 🍊 组合收益曲线</h4>
+                <h4>🍇 / 🍊 Equity Overlay</h4>
               </div>
               <div class="chart-legend" id="overview-legend"></div>
               <canvas id="overlay-overview-canvas" class="chart-canvas tall"></canvas>
@@ -59,7 +63,7 @@
             <div class="comparison-card">
               <div class="card-head">
                 <p class="eyebrow">Comparison</p>
-                <h4>核心指标对照</h4>
+                <h4>Core Metrics Side by Side</h4>
               </div>
               <div class="comparison-table" id="comparison-table"></div>
             </div>
@@ -68,14 +72,14 @@
             <div class="panel subsection">
               <div class="card-head">
                 <p class="eyebrow">Grapes Sleeves</p>
-                <h4>🍇 资产收益分布</h4>
+                <h4>🍇 Asset Profit Distribution</h4>
               </div>
               <div id="grapes-asset-cards" class="asset-card-grid"></div>
             </div>
             <div class="panel subsection">
               <div class="card-head">
                 <p class="eyebrow">Citrus Sleeves</p>
-                <h4>🍊 资产收益分布</h4>
+                <h4>🍊 Asset Profit Distribution</h4>
               </div>
               <div id="citrus-asset-cards" class="asset-card-grid"></div>
             </div>
@@ -94,7 +98,7 @@
             <div class="panel subsection">
               <div class="card-head">
                 <p class="eyebrow">Performance</p>
-                <h4>三资产收益叠图</h4>
+                <h4>Three-Asset Profit Overlay</h4>
               </div>
               <div class="chart-legend" id="grapes-legend"></div>
               <canvas id="grapes-detail-canvas" class="chart-canvas"></canvas>
@@ -102,7 +106,7 @@
             <div class="panel subsection">
               <div class="card-head">
                 <p class="eyebrow">Profile</p>
-                <h4>策略轮廓</h4>
+                <h4>Strategy Profile</h4>
               </div>
               <div id="grapes-summary" class="stack-list"></div>
             </div>
@@ -110,28 +114,28 @@
           <div class="panel subsection">
             <div class="card-head">
               <p class="eyebrow">Live State</p>
-              <h4>当前未平仓仓位</h4>
+              <h4>Open Positions</h4>
             </div>
             <div id="grapes-active-positions" class="position-grid"></div>
           </div>
           <div class="panel subsection">
             <div class="card-head">
               <p class="eyebrow">Assets</p>
-              <h4>多资产验证</h4>
+              <h4>Asset Validation</h4>
             </div>
             <div id="grapes-asset-cards-detail" class="asset-card-grid"></div>
           </div>
           <div class="panel subsection">
             <div class="card-head">
               <p class="eyebrow">Regime</p>
-              <h4>阶段表现</h4>
+              <h4>Regime Performance</h4>
             </div>
             <div id="grapes-regime" class="regime-grid"></div>
           </div>
           <div class="panel subsection">
             <div class="card-head">
               <p class="eyebrow">Monthly</p>
-              <h4>月度表现与热力图</h4>
+              <h4>Monthly Performance & Heatmap</h4>
             </div>
             <div id="grapes-monthly-summary" class="mini-summary-row"></div>
             <canvas id="grapes-heatmap-canvas" class="heatmap-canvas"></canvas>
@@ -139,14 +143,14 @@
           <div class="panel subsection">
             <div class="card-head">
               <p class="eyebrow">Trade Explorer</p>
-              <h4>按月 / 按年查看交易明细</h4>
+              <h4>Trade Explorer</h4>
             </div>
             <div id="grapes-trade-meta" class="mini-summary-row"></div>
             <div class="trade-filters">
               <select id="grapes-trade-scope">
-                <option value="month">月度</option>
-                <option value="year">年度</option>
-                <option value="all">全部</option>
+                <option value="month">Monthly</option>
+                <option value="year">Yearly</option>
+                <option value="all">All</option>
               </select>
               <select id="grapes-trade-value"></select>
             </div>
@@ -154,13 +158,13 @@
               <table class="trade-table">
                 <thead>
                   <tr>
-                    <th>资产</th>
-                    <th>方向</th>
-                    <th>类型</th>
-                    <th>入场</th>
-                    <th>出场</th>
-                    <th>持仓</th>
-                    <th>收益</th>
+                    <th>Asset</th>
+                    <th>Side</th>
+                    <th>Type</th>
+                    <th>Entry</th>
+                    <th>Exit</th>
+                    <th>Hold</th>
+                    <th>PnL</th>
                     <th>ROI</th>
                   </tr>
                 </thead>
@@ -182,7 +186,7 @@
             <div class="panel subsection">
               <div class="card-head">
                 <p class="eyebrow">Performance</p>
-                <h4>三资产收益叠图</h4>
+                <h4>Three-Asset Profit Overlay</h4>
               </div>
               <div class="chart-legend" id="citrus-legend"></div>
               <canvas id="citrus-return-canvas" class="chart-canvas"></canvas>
@@ -190,7 +194,7 @@
             <div class="panel subsection">
               <div class="card-head">
                 <p class="eyebrow">Profile</p>
-                <h4>策略轮廓</h4>
+                <h4>Strategy Profile</h4>
               </div>
               <div id="citrus-summary" class="stack-list"></div>
             </div>
@@ -198,28 +202,28 @@
           <div class="panel subsection">
             <div class="card-head">
               <p class="eyebrow">Live State</p>
-              <h4>当前未平仓仓位</h4>
+              <h4>Open Positions</h4>
             </div>
             <div id="citrus-active-positions" class="position-grid"></div>
           </div>
           <div class="panel subsection">
             <div class="card-head">
               <p class="eyebrow">Assets</p>
-              <h4>多资产验证</h4>
+              <h4>Asset Validation</h4>
             </div>
             <div id="citrus-asset-cards-detail" class="asset-card-grid"></div>
           </div>
           <div class="panel subsection">
             <div class="card-head">
               <p class="eyebrow">Regime</p>
-              <h4>阶段表现</h4>
+              <h4>Regime Performance</h4>
             </div>
             <div id="citrus-regime" class="regime-grid"></div>
           </div>
           <div class="panel subsection">
             <div class="card-head">
               <p class="eyebrow">Monthly</p>
-              <h4>月度表现与热力图</h4>
+              <h4>Monthly Performance & Heatmap</h4>
             </div>
             <div id="citrus-monthly-summary" class="mini-summary-row"></div>
             <canvas id="citrus-heatmap-canvas" class="heatmap-canvas"></canvas>
@@ -227,14 +231,14 @@
           <div class="panel subsection">
             <div class="card-head">
               <p class="eyebrow">Trade Explorer</p>
-              <h4>按月 / 按年查看交易明细</h4>
+              <h4>Trade Explorer</h4>
             </div>
             <div id="citrus-trade-meta" class="mini-summary-row"></div>
             <div class="trade-filters">
               <select id="citrus-trade-scope">
-                <option value="month">月度</option>
-                <option value="year">年度</option>
-                <option value="all">全部</option>
+                <option value="month">Monthly</option>
+                <option value="year">Yearly</option>
+                <option value="all">All</option>
               </select>
               <select id="citrus-trade-value"></select>
             </div>
@@ -242,12 +246,12 @@
               <table class="trade-table">
                 <thead>
                   <tr>
-                    <th>资产</th>
-                    <th>方向</th>
-                    <th>入场</th>
-                    <th>出场</th>
-                    <th>持仓</th>
-                    <th>收益</th>
+                    <th>Asset</th>
+                    <th>Side</th>
+                    <th>Entry</th>
+                    <th>Exit</th>
+                    <th>Hold</th>
+                    <th>PnL</th>
                     <th>ROI</th>
                   </tr>
                 </thead>
@@ -258,6 +262,6 @@
         </section>
       </main>
     </div>
-    <script type="module" src="./strategy_os.js?v=20260324f"></script>
+    <script type="module" src="./strategy_os.js?v=20260324g"></script>
   </body>
 </html>

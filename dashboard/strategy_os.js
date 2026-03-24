@@ -15,12 +15,132 @@ const COLORS = {
 const state = {
   data: null,
   view: "all",
+  lang: localStorage.getItem("strategy_os_lang") || "en",
   lastUpdatedAt: null,
   tradeFilters: {
     grapes: { scope: "month", value: "latest" },
     citrus: { scope: "month", value: "latest" },
   },
 };
+
+const I18N = {
+  en: {
+    updated: "Updated",
+    heroNote: "Two engines do not sit side by side. They compete for capital. Money does not listen to stories. It flows toward the stronger engine. NTS Alpha Lab turns strategies into a system with one capital basis, one risk language, and one execution standard.",
+    dualBoard: "Dual-Strategy Command Board",
+    equityOverlay: "🍇 / 🍊 Equity Overlay",
+    coreCompare: "Core Metrics Side by Side",
+    grapesSleeves: "🍇 Asset Profit Distribution",
+    citrusSleeves: "🍊 Asset Profit Distribution",
+    assetOverlay: "Three-Asset Profit Overlay",
+    strategyProfile: "Strategy Profile",
+    openPositions: "Open Positions",
+    assetValidation: "Asset Validation",
+    regimePerformance: "Regime Performance",
+    monthlyHeatmap: "Monthly Performance & Heatmap",
+    tradeExplorer: "Trade Explorer",
+    monthly: "Monthly",
+    yearly: "Yearly",
+    all: "All",
+    allPeriods: "All Periods",
+    asset: "Asset",
+    side: "Side",
+    type: "Type",
+    entry: "Entry",
+    exit: "Exit",
+    hold: "Hold",
+    pnl: "PnL",
+    noOpenPositions: "No open positions right now.",
+    entryTime: "Entry Time",
+    entryPrice: "Entry Price",
+    holdHours: "Hold Duration",
+    peakPnl: "Peak PnL",
+    currentFilteredTrades: "filtered trades",
+    wins: "wins",
+    losses: "losses",
+    totalPnl: "total pnl",
+    profitableMonths: "profitable months",
+    losingMonths: "losing months",
+    winRate: "win rate",
+    bestMonth: "best month",
+    trendUp: "Uptrend",
+    trendDown: "Downtrend",
+    rangeChop: "Range-bound",
+    transition: "Transition",
+    grapesProfileRows: [
+      ["Strategy role", "A compounding engine for structured markets", "Designed to stay patient through noise and push harder when market structure becomes clearer and more persistent."],
+      ["How it participates", "Selective in clean directional opportunities", "It prefers higher-quality trend structures instead of reacting to every short-term fluctuation."],
+      ["How it manages risk", "Protect gains before chasing more upside", "The focus is to retain realized progress and keep drawdowns controlled as the curve compounds."],
+      ["Current character", "Stable, selective, and resilient", "Built as a steadier return engine with stronger emphasis on quality, survival, and repeatability."],
+    ],
+    citrusProfileRows: [
+      ["Strategy role", "An opportunistic execution engine", "Designed to respond across assets when dislocations, positioning, or short-term inefficiencies create asymmetric setups."],
+      ["How it participates", "Confirms direction, then filters for quality", "It prioritizes opportunities with stronger market support and avoids lower-quality participation in noisy stretches."],
+      ["How it manages risk", "Reduce waste before forcing frequency", "The portfolio is shaped to cut low-value entries so capital is recycled into cleaner setups."],
+      ["Current character", "Adaptive, selective, and event-aware", "Built to improve participation quality across assets rather than simply increase trading frequency."],
+    ],
+  },
+  zh: {
+    updated: "更新于",
+    heroNote: "两套策略不是并列展示，而是在竞争资本配置权。资金不会听故事，只会流向更强的那一边。NTS Alpha Lab 把策略变成一个统一资金口径、统一风险语言、统一执行标准的系统。",
+    dualBoard: "双策略主控板",
+    equityOverlay: "🍇 / 🍊 组合收益曲线",
+    coreCompare: "核心指标对照",
+    grapesSleeves: "🍇 资产收益分布",
+    citrusSleeves: "🍊 资产收益分布",
+    assetOverlay: "三资产收益叠图",
+    strategyProfile: "策略轮廓",
+    openPositions: "当前未平仓仓位",
+    assetValidation: "多资产验证",
+    regimePerformance: "阶段表现",
+    monthlyHeatmap: "月度表现与热力图",
+    tradeExplorer: "交易明细",
+    monthly: "月度",
+    yearly: "年度",
+    all: "全部",
+    allPeriods: "全部时期",
+    asset: "资产",
+    side: "方向",
+    type: "类型",
+    entry: "入场",
+    exit: "出场",
+    hold: "持仓",
+    pnl: "收益",
+    noOpenPositions: "当前没有未平仓仓位。",
+    entryTime: "入场时间",
+    entryPrice: "入场价格",
+    holdHours: "持仓时长",
+    peakPnl: "峰值收益",
+    currentFilteredTrades: "当前筛选交易",
+    wins: "胜",
+    losses: "负",
+    totalPnl: "累计收益",
+    profitableMonths: "盈利月份",
+    losingMonths: "亏损月份",
+    winRate: "胜率",
+    bestMonth: "最佳单月",
+    trendUp: "上涨趋势",
+    trendDown: "下跌趋势",
+    rangeChop: "震荡行情",
+    transition: "过渡期",
+    grapesProfileRows: [
+      ["策略定位", "面向趋势与结构机会的稳健策略", "这套策略更强调在高质量行情中参与，在不确定阶段减少噪音暴露，让收益曲线尽量平稳向上。"],
+      ["如何参与", "偏向清晰、可持续的机会", "系统会在更有延续性的价格结构里建立仓位，而不是追逐每一次短期波动。"],
+      ["如何管理", "先保护收益，再控制回撤", "当盈利出现后，系统更注重留住已经到手的利润，并把回撤管理放在优先位置。"],
+      ["当前特征", "偏稳健、偏耐心", "更像一套追求长期复利质量的资产引擎。"],
+    ],
+    citrusProfileRows: [
+      ["策略定位", "多资产执行与筛选策略", "这套策略更强调跨资产的一致性，希望在不同币种中维持更整洁的收益结构。"],
+      ["如何参与", "只在更健康的机会里提高参与度", "系统会优先选择更有市场支持的机会，减少被假动作和噪音波动反复扫出的情况。"],
+      ["如何管理", "降低无效进出对组合的侵蚀", "核心目标不是提高频率，而是让每一次参与都更值得，把组合波动压到更可控的水平。"],
+      ["当前特征", "偏质量、偏筛选", "更像一套持续打磨执行质量的资产组合。"],
+    ],
+  },
+};
+
+function t(key) {
+  return I18N[state.lang][key] ?? I18N.en[key] ?? key;
+}
 
 function parseTimestamp(raw) {
   const dt = new Date(String(raw).replace(" ", "T"));
@@ -53,8 +173,46 @@ function setActiveView(view) {
   }
 }
 
+function applyLanguage() {
+  document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
+  document.querySelectorAll(".lang-tab").forEach((btn) => btn.classList.toggle("active", btn.dataset.lang === state.lang));
+  const setText = (selector, value) => {
+    const el = document.querySelector(selector);
+    if (el) el.textContent = value;
+  };
+  setText('.switch-tab[data-view="all"]', state.lang === "zh" ? "总览" : "Overview");
+  setText('#master-board-hero .hero-note', t("heroNote"));
+  setText('[data-panel="all"] .panel-head h3', t("dualBoard"));
+  setText('[data-panel="all"] .comparison-wrap .comparison-card:first-child h4', t("equityOverlay"));
+  setText('[data-panel="all"] .comparison-wrap .comparison-card:last-child h4', t("coreCompare"));
+  setText('[data-panel="all"] .sleeve-grid .panel:first-child h4', t("grapesSleeves"));
+  setText('[data-panel="all"] .sleeve-grid .panel:last-child h4', t("citrusSleeves"));
+  setText('[data-panel="grapes"] .detail-grid .panel:first-child h4', t("assetOverlay"));
+  setText('[data-panel="grapes"] .detail-grid .panel:last-child h4', t("strategyProfile"));
+  setText('[data-panel="grapes"] .panel.subsection:nth-of-type(2) h4', t("openPositions"));
+  setText('[data-panel="grapes"] .panel.subsection:nth-of-type(3) h4', t("assetValidation"));
+  setText('[data-panel="grapes"] .panel.subsection:nth-of-type(4) h4', t("regimePerformance"));
+  setText('[data-panel="grapes"] .panel.subsection:nth-of-type(5) h4', t("monthlyHeatmap"));
+  setText('[data-panel="grapes"] .panel.subsection:nth-of-type(6) h4', t("tradeExplorer"));
+  setText('[data-panel="citrus"] .detail-grid .panel:first-child h4', t("assetOverlay"));
+  setText('[data-panel="citrus"] .detail-grid .panel:last-child h4', t("strategyProfile"));
+  setText('[data-panel="citrus"] .panel.subsection:nth-of-type(2) h4', t("openPositions"));
+  setText('[data-panel="citrus"] .panel.subsection:nth-of-type(3) h4', t("assetValidation"));
+  setText('[data-panel="citrus"] .panel.subsection:nth-of-type(4) h4', t("regimePerformance"));
+  setText('[data-panel="citrus"] .panel.subsection:nth-of-type(5) h4', t("monthlyHeatmap"));
+  setText('[data-panel="citrus"] .panel.subsection:nth-of-type(6) h4', t("tradeExplorer"));
+  const grapesScope = document.getElementById("grapes-trade-scope");
+  const citrusScope = document.getElementById("citrus-trade-scope");
+  [grapesScope, citrusScope].forEach((select) => {
+    if (!select) return;
+    select.options[0].text = t("monthly");
+    select.options[1].text = t("yearly");
+    select.options[2].text = t("all");
+  });
+}
+
 function renderHero(data) {
-  document.getElementById("updated-at").textContent = `Updated ${String(data.meta.updated_at).slice(0, 16)}`;
+  document.getElementById("updated-at").textContent = `${t("updated")} ${String(data.meta.updated_at).slice(0, 16)}`;
   const target = document.getElementById("hero-status");
   const grapes = data.strategies.grapes;
   const citrus = data.strategies.citrus;
@@ -83,7 +241,7 @@ function renderStrategyCards(data) {
   document.getElementById("strategy-grid").innerHTML = `
     <article class="strategy-card">
       <div class="strategy-title">
-        <div><h4>🍇 Cortex Grapes</h4><p>趋势与均值回归并行，强调趋势段的质量和风控后的留存收益。</p></div>
+        <div><h4>🍇 Cortex Grapes</h4><p>${state.lang === "zh" ? "趋势与均值回归并行，强调趋势段的质量和风控后的留存收益。" : "Built to compound through structure, survive regime shifts, and keep capital working in cleaner trend conditions."}</p></div>
       </div>
       <div class="strategy-main">
         <div><div class="main-number" style="color:${COLORS.green}">${fmtPct(grapes.summary.total_return_pct)}</div><div class="kpi-sub">Total Return</div></div>
@@ -98,7 +256,7 @@ function renderStrategyCards(data) {
     </article>
     <article class="strategy-card">
       <div class="strategy-title">
-        <div><h4>🍊 Cortex Citrus</h4><p>多资产执行组合，核心目标是减少假动作里的低质量进出，让收益结构更干净。</p></div>
+        <div><h4>🍊 Cortex Citrus</h4><p>${state.lang === "zh" ? "多资产执行组合，核心目标是减少假动作里的低质量进出，让收益结构更干净。" : "Built to capture faster dislocations across assets and improve execution quality where shorter-term opportunities appear."}</p></div>
       </div>
       <div class="strategy-main">
         <div><div class="main-number" style="color:${COLORS.green}">${fmtPct(citrus.portfolio.total_return_pct_on_base)}</div><div class="kpi-sub">Total Return</div></div>
@@ -193,7 +351,7 @@ function renderActivePositions(targetId, positions) {
   const target = document.getElementById(targetId);
   if (!target) return;
   if (!positions || !positions.length) {
-    target.innerHTML = `<article class="position-card empty"><p>当前没有未平仓仓位。</p></article>`;
+    target.innerHTML = `<article class="position-card empty"><p>${t("noOpenPositions")}</p></article>`;
     return;
   }
   target.innerHTML = positions.map((row) => `
@@ -203,22 +361,20 @@ function renderActivePositions(targetId, positions) {
         <span class="dir-chip ${String(row.direction).toLowerCase()}">${row.direction}</span>
       </div>
       <div class="position-grid-inner">
-        <div><span>入场时间</span><strong>${fmtDate(row.entry_ts)}</strong></div>
-        <div><span>入场价格</span><strong>${fmtNum(row.entry_price, 4)}</strong></div>
-        ${row.hold_hours !== undefined ? `<div><span>持仓时长</span><strong>${row.hold_hours}h</strong></div>` : ""}
-        <div><span>峰值收益</span><strong class="${Number(row.peak_pnl_pct || 0) >= 0 ? "pos" : "neg"}">${fmtPct(row.peak_pnl_pct || 0, 2)}</strong></div>
+        <div><span>${t("entryTime")}</span><strong>${fmtDate(row.entry_ts)}</strong></div>
+        <div><span>${t("entryPrice")}</span><strong>${fmtNum(row.entry_price, 4)}</strong></div>
+        ${row.hold_hours !== undefined ? `<div><span>${t("holdHours")}</span><strong>${row.hold_hours}h</strong></div>` : ""}
+        <div><span>${t("peakPnl")}</span><strong class="${Number(row.peak_pnl_pct || 0) >= 0 ? "pos" : "neg"}">${fmtPct(row.peak_pnl_pct || 0, 2)}</strong></div>
       </div>
     </article>`).join("");
 }
 
 function renderGrapesSummary(data) {
   const grapes = data.strategies.grapes;
-  const rows = [
-    ["策略定位", "面向趋势与结构机会的稳健策略", "这套策略更强调在高质量行情中参与，在不确定阶段减少噪音暴露，让收益曲线尽量平稳向上。"],
-    ["如何参与", "偏向清晰、可持续的机会", "系统会在更有延续性的价格结构里建立仓位，而不是追逐每一次短期波动。"],
-    ["如何管理", "先保护收益，再控制回撤", "当盈利出现后，系统更注重留住已经到手的利润，并把回撤管理放在优先位置。"],
-    ["当前特征", "偏稳健、偏耐心", `当前组合 ${fmtPct(grapes.summary.total_return_pct)}，PF ${fmtNum(grapes.summary.profit_factor || 0)}，更像一套追求长期复利质量的资产引擎。`],
-  ];
+  const rows = [...I18N[state.lang].grapesProfileRows];
+  rows[3][2] = state.lang === "zh"
+    ? `当前组合 ${fmtPct(grapes.summary.total_return_pct)}，PF ${fmtNum(grapes.summary.profit_factor || 0)}，更像一套追求长期复利质量的资产引擎。`
+    : `Current return ${fmtPct(grapes.summary.total_return_pct)} with PF ${fmtNum(grapes.summary.profit_factor || 0)}. The engine leans toward cleaner compounding rather than forced activity.`;
   document.getElementById("grapes-summary").innerHTML = rows.map(([label, value, note]) => `
     <div class="stack-row narrative">
       <div class="stack-copy">
@@ -228,32 +384,30 @@ function renderGrapesSummary(data) {
       </div>
     </div>`).join("");
   renderBoardCards("grapes-board-cards", [
-    { title: "Final Equity", value: fmtUsd(grapes.summary.final_equity), label: "统一 1500 base", highlight: false },
-    { title: "Total Return", value: fmtPct(grapes.summary.total_return_pct), label: "组合总回报", highlight: true },
-    { title: "Max DD", value: fmtPct(grapes.summary.max_drawdown_pct), label: "最大回撤", negative: true },
-    { title: "Sharpe", value: fmtNum(grapes.summary.sharpe), label: "风险调整后收益" },
+    { title: "Final Equity", value: fmtUsd(grapes.summary.final_equity), label: state.lang === "zh" ? "统一 1500 base" : "1500 base capital", highlight: false },
+    { title: "Total Return", value: fmtPct(grapes.summary.total_return_pct), label: state.lang === "zh" ? "组合总回报" : "Total portfolio return", highlight: true },
+    { title: "Max DD", value: fmtPct(grapes.summary.max_drawdown_pct), label: state.lang === "zh" ? "最大回撤" : "Maximum drawdown", negative: true },
+    { title: "Sharpe", value: fmtNum(grapes.summary.sharpe), label: state.lang === "zh" ? "风险调整后收益" : "Risk-adjusted return" },
   ]);
   renderActivePositions("grapes-active-positions", grapes.active_positions || []);
 }
 
 function renderGrapesRegime(data) {
   const detail = data.strategies.grapes.regime_snapshot.regime_detail || [];
-  const map = { TREND_UP: "上涨趋势", TREND_DOWN: "下跌趋势", RANGE_CHOP: "震荡行情", TRANSITION: "过渡期" };
+  const map = { TREND_UP: t("trendUp"), TREND_DOWN: t("trendDown"), RANGE_CHOP: t("rangeChop"), TRANSITION: t("transition") };
   document.getElementById("grapes-regime").innerHTML = detail.map((row) => `
     <article class="regime-card">
       <h5>${map[row.regime_proxy] || row.regime_proxy}</h5>
-      <p>${row.trades} 笔 · 胜率 ${fmtPct(row.win_rate_pct)} · 累计 ${fmtUsd(row.total_pnl_usd)}</p>
+      <p>${row.trades} ${state.lang === "zh" ? "笔" : "trades"} · ${t("winRate")} ${fmtPct(row.win_rate_pct)} · ${t("totalPnl")} ${fmtUsd(row.total_pnl_usd)}</p>
     </article>`).join("");
 }
 
 function renderCitrusSummary(data) {
   const p = data.strategies.citrus.portfolio;
-  const rows = [
-    ["策略定位", "多资产执行与筛选策略", "这套策略更强调跨资产的一致性，希望在不同币种中维持更整洁的收益结构，而不是单押某一类机会。"],
-    ["如何参与", "只在更健康的机会里提高参与度", "系统会优先选择更有市场支持的机会，减少被假动作和噪音波动反复扫出的情况。"],
-    ["如何管理", "降低无效进出对组合的侵蚀", "核心目标不是提高频率，而是让每一次参与都更值得，把组合波动压到更可控的水平。"],
-    ["当前特征", "偏质量、偏筛选", `当前组合 ${fmtPct(p.total_return_pct_on_base)}，Sharpe ${fmtNum(p.sharpe || 0)}，胜率 ${fmtPct(p.win_rate_pct, 1)}，更像一套持续打磨执行质量的资产组合。`],
-  ];
+  const rows = [...I18N[state.lang].citrusProfileRows];
+  rows[3][2] = state.lang === "zh"
+    ? `当前组合 ${fmtPct(p.total_return_pct_on_base)}，Sharpe ${fmtNum(p.sharpe || 0)}，胜率 ${fmtPct(p.win_rate_pct, 1)}，更像一套持续打磨执行质量的资产组合。`
+    : `Current return ${fmtPct(p.total_return_pct_on_base)} with Sharpe ${fmtNum(p.sharpe || 0)} and win rate ${fmtPct(p.win_rate_pct, 1)}. The focus stays on cleaner participation and adaptive opportunity capture.`;
   document.getElementById("citrus-summary").innerHTML = rows.map(([label, value, note]) => `
     <div class="stack-row narrative">
       <div class="stack-copy">
@@ -263,23 +417,23 @@ function renderCitrusSummary(data) {
       </div>
     </div>`).join("");
   renderBoardCards("citrus-board-cards", [
-    { title: "Final Equity", value: fmtUsd(p.final_equity), label: "统一 1500 base" },
-    { title: "Total Return", value: fmtPct(p.total_return_pct_on_base), label: "组合总回报", highlight: true },
-    { title: "Max DD", value: fmtPct(p.max_dd_pct || 0), label: "最大回撤", negative: true },
-    { title: "Sharpe", value: fmtNum(p.sharpe || 0), label: "风险调整后收益" },
+    { title: "Final Equity", value: fmtUsd(p.final_equity), label: state.lang === "zh" ? "统一 1500 base" : "1500 base capital" },
+    { title: "Total Return", value: fmtPct(p.total_return_pct_on_base), label: state.lang === "zh" ? "组合总回报" : "Total portfolio return", highlight: true },
+    { title: "Max DD", value: fmtPct(p.max_dd_pct || 0), label: state.lang === "zh" ? "最大回撤" : "Maximum drawdown", negative: true },
+    { title: "Sharpe", value: fmtNum(p.sharpe || 0), label: state.lang === "zh" ? "风险调整后收益" : "Risk-adjusted return" },
   ]);
   renderActivePositions("citrus-active-positions", data.strategies.citrus.active_positions || []);
 }
 
 function renderCitrusRegime(data) {
   const detail = data.strategies.citrus.regime_snapshot?.regime_detail || [];
-  const map = { TREND_UP: "上涨趋势", TREND_DOWN: "下跌趋势", RANGE_CHOP: "震荡行情", TRANSITION: "过渡期" };
+  const map = { TREND_UP: t("trendUp"), TREND_DOWN: t("trendDown"), RANGE_CHOP: t("rangeChop"), TRANSITION: t("transition") };
   const target = document.getElementById("citrus-regime");
   if (!target) return;
   target.innerHTML = detail.map((row) => `
     <article class="regime-card">
       <h5>${map[row.regime_proxy] || row.regime_proxy}</h5>
-      <p>${row.trades} 笔 · 胜率 ${fmtPct(row.win_rate_pct)} · 累计 ${fmtUsd(row.total_pnl_usd)}</p>
+      <p>${row.trades} ${state.lang === "zh" ? "笔" : "trades"} · ${t("winRate")} ${fmtPct(row.win_rate_pct)} · ${t("totalPnl")} ${fmtUsd(row.total_pnl_usd)}</p>
     </article>`).join("");
 }
 
@@ -307,7 +461,7 @@ function syncTradeValueOptions(strategyKey) {
     ? ["all"]
     : [...new Set(trades.map((trade) => tradePeriodValue(trade, scope)))].sort().reverse();
   valueSelect.innerHTML = options
-    .map((value) => `<option value="${value}">${value === "all" ? "全部时期" : value}</option>`)
+    .map((value) => `<option value="${value}">${value === "all" ? t("allPeriods") : value}</option>`)
     .join("");
   if (state.tradeFilters[strategyKey].value === "latest") {
     state.tradeFilters[strategyKey].value = options[0] || "all";
@@ -481,10 +635,10 @@ function renderTradeMeta(targetId, trades) {
   const losses = trades.filter((trade) => Number(trade.net_pnl_usd) <= 0).length;
   const total = trades.reduce((sum, trade) => sum + Number(trade.net_pnl_usd || 0), 0);
   target.innerHTML = `
-    <span><strong>${trades.length}</strong> 当前筛选交易</span>
-    <span><strong>${wins}</strong> 胜</span>
-    <span><strong>${losses}</strong> 负</span>
-    <span><strong>${fmtUsd(total)}</strong> 累计收益</span>
+    <span><strong>${trades.length}</strong> ${t("currentFilteredTrades")}</span>
+    <span><strong>${wins}</strong> ${t("wins")}</span>
+    <span><strong>${losses}</strong> ${t("losses")}</span>
+    <span><strong>${fmtUsd(total)}</strong> ${t("totalPnl")}</span>
   `;
 }
 
@@ -569,10 +723,10 @@ function renderMonthlySummary(targetId, monthlySummary, winRate) {
   const target = document.getElementById(targetId);
   if (!target || !monthlySummary) return;
   target.innerHTML = `
-    <span><strong>${monthlySummary.profitable_months}</strong> 盈利月份</span>
-    <span><strong>${monthlySummary.losing_months}</strong> 亏损月份</span>
-    <span><strong>${fmtPct(winRate, 1)}</strong> 胜率</span>
-    <span><strong>${monthlySummary.best_month?.label || "—"}</strong> 最佳单月</span>
+    <span><strong>${monthlySummary.profitable_months}</strong> ${t("profitableMonths")}</span>
+    <span><strong>${monthlySummary.losing_months}</strong> ${t("losingMonths")}</span>
+    <span><strong>${fmtPct(winRate, 1)}</strong> ${t("winRate")}</span>
+    <span><strong>${monthlySummary.best_month?.label || "—"}</strong> ${t("bestMonth")}</span>
   `;
 }
 
@@ -619,6 +773,17 @@ function bindSwitches() {
   });
 }
 
+function bindLanguageSwitch() {
+  document.querySelectorAll(".lang-tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.lang = btn.dataset.lang;
+      localStorage.setItem("strategy_os_lang", state.lang);
+      applyLanguage();
+      if (state.data) render(state.data);
+    });
+  });
+}
+
 function bindTradeFilters() {
   ["grapes", "citrus"].forEach((strategyKey) => {
     const scopeSelect = document.getElementById(`${strategyKey}-trade-scope`);
@@ -636,6 +801,7 @@ function bindTradeFilters() {
 }
 
 function render(data) {
+  applyLanguage();
   renderHero(data);
   renderStrategyCards(data);
   renderComparison(data);
@@ -660,6 +826,7 @@ async function init() {
   state.data = raw;
   state.lastUpdatedAt = raw.meta.updated_at;
   bindSwitches();
+  bindLanguageSwitch();
   bindTradeFilters();
   render(raw);
   window.addEventListener("resize", () => render(state.data));
