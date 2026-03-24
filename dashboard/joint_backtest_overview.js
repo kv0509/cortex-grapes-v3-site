@@ -210,7 +210,8 @@ function animateNumber(el, target, format) {
 }
 
 function setupHero(data) {
-  document.querySelector('[data-animate-number="total_return_pct"]').style.color = COLORS.positive;
+  const totalReturnNode = document.querySelector('[data-animate-number="total_return_pct"]');
+  if (totalReturnNode) totalReturnNode.style.color = COLORS.positive;
   const monthCount = String(data.monthlyReturns.filter((row) => row.return_pct != null).length);
   document.querySelectorAll('[data-bind="monthly_count"]').forEach((node) => {
     node.textContent = monthCount;
@@ -222,7 +223,8 @@ function setupHero(data) {
 
 function renderMetricTexts(data) {
   const totalMonths = data.monthlyReturns.filter((row) => row.return_pct != null).length;
-  document.getElementById("heatmap-title").textContent = `每月收益一览，${totalMonths} 个月连续数据`;
+  const heatmapTitle = document.getElementById("heatmap-title");
+  if (heatmapTitle) heatmapTitle.textContent = `每月收益一览，${totalMonths} 个月连续数据`;
 
   const profitable = data.monthlySummary.profitable_months || 0;
   const losing = data.monthlySummary.losing_months || 0;
