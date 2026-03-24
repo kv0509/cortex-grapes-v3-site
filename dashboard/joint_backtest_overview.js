@@ -325,7 +325,7 @@ function renderMobileMonthStack(data) {
     })
     .join("");
 
-  container.innerHTML = `
+  const html = `
     <section class="mobile-year-block mobile-recent-block">
       <div class="mobile-year-header">
         <div>
@@ -340,6 +340,7 @@ function renderMobileMonthStack(data) {
       <div class="mobile-history-stack">${historyBlocks}</div>
     </details>
   `;
+  if (container) container.innerHTML = html;
 }
 
 function renderAssetCards(data) {
@@ -356,7 +357,7 @@ function renderAssetCards(data) {
   const assetSeries = data.assetCurves?.[selected.asset] || [];
   drawMiniAssetChart(focusCanvas, assetSeries, COLORS[selected.asset.toLowerCase()] || COLORS.equity, "pnl");
 
-  focusCopy.innerHTML = `
+  const focusHtml = `
     <div class="asset-focus-header">
       <div>
         <div class="asset-focus-label">${selected.asset}</div>
@@ -383,6 +384,7 @@ function renderAssetCards(data) {
       </div>
     </div>
   `;
+  if (focusCopy) focusCopy.innerHTML = focusHtml;
 
   const sortedByPnl = [...stats].sort((a, b) => Number(b.total_pnl || 0) - Number(a.total_pnl || 0));
   const highestWin = [...stats].sort((a, b) => Number(b.win_rate_pct || 0) - Number(a.win_rate_pct || 0))[0];
@@ -407,7 +409,7 @@ function renderAssetCards(data) {
   pushInsight(highestWin, (asset) => `胜率最高，达到 ${formatPercent(asset.win_rate_pct || 0)}，说明该资产的波动节奏与策略信号更匹配。`);
   pushInsight(mostSelective, (asset) => `交易次数最少，仅 ${asset.trades} 笔，但平均每笔达到 ${formatCurrency(calcAvgPnl(asset), 0)}。这说明每个资产的盈利结构并不一样。`);
 
-  insightList.innerHTML = insights.join("");
+  if (insightList) insightList.innerHTML = insights.join("");
 }
 
 function drawHeroCurve(canvas, equityCurve, progress = 1) {
