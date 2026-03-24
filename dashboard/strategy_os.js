@@ -206,8 +206,6 @@ function renderActivePositions(targetId, positions) {
         <div><span>入场时间</span><strong>${fmtDate(row.entry_ts)}</strong></div>
         <div><span>入场价格</span><strong>${fmtNum(row.entry_price, 4)}</strong></div>
         ${row.hold_hours !== undefined ? `<div><span>持仓时长</span><strong>${row.hold_hours}h</strong></div>` : ""}
-        ${row.position_size !== undefined ? `<div><span>仓位规模</span><strong>${fmtNum(row.position_size, 4)}</strong></div>` : ""}
-        ${row.remaining_size !== undefined ? `<div><span>剩余规模</span><strong>${fmtNum(row.remaining_size, 6)}</strong></div>` : ""}
         <div><span>峰值收益</span><strong class="${Number(row.peak_pnl_pct || 0) >= 0 ? "pos" : "neg"}">${fmtPct(row.peak_pnl_pct || 0, 2)}</strong></div>
       </div>
     </article>`).join("");
