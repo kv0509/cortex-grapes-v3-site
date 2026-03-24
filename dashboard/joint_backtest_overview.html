@@ -4,181 +4,293 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cortex Grapes V3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Montserrat:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="stylesheet" href="./joint_backtest_overview.css" />
   </head>
   <body>
-    <div class="site-shell">
-      <header class="site-header" id="top">
-        <div class="brand-lockup">
-          <p class="eyebrow">Quantitative Strategy System</p>
-          <h1>Cortex Grapes V3</h1>
+    <nav class="site-nav-shell">
+      <div class="nav-wordmark">Cortex Grapes <span>V3</span></div>
+      <div class="nav-center">
+        <a href="#metrics">指标</a>
+        <a href="#chart">业绩曲线</a>
+        <a href="#monthly">月度</a>
+        <a href="#logic">策略逻辑</a>
+        <a href="#assets">资产</a>
+        <a href="#risk">风险</a>
+      </div>
+      <div class="nav-status">
+        <span class="nav-dot"></span>
+        <span>策略运行中</span>
+      </div>
+      <button class="mobile-nav-toggle" id="mobile-nav-toggle" type="button" aria-label="打开导航" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="site-nav-drawer" id="site-nav">
+        <a href="#metrics">指标</a>
+        <a href="#chart">业绩曲线</a>
+        <a href="#monthly">月度</a>
+        <a href="#logic">策略逻辑</a>
+        <a href="#assets">资产</a>
+        <a href="#risk">风险</a>
+      </div>
+    </nav>
+
+    <section id="hero" class="hero-section">
+      <canvas class="hero-particles" id="hero-particles-canvas"></canvas>
+      <div class="hero-left">
+        <div class="hero-status">
+          <span class="nav-dot"></span>
+          <span>CORTEX GRAPES V3 · LIVE</span>
         </div>
-        <nav class="site-nav">
-          <a href="#section-performance">完整业绩</a>
-          <a href="#section-heatmap">月度表现</a>
-          <a href="#section-logic">策略逻辑</a>
-          <a href="#section-assets">资产表现</a>
-        </nav>
-      </header>
+        <div class="hero-eyebrow">Systematic Crypto Strategy · Since 2021</div>
+        <div class="hero-title">可验证的<br /><em>历史收益。</em></div>
+        <div class="hero-divider"></div>
+        <div class="hero-body">
+          自 2021 年运行至今，覆盖 BTC、ETH 与 SOL。<span data-bind="monthly_count">--</span> 个月连续数据，无间断记录。
+        </div>
+        <a class="hero-scroll-hint" href="#metrics"><span class="hero-scroll-line"></span>向下探索</a>
+      </div>
+      <div class="hero-right">
+        <div class="hero-number-block">
+          <div class="hero-number-label">累计收益</div>
+          <div class="hero-number" data-animate-number="total_return_pct" data-format="percent">+0%</div>
+          <div class="hero-stats">
+            <div>
+              <div class="hero-stat-label">净值</div>
+              <div class="hero-stat-val" data-bind="hero_equity">--</div>
+            </div>
+            <div>
+              <div class="hero-stat-label">最大回撤</div>
+              <div class="hero-stat-val neg" data-animate-number="max_drawdown_pct" data-format="percent">0%</div>
+            </div>
+            <div>
+              <div class="hero-stat-label">年化收益</div>
+              <div class="hero-stat-val" data-animate-number="annualized_return_pct" data-format="percent">0%</div>
+            </div>
+            <div>
+              <div class="hero-stat-label">Sharpe 比率</div>
+              <div class="hero-stat-val" data-animate-number="sharpe" data-format="number">0.00</div>
+            </div>
+          </div>
+        </div>
+        <canvas id="hero-equity-canvas" class="hero-chart-preview"></canvas>
+      </div>
+    </section>
 
-      <main>
-        <section class="hero-section">
-          <div class="hero-copy">
-            <p class="eyebrow">Systematic Crypto Strategy</p>
-            <h2>用连续、可验证的历史表现，证明策略值得信任。</h2>
-            <p class="hero-subtitle">自 2021 年运行至今，覆盖 BTC / ETH / SOL。</p>
-            <div class="hero-return-row">
-              <span class="hero-return-label">累计收益</span>
-              <strong class="hero-return-value" data-animate-number="total_return_pct" data-format="percent">+0%</strong>
-            </div>
-            <div class="hero-actions">
-              <a class="primary-button" href="#section-performance">查看完整业绩</a>
-              <a class="secondary-button" href="#section-cta">更多资料</a>
-            </div>
-          </div>
-          <div class="hero-visual">
-            <canvas id="hero-equity-canvas"></canvas>
-          </div>
-        </section>
+    <section id="metrics" class="metrics-section">
+      <div class="section-header">
+        <div class="section-num">01</div>
+        <div class="section-title">核心<em>指标</em></div>
+      </div>
+      <div class="metrics-row">
+        <div class="metric-col">
+          <div class="metric-tag">年化收益</div>
+          <div class="metric-figure pos" data-animate-number="annualized_return_pct" data-format="percent">0%</div>
+          <div class="metric-footnote">换算成年均复利，跨越完整牛熊周期验证。</div>
+        </div>
+        <div class="metric-col">
+          <div class="metric-tag">最大回撤</div>
+          <div class="metric-figure neg" data-animate-number="max_drawdown_pct" data-format="percent">0%</div>
+          <div class="metric-footnote">同期 BTC 最大跌幅超 70%，策略回撤显著更低。</div>
+        </div>
+        <div class="metric-col">
+          <div class="metric-tag">Sharpe 比率</div>
+          <div class="metric-figure neu" data-animate-number="sharpe" data-format="number">0.00</div>
+          <div class="metric-footnote">风险调整后收益，更适合作为长期稳定性证明。</div>
+        </div>
+      </div>
+    </section>
 
-        <section class="metrics-section section-tone-soft">
-          <div class="section-intro">
-            <p class="eyebrow">核心指标</p>
-            <h3>先回答最重要的问题：赚了多少，回撤多大，质量如何。</h3>
-          </div>
-          <div class="metrics-grid">
-            <article class="metric-block">
-              <strong data-animate-number="total_return_pct" data-format="percent">0%</strong>
-              <span>总收益。策略从初始净值到当前净值的累计增长。</span>
-            </article>
-            <article class="metric-block">
-              <strong data-animate-number="annualized_return_pct" data-format="percent">0%</strong>
-              <span>年化收益。把历史表现换算成年均复利水平。</span>
-            </article>
-            <article class="metric-block metric-block-negative">
-              <strong data-animate-number="max_drawdown_pct" data-format="percent">0%</strong>
-              <span>最大回撤。历史上从高点回撤最深的一段。</span>
-            </article>
-            <article class="metric-block">
-              <strong data-animate-number="sharpe" data-format="number">0.00</strong>
-              <span>Sharpe。单位波动换来的收益质量，越高越稳。</span>
-            </article>
-          </div>
-        </section>
+    <section id="chart" class="performance-section">
+      <div class="section-header">
+        <div class="section-num">02</div>
+        <div class="section-title">完整<em>业绩曲线</em></div>
+      </div>
+      <div class="chart-controls">
+        <div class="mobile-chart-tabs" id="mobile-chart-tabs">
+          <button class="mobile-chart-tab active" data-chart="both" type="button">对比</button>
+          <button class="mobile-chart-tab" data-chart="equity" type="button">净值</button>
+          <button class="mobile-chart-tab" data-chart="btc" type="button">BTC</button>
+        </div>
+      </div>
+      <div class="chart-box performance-chart-card">
+        <div class="chart-annotation">
+          <div>2021.12 — 2026.03</div>
+          <div>悬停查看数据</div>
+        </div>
+        <canvas id="performance-equity-canvas"></canvas>
+        <canvas id="performance-btc-canvas"></canvas>
+      </div>
+    </section>
 
-        <section class="performance-section" id="section-performance">
-          <div class="section-intro">
-            <p class="eyebrow">完整业绩</p>
-            <h3>净值曲线与 BTC 市场路径并排，直接看策略与市场的关系。</h3>
+    <section id="monthly" class="heatmap-section">
+      <div class="section-header">
+        <div class="section-num">03</div>
+        <div class="section-title" id="heatmap-title">月度<em>表现</em></div>
+      </div>
+      <div class="monthly-headline">
+        <div class="mh-item">
+          <div class="mh-val pos" data-bind="profitable_months">--</div>
+          <div class="mh-label">盈利月份</div>
+        </div>
+        <div class="mh-item">
+          <div class="mh-val neg" data-bind="losing_months">--</div>
+          <div class="mh-label">亏损月份</div>
+        </div>
+        <div class="mh-item">
+          <div class="mh-val neu" data-bind="monthly_hit_rate">--</div>
+          <div class="mh-label">月度胜率</div>
+        </div>
+        <div class="mh-item">
+          <div class="mh-val neu" data-bind="monthly_count">--</div>
+          <div class="mh-label">连续数据</div>
+        </div>
+      </div>
+      <div class="heatmap-layout">
+        <div class="heatmap-card">
+          <div class="mobile-month-stack" id="mobile-month-stack"></div>
+          <div class="heatmap-scroll">
+            <canvas id="heatmap-canvas"></canvas>
           </div>
-          <div class="performance-chart-card">
-            <div class="chart-title-row">
-              <div>
-                <p class="chart-kicker">Portfolio vs Market</p>
-                <h4>策略净值与 BTC 价格</h4>
-              </div>
-              <div class="chart-legend">
-                <span><i class="swatch swatch-equity"></i>策略净值</span>
-                <span><i class="swatch swatch-btc"></i>BTC 价格</span>
-              </div>
-            </div>
-            <div class="mobile-chart-tabs" id="mobile-chart-tabs">
-              <button class="mobile-chart-tab active" data-chart="both" type="button">双图</button>
-              <button class="mobile-chart-tab" data-chart="equity" type="button">净值</button>
-              <button class="mobile-chart-tab" data-chart="btc" type="button">BTC</button>
-            </div>
-            <canvas id="performance-equity-canvas"></canvas>
-            <canvas id="performance-btc-canvas"></canvas>
+        </div>
+        <aside class="heatmap-summary">
+          <div class="summary-line">
+            <span>最佳单月</span>
+            <strong data-bind="best_month_label">--</strong>
           </div>
-        </section>
+          <p class="heatmap-note">收益分布连续，不靠单月运气。</p>
+        </aside>
+      </div>
+    </section>
 
-        <section class="heatmap-section" id="section-heatmap">
-          <div class="section-intro">
-            <p class="eyebrow">月度表现</p>
-            <h3 id="heatmap-title">每月收益一览</h3>
-          </div>
-          <div class="heatmap-layout">
-            <div class="heatmap-card">
-              <div class="mobile-month-stack" id="mobile-month-stack"></div>
-              <div class="heatmap-scroll">
-                <canvas id="heatmap-canvas"></canvas>
-              </div>
+    <section id="logic" class="logic-section">
+      <div class="section-header">
+        <div class="section-num">04</div>
+        <div class="section-title">策略<em>逻辑</em></div>
+      </div>
+      <p class="logic-intro">数据可以被验证，逻辑可以被理解。以下是这套策略运作的三个核心层次。</p>
+      <div class="logic-list logic-copy">
+        <article class="logic-item logic-accordion is-open">
+          <button class="logic-toggle" type="button" aria-expanded="true">
+            <span class="logic-n">01</span>
+            <span class="logic-content">
+              <span class="logic-h">识别市场状态</span>
+            </span>
+            <span class="logic-plus logic-toggle-icon">+</span>
+          </button>
+          <div class="logic-panel">
+            <div class="logic-panel-inner">
+              <p class="logic-body">策略先判断市场是趋势、震荡还是过渡期，再决定是否提高暴露。</p>
+              <p class="logic-proof">
+                <span class="logic-proof-inner">当前样本中，<span data-bind="logic_trend_label">趋势阶段</span>累计实现 <strong data-bind="logic_trend_pnl">--</strong>，平均每笔 <strong data-bind="logic_trend_avg">--</strong>。</span>
+              </p>
             </div>
-            <aside class="heatmap-summary">
-              <div class="summary-line">
-                <span>盈利月份</span>
-                <strong data-bind="profitable_months">--</strong>
-              </div>
-              <div class="summary-line">
-                <span>亏损月份</span>
-                <strong data-bind="losing_months">--</strong>
-              </div>
-              <div class="summary-line">
-                <span>月度胜率</span>
-                <strong data-bind="monthly_hit_rate">--</strong>
-              </div>
-              <div class="summary-line">
-                <span>最佳单月</span>
-                <strong data-bind="best_month_label">--</strong>
-              </div>
-              <p class="heatmap-note">这部分的作用不是展示某一次幸运行情，而是证明收益分布真实、连续、可追踪。</p>
-            </aside>
           </div>
-        </section>
+        </article>
+        <article class="logic-item logic-accordion">
+          <button class="logic-toggle" type="button" aria-expanded="false">
+            <span class="logic-n">02</span>
+            <span class="logic-content">
+              <span class="logic-h">进场与离场条件</span>
+            </span>
+            <span class="logic-plus logic-toggle-icon">+</span>
+          </button>
+          <div class="logic-panel">
+            <div class="logic-panel-inner">
+              <p class="logic-body">入场看动量、波动率和趋势是否一致；离场看信号衰减和持仓管理。</p>
+              <p class="logic-proof">
+                <span class="logic-proof-inner">上涨趋势阶段胜率为 <strong data-bind="logic_up_win">--</strong>，说明策略更擅长在结构明确时把握延续。</span>
+              </p>
+            </div>
+          </div>
+        </article>
+        <article class="logic-item logic-accordion">
+          <button class="logic-toggle" type="button" aria-expanded="false">
+            <span class="logic-n">03</span>
+            <span class="logic-content">
+              <span class="logic-h">风险控制</span>
+            </span>
+            <span class="logic-plus logic-toggle-icon">+</span>
+          </button>
+          <div class="logic-panel">
+            <div class="logic-panel-inner">
+              <p class="logic-body">先减少低质量追价，再放大利润；风险依赖过滤器和分段止盈控制。</p>
+              <p class="logic-proof">
+                <span class="logic-proof-inner">整段历史最大回撤控制在 <strong data-animate-number="max_drawdown_pct" data-format="percent">0%</strong>，不是靠单次大赚覆盖连续亏损。</span>
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
 
-        <section class="logic-section" id="section-logic">
-          <div class="section-intro">
-            <p class="eyebrow">策略逻辑</p>
-            <h3>不是黑箱预测，而是确定性的信号、执行与风险控制。</h3>
+    <section id="assets" class="assets-section">
+      <div class="section-header">
+        <div class="section-num">05</div>
+        <div class="section-title">多资产<em>验证</em></div>
+      </div>
+      <p class="assets-note">相同逻辑在三个资产上运行，揭示策略在不同波动节奏下的真实表现差异。</p>
+      <div class="asset-comparison-card asset-tabs-card">
+        <div class="asset-comparison-head asset-tabs-head">
+          <div>
+            <p class="chart-kicker">多资产验证</p>
+            <h4>切换查看各资产表现</h4>
           </div>
-          <div class="logic-layout">
-            <div class="logic-copy">
-              <article>
-                <h4>识别什么市场状态</h4>
-                <p>系统持续识别趋势、震荡与过渡期。不是所有行情都做，而是在结构更清晰的阶段提高出手质量。</p>
-              </article>
-              <article>
-                <h4>什么时候进场和离场</h4>
-                <p>入场依赖多因子信号与趋势过滤的一致性。离场依赖概率衰减、止盈结构与持仓管理，不追求猜顶猜底。</p>
-              </article>
-              <article>
-                <h4>风险怎么控制</h4>
-                <p>策略强调先减少坏交易，再放大利润。通过 no-chase、Veto、Vegas 过滤和分段止盈，把大回撤压在可控区间。</p>
-              </article>
-            </div>
-            <div class="logic-flow">
-              <div class="flow-step">市场状态识别</div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-step">多因子信号确认</div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-step">执行与持仓管理</div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-step">止盈 / 风险退出</div>
-            </div>
+          <div class="asset-tabs" id="asset-tabs">
+            <button class="asset-tab active" data-asset="BTC" type="button">BTC</button>
+            <button class="asset-tab" data-asset="ETH" type="button">ETH</button>
+            <button class="asset-tab" data-asset="SOL" type="button">SOL</button>
           </div>
-        </section>
+        </div>
+        <div class="asset-focus-card">
+          <div class="asset-focus-chart-wrap">
+            <canvas id="asset-focus-canvas"></canvas>
+          </div>
+          <div class="asset-focus-copy" id="asset-focus-copy"></div>
+        </div>
+        <div class="asset-insight-list" id="asset-insight-list"></div>
+      </div>
+    </section>
 
-        <section class="assets-section" id="section-assets">
-          <div class="section-intro">
-            <p class="eyebrow">多资产验证</p>
-            <h3>不是单一资产碰巧有效，而是在多个主流交易标的上都能工作。</h3>
-          </div>
-          <div class="asset-card-grid" id="asset-card-grid"></div>
-        </section>
+    <section id="risk" class="risk-section">
+      <div class="section-header">
+        <div class="section-num">06</div>
+        <div class="section-title">风险<em>说明</em></div>
+      </div>
+      <div class="risk-grid">
+        <article class="risk-item">
+          <h4>震荡市场敏感</h4>
+          <p>策略在趋势明确的市场表现最优。长期震荡环境下，收益贡献会明显下降。</p>
+        </article>
+        <article class="risk-item">
+          <h4>连续亏损周期</h4>
+          <p>任何策略都存在连续亏损期。历史最大连续亏损阶段处于预期的风险范围内。</p>
+        </article>
+        <article class="risk-item">
+          <h4>历史非未来保证</h4>
+          <p>所有数据均为历史回测与实盘记录。未来市场结构变化可能影响表现。</p>
+        </article>
+      </div>
+    </section>
 
-        <section class="cta-section" id="section-cta">
-          <div class="cta-inner">
-            <p class="eyebrow">Call To Action</p>
-            <h3>对这个策略感兴趣？</h3>
-            <div class="cta-actions">
-              <a class="primary-button dark" href="../Reports/regime_trade_audit.xlsx">下载完整报告</a>
-              <a class="secondary-button dark" href="mailto:?subject=Cortex%20Grapes%20V3">联系我</a>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
+    <section id="cta" class="cta-section">
+      <div class="cta-inner">
+        <p class="eyebrow">下一步</p>
+        <h3>对这个策略感兴趣？</h3>
+        <div class="cta-actions">
+          <a class="primary-button dark" href="../Reports/regime_trade_audit.xlsx">下载完整报告</a>
+          <a class="secondary-button dark" href="mailto:?subject=Cortex%20Grapes%20V3">联系我</a>
+        </div>
+      </div>
+    </section>
 
     <script type="module" src="./joint_backtest_overview.js"></script>
   </body>
