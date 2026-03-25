@@ -58657,16 +58657,16 @@
         },
         "live": {
           "summary": {
-            "final_equity": 1437.71,
-            "net_pnl_usd": -62.29,
-            "total_return_pct": -4.15,
-            "profit_factor": 0.44,
-            "trades": 2,
-            "win_rate_pct": 50.0,
-            "avg_win_usd": 49.32,
-            "avg_loss_usd": -111.62,
+            "final_equity": 1582.89,
+            "net_pnl_usd": 82.89,
+            "total_return_pct": 5.53,
+            "profit_factor": 1.2,
+            "trades": 12,
+            "win_rate_pct": 66.7,
+            "avg_win_usd": 61.84,
+            "avg_loss_usd": -102.96,
             "sharpe": 0.0,
-            "max_dd_pct": -7.2
+            "max_dd_pct": -19.66
           },
           "portfolio_curve": [
             {
@@ -58674,23 +58674,71 @@
               "equity": 1500.0
             },
             {
+              "ts": "2026-03-01 00:00:00",
+              "equity": 1651.4
+            },
+            {
+              "ts": "2026-03-01 00:00:00",
+              "equity": 1817.0
+            },
+            {
+              "ts": "2026-03-05 16:00:00",
+              "equity": 1854.6
+            },
+            {
+              "ts": "2026-03-13 04:00:00",
+              "equity": 1876.8
+            },
+            {
+              "ts": "2026-03-13 04:00:00",
+              "equity": 1892.2
+            },
+            {
               "ts": "2026-03-15 12:00:00",
-              "equity": 1549.32
+              "equity": 1941.52
+            },
+            {
+              "ts": "2026-03-15 12:00:00",
+              "equity": 1970.12
+            },
+            {
+              "ts": "2026-03-16 04:25:00",
+              "equity": 1934.72
+            },
+            {
+              "ts": "2026-03-16 04:25:00",
+              "equity": 1959.32
+            },
+            {
+              "ts": "2026-03-19 08:00:00",
+              "equity": 1821.16
             },
             {
               "ts": "2026-03-20 04:00:00",
-              "equity": 1437.71
+              "equity": 1709.54
+            },
+            {
+              "ts": "2026-03-21 16:00:00",
+              "equity": 1582.89
             }
           ],
           "asset_curves": {
-            "BTC": [
+            "ETH": [
               {
                 "ts": "2021-12-07 20:00:00",
                 "pnl": 0.0
               },
               {
-                "ts": "2026-03-15 12:00:00",
-                "pnl": 49.32
+                "ts": "2026-03-01 00:00:00",
+                "pnl": 151.4
+              },
+              {
+                "ts": "2026-03-13 04:00:00",
+                "pnl": 173.6
+              },
+              {
+                "ts": "2026-03-19 08:00:00",
+                "pnl": 35.43
               }
             ],
             "SOL": [
@@ -58699,23 +58747,61 @@
                 "pnl": 0.0
               },
               {
+                "ts": "2026-03-01 00:00:00",
+                "pnl": 165.6
+              },
+              {
+                "ts": "2026-03-13 04:00:00",
+                "pnl": 181.0
+              },
+              {
                 "ts": "2026-03-20 04:00:00",
-                "pnl": -111.62
+                "pnl": 69.38
+              }
+            ],
+            "BTC": [
+              {
+                "ts": "2021-12-07 20:00:00",
+                "pnl": 0.0
+              },
+              {
+                "ts": "2026-03-05 16:00:00",
+                "pnl": 37.6
+              },
+              {
+                "ts": "2026-03-15 12:00:00",
+                "pnl": 86.92
+              },
+              {
+                "ts": "2026-03-15 12:00:00",
+                "pnl": 115.52
+              },
+              {
+                "ts": "2026-03-16 04:25:00",
+                "pnl": 80.12
+              },
+              {
+                "ts": "2026-03-16 04:25:00",
+                "pnl": 104.72
+              },
+              {
+                "ts": "2026-03-21 16:00:00",
+                "pnl": -21.93
               }
             ]
           },
           "monthly_summary": {
-            "profitable_months": 0,
-            "losing_months": 1,
+            "profitable_months": 1,
+            "losing_months": 0,
             "best_month": {
               "label": "2026-03",
-              "pnl_usd": -62.29,
-              "return_pct": -4.15
+              "pnl_usd": 82.89,
+              "return_pct": 5.53
             },
             "worst_month": {
               "label": "2026-03",
-              "pnl_usd": -62.29,
-              "return_pct": -4.15
+              "pnl_usd": 82.89,
+              "return_pct": 5.53
             }
           },
           "monthly_breakdown": [
@@ -58723,11 +58809,11 @@
               "label": "2026-03",
               "year": 2026,
               "month": 3,
-              "trade_count": 2,
-              "wins": 1,
-              "losses": 1,
-              "net_pnl": -62.29,
-              "return_pct": -4.15
+              "trade_count": 12,
+              "wins": 8,
+              "losses": 4,
+              "net_pnl": 82.89,
+              "return_pct": 5.53
             }
           ],
           "monthly_heatmap": [
@@ -58738,11 +58824,11 @@
                   "label": "2026-03",
                   "year": 2026,
                   "month": 3,
-                  "trade_count": 2,
-                  "wins": 1,
-                  "losses": 1,
-                  "net_pnl": -62.29,
-                  "return_pct": -4.15
+                  "trade_count": 12,
+                  "wins": 8,
+                  "losses": 4,
+                  "net_pnl": 82.89,
+                  "return_pct": 5.53
                 }
               ]
             }
@@ -58759,15 +58845,75 @@
               },
               {
                 "regime_proxy": "TRANSITION",
-                "trades": 1,
-                "win_rate_pct": 0.0,
-                "total_pnl_usd": -111.62,
-                "avg_pnl_usd": -111.62,
-                "profit_factor": 0.0
+                "trades": 11,
+                "win_rate_pct": 63.64,
+                "total_pnl_usd": 33.56,
+                "avg_pnl_usd": 3.05,
+                "profit_factor": 1.08
               }
             ]
           },
           "all_trades": [
+            {
+              "asset": "ETH",
+              "direction": "UNKNOWN",
+              "type": "Trend",
+              "entry_ts": "2026-03-01 00:00",
+              "exit_ts": "2026-03-01 00:00",
+              "hold_hours": 0.0,
+              "entry_price": 1895.02,
+              "exit_price": 1895.02,
+              "net_pnl_usd": 151.4,
+              "roi_pct_on_margin": 757.0
+            },
+            {
+              "asset": "SOL",
+              "direction": "UNKNOWN",
+              "type": "Trend",
+              "entry_ts": "2026-03-01 00:00",
+              "exit_ts": "2026-03-01 00:00",
+              "hold_hours": 0.0,
+              "entry_price": 80.63,
+              "exit_price": 80.63,
+              "net_pnl_usd": 165.6,
+              "roi_pct_on_margin": 828.0
+            },
+            {
+              "asset": "BTC",
+              "direction": "UNKNOWN",
+              "type": "Trend",
+              "entry_ts": "2026-03-05 16:00",
+              "exit_ts": "2026-03-05 16:00",
+              "hold_hours": 0.0,
+              "entry_price": 70950.1,
+              "exit_price": 70950.1,
+              "net_pnl_usd": 37.6,
+              "roi_pct_on_margin": 188.0
+            },
+            {
+              "asset": "ETH",
+              "direction": "UNKNOWN",
+              "type": "Trend",
+              "entry_ts": "2026-03-13 04:00",
+              "exit_ts": "2026-03-13 04:00",
+              "hold_hours": 0.0,
+              "entry_price": 2097.75,
+              "exit_price": 2097.75,
+              "net_pnl_usd": 22.2,
+              "roi_pct_on_margin": 111.0
+            },
+            {
+              "asset": "SOL",
+              "direction": "UNKNOWN",
+              "type": "Trend",
+              "entry_ts": "2026-03-13 04:00",
+              "exit_ts": "2026-03-13 04:00",
+              "hold_hours": 0.0,
+              "entry_price": 88.62,
+              "exit_price": 88.62,
+              "net_pnl_usd": 15.4,
+              "roi_pct_on_margin": 77.0
+            },
             {
               "asset": "BTC",
               "direction": "LONG",
@@ -58781,6 +58927,54 @@
               "roi_pct_on_margin": 246.61
             },
             {
+              "asset": "BTC",
+              "direction": "UNKNOWN",
+              "type": "Tiered",
+              "entry_ts": "2026-03-15 12:00",
+              "exit_ts": "2026-03-15 12:00",
+              "hold_hours": 0.0,
+              "entry_price": 71448.2,
+              "exit_price": 71448.2,
+              "net_pnl_usd": 28.6,
+              "roi_pct_on_margin": 143.0
+            },
+            {
+              "asset": "BTC",
+              "direction": "UNKNOWN",
+              "type": "Trend",
+              "entry_ts": "2026-03-16 04:25",
+              "exit_ts": "2026-03-16 04:25",
+              "hold_hours": 0.0,
+              "entry_price": 68954.3,
+              "exit_price": 68954.3,
+              "net_pnl_usd": -35.4,
+              "roi_pct_on_margin": -177.0
+            },
+            {
+              "asset": "BTC",
+              "direction": "UNKNOWN",
+              "type": "Trend",
+              "entry_ts": "2026-03-16 04:25",
+              "exit_ts": "2026-03-16 04:25",
+              "hold_hours": 0.0,
+              "entry_price": 70029.1,
+              "exit_price": 70029.1,
+              "net_pnl_usd": 24.6,
+              "roi_pct_on_margin": 123.0
+            },
+            {
+              "asset": "ETH",
+              "direction": "LONG",
+              "type": "Trend",
+              "entry_ts": "2026-03-17 04:03",
+              "exit_ts": "2026-03-19 08:00",
+              "hold_hours": 51.9,
+              "entry_price": 2326.89,
+              "exit_price": 2166.14,
+              "net_pnl_usd": -138.17,
+              "roi_pct_on_margin": -690.84
+            },
+            {
               "asset": "SOL",
               "direction": "LONG",
               "type": "Trend",
@@ -58791,6 +58985,18 @@
               "exit_price": 89.33,
               "net_pnl_usd": -111.62,
               "roi_pct_on_margin": -558.08
+            },
+            {
+              "asset": "BTC",
+              "direction": "LONG",
+              "type": "Trend",
+              "entry_ts": "2026-03-17 11:10",
+              "exit_ts": "2026-03-21 16:00",
+              "hold_hours": 100.8,
+              "entry_price": 75124.0,
+              "exit_price": 70366.6,
+              "net_pnl_usd": -126.65,
+              "roi_pct_on_margin": -633.27
             }
           ]
         }

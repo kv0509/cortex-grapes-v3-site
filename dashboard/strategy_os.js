@@ -703,11 +703,15 @@ function renderTradeTable(targetId, trades, includeType = false) {
   const ordered = [...trades].sort((a, b) => String(b.exit_ts).localeCompare(String(a.exit_ts)));
   target.innerHTML = ordered.map((trade) => {
     const pnl = Number(trade.net_pnl_usd || 0);
-    const isLong = String(trade.direction).toUpperCase() === "LONG" || String(trade.direction).toLowerCase() === "long";
+    const dir = String(trade.direction || "").toUpperCase();
+    const isLong = dir === "LONG";
+    const isShort = dir === "SHORT";
+    const sideLabel = isLong ? "Long" : isShort ? "Short" : "—";
+    const sideClass = isLong ? "pos" : isShort ? "neg" : "";
     return `
       <tr>
         <td class="mono">${trade.asset}</td>
-        <td class="mono ${isLong ? "pos" : "neg"}">${isLong ? "Long" : "Short"}</td>
+        <td class="mono ${sideClass}">${sideLabel}</td>
         ${includeType ? `<td class="mono">${trade.type || "Trend"}</td>` : ""}
         <td class="mono">${trade.entry_ts}</td>
         <td class="mono">${trade.exit_ts}</td>
