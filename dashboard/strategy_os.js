@@ -17,6 +17,10 @@ const state = {
   view: "all",
   lang: localStorage.getItem("strategy_os_lang") || "en",
   lastUpdatedAt: null,
+  lenses: {
+    grapes: "backtest",
+    citrus: "backtest",
+  },
   tradeFilters: {
     grapes: { scope: "month", value: "latest" },
     citrus: { scope: "month", value: "latest" },
@@ -63,6 +67,12 @@ const I18N = {
     losingMonths: "losing months",
     winRate: "win rate",
     bestMonth: "best month",
+    backtest: "Backtest",
+    live: "Live",
+    snapshotNoteBacktest: "Showing research validation and historical results.",
+    snapshotNoteLive: "Showing live execution and current strategy ledger.",
+    backtestSnapshot: "Backtest Snapshot",
+    liveSnapshot: "Live Execution",
     trendUp: "Uptrend",
     trendDown: "Downtrend",
     rangeChop: "Range-bound",
@@ -119,6 +129,12 @@ const I18N = {
     losingMonths: "亏损月份",
     winRate: "胜率",
     bestMonth: "最佳单月",
+    backtest: "回测",
+    live: "实盘",
+    snapshotNoteBacktest: "当前显示研究验证与历史结果。",
+    snapshotNoteLive: "当前显示实盘执行与当前账本。",
+    backtestSnapshot: "回测结果",
+    liveSnapshot: "实盘执行",
     trendUp: "上涨趋势",
     trendDown: "下跌趋势",
     rangeChop: "震荡行情",
@@ -174,6 +190,13 @@ function setActiveView(view) {
   }
 }
 
+function getStrategyLensData(strategyKey) {
+  const strategy = state.data?.strategies?.[strategyKey];
+  if (!strategy) return null;
+  const lens = state.lenses[strategyKey] || "backtest";
+  return strategy.execution_views?.[lens] || strategy.execution_views?.backtest || null;
+}
+
 function applyLanguage() {
   document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
   document.querySelectorAll(".lang-tab").forEach((btn) => btn.classList.toggle("active", btn.dataset.lang === state.lang));
@@ -209,6 +232,10 @@ function applyLanguage() {
     select.options[0].text = t("monthly");
     select.options[1].text = t("yearly");
     select.options[2].text = t("all");
+  });
+  document.querySelectorAll(".subview-tab").forEach((btn) => {
+    btn.textContent = t(btn.dataset.lens);
+    btn.classList.toggle("active", state.lenses[btn.dataset.strategy] === btn.dataset.lens);
   });
 }
 
@@ -284,6 +311,31 @@ function renderBoardCards(targetId, rows) {
         <div><div class="main-number ${row.negative ? "neg" : ""}" style="${row.negative ? `color:${COLORS.red}` : row.highlight ? `color:${COLORS.green}` : ""}">${row.value}</div><div class="kpi-sub">${row.label}</div></div>
       </div>
     </article>`).join("");
+}
+
+function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
+  const target = document.getElementById(`${strategyKey}-snapshot-cards`);
+  const note = document.getElementById(`${strategyKey}-lens-note`);
+  if (!target || !viewData) return;
+  const lens = state.lenses[strategyKey] || "backtest";
+  const s = viewData.summary || {};
+  if (note) note.textContent = lens === "live" ? t("snapshotNoteLive") : t("snapshotNoteBacktest");
+  target.innerHTML = `
+    <article class="snapshot-card">
+      <div class="snapshot-head">
+        <span class="snapshot-label">${t(lens === "live" ? "liveSnapshot" : "backtestSnapshot")}</span>
+        <strong>${strategyLabel}</strong>
+      </div>
+      <div class="snapshot-main">${fmtUsd(s.final_equity || 0)}</div>
+      <div class="snapshot-sub">Final Equity</div>
+      <div class="snapshot-metrics">
+        <div><span>Total Return</span><strong>${fmtPct(s.total_return_pct || 0)}</strong></div>
+        <div><span>Net PnL</span><strong>${fmtUsd(s.net_pnl_usd || 0)}</strong></div>
+        <div><span>Profit Factor</span><strong>${fmtNum(s.profit_factor || 0)}</strong></div>
+        <div><span>Trades</span><strong>${s.trades || 0}</strong></div>
+      </div>
+    </article>
+  `;
 }
 
 function renderComparison(data) {
@@ -390,11 +442,12 @@ function renderGrapesSummary(data) {
     { title: "Max DD", value: fmtPct(grapes.summary.max_drawdown_pct), label: state.lang === "zh" ? "最大回撤" : "Maximum drawdown", negative: true },
     { title: "Sharpe", value: fmtNum(grapes.summary.sharpe), label: state.lang === "zh" ? "风险调整后收益" : "Risk-adjusted return" },
   ]);
+  renderSnapshotCards("grapes", "🍇 Grapes", getStrategyLensData("grapes"));
   renderActivePositions("grapes-active-positions", grapes.active_positions || []);
 }
 
 function renderGrapesRegime(data) {
-  const detail = data.strategies.grapes.regime_snapshot.regime_detail || [];
+  const detail = getStrategyLensData("grapes")?.regime_snapshot?.regime_detail || [];
   const map = { TREND_UP: t("trendUp"), TREND_DOWN: t("trendDown"), RANGE_CHOP: t("rangeChop"), TRANSITION: t("transition") };
   document.getElementById("grapes-regime").innerHTML = detail.map((row) => `
     <article class="regime-card">
@@ -423,11 +476,12 @@ function renderCitrusSummary(data) {
     { title: "Max DD", value: fmtPct(p.max_dd_pct || 0), label: state.lang === "zh" ? "最大回撤" : "Maximum drawdown", negative: true },
     { title: "Sharpe", value: fmtNum(p.sharpe || 0), label: state.lang === "zh" ? "风险调整后收益" : "Risk-adjusted return" },
   ]);
+  renderSnapshotCards("citrus", "🍊 Citrus", getStrategyLensData("citrus"));
   renderActivePositions("citrus-active-positions", data.strategies.citrus.active_positions || []);
 }
 
 function renderCitrusRegime(data) {
-  const detail = data.strategies.citrus.regime_snapshot?.regime_detail || [];
+  const detail = getStrategyLensData("citrus")?.regime_snapshot?.regime_detail || [];
   const map = { TREND_UP: t("trendUp"), TREND_DOWN: t("trendDown"), RANGE_CHOP: t("rangeChop"), TRANSITION: t("transition") };
   const target = document.getElementById("citrus-regime");
   if (!target) return;
@@ -445,7 +499,7 @@ function tradePeriodValue(trade, scope) {
 }
 
 function getFilteredTrades(strategyKey) {
-  const trades = state.data.strategies[strategyKey].all_trades || [];
+  const trades = getStrategyLensData(strategyKey)?.all_trades || [];
   const filter = state.tradeFilters[strategyKey];
   if (!filter || filter.scope === "all" || filter.value === "all") return trades;
   return trades.filter((trade) => tradePeriodValue(trade, filter.scope) === filter.value);
@@ -457,7 +511,7 @@ function syncTradeValueOptions(strategyKey) {
   if (!scopeSelect || !valueSelect || !state.data) return;
   const scope = scopeSelect.value;
   state.tradeFilters[strategyKey].scope = scope;
-  const trades = state.data.strategies[strategyKey].all_trades || [];
+  const trades = getStrategyLensData(strategyKey)?.all_trades || [];
   const options = scope === "all"
     ? ["all"]
     : [...new Set(trades.map((trade) => tradePeriodValue(trade, scope)))].sort().reverse();
@@ -622,11 +676,11 @@ function drawAssetOverlayChart(canvas, assetCurves) {
 }
 
 function drawGrapesChart(canvas, data) {
-  drawAssetOverlayChart(canvas, data.strategies.grapes.asset_curves || {});
+  drawAssetOverlayChart(canvas, getStrategyLensData("grapes")?.asset_curves || data.strategies.grapes.asset_curves || {});
 }
 
 function drawCitrusAssetReturns(canvas, data) {
-  drawAssetOverlayChart(canvas, data.strategies.citrus.asset_curves || {});
+  drawAssetOverlayChart(canvas, getStrategyLensData("citrus")?.asset_curves || data.strategies.citrus.asset_curves || {});
 }
 
 function renderTradeMeta(targetId, trades) {
@@ -762,10 +816,10 @@ function renderCharts(data) {
   }
 
   const grapesHeatmap = document.getElementById("grapes-heatmap-canvas");
-  if (grapesHeatmap && grapesHeatmap.offsetParent !== null) drawMonthlyHeatmap(grapesHeatmap, data.strategies.grapes.monthly_heatmap);
+  if (grapesHeatmap && grapesHeatmap.offsetParent !== null) drawMonthlyHeatmap(grapesHeatmap, getStrategyLensData("grapes")?.monthly_heatmap || data.strategies.grapes.monthly_heatmap);
 
   const citrusHeatmap = document.getElementById("citrus-heatmap-canvas");
-  if (citrusHeatmap && citrusHeatmap.offsetParent !== null) drawMonthlyHeatmap(citrusHeatmap, data.strategies.citrus.monthly_heatmap);
+  if (citrusHeatmap && citrusHeatmap.offsetParent !== null) drawMonthlyHeatmap(citrusHeatmap, getStrategyLensData("citrus")?.monthly_heatmap || data.strategies.citrus.monthly_heatmap);
 }
 
 function bindSwitches() {
@@ -801,6 +855,22 @@ function bindTradeFilters() {
   });
 }
 
+function bindLensSwitches() {
+  document.querySelectorAll(".subview-tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const { strategy, lens } = btn.dataset;
+      state.lenses[strategy] = lens;
+      document.querySelectorAll(`.subview-tab[data-strategy="${strategy}"]`).forEach((el) => {
+        el.classList.toggle("active", el.dataset.lens === lens);
+      });
+      if (state.data) {
+        syncTradeValueOptions(strategy);
+        render(state.data);
+      }
+    });
+  });
+}
+
 function render(data) {
   applyLanguage();
   renderHero(data);
@@ -812,8 +882,10 @@ function render(data) {
   renderGrapesRegime(data);
   renderCitrusSummary(data);
   renderCitrusRegime(data);
-  renderMonthlySummary("grapes-monthly-summary", data.strategies.grapes.monthly_summary, data.strategies.grapes.summary.win_rate_pct);
-  renderMonthlySummary("citrus-monthly-summary", data.strategies.citrus.monthly_summary, data.strategies.citrus.portfolio.win_rate_pct);
+  const grapesLens = getStrategyLensData("grapes");
+  const citrusLens = getStrategyLensData("citrus");
+  renderMonthlySummary("grapes-monthly-summary", grapesLens?.monthly_summary, grapesLens?.summary?.win_rate_pct || 0);
+  renderMonthlySummary("citrus-monthly-summary", citrusLens?.monthly_summary, citrusLens?.summary?.win_rate_pct || 0);
   syncTradeValueOptions("grapes");
   syncTradeValueOptions("citrus");
   renderTradeSection("grapes", true);
@@ -828,6 +900,7 @@ async function init() {
   state.lastUpdatedAt = raw.meta.updated_at;
   bindSwitches();
   bindLanguageSwitch();
+  bindLensSwitches();
   bindTradeFilters();
   render(raw);
   window.addEventListener("resize", () => render(state.data));
