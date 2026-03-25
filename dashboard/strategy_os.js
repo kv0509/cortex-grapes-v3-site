@@ -34,6 +34,7 @@ const I18N = {
     grapesSleeves: "🍇 Asset Profit Distribution",
     citrusSleeves: "🍊 Asset Profit Distribution",
     assetOverlay: "Three-Asset Profit Overlay",
+    totalPnlCurve: "Live Total PnL Curve",
     strategyProfile: "Strategy Profile",
     openPositions: "Open Positions",
     assetValidation: "Asset Validation",
@@ -99,6 +100,7 @@ const I18N = {
     grapesSleeves: "🍇 资产收益分布",
     citrusSleeves: "🍊 资产收益分布",
     assetOverlay: "三资产收益叠图",
+    totalPnlCurve: "实盘累计收益曲线",
     strategyProfile: "策略轮廓",
     openPositions: "当前未平仓仓位",
     assetValidation: "多资产验证",
@@ -732,12 +734,56 @@ function drawAssetOverlayChart(canvas, assetCurves) {
   drawAxisLabels(ctx, width, height, m, min, max, entries[0][1]);
 }
 
+function buildCumulativePnlSeries(trades) {
+  const ordered = [...(trades || [])]
+    .filter((trade) => trade && trade.exit_ts)
+    .sort((a, b) => String(a.exit_ts).localeCompare(String(b.exit_ts)));
+  if (!ordered.length) return [];
+  let running = 0;
+  const startTs = ordered[0].entry_ts || ordered[0].exit_ts;
+  const rows = [{ ts: startTs, pnl: 0 }];
+  ordered.forEach((trade) => {
+    running += Number(trade.net_pnl_usd || 0);
+    rows.push({ ts: trade.exit_ts, pnl: Number(running.toFixed(2)) });
+  });
+  return rows;
+}
+
+function drawTotalPnlChart(canvas, trades) {
+  const series = buildCumulativePnlSeries(trades);
+  const { ctx, width, height } = resizeCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  if (!series.length) return;
+  const m = { top: 24, right: 42, bottom: 50, left: 78 };
+  const vals = series.map((row) => Number(row.pnl)).filter(Number.isFinite);
+  const min = Math.min(...vals, 0);
+  const max = Math.max(...vals, 0);
+  drawAxes(ctx, width, height, m);
+  const points = toPoints(series, "pnl", width, height, m, min, max);
+  drawSmoothLine(ctx, points, COLORS.green, true);
+  drawAxisLabels(ctx, width, height, m, min, max, series);
+}
+
 function drawGrapesChart(canvas, data) {
-  drawAssetOverlayChart(canvas, getStrategyLensData("grapes")?.asset_curves || data.strategies.grapes.asset_curves || {});
+  const lens = state.lenses.grapes || "backtest";
+  const view = getStrategyLensData("grapes");
+  if (lens === "live") {
+    drawTotalPnlChart(canvas, view?.all_trades || []);
+    return "single";
+  }
+  drawAssetOverlayChart(canvas, view?.asset_curves || data.strategies.grapes.asset_curves || {});
+  return "overlay";
 }
 
 function drawCitrusAssetReturns(canvas, data) {
-  drawAssetOverlayChart(canvas, getStrategyLensData("citrus")?.asset_curves || data.strategies.citrus.asset_curves || {});
+  const lens = state.lenses.citrus || "backtest";
+  const view = getStrategyLensData("citrus");
+  if (lens === "live") {
+    drawTotalPnlChart(canvas, view?.all_trades || []);
+    return "single";
+  }
+  drawAssetOverlayChart(canvas, view?.asset_curves || data.strategies.citrus.asset_curves || {});
+  return "overlay";
 }
 
 function renderTradeMeta(targetId, trades) {
@@ -894,22 +940,30 @@ function renderCharts(data) {
 
   const grapesDetail = document.getElementById("grapes-detail-canvas");
   if (grapesDetail && grapesDetail.offsetParent !== null) {
-    drawGrapesChart(grapesDetail, data);
-    renderLegend("grapes-legend", [
-      { label: "BTC", color: COLORS.green },
-      { label: "ETH", color: COLORS.blue },
-      { label: "SOL", color: COLORS.amber },
-    ]);
+    const mode = drawGrapesChart(grapesDetail, data);
+    const title = document.querySelector('[data-panel="grapes"] .detail-grid .panel:first-child h4');
+    if (title) title.textContent = mode === "single" ? t("totalPnlCurve") : t("assetOverlay");
+    renderLegend("grapes-legend", mode === "single"
+      ? [{ label: "Total PnL", color: COLORS.green }]
+      : [
+        { label: "BTC", color: COLORS.green },
+        { label: "ETH", color: COLORS.blue },
+        { label: "SOL", color: COLORS.amber },
+      ]);
   }
 
   const citrusDetail = document.getElementById("citrus-return-canvas");
   if (citrusDetail && citrusDetail.offsetParent !== null) {
-    drawCitrusAssetReturns(citrusDetail, data);
-    renderLegend("citrus-legend", [
-      { label: "BTC", color: COLORS.green },
-      { label: "ETH", color: COLORS.blue },
-      { label: "SOL", color: COLORS.amber },
-    ]);
+    const mode = drawCitrusAssetReturns(citrusDetail, data);
+    const title = document.querySelector('[data-panel="citrus"] .detail-grid .panel:first-child h4');
+    if (title) title.textContent = mode === "single" ? t("totalPnlCurve") : t("assetOverlay");
+    renderLegend("citrus-legend", mode === "single"
+      ? [{ label: "Total PnL", color: COLORS.green }]
+      : [
+        { label: "BTC", color: COLORS.green },
+        { label: "ETH", color: COLORS.blue },
+        { label: "SOL", color: COLORS.amber },
+      ]);
   }
 
   const grapesHeatmap = document.getElementById("grapes-heatmap-canvas");
