@@ -161,21 +161,7 @@ function fmtUsd(v) { return new Intl.NumberFormat("en-US", { style: "currency", 
 function fmtPct(v, d = 2) { const n = Number(v || 0); return `${n >= 0 ? "+" : ""}${n.toFixed(d)}%`; }
 function fmtNum(v, d = 2) { return Number(v || 0).toFixed(d); }
 function fmtDate(ts) { return String(ts || "").slice(0, 16); }
-function fmtUpdatedAt(ts) {
-  if (!ts) return "—";
-  const raw = String(ts).trim();
-  const asUtc = new Date(raw.replace(" ", "T") + "Z");
-  const dt = Number.isNaN(asUtc.getTime()) ? new Date(raw.replace(" ", "T")) : asUtc;
-  if (Number.isNaN(dt.getTime())) return raw.slice(0, 16);
-  return new Intl.DateTimeFormat("en-GB", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).format(dt).replace(",", "");
-}
+function fmtUpdatedAt(ts) { return String(ts || "").slice(0, 16); }
 
 function setActiveView(view) {
   state.view = view;
