@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-03-25 00:00:00",
+    "updated_at": "2026-03-25 04:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "Citrus_Alpha_V1/Docs/Citrus_4H_Portfolio_Report_20260309.md"
@@ -52092,10 +52092,26 @@
           "symbol": "SOLUSDT",
           "direction": "LONG",
           "entry_price": 91.38,
-          "current_price": 91.66,
-          "current_pnl_pct": 0.31,
+          "current_price": 91.77,
+          "current_pnl_pct": 0.43,
           "entry_ts": "2026-03-23 16:00",
-          "hold_hours": 32.0,
+          "hold_hours": 36.0,
+          "position_size": 1.0,
+          "peak_pnl_pct": 0.0,
+          "realized_pnl_pct": 0.0,
+          "tiered": true,
+          "hard_tp_done": false,
+          "breakeven_armed": false
+        },
+        {
+          "asset": "ETH",
+          "symbol": "ETHUSDT",
+          "direction": "LONG",
+          "entry_price": 2165.05,
+          "current_price": 2163.7,
+          "current_pnl_pct": -0.06,
+          "entry_ts": "2026-03-25 04:00",
+          "hold_hours": 0.0,
           "position_size": 1.0,
           "peak_pnl_pct": 0.0,
           "realized_pnl_pct": 0.0,
