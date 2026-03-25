@@ -596,6 +596,40 @@ function drawAxes(ctx, width, height, m) {
   }
 }
 
+function formatAxisDateLabel(rawTs, spanMs) {
+  const text = String(rawTs || "");
+  if (!text) return "";
+  const datePart = text.slice(0, 10);
+  if (spanMs <= 180 * 24 * 3600 * 1000) return datePart.slice(5);
+  return datePart.replace(/-/g, ".");
+}
+
+function buildXAxisTicks(series, width, m) {
+  if (!series.length) return [];
+  const count = series.length;
+  const firstTs = parseTimestamp(series[0].ts);
+  const lastTs = parseTimestamp(series[count - 1].ts);
+  const spanMs = Math.max(1, (lastTs || 0) - (firstTs || 0));
+  const desired = count <= 6 ? count : 4;
+  const indexSet = new Set();
+  for (let i = 0; i < desired; i += 1) {
+    indexSet.add(Math.round((i * (count - 1)) / Math.max(1, desired - 1)));
+  }
+  return Array.from(indexSet)
+    .sort((a, b) => a - b)
+    .map((idx) => {
+      const point = series[idx];
+      const ts = parseTimestamp(point.ts);
+      const x = count === 1
+        ? (m.left + width - m.right) / 2
+        : m.left + (((ts - firstTs) / Math.max(1, lastTs - firstTs)) * (width - m.left - m.right));
+      return {
+        x,
+        label: formatAxisDateLabel(point.ts, spanMs),
+      };
+    });
+}
+
 function drawAxisLabels(ctx, width, height, m, min, max, series) {
   ctx.save();
   ctx.fillStyle = COLORS.muted;
@@ -607,12 +641,22 @@ function drawAxisLabels(ctx, width, height, m, min, max, series) {
     const value = max - ((max - min) * (i / 4));
     ctx.fillText(fmtUsd(value), m.left - 8, y);
   }
-  const rawLabels = [series[0]?.ts, series[Math.floor(series.length / 2)]?.ts, series[series.length - 1]?.ts].filter(Boolean);
-  const xs = [m.left, (m.left + width - m.right) / 2, width - m.right];
+  const ticks = buildXAxisTicks(series, width, m);
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
-  rawLabels.forEach((label, idx) => {
-    ctx.fillText(String(label).slice(0, 7).replace("-", "."), xs[idx], height - m.bottom + 6);
+  ticks.forEach(({ label, x }) => {
+    ctx.fillText(label, x, height - m.bottom + 6);
+  });
+  ctx.restore();
+}
+
+function drawPointMarkers(ctx, points, color) {
+  ctx.save();
+  ctx.fillStyle = color;
+  points.forEach((point) => {
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, 3.2, 0, Math.PI * 2);
+    ctx.fill();
   });
   ctx.restore();
 }
@@ -761,6 +805,7 @@ function drawTotalPnlChart(canvas, trades) {
   drawAxes(ctx, width, height, m);
   const points = toPoints(series, "pnl", width, height, m, min, max);
   drawSmoothLine(ctx, points, COLORS.green, true);
+  drawPointMarkers(ctx, points, COLORS.green);
   drawAxisLabels(ctx, width, height, m, min, max, series);
 }
 
