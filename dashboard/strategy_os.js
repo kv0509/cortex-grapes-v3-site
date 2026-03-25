@@ -712,9 +712,10 @@ function renderTradeTable(targetId, trades, includeType = false) {
       <tr>
         <td class="mono">${trade.asset}</td>
         <td class="mono ${sideClass}">${sideLabel}</td>
-        ${includeType ? `<td class="mono">${trade.type || "Trend"}</td>` : ""}
         <td class="mono">${trade.entry_ts}</td>
         <td class="mono">${trade.exit_ts}</td>
+        <td class="mono">${fmtNum(trade.entry_price, 4)}</td>
+        <td class="mono">${fmtNum(trade.exit_price, 4)}</td>
         <td class="mono">${trade.hold_hours}h</td>
         <td class="mono ${pnl >= 0 ? "pos" : "neg"}">${fmtUsd(pnl)}</td>
         <td class="mono ${pnl >= 0 ? "pos" : "neg"}">${fmtPct(trade.roi_pct_on_margin, 2)}</td>
@@ -722,10 +723,45 @@ function renderTradeTable(targetId, trades, includeType = false) {
   }).join("");
 }
 
+function renderTradeCards(targetId, trades, includeType = false) {
+  const target = document.getElementById(targetId);
+  if (!target) return;
+  const ordered = [...trades].sort((a, b) => String(b.exit_ts).localeCompare(String(a.exit_ts)));
+  target.innerHTML = ordered.map((trade) => {
+    const pnl = Number(trade.net_pnl_usd || 0);
+    const dir = String(trade.direction || "").toUpperCase();
+    const isLong = dir === "LONG";
+    const isShort = dir === "SHORT";
+    const sideLabel = isLong ? "Long" : isShort ? "Short" : "—";
+    const sideClass = isLong ? "pos" : isShort ? "neg" : "";
+    return `
+      <article class="trade-card">
+        <div class="trade-card-head">
+          <div class="trade-card-title">
+            <strong>${trade.asset}</strong>
+            <span class="dir-chip ${String(sideLabel).toLowerCase()} ${sideClass}">${sideLabel}</span>
+          </div>
+          <strong class="${pnl >= 0 ? "pos" : "neg"}">${fmtUsd(pnl)}</strong>
+        </div>
+        <div class="trade-card-meta">
+          <div><span>${t("holdHours")}</span><strong>${trade.hold_hours}h</strong></div>
+          <div><span>${t("entry")}</span><strong class="mono">${trade.entry_ts}</strong></div>
+          <div><span>${t("exit")}</span><strong class="mono">${trade.exit_ts}</strong></div>
+          <div><span>Entry Px</span><strong class="mono">${fmtNum(trade.entry_price, 4)}</strong></div>
+          <div><span>Exit Px</span><strong class="mono">${fmtNum(trade.exit_price, 4)}</strong></div>
+          <div><span>${t("side")}</span><strong class="${sideClass}">${sideLabel}</strong></div>
+          <div><span>ROI</span><strong class="${pnl >= 0 ? "pos" : "neg"}">${fmtPct(trade.roi_pct_on_margin, 2)}</strong></div>
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
 function renderTradeSection(strategyKey, includeType = false) {
   const trades = getFilteredTrades(strategyKey);
   renderTradeMeta(`${strategyKey}-trade-meta`, trades);
   renderTradeTable(`${strategyKey}-trade-table`, trades, includeType);
+  renderTradeCards(`${strategyKey}-trade-cards`, trades, includeType);
 }
 
 function drawMonthlyHeatmap(canvas, monthlyHeatmap) {
