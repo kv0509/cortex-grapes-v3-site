@@ -14,13 +14,10 @@ const COLORS = {
 
 const state = {
   data: null,
-  view: "all",
+  view: localStorage.getItem("strategy_os_view") || "all",
   lang: localStorage.getItem("strategy_os_lang") || "en",
   lastUpdatedAt: null,
-  lenses: {
-    grapes: "backtest",
-    citrus: "backtest",
-  },
+  lenses: JSON.parse(localStorage.getItem("strategy_os_lenses") || '{"grapes":"backtest","citrus":"backtest"}'),
   tradeFilters: {
     grapes: { scope: "month", value: "latest" },
     citrus: { scope: "month", value: "latest" },
@@ -68,10 +65,13 @@ const I18N = {
     winRate: "win rate",
     bestMonth: "best month",
     backtest: "Backtest",
+    extended: "Extended",
     live: "Live",
     snapshotNoteBacktest: "Showing research validation and historical results.",
+    snapshotNoteExtended: "Showing validated backtest with post-backtest live extension appended.",
     snapshotNoteLive: "Showing live execution and current strategy ledger.",
     backtestSnapshot: "Backtest Snapshot",
+    extendedSnapshot: "Backtest + Live Extension",
     liveSnapshot: "Live Execution",
     trendUp: "Uptrend",
     trendDown: "Downtrend",
@@ -130,10 +130,13 @@ const I18N = {
     winRate: "胜率",
     bestMonth: "最佳单月",
     backtest: "回测",
+    extended: "延伸",
     live: "实盘",
     snapshotNoteBacktest: "当前显示研究验证与历史结果。",
+    snapshotNoteExtended: "当前显示回测结果，并追加回测结束后的实盘延伸。",
     snapshotNoteLive: "当前显示实盘执行与当前账本。",
     backtestSnapshot: "回测结果",
+    extendedSnapshot: "回测 + 实盘延伸",
     liveSnapshot: "实盘执行",
     trendUp: "上涨趋势",
     trendDown: "下跌趋势",
@@ -178,9 +181,14 @@ function fmtPct(v, d = 2) { const n = Number(v || 0); return `${n >= 0 ? "+" : "
 function fmtNum(v, d = 2) { return Number(v || 0).toFixed(d); }
 function fmtDate(ts) { return String(ts || "").slice(0, 16); }
 function fmtUpdatedAt(ts) { return String(ts || "").slice(0, 16); }
+function fmtBaseCapitalLabel(amount) {
+  const value = fmtUsd(amount);
+  return state.lang === "zh" ? `统一 ${value} base` : `${value} base capital`;
+}
 
 function setActiveView(view) {
   state.view = view;
+  localStorage.setItem("strategy_os_view", view);
   document.querySelectorAll(".switch-tab").forEach((btn) => btn.classList.toggle("active", btn.dataset.view === view));
   document.querySelectorAll(".view-panel").forEach((panel) => panel.classList.toggle("is-active", panel.dataset.panel === view));
   const hero = document.getElementById("master-board-hero");
@@ -195,6 +203,33 @@ function getStrategyLensData(strategyKey) {
   if (!strategy) return null;
   const lens = state.lenses[strategyKey] || "backtest";
   return strategy.execution_views?.[lens] || strategy.execution_views?.backtest || null;
+}
+
+function computeAssetValidationStats(trades) {
+  const grouped = new Map();
+  (trades || []).forEach((trade) => {
+    const asset = trade.asset;
+    if (!asset) return;
+    const pnl = Number(trade.net_pnl_usd || 0);
+    const row = grouped.get(asset) || { asset, trades: 0, wins: 0, totalPnl: 0, pnlList: [] };
+    row.trades += 1;
+    row.totalPnl += pnl;
+    row.pnlList.push(pnl);
+    if (pnl > 0) row.wins += 1;
+    grouped.set(asset, row);
+  });
+  return Array.from(grouped.values()).map((row) => {
+    const grossWins = row.pnlList.filter((v) => v > 0).reduce((a, b) => a + b, 0);
+    const grossLossesAbs = Math.abs(row.pnlList.filter((v) => v < 0).reduce((a, b) => a + b, 0));
+    return {
+      asset: row.asset,
+      trades: row.trades,
+      winRatePct: row.trades ? (row.wins / row.trades) * 100 : 0,
+      totalPnl: row.totalPnl,
+      avgPnl: row.trades ? row.totalPnl / row.trades : 0,
+      profitFactor: grossLossesAbs > 0 ? grossWins / grossLossesAbs : grossWins > 0 ? Infinity : 0,
+    };
+  }).sort((a, b) => String(a.asset).localeCompare(String(b.asset)));
 }
 
 function applyLanguage() {
@@ -319,11 +354,24 @@ function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
   if (!target || !viewData) return;
   const lens = state.lenses[strategyKey] || "backtest";
   const s = viewData.summary || {};
-  if (note) note.textContent = lens === "live" ? t("snapshotNoteLive") : t("snapshotNoteBacktest");
+  if (note) {
+    const noteKey = lens === "live"
+      ? "snapshotNoteLive"
+      : lens === "extended"
+        ? "snapshotNoteExtended"
+        : "snapshotNoteBacktest";
+    note.textContent = t(noteKey);
+  }
   target.innerHTML = `
     <article class="snapshot-card">
       <div class="snapshot-head">
-        <span class="snapshot-label">${t(lens === "live" ? "liveSnapshot" : "backtestSnapshot")}</span>
+        <span class="snapshot-label">${t(
+          lens === "live"
+            ? "liveSnapshot"
+            : lens === "extended"
+              ? "extendedSnapshot"
+              : "backtestSnapshot"
+        )}</span>
         <strong>${strategyLabel}</strong>
       </div>
       <div class="snapshot-main">${fmtUsd(s.final_equity || 0)}</div>
@@ -367,37 +415,41 @@ function renderLegend(targetId, items) {
 function renderGrapesAssets(data) {
   const target = document.getElementById("grapes-asset-cards");
   const detailTarget = document.getElementById("grapes-asset-cards-detail");
-  const markup = data.strategies.grapes.asset_stats.map((row) => `
+  const topRows = data.strategies.grapes.asset_stats || [];
+  const detailRows = computeAssetValidationStats(getStrategyLensData("grapes")?.all_trades || []);
+  const renderRows = (rows) => rows.map((row) => `
     <article class="asset-card">
       <h5>${row.asset}</h5>
-      <div class="headline ${row.total_pnl < 0 ? "red" : ""}">${fmtUsd(row.total_pnl)}</div>
+      <div class="headline ${(row.total_pnl ?? row.totalPnl) < 0 ? "red" : ""}">${fmtUsd(row.total_pnl ?? row.totalPnl)}</div>
       <div class="asset-stat-grid">
         <div class="asset-stat"><span>Trades</span><strong>${row.trades}</strong></div>
-        <div class="asset-stat"><span>Win Rate</span><strong>${fmtPct(row.win_rate_pct, 2)}</strong></div>
-        <div class="asset-stat"><span>PF</span><strong>${fmtNum(row.profit_factor)}</strong></div>
-        <div class="asset-stat"><span>Avg PnL</span><strong>${fmtUsd(row.avg_pnl)}</strong></div>
+        <div class="asset-stat"><span>Win Rate</span><strong>${fmtPct(row.win_rate_pct ?? row.winRatePct, 2)}</strong></div>
+        <div class="asset-stat"><span>PF</span><strong>${Number.isFinite(row.profit_factor ?? row.profitFactor) ? fmtNum(row.profit_factor ?? row.profitFactor) : "∞"}</strong></div>
+        <div class="asset-stat"><span>Avg PnL</span><strong>${fmtUsd(row.avg_pnl ?? row.avgPnl)}</strong></div>
       </div>
     </article>`).join("");
-  target.innerHTML = markup;
-  if (detailTarget) detailTarget.innerHTML = markup;
+  target.innerHTML = renderRows(topRows);
+  if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows);
 }
 
 function renderCitrusAssets(data) {
   const target = document.getElementById("citrus-asset-cards");
   const detailTarget = document.getElementById("citrus-asset-cards-detail");
-  const markup = data.strategies.citrus.assets.map((row) => `
+  const topRows = data.strategies.citrus.assets || [];
+  const detailRows = computeAssetValidationStats(getStrategyLensData("citrus")?.all_trades || []);
+  const renderRows = (rows, useLegacy = false) => rows.map((row) => `
     <article class="asset-card">
       <h5>${row.asset}</h5>
-      <div class="headline ${row.total_pnl_usd_20 < 0 ? "red" : ""}">${fmtUsd(row.total_pnl_usd_20)}</div>
+      <div class="headline ${(useLegacy ? row.total_pnl_usd_20 : row.totalPnl) < 0 ? "red" : ""}">${fmtUsd(useLegacy ? row.total_pnl_usd_20 : row.totalPnl)}</div>
       <div class="asset-stat-grid">
         <div class="asset-stat"><span>Trades</span><strong>${row.trades}</strong></div>
-        <div class="asset-stat"><span>Win Rate</span><strong>${fmtPct(row.win_rate_pct, 1)}</strong></div>
-        <div class="asset-stat"><span>Sharpe</span><strong>${fmtNum(row.sharpe, 3)}</strong></div>
-        <div class="asset-stat"><span>ROI</span><strong>${fmtPct(row.total_return_pct, 2)}</strong></div>
+        <div class="asset-stat"><span>Win Rate</span><strong>${fmtPct(useLegacy ? row.win_rate_pct : row.winRatePct, useLegacy ? 1 : 2)}</strong></div>
+        <div class="asset-stat"><span>PF</span><strong>${useLegacy ? fmtNum(row.sharpe ?? 0, 3) : (Number.isFinite(row.profitFactor) ? fmtNum(row.profitFactor) : "∞")}</strong></div>
+        <div class="asset-stat"><span>${useLegacy ? "ROI" : "Avg PnL"}</span><strong>${useLegacy ? fmtPct(row.total_return_pct, 2) : fmtUsd(row.avgPnl)}</strong></div>
       </div>
     </article>`).join("");
-  target.innerHTML = markup;
-  if (detailTarget) detailTarget.innerHTML = markup;
+  target.innerHTML = renderRows(topRows, true);
+  if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows, !detailRows.length);
 }
 
 function renderActivePositions(targetId, positions) {
@@ -437,7 +489,7 @@ function renderGrapesSummary(data) {
       </div>
     </div>`).join("");
   renderBoardCards("grapes-board-cards", [
-    { title: "Final Equity", value: fmtUsd(grapes.summary.final_equity), label: state.lang === "zh" ? "统一 1500 base" : "1500 base capital", highlight: false },
+    { title: "Final Equity", value: fmtUsd(grapes.summary.final_equity), label: fmtBaseCapitalLabel(grapes.summary.initial_equity || 0), highlight: false },
     { title: "Total Return", value: fmtPct(grapes.summary.total_return_pct), label: state.lang === "zh" ? "组合总回报" : "Total portfolio return", highlight: true },
     { title: "Max DD", value: fmtPct(grapes.summary.max_drawdown_pct), label: state.lang === "zh" ? "最大回撤" : "Maximum drawdown", negative: true },
     { title: "Sharpe", value: fmtNum(grapes.summary.sharpe), label: state.lang === "zh" ? "风险调整后收益" : "Risk-adjusted return" },
@@ -471,7 +523,7 @@ function renderCitrusSummary(data) {
       </div>
     </div>`).join("");
   renderBoardCards("citrus-board-cards", [
-    { title: "Final Equity", value: fmtUsd(p.final_equity), label: state.lang === "zh" ? "统一 1500 base" : "1500 base capital" },
+    { title: "Final Equity", value: fmtUsd(p.final_equity), label: fmtBaseCapitalLabel(data.strategies.citrus.normalization?.synthetic_base_equity_usd || 0) },
     { title: "Total Return", value: fmtPct(p.total_return_pct_on_base), label: state.lang === "zh" ? "组合总回报" : "Total portfolio return", highlight: true },
     { title: "Max DD", value: fmtPct(p.max_dd_pct || 0), label: state.lang === "zh" ? "最大回撤" : "Maximum drawdown", negative: true },
     { title: "Sharpe", value: fmtNum(p.sharpe || 0), label: state.lang === "zh" ? "风险调整后收益" : "Risk-adjusted return" },
@@ -575,16 +627,20 @@ function drawSmoothLine(ctx, points, color, fill = false) {
   ctx.lineCap = "round";
   ctx.beginPath();
   ctx.moveTo(points[0].x, points[0].y);
-  for (let i = 0; i < points.length - 1; i += 1) {
-    const p0 = points[i - 1] || points[i];
-    const p1 = points[i];
-    const p2 = points[i + 1];
-    const p3 = points[i + 2] || p2;
-    const cp1x = p1.x + (p2.x - p0.x) * 0.12;
-    const cp1y = p1.y + (p2.y - p0.y) * 0.12;
-    const cp2x = p2.x - (p3.x - p1.x) * 0.12;
-    const cp2y = p2.y - (p3.y - p1.y) * 0.12;
-    ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+  if (points.length <= 6) {
+    for (let i = 1; i < points.length; i += 1) ctx.lineTo(points[i].x, points[i].y);
+  } else {
+    for (let i = 0; i < points.length - 1; i += 1) {
+      const p0 = points[i - 1] || points[i];
+      const p1 = points[i];
+      const p2 = points[i + 1];
+      const p3 = points[i + 2] || p2;
+      const cp1x = p1.x + (p2.x - p0.x) * 0.12;
+      const cp1y = p1.y + (p2.y - p0.y) * 0.12;
+      const cp2x = p2.x - (p3.x - p1.x) * 0.12;
+      const cp2y = p2.y - (p3.y - p1.y) * 0.12;
+      ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+    }
   }
   ctx.stroke();
   if (fill) {
@@ -609,9 +665,10 @@ function toPoints(series, valueKey, width, height, m, minOverride = null, maxOve
   const max = maxOverride ?? Math.max(...vals);
   const start = parseTimestamp(series[0].ts);
   const end = parseTimestamp(series[series.length - 1].ts);
+  const range = Math.max(1, end - start);
   return series.map((row) => {
     const ts = parseTimestamp(row.ts);
-    const x = m.left + ((ts - start) / Math.max(1, end - start)) * (width - m.left - m.right);
+    const x = m.left + ((ts - start) / range) * (width - m.left - m.right);
     const normalized = (Number(row[valueKey]) - min) / Math.max(1e-9, max - min);
     const y = height - m.bottom - normalized * (height - m.top - m.bottom);
     return { x, y };
@@ -660,7 +717,7 @@ function drawOverlayStrategyChart(canvas, data) {
 function drawAssetOverlayChart(canvas, assetCurves) {
   const { ctx, width, height } = resizeCanvas(canvas);
   ctx.clearRect(0, 0, width, height);
-  const m = { top: 24, right: 32, bottom: 42, left: 68 };
+  const m = { top: 24, right: 42, bottom: 50, left: 78 };
   const entries = Object.entries(assetCurves || {}).filter(([, series]) => Array.isArray(series) && series.length);
   if (!entries.length) return;
   const allVals = entries.flatMap(([, series]) => series.map((row) => Number(row.pnl)).filter(Number.isFinite));
@@ -900,6 +957,7 @@ function bindLensSwitches() {
     btn.addEventListener("click", () => {
       const { strategy, lens } = btn.dataset;
       state.lenses[strategy] = lens;
+      localStorage.setItem("strategy_os_lenses", JSON.stringify(state.lenses));
       document.querySelectorAll(`.subview-tab[data-strategy="${strategy}"]`).forEach((el) => {
         el.classList.toggle("active", el.dataset.lens === lens);
       });
@@ -934,7 +992,7 @@ function render(data) {
 }
 
 async function init() {
-  const res = await fetch(DATA_URL);
+  const res = await fetch(DATA_URL, { cache: "no-store" });
   const raw = await res.json();
   state.data = raw;
   state.lastUpdatedAt = raw.meta.updated_at;
@@ -943,6 +1001,7 @@ async function init() {
   bindLensSwitches();
   bindTradeFilters();
   render(raw);
+  setActiveView(state.view);
   window.addEventListener("resize", () => render(state.data));
   startAutoRefresh();
 }
