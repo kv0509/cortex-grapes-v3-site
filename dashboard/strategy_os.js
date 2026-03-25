@@ -66,13 +66,10 @@ const I18N = {
     winRate: "win rate",
     bestMonth: "best month",
     backtest: "Backtest",
-    extended: "Extended",
     live: "Live",
     snapshotNoteBacktest: "Showing research validation and historical results.",
-    snapshotNoteExtended: "Showing validated backtest with post-backtest live extension appended.",
     snapshotNoteLive: "Showing live execution and current strategy ledger.",
     backtestSnapshot: "Backtest Snapshot",
-    extendedSnapshot: "Backtest + Live Extension",
     liveSnapshot: "Live Execution",
     trendUp: "Uptrend",
     trendDown: "Downtrend",
@@ -132,13 +129,10 @@ const I18N = {
     winRate: "胜率",
     bestMonth: "最佳单月",
     backtest: "回测",
-    extended: "延伸",
     live: "实盘",
     snapshotNoteBacktest: "当前显示研究验证与历史结果。",
-    snapshotNoteExtended: "当前显示回测结果，并追加回测结束后的实盘延伸。",
     snapshotNoteLive: "当前显示实盘执行与当前账本。",
     backtestSnapshot: "回测结果",
-    extendedSnapshot: "回测 + 实盘延伸",
     liveSnapshot: "实盘执行",
     trendUp: "上涨趋势",
     trendDown: "下跌趋势",
@@ -203,7 +197,7 @@ function setActiveView(view) {
 function getStrategyLensData(strategyKey) {
   const strategy = state.data?.strategies?.[strategyKey];
   if (!strategy) return null;
-  const lens = state.lenses[strategyKey] || "backtest";
+  const lens = (state.lenses[strategyKey] === "extended" ? "backtest" : state.lenses[strategyKey]) || "backtest";
   return strategy.execution_views?.[lens] || strategy.execution_views?.backtest || null;
 }
 
@@ -354,25 +348,17 @@ function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
   const target = document.getElementById(`${strategyKey}-snapshot-cards`);
   const note = document.getElementById(`${strategyKey}-lens-note`);
   if (!target || !viewData) return;
-  const lens = state.lenses[strategyKey] || "backtest";
+  const lens = (state.lenses[strategyKey] === "extended" ? "backtest" : state.lenses[strategyKey]) || "backtest";
   const s = viewData.summary || {};
   if (note) {
-    const noteKey = lens === "live"
-      ? "snapshotNoteLive"
-      : lens === "extended"
-        ? "snapshotNoteExtended"
-        : "snapshotNoteBacktest";
+    const noteKey = lens === "live" ? "snapshotNoteLive" : "snapshotNoteBacktest";
     note.textContent = t(noteKey);
   }
   target.innerHTML = `
     <article class="snapshot-card">
       <div class="snapshot-head">
         <span class="snapshot-label">${t(
-          lens === "live"
-            ? "liveSnapshot"
-            : lens === "extended"
-              ? "extendedSnapshot"
-              : "backtestSnapshot"
+          lens === "live" ? "liveSnapshot" : "backtestSnapshot"
         )}</span>
         <strong>${strategyLabel}</strong>
       </div>
@@ -1057,10 +1043,10 @@ function bindLensSwitches() {
   document.querySelectorAll(".subview-tab").forEach((btn) => {
     btn.addEventListener("click", () => {
       const { strategy, lens } = btn.dataset;
-      state.lenses[strategy] = lens;
+      state.lenses[strategy] = lens === "extended" ? "backtest" : lens;
       localStorage.setItem("strategy_os_lenses", JSON.stringify(state.lenses));
       document.querySelectorAll(`.subview-tab[data-strategy="${strategy}"]`).forEach((el) => {
-        el.classList.toggle("active", el.dataset.lens === lens);
+        el.classList.toggle("active", el.dataset.lens === state.lenses[strategy]);
       });
       if (state.data) {
         syncTradeValueOptions(strategy);
@@ -1097,6 +1083,10 @@ async function init() {
   const raw = await res.json();
   state.data = raw;
   state.lastUpdatedAt = raw.meta.updated_at;
+  Object.keys(state.lenses).forEach((strategyKey) => {
+    if (state.lenses[strategyKey] === "extended") state.lenses[strategyKey] = "backtest";
+  });
+  localStorage.setItem("strategy_os_lenses", JSON.stringify(state.lenses));
   bindSwitches();
   bindLanguageSwitch();
   bindLensSwitches();
