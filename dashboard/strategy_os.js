@@ -469,8 +469,10 @@ function renderActivePositions(targetId, positions) {
       </div>
       <div class="position-grid-inner">
         <div><span>${t("entryTime")}</span><strong>${fmtDate(row.entry_ts)}</strong></div>
-        <div><span>${t("entryPrice")}</span><strong>${fmtNum(row.entry_price, 4)}</strong></div>
+        <div><span>${t("entryPrice")}</span><strong>${fmtNum(row.entry_price, 2)}</strong></div>
+        ${row.current_price !== undefined ? `<div><span>Current Price</span><strong>${fmtNum(row.current_price, 2)}</strong></div>` : ""}
         ${row.hold_hours !== undefined ? `<div><span>${t("holdHours")}</span><strong>${row.hold_hours}h</strong></div>` : ""}
+        ${row.current_pnl_pct !== undefined ? `<div><span>Current PnL</span><strong class="${Number(row.current_pnl_pct || 0) >= 0 ? "pos" : "neg"}">${fmtPct(row.current_pnl_pct || 0, 2)}</strong></div>` : ""}
         <div><span>${t("peakPnl")}</span><strong class="${Number(row.peak_pnl_pct || 0) >= 0 ? "pos" : "neg"}">${fmtPct(row.peak_pnl_pct || 0, 2)}</strong></div>
       </div>
     </article>`).join("");
@@ -862,8 +864,8 @@ function renderTradeTable(targetId, trades, includeType = false) {
         <td class="mono ${sideClass}">${sideLabel}</td>
         <td class="mono">${trade.entry_ts}</td>
         <td class="mono">${trade.exit_ts}</td>
-        <td class="mono">${fmtNum(trade.entry_price, 4)}</td>
-        <td class="mono">${fmtNum(trade.exit_price, 4)}</td>
+        <td class="mono">${fmtNum(trade.entry_price, 2)}</td>
+        <td class="mono">${fmtNum(trade.exit_price, 2)}</td>
         <td class="mono">${trade.hold_hours}h</td>
         <td class="mono ${pnl >= 0 ? "pos" : "neg"}">${fmtUsd(pnl)}</td>
         <td class="mono ${pnl >= 0 ? "pos" : "neg"}">${fmtPct(trade.roi_pct_on_margin, 2)}</td>
@@ -895,8 +897,8 @@ function renderTradeCards(targetId, trades, includeType = false) {
           <div><span>${t("holdHours")}</span><strong>${trade.hold_hours}h</strong></div>
           <div><span>${t("entry")}</span><strong class="mono">${trade.entry_ts}</strong></div>
           <div><span>${t("exit")}</span><strong class="mono">${trade.exit_ts}</strong></div>
-          <div><span>Entry Px</span><strong class="mono">${fmtNum(trade.entry_price, 4)}</strong></div>
-          <div><span>Exit Px</span><strong class="mono">${fmtNum(trade.exit_price, 4)}</strong></div>
+          <div><span>Entry Px</span><strong class="mono">${fmtNum(trade.entry_price, 2)}</strong></div>
+          <div><span>Exit Px</span><strong class="mono">${fmtNum(trade.exit_price, 2)}</strong></div>
           <div><span>${t("side")}</span><strong class="${sideClass}">${sideLabel}</strong></div>
           <div><span>ROI</span><strong class="${pnl >= 0 ? "pos" : "neg"}">${fmtPct(trade.roi_pct_on_margin, 2)}</strong></div>
         </div>
