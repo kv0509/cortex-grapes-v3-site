@@ -38339,24 +38339,24 @@
           "asset": "BTC",
           "trades": 97,
           "win_rate_pct": 64.95,
-          "total_pnl": 2070.7,
-          "avg_pnl": 21.35,
-          "profit_factor": 1.91
+          "total_pnl": 9265.86,
+          "avg_pnl": 95.52,
+          "profit_factor": 2.08
         },
         {
           "asset": "ETH",
-          "trades": 111,
-          "win_rate_pct": 57.66,
-          "total_pnl": 2777.8,
-          "avg_pnl": 25.03,
+          "trades": 112,
+          "win_rate_pct": 58.04,
+          "total_pnl": 11112.61,
+          "avg_pnl": 99.22,
           "profit_factor": 1.92
         },
         {
           "asset": "SOL",
-          "trades": 65,
-          "win_rate_pct": 63.08,
-          "total_pnl": 3432.86,
-          "avg_pnl": 52.81,
+          "trades": 66,
+          "win_rate_pct": 63.64,
+          "total_pnl": 12031.54,
+          "avg_pnl": 182.3,
           "profit_factor": 3.37
         }
       ],
