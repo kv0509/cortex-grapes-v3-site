@@ -15,8 +15,9 @@ ROOT = Path(__file__).resolve().parents[1]
 DASHBOARD_DIR = ROOT / "dashboard"
 DATA_DIR = DASHBOARD_DIR / "data"
 GRAPES_JSON = DATA_DIR / "joint_backtest_overview.json"
-GRAPES_BT_RANGE_SUMMARY_CSV = ROOT / "Reports" / "experiments" / "btc_range_sync_walk_forward_suite" / "full_portfolio_summary.csv"
-GRAPES_BT_RANGE_ASSET_CSV = ROOT / "Reports" / "experiments" / "btc_range_sync_walk_forward_suite" / "full_by_asset_summary.csv"
+GRAPES_BT_RANGE_SUMMARY_CSV = ROOT / "Reports" / "experiments" / "production_btc_eth_full_backtest_no_hype" / "full_portfolio_summary.csv"
+GRAPES_BT_RANGE_ASSET_CSV = ROOT / "Reports" / "experiments" / "production_btc_eth_full_backtest_no_hype" / "full_by_asset_summary.csv"
+GRAPES_BT_RANGE_TRADES_CSV = ROOT / "Reports" / "experiments" / "production_monte_carlo_suite" / "trade_records.csv"
 CITRUS_REPORT = ROOT.parent / "citrus" / "Docs" / "Citrus_4H_Portfolio_Report_20260309.md"
 CITRUS_ROOT = ROOT.parent / "citrus"
 CITRUS_REPORTS = CITRUS_ROOT / "Reports"
@@ -28,6 +29,7 @@ GRAPES_BASE_EQUITY_USD = 6000.0
 CITRUS_BASE_EQUITY_USD = 6000.0
 GRAPES_LIVE_DB = ROOT / "Live" / "db" / "grapes_model_v1.db"
 CITRUS_LIVE_DB = ROOT.parent / "citrus" / "Live" / "citrus_live.db"
+GRAPES_PRODUCTION_VERSION = "btc_range_sync_gate_prod_btc_eth_high_chase_no_hype"
 TP_PCT_BY_SYMBOL = {
     "BTCUSDT": 0.035,
     "ETHUSDT": 0.06,
@@ -147,7 +149,7 @@ def load_grapes_range_sync_summary() -> Dict[str, float] | None:
     if not GRAPES_BT_RANGE_SUMMARY_CSV.exists():
         return None
     df = pd.read_csv(GRAPES_BT_RANGE_SUMMARY_CSV)
-    row = df[df["version"] == "btc_range_sync_gate"]
+    row = df[df["version"] == GRAPES_PRODUCTION_VERSION]
     if row.empty:
         return None
     record = row.iloc[0]
@@ -155,8 +157,11 @@ def load_grapes_range_sync_summary() -> Dict[str, float] | None:
         "trades": int(record["trades"]),
         "win_rate_pct": float(record["win_rate_pct"]),
         "net_pnl_usd": float(record["total_pnl_usd"]),
+        "avg_pnl_usd": float(record["avg_pnl_usd"]),
+        "max_dd_usd": float(record["max_dd_usd"]),
         "profit_factor": float(record["profit_factor"]),
         "sharpe": float(record["sharpe"]),
+        "display_name": str(record.get("display_name", "BTC+ETH High-Chase Production (No HYPE)")),
     }
 
 
@@ -165,8 +170,7 @@ def load_grapes_range_sync_asset_stats() -> List[Dict[str, Any]] | None:
         return None
     df = pd.read_csv(GRAPES_BT_RANGE_ASSET_CSV)
     rows = df[
-        (df["version"] == "btc_range_sync_gate")
-        & (df["scope"] == "FULL")
+        (df["version"] == GRAPES_PRODUCTION_VERSION)
         & (df["asset"].isin(["BTC", "ETH", "SOL"]))
     ].copy()
     if rows.empty:
@@ -180,6 +184,9 @@ def load_grapes_range_sync_asset_stats() -> List[Dict[str, Any]] | None:
             "win_rate_pct": round(float(row["win_rate_pct"]), 2),
             "total_pnl": round(float(row["total_pnl_usd"]), 2),
             "avg_pnl": round(float(row["avg_pnl_usd"]), 2),
+            "total_pnl_usd_20": round(float(row["total_pnl_usd"]), 2),
+            "avg_pnl_usd_20": round(float(row["avg_pnl_usd"]), 2),
+            "max_dd_usd": round(float(row["max_dd_usd"]), 2),
             "profit_factor": round(float(row["profit_factor"]), 2),
         }
         for _, row in rows.iterrows()
@@ -187,6 +194,78 @@ def load_grapes_range_sync_asset_stats() -> List[Dict[str, Any]] | None:
 
 
 def load_grapes_range_sync_backtest_payload(start_ts: str) -> Dict[str, Any] | None:
+    if GRAPES_BT_RANGE_TRADES_CSV.exists():
+        try:
+            trades_df = pd.read_csv(GRAPES_BT_RANGE_TRADES_CSV)
+            trades_df = trades_df[
+                (trades_df["version"] == GRAPES_PRODUCTION_VERSION)
+                & (trades_df["asset"].isin(["BTC", "ETH", "SOL"]))
+            ].copy()
+            if not trades_df.empty:
+                if "side" in trades_df.columns and "direction" not in trades_df.columns:
+                    trades_df["direction"] = trades_df["side"]
+                trades_df["direction"] = trades_df["direction"].astype(int).map({1: "LONG", -1: "SHORT"}).fillna(trades_df["direction"].astype(str))
+                trades_df["scaled_net_pnl_usd"] = trades_df["net_pnl_usd"].astype(float)
+                trades_df["hold_hours"] = (
+                    (
+                        pd.to_datetime(trades_df["exit_time"], errors="coerce")
+                        - pd.to_datetime(trades_df["entry_time"], errors="coerce")
+                    ).dt.total_seconds() / 3600.0
+                ).round(1)
+                trades_df["is_tiered"] = trades_df.get("is_tiered", 0).fillna(0).astype(int)
+                regime_segments = load_regime_segments()
+                backtest_view = _execution_view_from_trades(
+                    trades_df,
+                    start_ts=start_ts,
+                    base_equity_usd=GRAPES_BASE_EQUITY_USD,
+                    include_type=True,
+                    regime_segments=regime_segments,
+                )
+                asset_rows: List[Dict[str, Any]] = []
+                asset_curves: Dict[str, List[Dict[str, Any]]] = {}
+                for asset, group in trades_df.groupby("asset", sort=False):
+                    row, curve = _asset_payload_from_trades(
+                        str(asset),
+                        group.sort_values("exit_time").reset_index(drop=True),
+                        start_ts,
+                        GRAPES_BASE_EQUITY_USD,
+                    )
+                    asset_rows.append(row)
+                    asset_curves[str(asset)] = curve
+                order = {"BTC": 0, "ETH": 1, "SOL": 2}
+                asset_rows = sorted(asset_rows, key=lambda row: order.get(str(row["asset"]), 99))
+                gross_win = float(trades_df.loc[trades_df["scaled_net_pnl_usd"] > 0, "scaled_net_pnl_usd"].sum())
+                gross_loss = abs(float(trades_df.loc[trades_df["scaled_net_pnl_usd"] <= 0, "scaled_net_pnl_usd"].sum()))
+                candidate_final_equity = GRAPES_BASE_EQUITY_USD + float(trades_df["scaled_net_pnl_usd"].sum())
+                candidate_total_return_pct = (float(trades_df["scaled_net_pnl_usd"].sum()) / GRAPES_BASE_EQUITY_USD) * 100.0
+                return {
+                    "summary": {
+                        "initial_equity": GRAPES_BASE_EQUITY_USD,
+                        "final_equity": round(candidate_final_equity, 2),
+                        "net_pnl_usd": round(float(trades_df["scaled_net_pnl_usd"].sum()), 2),
+                        "total_return_pct": round(candidate_total_return_pct, 2),
+                        "annualized_return_pct": round((((candidate_final_equity / GRAPES_BASE_EQUITY_USD) ** (1.0 / max(((pd.to_datetime(trades_df["exit_time"].max()) - pd.to_datetime(start_ts)).total_seconds() / (365.25 * 24 * 3600)), 1e-9))) - 1.0) * 100.0, 2),
+                        "max_drawdown_pct": backtest_view["summary"]["max_dd_pct"],
+                        "sharpe": _estimate_sharpe_from_monthly(backtest_view["monthly_breakdown"]),
+                        "profit_factor": round((gross_win / gross_loss) if gross_loss > 0 else 0.0, 2),
+                        "trade_count": int(len(trades_df)),
+                        "win_rate_pct": round(float((trades_df["scaled_net_pnl_usd"] > 0).mean() * 100.0), 1),
+                        "start_ts": start_ts,
+                        "end_ts": str(pd.to_datetime(trades_df["exit_time"], errors="coerce").max())[:19],
+                    },
+                    "equity_curve": backtest_view["portfolio_curve"],
+                    "asset_stats": asset_rows,
+                    "asset_curves": asset_curves,
+                    "monthly_summary": backtest_view["monthly_summary"],
+                    "monthly_breakdown": backtest_view["monthly_breakdown"],
+                    "monthly_heatmap": backtest_view["monthly_heatmap"],
+                    "regime_snapshot": backtest_view["regime_snapshot"],
+                    "all_trades": backtest_view["all_trades"],
+                    "execution_view": backtest_view,
+                }
+        except Exception:
+            pass
+
     os.environ.setdefault("MPLCONFIGDIR", "/tmp/mplcache")
     Path(os.environ["MPLCONFIGDIR"]).mkdir(parents=True, exist_ok=True)
     if str(ROOT) not in sys.path:
@@ -1578,14 +1657,15 @@ def build_grapes_payload(path: Path) -> Dict[str, Any]:
         monthly_breakdown = candidate_payload["monthly_breakdown"]
         monthly_heatmap_rows = candidate_payload["monthly_heatmap"]
         all_trades = candidate_payload["all_trades"]
-    elif candidate_summary:
+    if candidate_summary:
         grapes_summary["final_equity"] = round(GRAPES_BASE_EQUITY_USD + float(candidate_summary["net_pnl_usd"]), 2)
         grapes_summary["net_pnl_usd"] = round(float(candidate_summary["net_pnl_usd"]), 2)
         grapes_summary["total_return_pct"] = round((float(candidate_summary["net_pnl_usd"]) / GRAPES_BASE_EQUITY_USD) * 100.0, 2)
+        grapes_summary["annualized_return_pct"] = round(((((GRAPES_BASE_EQUITY_USD + float(candidate_summary["net_pnl_usd"])) / GRAPES_BASE_EQUITY_USD) ** (1.0 / years)) - 1.0) * 100.0, 2)
         grapes_summary["sharpe"] = round(float(candidate_summary["sharpe"]), 3)
         grapes_summary["profit_factor"] = round(float(candidate_summary["profit_factor"]), 2)
         grapes_summary["trade_count"] = int(candidate_summary["trades"])
-        grapes_summary["win_rate_pct"] = round(float(candidate_summary["win_rate_pct"]), 1)
+        grapes_summary["win_rate_pct"] = round(float(candidate_summary["win_rate_pct"]), 2)
 
     return {
         "name": "Cortex Grapes",
@@ -1594,7 +1674,7 @@ def build_grapes_payload(path: Path) -> Dict[str, Any]:
         "summary": grapes_summary,
         "equity_curve": adjusted_curve,
         "btc_price": raw["btc_price"],
-        "asset_stats": candidate_payload["asset_stats"] if candidate_payload else (candidate_asset_stats if candidate_asset_stats else raw["asset_stats"]),
+        "asset_stats": candidate_asset_stats if candidate_asset_stats else raw["asset_stats"],
         "asset_curves": candidate_payload["asset_curves"] if candidate_payload else raw["asset_curves"],
         "monthly_summary": candidate_payload["monthly_summary"] if candidate_payload else raw["monthly_summary"],
         "monthly_breakdown": monthly_breakdown,
