@@ -146,6 +146,28 @@ def latest_file(pattern: str) -> Path | None:
 
 
 def load_grapes_range_sync_summary() -> Dict[str, float] | None:
+    if GRAPES_BT_RANGE_TRADES_CSV.exists():
+        try:
+            df = pd.read_csv(GRAPES_BT_RANGE_TRADES_CSV)
+            rows = df[df["version"] == GRAPES_PRODUCTION_VERSION].copy()
+            if not rows.empty:
+                rows["margin"] = rows["margin"].astype(float)
+                rows["net_pnl_usd"] = rows["net_pnl_usd"].astype(float)
+                rows["scaled_net_pnl_usd"] = rows["net_pnl_usd"] * (FIXED_MARGIN_USD / rows["margin"].clip(lower=1e-9))
+                wins = rows[rows["scaled_net_pnl_usd"] > 0]
+                losses = rows[rows["scaled_net_pnl_usd"] <= 0]
+                gross_win = float(wins["scaled_net_pnl_usd"].sum())
+                gross_loss = abs(float(losses["scaled_net_pnl_usd"].sum()))
+                return {
+                    "trades": int(len(rows)),
+                    "win_rate_pct": float((rows["scaled_net_pnl_usd"] > 0).mean() * 100.0),
+                    "net_pnl_usd": float(rows["scaled_net_pnl_usd"].sum()),
+                    "avg_pnl_usd": float(rows["scaled_net_pnl_usd"].mean()) if len(rows) else 0.0,
+                    "profit_factor": (gross_win / gross_loss) if gross_loss > 0 else 0.0,
+                    "display_name": "BTC+ETH High-Chase Production (No HYPE) / 20U normalized",
+                }
+        except Exception:
+            pass
     if not GRAPES_BT_RANGE_SUMMARY_CSV.exists():
         return None
     df = pd.read_csv(GRAPES_BT_RANGE_SUMMARY_CSV)
@@ -166,6 +188,41 @@ def load_grapes_range_sync_summary() -> Dict[str, float] | None:
 
 
 def load_grapes_range_sync_asset_stats() -> List[Dict[str, Any]] | None:
+    if GRAPES_BT_RANGE_TRADES_CSV.exists():
+        try:
+            df = pd.read_csv(GRAPES_BT_RANGE_TRADES_CSV)
+            rows = df[
+                (df["version"] == GRAPES_PRODUCTION_VERSION)
+                & (df["asset"].isin(["BTC", "ETH", "SOL"]))
+            ].copy()
+            if not rows.empty:
+                rows["margin"] = rows["margin"].astype(float)
+                rows["net_pnl_usd"] = rows["net_pnl_usd"].astype(float)
+                rows["scaled_net_pnl_usd"] = rows["net_pnl_usd"] * (FIXED_MARGIN_USD / rows["margin"].clip(lower=1e-9))
+                rows["asset"] = pd.Categorical(rows["asset"], categories=["BTC", "ETH", "SOL"], ordered=True)
+                rows = rows.sort_values("asset")
+                asset_stats: List[Dict[str, Any]] = []
+                for asset, group in rows.groupby("asset", sort=False):
+                    pnl = group["scaled_net_pnl_usd"].astype(float)
+                    wins = pnl[pnl > 0]
+                    losses = pnl[pnl <= 0]
+                    gross_win = float(wins.sum())
+                    gross_loss = abs(float(losses.sum()))
+                    asset_stats.append(
+                        {
+                            "asset": str(asset),
+                            "trades": int(len(group)),
+                            "win_rate_pct": round(float((pnl > 0).mean() * 100.0), 2),
+                            "total_pnl": round(float(pnl.sum()), 2),
+                            "avg_pnl": round(float(pnl.mean()) if len(group) else 0.0, 2),
+                            "total_pnl_usd_20": round(float(pnl.sum()), 2),
+                            "avg_pnl_usd_20": round(float(pnl.mean()) if len(group) else 0.0, 2),
+                            "profit_factor": round((gross_win / gross_loss) if gross_loss > 0 else 0.0, 2),
+                        }
+                    )
+                return asset_stats
+        except Exception:
+            pass
     if not GRAPES_BT_RANGE_ASSET_CSV.exists():
         return None
     df = pd.read_csv(GRAPES_BT_RANGE_ASSET_CSV)
@@ -202,10 +259,13 @@ def load_grapes_range_sync_backtest_payload(start_ts: str) -> Dict[str, Any] | N
                 & (trades_df["asset"].isin(["BTC", "ETH", "SOL"]))
             ].copy()
             if not trades_df.empty:
-                if "side" in trades_df.columns and "direction" not in trades_df.columns:
+                if "direction" not in trades_df.columns and "side" in trades_df.columns:
                     trades_df["direction"] = trades_df["side"]
-                trades_df["direction"] = trades_df["direction"].astype(int).map({1: "LONG", -1: "SHORT"}).fillna(trades_df["direction"].astype(str))
-                trades_df["scaled_net_pnl_usd"] = trades_df["net_pnl_usd"].astype(float)
+                direction_numeric = pd.to_numeric(trades_df["direction"], errors="coerce")
+                trades_df["direction"] = direction_numeric.map({1: "LONG", -1: "SHORT"}).fillna(trades_df["direction"].astype(str))
+                trades_df["margin"] = pd.to_numeric(trades_df["margin"], errors="coerce").fillna(FIXED_MARGIN_USD)
+                trades_df["net_pnl_usd"] = pd.to_numeric(trades_df["net_pnl_usd"], errors="coerce").fillna(0.0)
+                trades_df["scaled_net_pnl_usd"] = trades_df["net_pnl_usd"] * (FIXED_MARGIN_USD / trades_df["margin"].clip(lower=1e-9))
                 trades_df["hold_hours"] = (
                     (
                         pd.to_datetime(trades_df["exit_time"], errors="coerce")
@@ -1662,7 +1722,8 @@ def build_grapes_payload(path: Path) -> Dict[str, Any]:
         grapes_summary["net_pnl_usd"] = round(float(candidate_summary["net_pnl_usd"]), 2)
         grapes_summary["total_return_pct"] = round((float(candidate_summary["net_pnl_usd"]) / GRAPES_BASE_EQUITY_USD) * 100.0, 2)
         grapes_summary["annualized_return_pct"] = round(((((GRAPES_BASE_EQUITY_USD + float(candidate_summary["net_pnl_usd"])) / GRAPES_BASE_EQUITY_USD) ** (1.0 / years)) - 1.0) * 100.0, 2)
-        grapes_summary["sharpe"] = round(float(candidate_summary["sharpe"]), 3)
+        if "sharpe" in candidate_summary:
+            grapes_summary["sharpe"] = round(float(candidate_summary["sharpe"]), 3)
         grapes_summary["profit_factor"] = round(float(candidate_summary["profit_factor"]), 2)
         grapes_summary["trade_count"] = int(candidate_summary["trades"])
         grapes_summary["win_rate_pct"] = round(float(candidate_summary["win_rate_pct"]), 2)
