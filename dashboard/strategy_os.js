@@ -846,6 +846,11 @@ function renderTradeTable(targetId, trades, includeType = false) {
     const isShort = dir === "SHORT";
     const sideLabel = isLong ? "Long" : isShort ? "Short" : "—";
     const sideClass = isLong ? "pos" : isShort ? "neg" : "";
+    const entryPx = Number(trade.entry_price || 0);
+    const exitPx = Number(trade.exit_price || 0);
+    const movePct = entryPx > 0
+      ? (((exitPx - entryPx) / entryPx) * (isShort ? -100 : 100))
+      : 0;
     return `
       <tr>
         <td class="mono">${trade.asset}</td>
@@ -856,7 +861,7 @@ function renderTradeTable(targetId, trades, includeType = false) {
         <td class="mono">${fmtNum(trade.exit_price, 2)}</td>
         <td class="mono">${trade.hold_hours}h</td>
         <td class="mono ${pnl >= 0 ? "pos" : "neg"}">${fmtUsd(pnl)}</td>
-        <td class="mono ${pnl >= 0 ? "pos" : "neg"}">${fmtPct(trade.roi_pct_on_margin, 2)}</td>
+        <td class="mono ${movePct >= 0 ? "pos" : "neg"}">${fmtPct(movePct, 2)}</td>
       </tr>`;
   }).join("");
 }
@@ -872,6 +877,11 @@ function renderTradeCards(targetId, trades, includeType = false) {
     const isShort = dir === "SHORT";
     const sideLabel = isLong ? "Long" : isShort ? "Short" : "—";
     const sideClass = isLong ? "pos" : isShort ? "neg" : "";
+    const entryPx = Number(trade.entry_price || 0);
+    const exitPx = Number(trade.exit_price || 0);
+    const movePct = entryPx > 0
+      ? (((exitPx - entryPx) / entryPx) * (isShort ? -100 : 100))
+      : 0;
     return `
       <article class="trade-card">
         <div class="trade-card-head">
@@ -888,7 +898,7 @@ function renderTradeCards(targetId, trades, includeType = false) {
           <div><span>Entry Px</span><strong class="mono">${fmtNum(trade.entry_price, 2)}</strong></div>
           <div><span>Exit Px</span><strong class="mono">${fmtNum(trade.exit_price, 2)}</strong></div>
           <div><span>${t("side")}</span><strong class="${sideClass}">${sideLabel}</strong></div>
-          <div><span>ROI</span><strong class="${pnl >= 0 ? "pos" : "neg"}">${fmtPct(trade.roi_pct_on_margin, 2)}</strong></div>
+          <div><span>Move</span><strong class="${movePct >= 0 ? "pos" : "neg"}">${fmtPct(movePct, 2)}</strong></div>
         </div>
       </article>
     `;
