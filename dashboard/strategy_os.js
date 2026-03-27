@@ -405,15 +405,17 @@ function renderGrapesAssets(data) {
   const detailTarget = document.getElementById("grapes-asset-cards-detail");
   const topRows = data.strategies.grapes.asset_stats || [];
   const detailRows = computeAssetValidationStats(getStrategyLensData("grapes")?.all_trades || []);
+  const totalPnlForRow = (row) => row.total_pnl ?? row.totalPnl ?? row.total_pnl_usd_20;
+  const avgPnlForRow = (row) => row.avg_pnl ?? row.avgPnl ?? row.avg_pnl_usd_20;
   const renderRows = (rows) => rows.map((row) => `
     <article class="asset-card">
       <h5>${row.asset}</h5>
-      <div class="headline ${(row.total_pnl ?? row.totalPnl) < 0 ? "red" : ""}">${fmtUsd(row.total_pnl ?? row.totalPnl)}</div>
+      <div class="headline ${totalPnlForRow(row) < 0 ? "red" : ""}">${fmtUsd(totalPnlForRow(row))}</div>
       <div class="asset-stat-grid">
         <div class="asset-stat"><span>Trades</span><strong>${row.trades}</strong></div>
         <div class="asset-stat"><span>Win Rate</span><strong>${fmtPct(row.win_rate_pct ?? row.winRatePct, 2)}</strong></div>
         <div class="asset-stat"><span>PF</span><strong>${Number.isFinite(row.profit_factor ?? row.profitFactor) ? fmtNum(row.profit_factor ?? row.profitFactor) : "∞"}</strong></div>
-        <div class="asset-stat"><span>Avg PnL</span><strong>${fmtUsd(row.avg_pnl ?? row.avgPnl)}</strong></div>
+        <div class="asset-stat"><span>Avg PnL</span><strong>${fmtUsd(avgPnlForRow(row))}</strong></div>
       </div>
     </article>`).join("");
   target.innerHTML = renderRows(topRows);
