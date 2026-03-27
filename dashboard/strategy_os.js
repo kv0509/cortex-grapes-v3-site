@@ -27,14 +27,23 @@ const state = {
 const I18N = {
   en: {
     updated: "Updated",
-    heroNote: "Two engines do not sit side by side. They compete for capital. Money does not listen to stories. It flows toward the stronger engine. NTS Alpha Lab turns strategies into a system with one capital basis, one risk language, and one execution standard.",
+    heroKicker: "Strategy OS",
+    heroHeadline: "One operating system for strategy research, selection, and capital deployment.",
+    heroNote: "A firm-level strategy surface for comparing research, translating risk into one capital language, and assigning exposure to the engine that is currently earning it.",
+    portfolioOverview: "Portfolio Overview",
     dualBoard: "Dual-Strategy Command Board",
-    equityOverlay: "🍇 / 🍊 Equity Overlay",
-    coreCompare: "Core Metrics Side by Side",
-    grapesSleeves: "🍇 Asset Profit Distribution",
-    citrusSleeves: "🍊 Asset Profit Distribution",
+    dualBoardNote: "Two mandates on one normalized capital base, so relative quality, contribution, and allocation fitness stay readable.",
+    equityOverlay: "Equity Overlay",
+    coreCompare: "Relative Quality",
+    grapesSleeves: "Asset Profit Distribution",
+    citrusSleeves: "Asset Profit Distribution",
+    strategyDetail: "Strategy Detail",
+    grapesName: "Cortex Grapes",
+    grapesNote: "Trend and structure mandate designed for cleaner compounding through persistent market phases.",
+    citrusName: "Cortex Citrus",
+    citrusNote: "Cross-asset opportunistic mandate focused on extracting asymmetric dislocations with tighter participation quality.",
     assetOverlay: "Three-Asset Profit Overlay",
-    totalPnlCurve: "Live Total PnL Curve",
+    totalPnlCurve: "Daily Total PnL",
     strategyProfile: "Strategy Profile",
     openPositions: "Open Positions",
     assetValidation: "Asset Validation",
@@ -46,6 +55,9 @@ const I18N = {
     all: "All",
     allPeriods: "All Periods",
     asset: "Asset",
+    trades: "Trades",
+    avgPnl: "Avg PnL",
+    pf: "PF",
     side: "Side",
     type: "Type",
     entry: "Entry",
@@ -90,14 +102,23 @@ const I18N = {
   },
   zh: {
     updated: "更新于",
-    heroNote: "两套策略不是并列展示，而是在竞争资本配置权。资金不会听故事，只会流向更强的那一边。NTS Alpha Lab 把策略变成一个统一资金口径、统一风险语言、统一执行标准的系统。",
+    heroKicker: "策略操作系统",
+    heroHeadline: "一套用于策略研究、筛选与资金配置的统一操作系统。",
+    heroNote: "这是面向管理层与投资视角的策略界面。研究结果在统一资金语言下比较，风险在统一基准下衡量，资本配置持续流向更值得持有的引擎。",
+    portfolioOverview: "组合总览",
     dualBoard: "双策略主控板",
-    equityOverlay: "🍇 / 🍊 组合收益曲线",
-    coreCompare: "核心指标对照",
-    grapesSleeves: "🍇 资产收益分布",
-    citrusSleeves: "🍊 资产收益分布",
+    dualBoardNote: "两套不同 mandate 放在统一资金基准上展示，让相对质量、贡献度与配置价值保持清晰可读。",
+    equityOverlay: "组合收益曲线",
+    coreCompare: "相对质量对照",
+    grapesSleeves: "资产收益分布",
+    citrusSleeves: "资产收益分布",
+    strategyDetail: "策略详情",
+    grapesName: "Cortex Grapes",
+    grapesNote: "偏趋势与结构的 mandate，目标是在更持续的市场阶段中提高复利质量。",
+    citrusName: "Cortex Citrus",
+    citrusNote: "偏多资产机会捕捉的 mandate，目标是在更快变化的阶段里提高参与质量与配置效率。",
     assetOverlay: "三资产收益叠图",
-    totalPnlCurve: "实盘累计收益曲线",
+    totalPnlCurve: "日度累计收益",
     strategyProfile: "策略轮廓",
     openPositions: "当前未平仓仓位",
     assetValidation: "多资产验证",
@@ -109,6 +130,9 @@ const I18N = {
     all: "全部",
     allPeriods: "全部时期",
     asset: "资产",
+    trades: "交易数",
+    avgPnl: "平均收益",
+    pf: "盈亏比",
     side: "方向",
     type: "类型",
     entry: "入场",
@@ -235,27 +259,43 @@ function applyLanguage() {
     const el = document.querySelector(selector);
     if (el) el.textContent = value;
   };
+  const setPanelTitleFromBody = (bodyId, title) => {
+    const body = document.getElementById(bodyId);
+    const panel = body?.closest(".panel");
+    const heading = panel?.querySelector(".card-head h4");
+    if (heading) heading.textContent = title;
+  };
   setText('.switch-tab[data-view="all"]', state.lang === "zh" ? "总览" : "Overview");
+  setText('#master-board-hero .hero-kicker-mark', t("heroKicker"));
+  setText('#master-board-hero h2', t("heroHeadline"));
   setText('#master-board-hero .hero-note', t("heroNote"));
+  setText('[data-panel="all"] .panel-head .eyebrow', t("portfolioOverview"));
   setText('[data-panel="all"] .panel-head h3', t("dualBoard"));
+  setText('[data-panel="all"] .panel-head .section-note', t("dualBoardNote"));
   setText('[data-panel="all"] .comparison-wrap .comparison-card:first-child h4', t("equityOverlay"));
   setText('[data-panel="all"] .comparison-wrap .comparison-card:last-child h4', t("coreCompare"));
   setText('[data-panel="all"] .sleeve-grid .panel:first-child h4', t("grapesSleeves"));
   setText('[data-panel="all"] .sleeve-grid .panel:last-child h4', t("citrusSleeves"));
+  setText('[data-panel="grapes"] .panel-head .eyebrow', t("strategyDetail"));
+  setText('[data-panel="grapes"] .panel-head h3', t("grapesName"));
+  setText('[data-panel="grapes"] .panel-head .section-note', t("grapesNote"));
   setText('[data-panel="grapes"] .detail-grid .panel:first-child h4', t("assetOverlay"));
-  setText('[data-panel="grapes"] .detail-grid .panel:last-child h4', t("strategyProfile"));
-  setText('[data-panel="grapes"] .panel.subsection:nth-of-type(2) h4', t("openPositions"));
-  setText('[data-panel="grapes"] .panel.subsection:nth-of-type(3) h4', t("assetValidation"));
-  setText('[data-panel="grapes"] .panel.subsection:nth-of-type(4) h4', t("regimePerformance"));
-  setText('[data-panel="grapes"] .panel.subsection:nth-of-type(5) h4', t("monthlyHeatmap"));
-  setText('[data-panel="grapes"] .panel.subsection:nth-of-type(6) h4', t("tradeExplorer"));
+  setPanelTitleFromBody("grapes-summary", t("strategyProfile"));
+  setPanelTitleFromBody("grapes-active-positions", t("openPositions"));
+  setPanelTitleFromBody("grapes-asset-cards-detail", t("assetValidation"));
+  setPanelTitleFromBody("grapes-regime", t("regimePerformance"));
+  setPanelTitleFromBody("grapes-monthly-summary", t("monthlyHeatmap"));
+  setPanelTitleFromBody("grapes-trade-meta", t("tradeExplorer"));
+  setText('[data-panel="citrus"] .panel-head .eyebrow', t("strategyDetail"));
+  setText('[data-panel="citrus"] .panel-head h3', t("citrusName"));
+  setText('[data-panel="citrus"] .panel-head .section-note', t("citrusNote"));
   setText('[data-panel="citrus"] .detail-grid .panel:first-child h4', t("assetOverlay"));
-  setText('[data-panel="citrus"] .detail-grid .panel:last-child h4', t("strategyProfile"));
-  setText('[data-panel="citrus"] .panel.subsection:nth-of-type(2) h4', t("openPositions"));
-  setText('[data-panel="citrus"] .panel.subsection:nth-of-type(3) h4', t("assetValidation"));
-  setText('[data-panel="citrus"] .panel.subsection:nth-of-type(4) h4', t("regimePerformance"));
-  setText('[data-panel="citrus"] .panel.subsection:nth-of-type(5) h4', t("monthlyHeatmap"));
-  setText('[data-panel="citrus"] .panel.subsection:nth-of-type(6) h4', t("tradeExplorer"));
+  setPanelTitleFromBody("citrus-summary", t("strategyProfile"));
+  setPanelTitleFromBody("citrus-active-positions", t("openPositions"));
+  setPanelTitleFromBody("citrus-asset-cards-detail", t("assetValidation"));
+  setPanelTitleFromBody("citrus-regime", t("regimePerformance"));
+  setPanelTitleFromBody("citrus-monthly-summary", t("monthlyHeatmap"));
+  setPanelTitleFromBody("citrus-trade-meta", t("tradeExplorer"));
   const grapesScope = document.getElementById("grapes-trade-scope");
   const citrusScope = document.getElementById("citrus-trade-scope");
   [grapesScope, citrusScope].forEach((select) => {
@@ -277,19 +317,23 @@ function renderHero(data) {
   const citrus = data.strategies.citrus;
   target.innerHTML = `
     <article class="hero-stat">
-      <div class="hero-stat-label">Two Engines</div>
+      <div class="hero-stat-label">${state.lang === "zh" ? "Strategy Spread" : "Strategy Spread"}</div>
       <div class="hero-stat-value">${fmtPct(grapes.summary.total_return_pct)} / ${fmtPct(citrus.portfolio.total_return_pct_on_base)}</div>
-      <div class="hero-stat-sub"><strong>🍇 Grapes — The Compounding Engine</strong><br/>Built to survive regimes and extract structured trend alpha.<br/><br/><strong>🍊 Citrus — The Opportunistic Engine</strong><br/>Built to exploit dislocations, flow imbalances, and short-term inefficiencies.<br/><br/>One compounds. One adapts. Together, they capture what single strategies miss.</div>
+      <div class="hero-stat-sub"><strong>🍇 Grapes — ${state.lang === "zh" ? "复利型引擎" : "Compounding Engine"}</strong><br/>${state.lang === "zh" ? "偏向更持续的结构行情，目标是稳定累积净值质量。" : "Built to stay with clearer structure and compound through cleaner trend conditions."}<br/><br/><strong>🍊 Citrus — ${state.lang === "zh" ? "机会型引擎" : "Opportunistic Engine"}</strong><br/>${state.lang === "zh" ? "偏向短中期错配机会，目标是提高参与质量与配置效率。" : "Built to exploit cross-asset dislocations and improve participation quality."}</div>
     </article>
     <article class="hero-stat">
-      <div class="hero-stat-label">Unified Basis</div>
+      <div class="hero-stat-label">${state.lang === "zh" ? "Unified Basis" : "Unified Basis"}</div>
       <div class="hero-stat-value">${fmtUsd(2000)}</div>
-      <div class="hero-stat-sub">Every metric normalized.<br/>No leverage tricks. No sizing bias.<br/><br/>Pure strategy performance, comparable at a glance.</div>
+      <div class="hero-stat-sub">${state.lang === "zh"
+        ? "所有表现统一归一到同一资金基准。没有杠杆幻觉，没有仓位偏置，只有可比较的策略质量。"
+        : "Every metric is normalized onto the same capital basis. No leverage illusion. No sizing bias. Pure strategy quality, comparable at a glance."}</div>
     </article>
     <article class="hero-stat">
-      <div class="hero-stat-label">Always Current</div>
+      <div class="hero-stat-label">${state.lang === "zh" ? "Always Current" : "Always Current"}</div>
       <div class="hero-stat-value">${fmtUsd(grapes.summary.final_equity)} / ${fmtUsd(citrus.portfolio.final_equity)}</div>
-      <div class="hero-stat-sub">Live Capital State — ${fmtUsd(grapes.summary.final_equity)} / ${fmtUsd(citrus.portfolio.final_equity)}<br/><br/>No static reports. No outdated snapshots.<br/><br/>Positions update. PnL evolves. Capital shifts.<br/><br/>What you see is what is running — now.</div>
+      <div class="hero-stat-sub">${state.lang === "zh"
+        ? `当前资金状态直接展示策略最新运行结果。仓位、PnL、资本占用会继续变化，这不是静态宣传页。`
+        : `Current capital state is tied to the latest running snapshot. Positions change, PnL evolves, and capital reallocates. This is a live strategy website, not a frozen report.`}</div>
     </article>
   `;
 }
@@ -298,9 +342,10 @@ function renderStrategyCards(data) {
   const grapes = data.strategies.grapes;
   const citrus = data.strategies.citrus;
   document.getElementById("strategy-grid").innerHTML = `
-    <article class="strategy-card">
+    <article class="strategy-card strategy-card-grapes">
       <div class="strategy-title">
-        <div><h4>🍇 Cortex Grapes</h4><p>${state.lang === "zh" ? "趋势与均值回归并行，强调趋势段的质量和风控后的留存收益。" : "Built to compound through structure, survive regime shifts, and keep capital working in cleaner trend conditions."}</p></div>
+        <div><h4>🍇 Cortex Grapes</h4><p>${state.lang === "zh" ? "趋势与结构交易引擎，目标是在更可持续的行情里稳步积累净值质量。" : "Trend and structure engine built to compound through cleaner, more persistent market phases."}</p></div>
+        <span class="strategy-role">${state.lang === "zh" ? "Compounding Mandate" : "Compounding Mandate"}</span>
       </div>
       <div class="strategy-main">
         <div><div class="main-number" style="color:${COLORS.green}">${fmtPct(grapes.summary.total_return_pct)}</div><div class="kpi-sub">Total Return</div></div>
@@ -313,9 +358,10 @@ function renderStrategyCards(data) {
         <div class="mini-metric"><span>Win Rate</span><strong>${fmtPct(grapes.summary.win_rate_pct, 1)}</strong></div>
       </div>
     </article>
-    <article class="strategy-card">
+    <article class="strategy-card strategy-card-citrus">
       <div class="strategy-title">
-        <div><h4>🍊 Cortex Citrus</h4><p>${state.lang === "zh" ? "多资产执行组合，核心目标是减少假动作里的低质量进出，让收益结构更干净。" : "Built to capture faster dislocations across assets and improve execution quality where shorter-term opportunities appear."}</p></div>
+        <div><h4>🍊 Cortex Citrus</h4><p>${state.lang === "zh" ? "多资产错配机会引擎，目标是在更快的市场变化中提升参与质量与资本效率。" : "Cross-asset dislocation engine built to capture faster opportunity windows with tighter execution discipline."}</p></div>
+        <span class="strategy-role">${state.lang === "zh" ? "Adaptive Mandate" : "Adaptive Mandate"}</span>
       </div>
       <div class="strategy-main">
         <div><div class="main-number" style="color:${COLORS.green}">${fmtPct(citrus.portfolio.total_return_pct_on_base)}</div><div class="kpi-sub">Total Return</div></div>
@@ -412,10 +458,10 @@ function renderGrapesAssets(data) {
       <h5>${row.asset}</h5>
       <div class="headline ${totalPnlForRow(row) < 0 ? "red" : ""}">${fmtUsd(totalPnlForRow(row))}</div>
       <div class="asset-stat-grid">
-        <div class="asset-stat"><span>Trades</span><strong>${row.trades}</strong></div>
-        <div class="asset-stat"><span>Win Rate</span><strong>${fmtPct(row.win_rate_pct ?? row.winRatePct, 2)}</strong></div>
-        <div class="asset-stat"><span>PF</span><strong>${Number.isFinite(row.profit_factor ?? row.profitFactor) ? fmtNum(row.profit_factor ?? row.profitFactor) : "∞"}</strong></div>
-        <div class="asset-stat"><span>Avg PnL</span><strong>${fmtUsd(avgPnlForRow(row))}</strong></div>
+        <div class="asset-stat"><span>${t("trades")}</span><strong>${row.trades}</strong></div>
+        <div class="asset-stat"><span>${t("winRate")}</span><strong>${fmtPct(row.win_rate_pct ?? row.winRatePct, 2)}</strong></div>
+        <div class="asset-stat"><span>${t("pf")}</span><strong>${Number.isFinite(row.profit_factor ?? row.profitFactor) ? fmtNum(row.profit_factor ?? row.profitFactor, 2) : "∞"}</strong></div>
+        <div class="asset-stat"><span>${t("avgPnl")}</span><strong>${fmtUsd(avgPnlForRow(row))}</strong></div>
       </div>
     </article>`).join("");
   target.innerHTML = renderRows(topRows);
@@ -427,19 +473,41 @@ function renderCitrusAssets(data) {
   const detailTarget = document.getElementById("citrus-asset-cards-detail");
   const topRows = data.strategies.citrus.assets || [];
   const detailRows = computeAssetValidationStats(getStrategyLensData("citrus")?.all_trades || []);
+  const totalPnlForRow = (row, useLegacy) => useLegacy ? row.total_pnl_usd_20 : row.totalPnl;
+  const avgPnlForRow = (row, useLegacy) => {
+    if (!useLegacy) return row.avgPnl;
+    const total = Number(row.total_pnl_usd_20 || 0);
+    const trades = Number(row.trades || 0);
+    return trades ? total / trades : 0;
+  };
+  const profitFactorForRow = (row, useLegacy) => {
+    if (!useLegacy) return row.profitFactor;
+    return row.profit_factor ?? row.profitFactor ?? row.sharpe ?? 0;
+  };
+  const winRateForRow = (row, useLegacy) => useLegacy ? row.win_rate_pct : row.winRatePct;
   const renderRows = (rows, useLegacy = false) => rows.map((row) => `
     <article class="asset-card">
       <h5>${row.asset}</h5>
-      <div class="headline ${(useLegacy ? row.total_pnl_usd_20 : row.totalPnl) < 0 ? "red" : ""}">${fmtUsd(useLegacy ? row.total_pnl_usd_20 : row.totalPnl)}</div>
+      <div class="headline ${totalPnlForRow(row, useLegacy) < 0 ? "red" : ""}">${fmtUsd(totalPnlForRow(row, useLegacy))}</div>
       <div class="asset-stat-grid">
-        <div class="asset-stat"><span>Trades</span><strong>${row.trades}</strong></div>
-        <div class="asset-stat"><span>Win Rate</span><strong>${fmtPct(useLegacy ? row.win_rate_pct : row.winRatePct, useLegacy ? 1 : 2)}</strong></div>
-        <div class="asset-stat"><span>PF</span><strong>${useLegacy ? fmtNum(row.sharpe ?? 0, 3) : (Number.isFinite(row.profitFactor) ? fmtNum(row.profitFactor) : "∞")}</strong></div>
-        <div class="asset-stat"><span>${useLegacy ? "ROI" : "Avg PnL"}</span><strong>${useLegacy ? fmtPct(row.total_return_pct, 2) : fmtUsd(row.avgPnl)}</strong></div>
+        <div class="asset-stat"><span>${t("trades")}</span><strong>${row.trades}</strong></div>
+        <div class="asset-stat"><span>${t("winRate")}</span><strong>${fmtPct(winRateForRow(row, useLegacy), 2)}</strong></div>
+        <div class="asset-stat"><span>${t("pf")}</span><strong>${Number.isFinite(profitFactorForRow(row, useLegacy)) ? fmtNum(profitFactorForRow(row, useLegacy), 2) : "∞"}</strong></div>
+        <div class="asset-stat"><span>${t("avgPnl")}</span><strong>${fmtUsd(avgPnlForRow(row, useLegacy))}</strong></div>
       </div>
     </article>`).join("");
   target.innerHTML = renderRows(topRows, true);
   if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows, !detailRows.length);
+}
+
+function syncSleevePanelHeights() {
+  const panels = Array.from(document.querySelectorAll(".sleeve-grid .sleeve-panel"));
+  if (panels.length < 2) return;
+  panels.forEach((panel) => { panel.style.minHeight = ""; });
+  const maxHeight = Math.max(...panels.map((panel) => panel.getBoundingClientRect().height));
+  panels.forEach((panel) => {
+    panel.style.minHeight = `${Math.ceil(maxHeight)}px`;
+  });
 }
 
 function renderActivePositions(targetId, positions) {
@@ -571,27 +639,134 @@ function syncTradeValueOptions(strategyKey) {
   valueSelect.value = state.tradeFilters[strategyKey].value;
 }
 
-function drawAxes(ctx, width, height, m) {
+function drawAxes(ctx, width, height, m, yTicks = [], xTicks = []) {
   ctx.strokeStyle = COLORS.grid;
   ctx.lineWidth = 1;
-  const chartW = width - m.left - m.right;
-  const chartH = height - m.top - m.bottom;
-  for (let i = 0; i < 5; i += 1) {
-    const y = m.top + chartH * (i / 4);
-    ctx.beginPath(); ctx.moveTo(m.left, y); ctx.lineTo(width - m.right, y); ctx.stroke();
+  const minY = yTicks[0] ?? 0;
+  const maxY = yTicks[yTicks.length - 1] ?? 1;
+  const zeroNormalized = (0 - minY) / Math.max(1e-9, maxY - minY);
+  const baselineY = zeroNormalized >= 0 && zeroNormalized <= 1
+    ? height - m.bottom - zeroNormalized * (height - m.top - m.bottom)
+    : height - m.bottom;
+
+  yTicks.forEach((value) => {
+    if (Math.abs(value) < 1e-9) return;
+    const normalized = (value - minY) / Math.max(1e-9, maxY - minY);
+    const y = height - m.bottom - normalized * (height - m.top - m.bottom);
+    ctx.beginPath();
+    ctx.moveTo(m.left, y);
+    ctx.lineTo(width - m.right, y);
+    ctx.stroke();
+  });
+
+  xTicks.forEach(({ x }) => {
+    ctx.beginPath();
+    ctx.moveTo(x, m.top);
+    ctx.lineTo(x, height - m.bottom);
+    ctx.stroke();
+  });
+
+  ctx.strokeStyle = "rgba(255,255,255,0.12)";
+  ctx.beginPath(); ctx.moveTo(m.left, baselineY); ctx.lineTo(width - m.right, baselineY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(m.left, m.top); ctx.lineTo(m.left, height - m.bottom); ctx.stroke();
+}
+
+function niceNumber(value, round) {
+  const exponent = Math.floor(Math.log10(Math.max(Math.abs(value), 1e-9)));
+  const fraction = value / (10 ** exponent);
+  let niceFraction;
+  if (round) {
+    if (fraction < 1.5) niceFraction = 1;
+    else if (fraction < 3) niceFraction = 2;
+    else if (fraction < 7) niceFraction = 5;
+    else niceFraction = 10;
+  } else {
+    if (fraction <= 1) niceFraction = 1;
+    else if (fraction <= 2) niceFraction = 2;
+    else if (fraction <= 5) niceFraction = 5;
+    else niceFraction = 10;
   }
-  for (let i = 0; i < 4; i += 1) {
-    const x = m.left + chartW * (i / 3);
-    ctx.beginPath(); ctx.moveTo(x, m.top); ctx.lineTo(x, height - m.bottom); ctx.stroke();
+  return niceFraction * (10 ** exponent);
+}
+
+function buildNiceScale(values, tickCount = 5, opts = {}) {
+  const numeric = (values || []).filter(Number.isFinite);
+  if (!numeric.length) {
+    return { min: 0, max: 1, ticks: [0, 0.25, 0.5, 0.75, 1] };
   }
+
+  const rawMin = Math.min(...numeric);
+  const rawMax = Math.max(...numeric);
+  const includeZero = opts.includeZero === true;
+
+  if (rawMin === rawMax) {
+    const pad = Math.max(Math.abs(rawMin) * 0.08, 1);
+    const min = rawMin - pad;
+    const max = rawMax + pad;
+    return buildNiceScale([min, max], tickCount, { includeZero });
+  }
+
+  const paddedMin = includeZero ? Math.min(0, rawMin) : rawMin - ((rawMax - rawMin) * 0.08);
+  const paddedMax = includeZero ? Math.max(0, rawMax) : rawMax + ((rawMax - rawMin) * 0.08);
+  const range = niceNumber(paddedMax - paddedMin, false);
+  const step = niceNumber(range / Math.max(1, tickCount - 1), true);
+  const min = Math.floor(paddedMin / step) * step;
+  const max = Math.ceil(paddedMax / step) * step;
+  const ticks = [];
+  for (let value = min; value <= max + step * 0.5; value += step) {
+    ticks.push(Number(value.toFixed(10)));
+  }
+  return { min, max, ticks };
 }
 
 function formatAxisDateLabel(rawTs, spanMs) {
   const text = String(rawTs || "");
   if (!text) return "";
+  if (/^\d{4}-\d{2}$/.test(text)) return text;
   const datePart = text.slice(0, 10);
   if (spanMs <= 180 * 24 * 3600 * 1000) return datePart.slice(5);
   return datePart.replace(/-/g, ".");
+}
+
+function parseSeriesDate(rawTs) {
+  const text = String(rawTs || "");
+  if (!text) return null;
+  const normalized = text.length === 7 ? `${text}-01T00:00:00` : text.replace(" ", "T");
+  const date = new Date(normalized);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function getVisibleSeriesStartDate(series) {
+  const parsed = series.map((row) => parseSeriesDate(row.ts)).filter(Boolean);
+  if (!parsed.length) return null;
+  const first = parsed[0];
+  const last = parsed[parsed.length - 1];
+  const spanDays = Math.max(1, Math.round((last.getTime() - first.getTime()) / (24 * 3600 * 1000)));
+  if (spanDays < 365) return first;
+  const startOfYear = new Date(`${first.getFullYear()}-01-01T00:00:00`);
+  return first.getTime() > startOfYear.getTime()
+    ? new Date(`${first.getFullYear() + 1}-01-01T00:00:00`)
+    : startOfYear;
+}
+
+function getXPositionForSeriesPoint(series, index, width, m) {
+  const xStart = m.left;
+  const xEnd = width - m.right;
+  if (!series.length) return xStart;
+  if (series.length === 1) return xStart;
+
+  const parsed = series.map((row) => parseSeriesDate(row.ts));
+  const valid = parsed.filter(Boolean);
+  if (!valid.length) {
+    return xStart + (index / Math.max(1, series.length - 1)) * (xEnd - xStart);
+  }
+
+  const first = getVisibleSeriesStartDate(series) || valid[0];
+  const last = valid[valid.length - 1];
+  const current = parsed[index] || first;
+  const range = Math.max(1, last.getTime() - first.getTime());
+  const clamped = Math.max(first.getTime(), current.getTime());
+  return xStart + ((clamped - first.getTime()) / range) * (xEnd - xStart);
 }
 
 function buildXAxisTicks(series, width, m) {
@@ -600,7 +775,9 @@ function buildXAxisTicks(series, width, m) {
   const firstTs = parseTimestamp(series[0].ts);
   const lastTs = parseTimestamp(series[count - 1].ts);
   const spanMs = Math.max(1, (lastTs || 0) - (firstTs || 0));
-  const desired = count <= 6 ? count : 4;
+  const desired = count <= 6 ? count : 5;
+  const xStart = m.left;
+  const xEnd = width - m.right;
   const indexSet = new Set();
   for (let i = 0; i < desired; i += 1) {
     indexSet.add(Math.round((i * (count - 1)) / Math.max(1, desired - 1)));
@@ -611,13 +788,94 @@ function buildXAxisTicks(series, width, m) {
       const point = series[idx];
       const ts = parseTimestamp(point.ts);
       const x = count === 1
-        ? (m.left + width - m.right) / 2
-        : m.left + (((ts - firstTs) / Math.max(1, lastTs - firstTs)) * (width - m.left - m.right));
+        ? (xStart + xEnd) / 2
+        : xStart + (((ts - firstTs) / Math.max(1, lastTs - firstTs)) * (xEnd - xStart));
       return {
         x,
         label: formatAxisDateLabel(point.ts, spanMs),
       };
     });
+}
+
+function buildCalendarXAxisTicks(series, width, m, monthStep = null) {
+  if (!series.length) return [];
+  const parsed = series
+    .map((point, index) => ({ point, index, date: parseSeriesDate(point.ts) }))
+    .filter((row) => !Number.isNaN(row.date.getTime()));
+  if (!parsed.length) return buildXAxisTicks(series, width, m);
+
+  const first = getVisibleSeriesStartDate(series) || parsed[0].date;
+  const last = parsed[parsed.length - 1].date;
+  const spanDays = Math.max(1, Math.round((last.getTime() - first.getTime()) / (24 * 3600 * 1000)));
+  const chartW = width - m.left - m.right;
+
+  if (spanDays <= 45) {
+    const targetCount = Math.max(2, Math.min(4, Math.floor((width - m.left - m.right) / 140)));
+    const indexSet = new Set([0, parsed.length - 1]);
+    for (let i = 1; i < targetCount - 1; i += 1) {
+      indexSet.add(Math.round((i * (parsed.length - 1)) / Math.max(1, targetCount - 1)));
+    }
+    return Array.from(indexSet)
+      .sort((a, b) => a - b)
+      .map((idx) => {
+        const row = parsed[idx];
+        return {
+          x: getXPositionForSeriesPoint(series, row.index, width, m),
+          label: String(row.point.ts || "").slice(0, 4),
+        };
+      });
+  }
+
+  const seenYears = new Set();
+  const yearTicks = [];
+  parsed.forEach((row) => {
+    const year = row.date.getFullYear();
+    if (row.date.getTime() < first.getTime()) return;
+    if (seenYears.has(year)) return;
+    seenYears.add(year);
+    yearTicks.push({
+      x: year === first.getFullYear() ? m.left : getXPositionForSeriesPoint(series, row.index, width, m),
+      label: `${year}`,
+    });
+  });
+
+  return yearTicks;
+}
+
+function buildZeroBasedNiceScale(values, targetTickCount = 5) {
+  const numeric = (values || []).filter(Number.isFinite);
+  const maxValue = Math.max(0, ...numeric);
+  const roughStep = Math.max(1, maxValue / Math.max(1, targetTickCount - 1));
+  const step = niceNumber(roughStep, true);
+  const max = Math.max(step, Math.ceil(maxValue / step) * step);
+  const ticks = [];
+  for (let value = 0; value <= max + step * 0.5; value += step) {
+    ticks.push(Number(value.toFixed(10)));
+  }
+  return { min: 0, max, ticks };
+}
+
+function buildTightProfitScale(values, targetTickCount = 5) {
+  const numeric = (values || []).filter(Number.isFinite);
+  if (!numeric.length) return { min: 0, max: 1, ticks: [0, 0.25, 0.5, 0.75, 1] };
+
+  const rawMin = Math.min(...numeric);
+  const rawMax = Math.max(...numeric);
+  if (rawMin >= 0) return buildZeroBasedNiceScale(numeric, targetTickCount);
+
+  const dominant = Math.max(Math.abs(rawMin), Math.abs(rawMax));
+  const step = niceNumber(Math.max(1, dominant) / Math.max(1, targetTickCount - 1), true);
+  const min = Math.floor(rawMin / step) * step;
+  const max = Math.max(step, Math.ceil(rawMax / step) * step);
+  const ticks = [];
+  for (let value = min; value <= max + step * 0.5; value += step) {
+    ticks.push(Number(value.toFixed(10)));
+  }
+  if (!ticks.some((value) => Math.abs(value) < 1e-9)) {
+    ticks.push(0);
+    ticks.sort((a, b) => a - b);
+  }
+  return { min, max, ticks };
 }
 
 function drawAxisLabels(ctx, width, height, m, min, max, series) {
@@ -626,16 +884,39 @@ function drawAxisLabels(ctx, width, height, m, min, max, series) {
   ctx.font = `11px ${getComputedStyle(document.documentElement).getPropertyValue("--mono") || "IBM Plex Mono"}`;
   ctx.textAlign = "right";
   ctx.textBaseline = "middle";
-  for (let i = 0; i < 5; i += 1) {
-    const y = m.top + (height - m.top - m.bottom) * (i / 4);
-    const value = max - ((max - min) * (i / 4));
-    ctx.fillText(fmtUsd(value), m.left - 8, y);
-  }
-  const ticks = buildXAxisTicks(series, width, m);
-  ctx.textAlign = "center";
+  const scale = buildNiceScale([min, max]);
+  const xTicks = buildXAxisTicks(series, width, m);
+  scale.ticks.forEach((value) => {
+    const normalized = (value - scale.min) / Math.max(1e-9, scale.max - scale.min);
+    const y = height - m.bottom - normalized * (height - m.top - m.bottom);
+    ctx.fillText(fmtUsd(value), m.left - 12, y);
+  });
   ctx.textBaseline = "top";
-  ticks.forEach(({ label, x }) => {
-    ctx.fillText(label, x, height - m.bottom + 6);
+  xTicks.forEach(({ label, x }, index) => {
+    ctx.textAlign = index === 0 ? "left" : index === xTicks.length - 1 ? "right" : "center";
+    ctx.fillText(label, x, height - m.bottom + 10);
+  });
+  ctx.restore();
+}
+
+function drawFixedAxisLabels(ctx, width, height, m, ticks, series, xTickBuilder = buildXAxisTicks) {
+  ctx.save();
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = `11px ${getComputedStyle(document.documentElement).getPropertyValue("--mono") || "IBM Plex Mono"}`;
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  const min = ticks[0];
+  const max = ticks[ticks.length - 1];
+  const xTicks = xTickBuilder(series, width, m);
+  ticks.forEach((value) => {
+    const normalized = (value - min) / Math.max(1e-9, max - min);
+    const y = height - m.bottom - normalized * (height - m.top - m.bottom);
+    ctx.fillText(fmtUsd(value), m.left - 12, y);
+  });
+  ctx.textBaseline = "top";
+  xTicks.forEach(({ label, x }, index) => {
+    ctx.textAlign = index === 0 ? "left" : index === xTicks.length - 1 ? "right" : "center";
+    ctx.fillText(label, x, height - m.bottom + 10);
   });
   ctx.restore();
 }
@@ -653,9 +934,12 @@ function drawPointMarkers(ctx, points, color) {
 
 function drawSmoothLine(ctx, points, color, fill = false) {
   if (points.length < 2) return;
+  const chartHeight = ctx.canvas.height / (window.devicePixelRatio || 1);
+  const baselineY = points[0].baselineY ?? points.reduce((max, point) => Math.max(max, point.y), -Infinity);
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   ctx.save();
   ctx.beginPath();
-  ctx.rect(0, 0, ctx.canvas.width / (window.devicePixelRatio || 1), ctx.canvas.height / (window.devicePixelRatio || 1));
+  ctx.rect(0, 0, ctx.canvas.width / (window.devicePixelRatio || 1), chartHeight);
   ctx.clip();
   ctx.strokeStyle = color;
   ctx.lineWidth = 2.2;
@@ -664,17 +948,32 @@ function drawSmoothLine(ctx, points, color, fill = false) {
   ctx.beginPath();
   ctx.moveTo(points[0].x, points[0].y);
   if (points.length <= 6) {
-    for (let i = 1; i < points.length; i += 1) ctx.lineTo(points[i].x, points[i].y);
+    for (let i = 1; i < points.length; i += 1) {
+      const prev = points[i - 1];
+      const next = points[i];
+      const mx = (prev.x + next.x) / 2;
+      ctx.quadraticCurveTo(prev.x, prev.y, mx, (prev.y + next.y) / 2);
+    }
+    ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
   } else {
+    const tension = 0.12;
     for (let i = 0; i < points.length - 1; i += 1) {
       const p0 = points[i - 1] || points[i];
       const p1 = points[i];
       const p2 = points[i + 1];
       const p3 = points[i + 2] || p2;
-      const cp1x = p1.x + (p2.x - p0.x) * 0.12;
-      const cp1y = p1.y + (p2.y - p0.y) * 0.12;
-      const cp2x = p2.x - (p3.x - p1.x) * 0.12;
-      const cp2y = p2.y - (p3.y - p1.y) * 0.12;
+      const cp1x = p1.x + (p2.x - p0.x) * tension;
+      const cp1y = clamp(
+        p1.y + (p2.y - p0.y) * tension,
+        Math.min(p1.y, p2.y),
+        Math.max(p1.y, p2.y)
+      );
+      const cp2x = p2.x - (p3.x - p1.x) * tension;
+      const cp2y = clamp(
+        p2.y - (p3.y - p1.y) * tension,
+        Math.min(p1.y, p2.y),
+        Math.max(p1.y, p2.y)
+      );
       ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
     }
   }
@@ -682,11 +981,10 @@ function drawSmoothLine(ctx, points, color, fill = false) {
   if (fill) {
     const last = points[points.length - 1];
     const first = points[0];
-    const bottom = ctx.canvas.height / (window.devicePixelRatio || 1) - 28;
-    ctx.lineTo(last.x, bottom);
-    ctx.lineTo(first.x, bottom);
+    ctx.lineTo(last.x, baselineY);
+    ctx.lineTo(first.x, baselineY);
     ctx.closePath();
-    const grad = ctx.createLinearGradient(0, 34, 0, bottom);
+    const grad = ctx.createLinearGradient(0, 34, 0, baselineY);
     grad.addColorStop(0, "rgba(51,209,122,0.18)");
     grad.addColorStop(1, "rgba(51,209,122,0)");
     ctx.fillStyle = grad;
@@ -697,113 +995,136 @@ function drawSmoothLine(ctx, points, color, fill = false) {
 
 function toPoints(series, valueKey, width, height, m, minOverride = null, maxOverride = null) {
   const vals = series.map((row) => Number(row[valueKey])).filter(Number.isFinite);
-  const min = minOverride ?? Math.min(...vals);
-  const max = maxOverride ?? Math.max(...vals);
-  const start = parseTimestamp(series[0].ts);
-  const end = parseTimestamp(series[series.length - 1].ts);
-  const range = Math.max(1, end - start);
+  const scale = buildNiceScale(vals);
+  const min = minOverride ?? scale.min;
+  const max = maxOverride ?? scale.max;
+  const zeroNormalized = (0 - min) / Math.max(1e-9, max - min);
+  const baselineY = zeroNormalized >= 0 && zeroNormalized <= 1
+    ? height - m.bottom - zeroNormalized * (height - m.top - m.bottom)
+    : height - m.bottom;
   return series.map((row) => {
-    const ts = parseTimestamp(row.ts);
-    const x = m.left + ((ts - start) / range) * (width - m.left - m.right);
+    const x = getXPositionForSeriesPoint(series, series.indexOf(row), width, m);
     const normalized = (Number(row[valueKey]) - min) / Math.max(1e-9, max - min);
     const y = height - m.bottom - normalized * (height - m.top - m.bottom);
-    return { x, y };
+    return { x, y, baselineY };
   });
 }
 
 function drawDualCurveChart(canvas, leftSeries, leftKey, rightSeries, rightKey, leftColor, rightColor) {
   const { ctx, width, height } = resizeCanvas(canvas);
-  const m = { top: 24, right: 32, bottom: 42, left: 68 };
+  const m = { top: 20, right: 28, bottom: 58, left: 92 };
   ctx.clearRect(0, 0, width, height);
   const leftVals = leftSeries.map((row) => Number(row[leftKey])).filter(Number.isFinite);
   const rightVals = rightSeries.map((row) => Number(row[rightKey])).filter(Number.isFinite);
-  const leftMin = Math.min(...leftVals);
-  const leftMax = Math.max(...leftVals);
-  const rightMin = Math.min(...rightVals);
-  const rightMax = Math.max(...rightVals);
-  drawAxes(ctx, width, height, m);
-  const leftPoints = toPoints(leftSeries, leftKey, width, height, m, leftMin, leftMax);
-  const rightPoints = toPoints(rightSeries, rightKey, width, height, m, rightMin, rightMax);
+  const leftScale = buildNiceScale(leftVals);
+  const rightScale = buildNiceScale(rightVals);
+  drawAxes(ctx, width, height, m, leftScale.ticks, buildXAxisTicks(leftSeries, width, m));
+  const leftPoints = toPoints(leftSeries, leftKey, width, height, m, leftScale.min, leftScale.max);
+  const rightPoints = toPoints(rightSeries, rightKey, width, height, m, rightScale.min, rightScale.max);
   drawSmoothLine(ctx, leftPoints, leftColor, true);
   drawSmoothLine(ctx, rightPoints, rightColor, false);
-  drawAxisLabels(ctx, width, height, m, leftMin, leftMax, leftSeries);
+  drawAxisLabels(ctx, width, height, m, leftScale.min, leftScale.max, leftSeries);
 }
 
 function drawOverlayStrategyChart(canvas, data) {
   const { ctx, width, height } = resizeCanvas(canvas);
-  const m = { top: 24, right: 32, bottom: 42, left: 68 };
+  const m = { top: 20, right: 28, bottom: 58, left: 92 };
   ctx.clearRect(0, 0, width, height);
-  drawAxes(ctx, width, height, m);
   const grapesSeries = data.strategies.grapes.equity_curve || [];
   const citrusSeries = data.strategies.citrus.portfolio_curve || [];
   if (!grapesSeries.length || !citrusSeries.length) return;
-  const vals = [
-    ...grapesSeries.map((row) => Number(row.equity)).filter(Number.isFinite),
-    ...citrusSeries.map((row) => Number(row.equity)).filter(Number.isFinite),
-  ];
-  const min = Math.min(...vals);
-  const max = Math.max(...vals);
-  const grapesPoints = toPoints(grapesSeries, "equity", width, height, m, min, max);
-  const citrusPoints = toPoints(citrusSeries, "equity", width, height, m, min, max);
+  const grapesBase = Number(grapesSeries[0]?.equity || 0);
+  const citrusBase = Number(citrusSeries[0]?.equity || 0);
+  const grapesPnl = grapesSeries.map((row) => ({ ts: row.ts, pnl: Math.max(0, Number(row.equity || 0) - grapesBase) }));
+  const citrusPnl = citrusSeries.map((row) => ({ ts: row.ts, pnl: Math.max(0, Number(row.equity || 0) - citrusBase) }));
+  const scale = buildZeroBasedNiceScale([
+    ...grapesPnl.map((row) => Number(row.pnl)),
+    ...citrusPnl.map((row) => Number(row.pnl)),
+  ]);
+  const xTicks = buildCalendarXAxisTicks(grapesPnl, width, m);
+  drawAxes(ctx, width, height, m, scale.ticks, xTicks);
+  const grapesPoints = toPoints(grapesPnl, "pnl", width, height, m, scale.min, scale.max);
+  const citrusPoints = toPoints(citrusPnl, "pnl", width, height, m, scale.min, scale.max);
   drawSmoothLine(ctx, grapesPoints, COLORS.green, true);
   drawSmoothLine(ctx, citrusPoints, COLORS.blue, false);
-  drawAxisLabels(ctx, width, height, m, min, max, grapesSeries);
+  drawFixedAxisLabels(ctx, width, height, m, scale.ticks, grapesPnl, () => xTicks);
 }
 
 function drawAssetOverlayChart(canvas, assetCurves) {
   const { ctx, width, height } = resizeCanvas(canvas);
   ctx.clearRect(0, 0, width, height);
-  const m = { top: 24, right: 42, bottom: 50, left: 78 };
+  const m = { top: 20, right: 28, bottom: 58, left: 92 };
   const entries = Object.entries(assetCurves || {}).filter(([, series]) => Array.isArray(series) && series.length);
   if (!entries.length) return;
   const allVals = entries.flatMap(([, series]) => series.map((row) => Number(row.pnl)).filter(Number.isFinite));
-  const min = Math.min(...allVals);
-  const max = Math.max(...allVals);
-  drawAxes(ctx, width, height, m);
+  const scale = buildTightProfitScale(allVals, 5);
+  const xTicks = buildCalendarXAxisTicks(entries[0][1], width, m);
+  drawAxes(ctx, width, height, m, scale.ticks, xTicks);
   const palette = { BTC: COLORS.green, ETH: COLORS.blue, SOL: COLORS.amber };
   entries.forEach(([asset, series], idx) => {
-    const points = toPoints(series, "pnl", width, height, m, min, max);
+    const points = toPoints(series, "pnl", width, height, m, scale.min, scale.max);
     drawSmoothLine(ctx, points, palette[asset] || COLORS.text, idx === 0);
   });
-  drawAxisLabels(ctx, width, height, m, min, max, entries[0][1]);
+  drawFixedAxisLabels(ctx, width, height, m, scale.ticks, entries[0][1], () => xTicks);
 }
 
-function buildCumulativePnlSeries(trades) {
+function buildDailyPnlSeries(trades) {
   const ordered = [...(trades || [])]
-    .filter((trade) => trade && trade.exit_ts)
+    .filter((trade) => trade?.exit_ts)
     .sort((a, b) => String(a.exit_ts).localeCompare(String(b.exit_ts)));
   if (!ordered.length) return [];
-  let running = 0;
-  const startTs = ordered[0].entry_ts || ordered[0].exit_ts;
-  const rows = [{ ts: startTs, pnl: 0 }];
+
+  const grouped = new Map();
   ordered.forEach((trade) => {
-    running += Number(trade.net_pnl_usd || 0);
-    rows.push({ ts: trade.exit_ts, pnl: Number(running.toFixed(2)) });
+    const day = String(trade.exit_ts).slice(0, 10);
+    grouped.set(day, (grouped.get(day) || 0) + Number(trade.net_pnl_usd || 0));
   });
-  return rows;
+
+  const firstDay = new Date(`${ordered[0].exit_ts.slice(0, 10)}T00:00:00`);
+  const lastDay = new Date(`${ordered[ordered.length - 1].exit_ts.slice(0, 10)}T00:00:00`);
+  const rows = [];
+  let running = 0;
+  const cursor = new Date(firstDay);
+
+  while (cursor <= lastDay) {
+    const key = cursor.toISOString().slice(0, 10);
+    running += grouped.get(key) || 0;
+    rows.push({ ts: key, pnl: Number(running.toFixed(2)) });
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return rows.slice(-180);
 }
 
-function drawTotalPnlChart(canvas, trades) {
-  const series = buildCumulativePnlSeries(trades);
+function drawDailyPnlChart(canvas, trades) {
+  const series = buildDailyPnlSeries(trades);
   const { ctx, width, height } = resizeCanvas(canvas);
   ctx.clearRect(0, 0, width, height);
   if (!series.length) return;
-  const m = { top: 24, right: 42, bottom: 50, left: 78 };
+  const m = { top: 20, right: 28, bottom: 58, left: 92 };
   const vals = series.map((row) => Number(row.pnl)).filter(Number.isFinite);
-  const min = Math.min(...vals, 0);
-  const max = Math.max(...vals, 0);
-  drawAxes(ctx, width, height, m);
-  const points = toPoints(series, "pnl", width, height, m, min, max);
+  const scale = buildZeroBasedNiceScale(vals, 6);
+  const xTicks = buildCalendarXAxisTicks(series, width, m);
+  drawAxes(ctx, width, height, m, scale.ticks, xTicks);
+  const points = toPoints(
+    series.map((row) => ({ ts: row.ts, pnl: Math.max(0, Number(row.pnl)) })),
+    "pnl",
+    width,
+    height,
+    m,
+    scale.min,
+    scale.max
+  );
   drawSmoothLine(ctx, points, COLORS.green, true);
-  drawPointMarkers(ctx, points, COLORS.green);
-  drawAxisLabels(ctx, width, height, m, min, max, series);
+  drawPointMarkers(ctx, points.filter((_, index) => index % 14 === 0 || index === points.length - 1), COLORS.green);
+  drawFixedAxisLabels(ctx, width, height, m, scale.ticks, series, () => xTicks);
 }
 
 function drawGrapesChart(canvas, data) {
   const lens = state.lenses.grapes || "backtest";
   const view = getStrategyLensData("grapes");
   if (lens === "live") {
-    drawTotalPnlChart(canvas, view?.all_trades || []);
+    drawDailyPnlChart(canvas, view?.all_trades || []);
     return "single";
   }
   drawAssetOverlayChart(canvas, view?.asset_curves || data.strategies.grapes.asset_curves || {});
@@ -814,7 +1135,7 @@ function drawCitrusAssetReturns(canvas, data) {
   const lens = state.lenses.citrus || "backtest";
   const view = getStrategyLensData("citrus");
   if (lens === "live") {
-    drawTotalPnlChart(canvas, view?.all_trades || []);
+    drawDailyPnlChart(canvas, view?.all_trades || []);
     return "single";
   }
   drawAssetOverlayChart(canvas, view?.asset_curves || data.strategies.citrus.asset_curves || {});
@@ -1075,6 +1396,7 @@ function render(data) {
   renderComparison(data);
   renderGrapesAssets(data);
   renderCitrusAssets(data);
+  syncSleevePanelHeights();
   renderGrapesSummary(data);
   renderGrapesRegime(data);
   renderCitrusSummary(data);

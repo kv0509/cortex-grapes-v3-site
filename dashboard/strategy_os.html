@@ -11,7 +11,7 @@
       rel="stylesheet"
     />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="stylesheet" href="./strategy_os.css?v=20260324g" />
+    <link rel="stylesheet" href="./strategy_os.css?v=20260327p" />
   </head>
   <body>
     <div class="os-shell">
@@ -36,9 +36,17 @@
       <main class="os-main">
         <section class="panel hero-panel" id="master-board-hero">
           <div class="hero-copy">
-            <p class="eyebrow">Master Board</p>
-            <h2>Where Capital Chooses Its Alpha</h2>
-            <p class="hero-note">Two engines do not sit side by side. They compete for capital. Money does not listen to stories. It flows toward the stronger engine. NTS Alpha Lab turns strategies into a system with one capital basis, one risk language, and one execution standard.</p>
+            <div class="hero-kicker-row">
+              <p class="eyebrow">NTS Alpha Lab</p>
+              <span class="hero-kicker-mark">Strategy OS</span>
+            </div>
+            <h2>One operating system for strategy research, selection, and capital deployment.</h2>
+            <p class="hero-note">A firm-level strategy surface for comparing research, translating risk into one capital language, and assigning exposure to the engine that is currently earning it.</p>
+            <div class="hero-pill-row">
+              <span class="hero-pill">Quant research</span>
+              <span class="hero-pill">Capital allocation</span>
+              <span class="hero-pill">Live strategy state</span>
+            </div>
           </div>
           <div class="hero-status" id="hero-status"></div>
         </section>
@@ -48,14 +56,15 @@
             <div>
               <p class="eyebrow">Portfolio Overview</p>
               <h3>Dual-Strategy Command Board</h3>
+              <p class="section-note">Two mandates on one normalized capital base, so relative quality, contribution, and allocation fitness stay readable.</p>
             </div>
           </div>
-          <div class="strategy-grid" id="strategy-grid"></div>
+          <div class="strategy-grid strategy-grid-overview" id="strategy-grid"></div>
           <div class="comparison-wrap">
             <div class="comparison-card">
               <div class="card-head">
                 <p class="eyebrow">Overlay</p>
-                <h4>🍇 / 🍊 Equity Overlay</h4>
+                <h4>Equity Overlay</h4>
               </div>
               <div class="chart-legend" id="overview-legend"></div>
               <canvas id="overlay-overview-canvas" class="chart-canvas tall"></canvas>
@@ -63,23 +72,23 @@
             <div class="comparison-card">
               <div class="card-head">
                 <p class="eyebrow">Comparison</p>
-                <h4>Core Metrics Side by Side</h4>
+                <h4>Relative Quality</h4>
               </div>
               <div class="comparison-table" id="comparison-table"></div>
             </div>
           </div>
           <div class="sleeve-grid">
-            <div class="panel subsection">
+            <div class="panel subsection sleeve-panel sleeve-panel-grapes">
               <div class="card-head">
                 <p class="eyebrow">Grapes Sleeves</p>
-                <h4>🍇 Asset Profit Distribution</h4>
+                <h4>Asset Profit Distribution</h4>
               </div>
               <div id="grapes-asset-cards" class="asset-card-grid"></div>
             </div>
-            <div class="panel subsection">
+            <div class="panel subsection sleeve-panel sleeve-panel-citrus">
               <div class="card-head">
                 <p class="eyebrow">Citrus Sleeves</p>
-                <h4>🍊 Asset Profit Distribution</h4>
+                <h4>Asset Profit Distribution</h4>
               </div>
               <div id="citrus-asset-cards" class="asset-card-grid"></div>
             </div>
@@ -90,7 +99,8 @@
           <div class="panel-head">
             <div>
               <p class="eyebrow">Strategy Detail</p>
-              <h3>🍇 Cortex Grapes</h3>
+              <h3>Cortex Grapes</h3>
+              <p class="section-note">Trend and structure mandate designed for cleaner compounding through persistent market phases.</p>
             </div>
           </div>
           <div id="grapes-board-cards" class="strategy-grid board-grid"></div>
@@ -188,7 +198,8 @@
           <div class="panel-head">
             <div>
               <p class="eyebrow">Strategy Detail</p>
-              <h3>🍊 Cortex Citrus</h3>
+              <h3>Cortex Citrus</h3>
+              <p class="section-note">Cross-asset opportunistic mandate focused on extracting asymmetric dislocations with tighter participation quality.</p>
             </div>
           </div>
           <div id="citrus-board-cards" class="strategy-grid board-grid"></div>
@@ -283,6 +294,6 @@
         </section>
       </main>
     </div>
-    <script type="module" src="./strategy_os.js?v=20260324g"></script>
+    <script type="module" src="./strategy_os.js?v=20260327b"></script>
   </body>
 </html>
