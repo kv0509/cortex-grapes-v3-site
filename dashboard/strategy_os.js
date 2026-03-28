@@ -268,16 +268,6 @@ function applyLanguage() {
     if (heading) heading.textContent = title;
   };
   setText('.switch-tab[data-view="all"]', state.lang === "zh" ? "总览" : "Overview");
-  setText('#master-board-hero .hero-kicker-mark', t("heroKicker"));
-  setText('#master-board-hero h2', t("heroHeadline"));
-  setText('#master-board-hero .hero-note', t("heroNote"));
-  setText('[data-panel="all"] .panel-head .eyebrow', t("portfolioOverview"));
-  setText('[data-panel="all"] .panel-head h3', t("dualBoard"));
-  setText('[data-panel="all"] .panel-head .section-note', t("dualBoardNote"));
-  setText('[data-panel="all"] .comparison-wrap .comparison-card:first-child h4', t("equityOverlay"));
-  setText('[data-panel="all"] .comparison-wrap .comparison-card:last-child h4', t("coreCompare"));
-  setText('[data-panel="all"] .sleeve-grid .panel:first-child h4', t("grapesSleeves"));
-  setText('[data-panel="all"] .sleeve-grid .panel:last-child h4', t("citrusSleeves"));
   setText('[data-panel="grapes"] .panel-head .eyebrow', t("strategyDetail"));
   setText('[data-panel="grapes"] .panel-head h3', t("grapesName"));
   setText('[data-panel="grapes"] .panel-head .section-note', t("grapesNote"));
@@ -315,67 +305,118 @@ function applyLanguage() {
 function renderHero(data) {
   document.getElementById("updated-at").textContent = `${t("updated")} ${fmtUpdatedAt(data.meta.updated_at)}`;
   const target = document.getElementById("hero-status");
+  if (!target) return;
   const grapes = data.strategies.grapes;
   const citrus = data.strategies.citrus;
+  const grapesLive = grapes.execution_views?.live || {};
+  const citrusLive = citrus.execution_views?.live || {};
+  const totalEquity = Number(grapes.summary.final_equity || 0) + Number(citrus.portfolio.final_equity || 0);
+  const totalPnl = Number(grapes.summary.net_pnl_usd || 0) + Number(citrus.portfolio.net_pnl_usd || 0);
+  const livePnl = Number(grapesLive.summary?.net_pnl_usd || 0) + Number(citrusLive.summary?.net_pnl_usd || 0);
+  const livePositions = (grapes.active_positions?.length || 0) + (citrus.active_positions?.length || 0);
   target.innerHTML = `
-    <article class="hero-stat">
-      <div class="hero-stat-label">${state.lang === "zh" ? "Strategy Spread" : "Strategy Spread"}</div>
-      <div class="hero-stat-value">${fmtPct(grapes.summary.total_return_pct)} / ${fmtPct(citrus.portfolio.total_return_pct_on_base)}</div>
-      <div class="hero-stat-sub"><strong>🍇 Grapes — ${state.lang === "zh" ? "复利型引擎" : "Compounding Engine"}</strong><br/>${state.lang === "zh" ? "偏向更持续的结构行情，目标是稳定累积净值质量。" : "Built to stay with clearer structure and compound through cleaner trend conditions."}<br/><br/><strong>🍊 Citrus — ${state.lang === "zh" ? "机会型引擎" : "Opportunistic Engine"}</strong><br/>${state.lang === "zh" ? "偏向短中期错配机会，目标是提高参与质量与配置效率。" : "Built to exploit cross-asset dislocations and improve participation quality."}</div>
+    <article class="hero-stat hero-stat-main">
+      <div class="hero-stat-label">${state.lang === "zh" ? "Combined Equity" : "Combined Equity"}</div>
+      <div class="hero-stat-value">${fmtUsd(totalEquity)}</div>
+      <div class="hero-stat-sub">${state.lang === "zh" ? "两套 live engine 当前合并资本。" : "Combined live capital across both engines."}</div>
     </article>
-    <article class="hero-stat">
-      <div class="hero-stat-label">${state.lang === "zh" ? "Unified Basis" : "Unified Basis"}</div>
-      <div class="hero-stat-value">${fmtUsd(2000)}</div>
-      <div class="hero-stat-sub">${state.lang === "zh"
-        ? "所有表现统一归一到同一资金基准。没有杠杆幻觉，没有仓位偏置，只有可比较的策略质量。"
-        : "Every metric is normalized onto the same capital basis. No leverage illusion. No sizing bias. Pure strategy quality, comparable at a glance."}</div>
+    <article class="hero-stat hero-stat-line">
+      <span class="hero-line-label">${state.lang === "zh" ? "Net PnL" : "Net PnL"}</span>
+      <strong class="hero-line-value ${totalPnl < 0 ? "neg" : "pos"}">${fmtUsd(totalPnl)}</strong>
     </article>
-    <article class="hero-stat">
-      <div class="hero-stat-label">${state.lang === "zh" ? "Always Current" : "Always Current"}</div>
-      <div class="hero-stat-value">${fmtUsd(grapes.summary.final_equity)} / ${fmtUsd(citrus.portfolio.final_equity)}</div>
-      <div class="hero-stat-sub">${state.lang === "zh"
-        ? `当前资金状态直接展示策略最新运行结果。仓位、PnL、资本占用会继续变化，这不是静态宣传页。`
-        : `Current capital state is tied to the latest running snapshot. Positions change, PnL evolves, and capital reallocates. This is a live strategy website, not a frozen report.`}</div>
+    <article class="hero-stat hero-stat-line">
+      <span class="hero-line-label">${state.lang === "zh" ? "Live PnL" : "Live PnL"}</span>
+      <strong class="hero-line-value ${livePnl < 0 ? "neg" : "pos"}">${fmtUsd(livePnl)}</strong>
+    </article>
+    <article class="hero-stat hero-stat-line">
+      <span class="hero-line-label">${state.lang === "zh" ? "Open Risk" : "Open Risk"}</span>
+      <strong class="hero-line-value">${livePositions}</strong>
+    </article>
+    <article class="hero-stat hero-stat-line">
+      <span class="hero-line-label">${state.lang === "zh" ? "Base Capital" : "Base Capital"}</span>
+      <strong class="hero-line-value">${fmtUsd((grapes.summary.initial_equity || 0) + (citrus.portfolio.synthetic_base_equity_usd || citrus.portfolio.final_equity - citrus.portfolio.net_pnl_usd || 0))}</strong>
+    </article>
+    <article class="hero-stat hero-stat-line">
+      <span class="hero-line-label">${state.lang === "zh" ? "Last Sync" : "Last Sync"}</span>
+      <strong class="hero-line-value">${fmtUpdatedAt(data.meta.updated_at)}</strong>
     </article>
   `;
 }
 
-function renderStrategyCards(data) {
+function renderOverviewStatusStrip(data) {
   const grapes = data.strategies.grapes;
   const citrus = data.strategies.citrus;
-  document.getElementById("strategy-grid").innerHTML = `
-    <article class="strategy-card strategy-card-grapes">
-      <div class="strategy-title">
-        <div><h4>🍇 Cortex Grapes</h4><p>${state.lang === "zh" ? "趋势与结构交易引擎，目标是在更可持续的行情里稳步积累净值质量。" : "Trend and structure engine built to compound through cleaner, more persistent market phases."}</p></div>
-        <span class="strategy-role">${state.lang === "zh" ? "Compounding Mandate" : "Compounding Mandate"}</span>
+  const target = document.getElementById("overview-status-strip");
+  if (!target) return;
+  const grapesLive = grapes.execution_views?.live || {};
+  const citrusLive = citrus.execution_views?.live || {};
+  const totalLivePnl = Number(grapesLive.summary?.net_pnl_usd || 0) + Number(citrusLive.summary?.net_pnl_usd || 0);
+  const livePositions = (grapes.active_positions?.length || 0) + (citrus.active_positions?.length || 0);
+  target.innerHTML = `
+    <article class="overview-status-tile">
+      <div class="overview-status-label">Capital</div>
+      <div class="overview-status-value">${fmtUsd((grapes.summary.initial_equity || 0) + (citrus.portfolio.synthetic_base_equity_usd || citrus.portfolio.final_equity - citrus.portfolio.net_pnl_usd || 0))}</div>
+      <div class="overview-status-note">${state.lang === "zh" ? "统一归一资金基准" : "Normalized base"}</div>
+    </article>
+    <article class="overview-status-tile">
+      <div class="overview-status-label">Live PnL</div>
+      <div class="overview-status-value ${totalLivePnl < 0 ? "neg" : "pos"}">${fmtUsd(totalLivePnl)}</div>
+      <div class="overview-status-note">${state.lang === "zh" ? "当前账本汇总" : "Current ledger"}</div>
+    </article>
+    <article class="overview-status-tile">
+      <div class="overview-status-label">Open Risk</div>
+      <div class="overview-status-value">${livePositions}</div>
+      <div class="overview-status-note">${state.lang === "zh" ? "当前未平仓仓位" : "Open positions"}</div>
+    </article>
+    <article class="overview-status-tile">
+      <div class="overview-status-label">Last Sync</div>
+      <div class="overview-status-value">${fmtUpdatedAt(data.meta.updated_at)}</div>
+      <div class="overview-status-note">${state.lang === "zh" ? "最新刷新时间" : "Dashboard refresh"}</div>
+    </article>
+  `;
+}
+
+function renderOverviewStrategyTape(data) {
+  const target = document.getElementById("overview-strategy-tape");
+  if (!target) return;
+  const rows = [
+    {
+      key: "grapes",
+      name: "Cortex Grapes",
+      role: "Compounding Mandate",
+      totalReturn: data.strategies.grapes.summary.total_return_pct,
+      finalEquity: data.strategies.grapes.summary.final_equity,
+      netPnl: data.strategies.grapes.summary.net_pnl_usd,
+      pf: data.strategies.grapes.summary.profit_factor,
+      trades: data.strategies.grapes.summary.trade_count,
+      winRate: data.strategies.grapes.summary.win_rate_pct,
+    },
+    {
+      key: "citrus",
+      name: "Cortex Citrus",
+      role: "Adaptive Mandate",
+      totalReturn: data.strategies.citrus.portfolio.total_return_pct_on_base,
+      finalEquity: data.strategies.citrus.portfolio.final_equity,
+      netPnl: data.strategies.citrus.portfolio.net_pnl_usd,
+      pf: data.strategies.citrus.portfolio.profit_factor,
+      trades: data.strategies.citrus.portfolio.trades,
+      winRate: data.strategies.citrus.portfolio.win_rate_pct,
+    },
+  ];
+  target.innerHTML = rows.map((row) => `
+    <article class="strategy-tape-row ${row.key}">
+      <div class="strategy-tape-head">
+        <div class="strategy-tape-name">${row.name}</div>
+        <div class="strategy-tape-role">${row.role}</div>
       </div>
-      <div class="strategy-main">
-        <div><div class="main-number" style="color:${COLORS.green}">${fmtPct(grapes.summary.total_return_pct)}</div><div class="kpi-sub">Total Return</div></div>
-        <div><div class="main-number">${fmtUsd(grapes.summary.final_equity)}</div><div class="kpi-sub">Final Equity</div></div>
-      </div>
-      <div class="mini-metrics">
-        <div class="mini-metric"><span>Net PnL</span><strong>${fmtUsd(grapes.summary.net_pnl_usd)}</strong></div>
-        <div class="mini-metric"><span>Profit Factor</span><strong>${fmtNum(grapes.summary.profit_factor || 0)}</strong></div>
-        <div class="mini-metric"><span>Trades</span><strong>${grapes.summary.trade_count}</strong></div>
-        <div class="mini-metric"><span>Win Rate</span><strong>${fmtPct(grapes.summary.win_rate_pct, 1)}</strong></div>
+      <div class="strategy-tape-body">
+        <div class="strategy-tape-metric"><span>Return</span><strong class="${Number(row.totalReturn) < 0 ? "neg" : "pos"}">${fmtPct(row.totalReturn, 2)}</strong></div>
+        <div class="strategy-tape-metric"><span>Equity</span><strong>${fmtUsd(row.finalEquity)}</strong></div>
+        <div class="strategy-tape-metric"><span>PnL</span><strong class="${Number(row.netPnl) < 0 ? "neg" : "pos"}">${fmtUsd(row.netPnl)}</strong></div>
+        <div class="strategy-tape-metric"><span>Quality</span><strong>${fmtNum(row.pf, 2)} PF · ${fmtPct(row.winRate, 1)} WR · ${row.trades}</strong></div>
       </div>
     </article>
-    <article class="strategy-card strategy-card-citrus">
-      <div class="strategy-title">
-        <div><h4>🍊 Cortex Citrus</h4><p>${state.lang === "zh" ? "多资产错配机会引擎，目标是在更快的市场变化中提升参与质量与资本效率。" : "Cross-asset dislocation engine built to capture faster opportunity windows with tighter execution discipline."}</p></div>
-        <span class="strategy-role">${state.lang === "zh" ? "Adaptive Mandate" : "Adaptive Mandate"}</span>
-      </div>
-      <div class="strategy-main">
-        <div><div class="main-number" style="color:${COLORS.green}">${fmtPct(citrus.portfolio.total_return_pct_on_base)}</div><div class="kpi-sub">Total Return</div></div>
-        <div><div class="main-number">${fmtUsd(citrus.portfolio.final_equity)}</div><div class="kpi-sub">Final Equity</div></div>
-      </div>
-      <div class="mini-metrics">
-        <div class="mini-metric"><span>Net PnL</span><strong>${fmtUsd(citrus.portfolio.net_pnl_usd)}</strong></div>
-        <div class="mini-metric"><span>Profit Factor</span><strong>${fmtNum(citrus.portfolio.profit_factor)}</strong></div>
-        <div class="mini-metric"><span>Trades</span><strong>${citrus.portfolio.trades}</strong></div>
-        <div class="mini-metric"><span>Win Rate</span><strong>${fmtPct(citrus.portfolio.win_rate_pct, 1)}</strong></div>
-      </div>
-    </article>`;
+  `).join("");
 }
 
 function renderBoardCards(targetId, rows) {
@@ -423,17 +464,22 @@ function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
 }
 
 function renderComparison(data) {
-  document.getElementById("comparison-table").innerHTML = `
+  const target = document.getElementById("comparison-table");
+  if (!target) return;
+  const rows = data.comparison_rows || [];
+  target.innerHTML = `
     <div class="comparison-row comparison-head">
       <div class="label">Metric</div>
       <div class="value value-head">Grapes</div>
       <div class="value value-head">Citrus</div>
+      <div class="delta value-head">Spread</div>
     </div>
-    ${data.comparison_rows.map((row) => `
+    ${rows.map((row) => `
     <div class="comparison-row">
       <div class="label">${row.label}</div>
       <div class="value">${row.grapes}</div>
       <div class="value">${row.citrus}</div>
+      <div class="delta ${String(row.delta || "").startsWith("-") ? "neg" : "pos"}">${row.delta || "—"}</div>
     </div>`).join("")}`;
 }
 
@@ -449,7 +495,6 @@ function renderLegend(targetId, items) {
 }
 
 function renderGrapesAssets(data) {
-  const target = document.getElementById("grapes-asset-cards");
   const detailTarget = document.getElementById("grapes-asset-cards-detail");
   const topRows = data.strategies.grapes.asset_stats || [];
   const detailRows = computeAssetValidationStats(getStrategyLensData("grapes")?.all_trades || []);
@@ -457,21 +502,31 @@ function renderGrapesAssets(data) {
   const avgPnlForRow = (row) => row.avg_pnl ?? row.avgPnl ?? row.avg_pnl_usd_20;
   const renderRows = (rows) => rows.map((row) => `
     <article class="asset-card">
-      <h5>${row.asset}</h5>
-      <div class="headline ${totalPnlForRow(row) < 0 ? "red" : ""}">${fmtUsd(totalPnlForRow(row))}</div>
-      <div class="asset-stat-grid">
-        <div class="asset-stat"><span>${t("trades")}</span><strong>${row.trades}</strong></div>
-        <div class="asset-stat"><span>${t("winRate")}</span><strong>${fmtPct(row.win_rate_pct ?? row.winRatePct, 2)}</strong></div>
-        <div class="asset-stat"><span>${t("pf")}</span><strong>${Number.isFinite(row.profit_factor ?? row.profitFactor) ? fmtNum(row.profit_factor ?? row.profitFactor, 2) : "∞"}</strong></div>
-        <div class="asset-stat"><span>${t("avgPnl")}</span><strong>${fmtUsd(avgPnlForRow(row))}</strong></div>
+      <div class="asset-card-head">
+        <strong class="asset-symbol">${row.asset}</strong>
+        <span class="asset-caption">validation row</span>
+      </div>
+      <div class="asset-main">
+        <div class="asset-pnl-line">
+          <span class="asset-pnl-label">Net PnL</span>
+          <strong class="headline ${totalPnlForRow(row) < 0 ? "red" : ""}">${fmtUsd(totalPnlForRow(row))}</strong>
+        </div>
+        <div class="asset-stat-grid">
+          <div class="asset-stat"><span>${t("trades")}</span><strong>${row.trades}</strong></div>
+          <div class="asset-stat"><span>${t("winRate")}</span><strong>${fmtPct(row.win_rate_pct ?? row.winRatePct, 2)}</strong></div>
+          <div class="asset-stat"><span>${t("pf")}</span><strong>${Number.isFinite(row.profit_factor ?? row.profitFactor) ? fmtNum(row.profit_factor ?? row.profitFactor, 2) : "∞"}</strong></div>
+          <div class="asset-stat"><span>${t("avgPnl")}</span><strong>${fmtUsd(avgPnlForRow(row))}</strong></div>
+        </div>
+      </div>
+      <div class="asset-side-note">
+        <strong>${fmtPct(row.win_rate_pct ?? row.winRatePct, 1)}</strong>
+        <span>${state.lang === "zh" ? "hit rate" : "hit rate"}</span>
       </div>
     </article>`).join("");
-  target.innerHTML = renderRows(topRows);
   if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows);
 }
 
 function renderCitrusAssets(data) {
-  const target = document.getElementById("citrus-asset-cards");
   const detailTarget = document.getElementById("citrus-asset-cards-detail");
   const topRows = data.strategies.citrus.assets || [];
   const detailRows = computeAssetValidationStats(getStrategyLensData("citrus")?.all_trades || []);
@@ -489,17 +544,64 @@ function renderCitrusAssets(data) {
   const winRateForRow = (row, useLegacy) => useLegacy ? row.win_rate_pct : row.winRatePct;
   const renderRows = (rows, useLegacy = false) => rows.map((row) => `
     <article class="asset-card">
-      <h5>${row.asset}</h5>
-      <div class="headline ${totalPnlForRow(row, useLegacy) < 0 ? "red" : ""}">${fmtUsd(totalPnlForRow(row, useLegacy))}</div>
-      <div class="asset-stat-grid">
-        <div class="asset-stat"><span>${t("trades")}</span><strong>${row.trades}</strong></div>
-        <div class="asset-stat"><span>${t("winRate")}</span><strong>${fmtPct(winRateForRow(row, useLegacy), 2)}</strong></div>
-        <div class="asset-stat"><span>${t("pf")}</span><strong>${Number.isFinite(profitFactorForRow(row, useLegacy)) ? fmtNum(profitFactorForRow(row, useLegacy), 2) : "∞"}</strong></div>
-        <div class="asset-stat"><span>${t("avgPnl")}</span><strong>${fmtUsd(avgPnlForRow(row, useLegacy))}</strong></div>
+      <div class="asset-card-head">
+        <strong class="asset-symbol">${row.asset}</strong>
+        <span class="asset-caption">validation row</span>
+      </div>
+      <div class="asset-main">
+        <div class="asset-pnl-line">
+          <span class="asset-pnl-label">Net PnL</span>
+          <strong class="headline ${totalPnlForRow(row, useLegacy) < 0 ? "red" : ""}">${fmtUsd(totalPnlForRow(row, useLegacy))}</strong>
+        </div>
+        <div class="asset-stat-grid">
+          <div class="asset-stat"><span>${t("trades")}</span><strong>${row.trades}</strong></div>
+          <div class="asset-stat"><span>${t("winRate")}</span><strong>${fmtPct(winRateForRow(row, useLegacy), 2)}</strong></div>
+          <div class="asset-stat"><span>${t("pf")}</span><strong>${Number.isFinite(profitFactorForRow(row, useLegacy)) ? fmtNum(profitFactorForRow(row, useLegacy), 2) : "∞"}</strong></div>
+          <div class="asset-stat"><span>${t("avgPnl")}</span><strong>${fmtUsd(avgPnlForRow(row, useLegacy))}</strong></div>
+        </div>
+      </div>
+      <div class="asset-side-note">
+        <strong>${fmtPct(winRateForRow(row, useLegacy), 1)}</strong>
+        <span>${state.lang === "zh" ? "hit rate" : "hit rate"}</span>
       </div>
     </article>`).join("");
-  target.innerHTML = renderRows(topRows, true);
   if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows, !detailRows.length);
+}
+
+function renderOverviewSleeves(data) {
+  const target = document.getElementById("overview-sleeves");
+  if (!target) return;
+  const renderBlock = (title, rows, palette) => {
+    const maxAbs = Math.max(1, ...rows.map((row) => Math.abs(Number((row.total_pnl ?? row.totalPnl ?? row.total_pnl_usd_20) || 0))));
+    return `
+      <section class="overview-sleeve-block">
+        <div class="overview-sleeve-title">
+          <strong>${title}</strong>
+          <span>${state.lang === "zh" ? "asset contribution" : "asset contribution"}</span>
+        </div>
+        ${rows.map((row) => {
+          const pnl = Number((row.total_pnl ?? row.totalPnl ?? row.total_pnl_usd_20) || 0);
+          const trades = Number(row.trades || 0);
+          const winRate = Number((row.win_rate_pct ?? row.winRatePct) || 0);
+          const width = Math.max(6, Math.round((Math.abs(pnl) / maxAbs) * 100));
+          const color = pnl < 0 ? COLORS.red : (palette[row.asset] || COLORS.green);
+          return `
+            <div class="overview-sleeve-row">
+              <div class="overview-sleeve-asset">${row.asset}</div>
+              <div class="overview-sleeve-bar"><span style="width:${width}%;background:${color};opacity:${pnl < 0 ? 0.85 : 0.72}"></span></div>
+              <div class="overview-sleeve-pnl ${pnl < 0 ? "neg" : "pos"}">${fmtUsd(pnl)}</div>
+              <div class="overview-sleeve-trades">${trades}</div>
+              <div class="overview-sleeve-wr">${fmtPct(winRate, 1)}</div>
+            </div>
+          `;
+        }).join("")}
+      </section>
+    `;
+  };
+  target.innerHTML = [
+    renderBlock("Grapes", data.strategies.grapes.asset_stats || [], { BTC: COLORS.green, ETH: COLORS.blue, SOL: COLORS.amber }),
+    renderBlock("Citrus", data.strategies.citrus.assets || [], { BTC: COLORS.green, ETH: COLORS.blue, SOL: COLORS.amber }),
+  ].join("");
 }
 
 function renderActivePositions(targetId, positions) {
@@ -843,6 +945,21 @@ function buildCalendarXAxisTicks(series, width, m, monthStep = null) {
   return yearTicks;
 }
 
+function buildProgressXAxisTicks(series, width, m) {
+  if (!series.length) return [];
+  const desired = series.length <= 4 ? series.length : 4;
+  const indexSet = new Set([0, series.length - 1]);
+  for (let i = 1; i < desired - 1; i += 1) {
+    indexSet.add(Math.round((i * (series.length - 1)) / Math.max(1, desired - 1)));
+  }
+  return Array.from(indexSet)
+    .sort((a, b) => a - b)
+    .map((idx) => ({
+      x: m.left + (idx / Math.max(1, series.length - 1)) * (width - m.left - m.right),
+      label: String(series[idx]?.ts || "").slice(5, 10),
+    }));
+}
+
 function buildZeroBasedNiceScale(values, targetTickCount = 5) {
   const numeric = (values || []).filter(Number.isFinite);
   const maxValue = Math.max(0, ...numeric);
@@ -978,19 +1095,53 @@ function buildSignedPnlSegments(points, values) {
   return segments;
 }
 
-function drawSignedPnlAreaAndLine(ctx, points, values) {
+function expandStepPoints(points) {
+  if (!Array.isArray(points) || points.length < 2) return points || [];
+  const stepped = [points[0]];
+  for (let i = 1; i < points.length; i += 1) {
+    const prev = points[i - 1];
+    const curr = points[i];
+    stepped.push({
+      x: curr.x,
+      y: prev.y,
+      baselineY: curr.baselineY ?? prev.baselineY,
+    });
+    stepped.push(curr);
+  }
+  return stepped;
+}
+
+function drawPolyline(ctx, points, color) {
+  if (points.length < 2) return;
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.2;
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  for (let i = 1; i < points.length; i += 1) {
+    ctx.lineTo(points[i].x, points[i].y);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawSignedPnlAreaAndLine(ctx, points, values, opts = {}) {
+  const stepped = opts.stepped === true;
   const segments = buildSignedPnlSegments(points, values) || [];
   segments.forEach((segment) => {
+    const segmentPoints = stepped ? expandStepPoints(segment.points) : segment.points;
     const baselineY = segment.points[0]?.baselineY ?? points[0]?.baselineY ?? 0;
     ctx.save();
     ctx.beginPath();
-    ctx.moveTo(segment.points[0].x, baselineY);
-    segment.points.forEach((point) => {
+    ctx.moveTo(segmentPoints[0].x, baselineY);
+    segmentPoints.forEach((point) => {
       ctx.lineTo(point.x, point.y);
     });
-    ctx.lineTo(segment.points[segment.points.length - 1].x, baselineY);
+    ctx.lineTo(segmentPoints[segmentPoints.length - 1].x, baselineY);
     ctx.closePath();
-    const area = ctx.createLinearGradient(0, Math.min(...segment.points.map((point) => point.y)), 0, Math.max(...segment.points.map((point) => point.y)));
+    const area = ctx.createLinearGradient(0, Math.min(...segmentPoints.map((point) => point.y)), 0, Math.max(...segmentPoints.map((point) => point.y)));
     if (segment.color === COLORS.red) {
       area.addColorStop(0, "rgba(224,109,109,0.18)");
       area.addColorStop(1, "rgba(224,109,109,0.46)");
@@ -1003,7 +1154,14 @@ function drawSignedPnlAreaAndLine(ctx, points, values) {
     ctx.restore();
   });
 
-  segments.forEach((segment) => drawSmoothLine(ctx, segment.points, segment.color, false));
+  segments.forEach((segment) => {
+    const segmentPoints = stepped ? expandStepPoints(segment.points) : segment.points;
+    if (stepped) {
+      drawPolyline(ctx, segmentPoints, segment.color);
+    } else {
+      drawSmoothLine(ctx, segmentPoints, segment.color, false);
+    }
+  });
 }
 
 function drawSmoothLine(ctx, points, color, fill = false) {
@@ -1084,6 +1242,23 @@ function toPoints(series, valueKey, width, height, m, minOverride = null, maxOve
   });
 }
 
+function toIndexedPoints(series, valueKey, width, height, m, minOverride = null, maxOverride = null, baselineValue = 0) {
+  const vals = series.map((row) => Number(row[valueKey])).filter(Number.isFinite);
+  const scale = buildNiceScale(vals);
+  const min = minOverride ?? scale.min;
+  const max = maxOverride ?? scale.max;
+  const baselineNormalized = (baselineValue - min) / Math.max(1e-9, max - min);
+  const baselineY = baselineNormalized >= 0 && baselineNormalized <= 1
+    ? height - m.bottom - baselineNormalized * (height - m.top - m.bottom)
+    : height - m.bottom;
+  return series.map((row, index) => {
+    const x = m.left + (index / Math.max(1, series.length - 1)) * (width - m.left - m.right);
+    const normalized = (Number(row[valueKey]) - min) / Math.max(1e-9, max - min);
+    const y = height - m.bottom - normalized * (height - m.top - m.bottom);
+    return { x, y, baselineY };
+  });
+}
+
 function drawDualCurveChart(canvas, leftSeries, leftKey, rightSeries, rightKey, leftColor, rightColor) {
   const { ctx, width, height } = resizeCanvas(canvas);
   const m = { top: 20, right: 28, bottom: 58, left: 92 };
@@ -1127,7 +1302,7 @@ function drawOverlayStrategyChart(canvas, data) {
 function drawAssetOverlayChart(canvas, assetCurves) {
   const { ctx, width, height } = resizeCanvas(canvas);
   ctx.clearRect(0, 0, width, height);
-  const m = { top: 20, right: 28, bottom: 58, left: 92 };
+  const m = { top: 10, right: 14, bottom: 38, left: 68 };
   const entries = Object.entries(assetCurves || {}).filter(([, series]) => Array.isArray(series) && series.length);
   if (!entries.length) return;
   const allVals = entries.flatMap(([, series]) => series.map((row) => Number(row.pnl)).filter(Number.isFinite));
@@ -1244,12 +1419,12 @@ function drawTradeEquityChart(canvas, trades, baseEquity = 0) {
   const { ctx, width, height } = resizeCanvas(canvas);
   ctx.clearRect(0, 0, width, height);
   if (!series.length) return;
-  const m = { top: 20, right: 28, bottom: 58, left: 92 };
+  const m = { top: 10, right: 14, bottom: 38, left: 68 };
   const vals = series.map((row) => Number(row.equity)).filter(Number.isFinite);
   const scale = buildNiceScale([...vals, Number(baseEquity || 0)], 6);
-  const xTicks = buildCalendarXAxisTicks(series, width, m);
+  const xTicks = buildProgressXAxisTicks(series, width, m);
   drawAxes(ctx, width, height, m, scale.ticks, xTicks);
-  const points = toPoints(
+  const points = toIndexedPoints(
     series.map((row) => ({ ts: row.ts, equity: Number(row.equity) })),
     "equity",
     width,
@@ -1270,7 +1445,10 @@ function drawTradeEquityChart(canvas, trades, baseEquity = 0) {
     ctx.restore();
   }
   drawSignedPnlAreaAndLine(ctx, points, series.map((row) => Number(row.pnl)));
-  drawPointMarkers(ctx, points, Number(series[series.length - 1]?.pnl || 0) < 0 ? COLORS.red : COLORS.green);
+  const lastPoint = points[points.length - 1];
+  if (lastPoint) {
+    drawPointMarkers(ctx, [lastPoint], Number(series[series.length - 1]?.pnl || 0) < 0 ? COLORS.red : COLORS.green);
+  }
   drawFixedAxisLabels(ctx, width, height, m, scale.ticks, series, () => xTicks);
 }
 
@@ -1546,8 +1724,10 @@ function bindLensSwitches() {
 function render(data) {
   applyLanguage();
   renderHero(data);
-  renderStrategyCards(data);
+  renderOverviewStatusStrip(data);
+  renderOverviewStrategyTape(data);
   renderComparison(data);
+  renderOverviewSleeves(data);
   renderGrapesAssets(data);
   renderCitrusAssets(data);
   renderGrapesSummary(data);

@@ -6,25 +6,26 @@
     <title>NTS Alpha Lab</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="stylesheet" href="./strategy_os.css?v=20260327w" />
+    <link rel="stylesheet" href="./strategy_os.css?v=20260328-reset" />
   </head>
   <body>
-    <div class="os-shell">
-      <header class="os-header">
-        <div class="brand-block">
+    <div class="page-shell">
+      <header class="site-header">
+        <div class="site-brand">
           <img class="brand-logo" src="./assets/nts-alpha-lab-logo.png" alt="NTS Alpha Lab" />
+          <div class="brand-copy">
+            <span class="brand-kicker">NTS Alpha Lab</span>
+            <strong>Strategy OS</strong>
+          </div>
         </div>
-        <nav class="top-switch" id="top-switch">
+        <nav class="site-nav" id="top-switch">
           <button class="switch-tab active" data-view="all" type="button">Overview</button>
-          <button class="switch-tab" data-view="grapes" type="button">🍇 Grapes</button>
-          <button class="switch-tab" data-view="citrus" type="button">🍊 Citrus</button>
+          <button class="switch-tab" data-view="grapes" type="button">Grapes</button>
+          <button class="switch-tab" data-view="citrus" type="button">Citrus</button>
         </nav>
-        <div class="header-meta">
+        <div class="site-controls">
           <div class="lang-switch" id="lang-switch">
             <button class="lang-tab active" data-lang="en" type="button">EN</button>
             <button class="lang-tab" data-lang="zh" type="button">中文</button>
@@ -33,136 +34,110 @@
         </div>
       </header>
 
-      <main class="os-main">
-        <section class="panel hero-panel" id="master-board-hero">
-          <div class="hero-copy">
-            <div class="hero-kicker-row">
-              <p class="eyebrow">NTS Alpha Lab</p>
-              <span class="hero-kicker-mark">Strategy OS</span>
+      <main class="page-main">
+        <section class="view-panel is-active" data-panel="all">
+          <section class="overview-command-deck" id="master-board-hero">
+            <div class="overview-shell-head">
+              <p class="eyebrow">Overview</p>
+              <span class="overview-shell-note">live first</span>
             </div>
-            <h2>One operating system for strategy research, selection, and capital deployment.</h2>
-            <p class="hero-note">A firm-level strategy surface for comparing research, translating risk into one capital language, and assigning exposure to the engine that is currently earning it.</p>
-            <div class="hero-pill-row">
-              <span class="hero-pill">Quant research</span>
-              <span class="hero-pill">Capital allocation</span>
-              <span class="hero-pill">Live strategy state</span>
-            </div>
-          </div>
-          <div class="hero-status" id="hero-status"></div>
-        </section>
+            <section class="overview-hero">
+              <div class="hero-side" id="hero-status"></div>
+            </section>
+          </section>
 
-        <section class="panel view-panel is-active" data-panel="all">
-          <div class="panel-head">
-            <div>
-              <p class="eyebrow">Portfolio Overview</p>
-              <h3>Dual-Strategy Command Board</h3>
-              <p class="section-note">Two mandates on one normalized capital base, so relative quality, contribution, and allocation fitness stay readable.</p>
-            </div>
-          </div>
-          <div class="strategy-grid strategy-grid-overview" id="strategy-grid"></div>
-          <div class="comparison-wrap">
-            <div class="comparison-card">
-              <div class="card-head">
-                <p class="eyebrow">Overlay</p>
-                <h4>Equity Overlay</h4>
-              </div>
+          <section class="metric-ribbon overview-ribbon-shell" id="overview-status-strip"></section>
+
+          <section class="feature-panel chart-panel overview-chart-stage">
+            <div class="section-head minimal">
+              <p class="eyebrow">Live Overlay</p>
               <div class="chart-legend" id="overview-legend"></div>
-              <canvas id="overlay-overview-canvas" class="chart-canvas tall"></canvas>
             </div>
-            <div class="comparison-card">
-              <div class="card-head">
-                <p class="eyebrow">Comparison</p>
-                <h4>Relative Quality</h4>
+            <canvas id="overlay-overview-canvas" class="chart-canvas tall"></canvas>
+          </section>
+
+          <section class="overview-support-grid">
+            <section class="feature-panel rail-panel">
+              <div class="section-head minimal">
+                <p class="eyebrow">Strategy Read</p>
               </div>
-              <div class="comparison-table" id="comparison-table"></div>
-            </div>
-          </div>
-          <div class="sleeve-grid">
-            <div class="panel subsection sleeve-panel sleeve-panel-shared">
-              <div class="card-head">
-                <p class="eyebrow">Grapes Sleeves</p>
-                <h4>Asset Profit Distribution</h4>
+              <div class="dual-modules" id="overview-strategy-tape"></div>
+            </section>
+
+            <section class="feature-panel rail-panel">
+              <div class="section-head minimal">
+                <p class="eyebrow">Relative Matrix</p>
               </div>
-              <div id="grapes-asset-cards" class="asset-card-grid"></div>
-            </div>
-            <div class="panel subsection sleeve-panel sleeve-panel-shared">
-              <div class="card-head">
-                <p class="eyebrow">Citrus Sleeves</p>
-                <h4>Asset Profit Distribution</h4>
+              <div class="comparison-table technical" id="comparison-table"></div>
+            </section>
+
+            <section class="feature-panel rail-panel">
+              <div class="section-head minimal">
+                <p class="eyebrow">Sleeve Contribution</p>
               </div>
-              <div id="citrus-asset-cards" class="asset-card-grid"></div>
-            </div>
-          </div>
+              <div id="overview-sleeves" class="overview-sleeves"></div>
+            </section>
+          </section>
         </section>
 
-        <section class="panel view-panel" data-panel="grapes">
-          <div class="panel-head">
-            <div>
+        <section class="view-panel strategy-view" data-panel="grapes">
+          <section class="strategy-header">
+            <div class="strategy-header-copy">
               <p class="eyebrow">Strategy Detail</p>
-              <h3>Cortex Grapes</h3>
+              <h2>Cortex Grapes</h2>
               <p class="section-note">Trend and structure mandate designed for cleaner compounding through persistent market phases.</p>
             </div>
-          </div>
-          <div id="grapes-board-cards" class="strategy-grid board-grid"></div>
-          <div class="subview-bar">
+            <div id="grapes-board-cards" class="strategy-header-metrics"></div>
+          </section>
+
+          <section class="toolbar-row">
             <div class="subview-switch" id="grapes-lens-switch">
               <button class="subview-tab active" data-strategy="grapes" data-lens="backtest" type="button">Backtest</button>
               <button class="subview-tab" data-strategy="grapes" data-lens="live" type="button">Live</button>
             </div>
             <div id="grapes-lens-note" class="lens-note"></div>
-          </div>
+          </section>
+
           <div id="grapes-snapshot-cards" class="snapshot-grid"></div>
-          <div class="detail-grid">
-            <div class="panel subsection">
-              <div class="card-head">
+
+          <section class="content-grid two-col">
+            <section class="feature-panel performance-panel">
+              <div class="section-head">
                 <p class="eyebrow">Performance</p>
-                <h4>Three-Asset Profit Overlay</h4>
+                <div class="chart-legend" id="grapes-legend"></div>
               </div>
-              <div class="chart-legend" id="grapes-legend"></div>
               <canvas id="grapes-detail-canvas" class="chart-canvas"></canvas>
-            </div>
-            <div class="panel subsection">
-              <div class="card-head">
-                <p class="eyebrow">Profile</p>
-                <h4>Strategy Profile</h4>
-              </div>
+            </section>
+            <section class="feature-panel performance-panel">
+              <div class="section-head"><p class="eyebrow">Profile</p></div>
               <div id="grapes-summary" class="stack-list"></div>
-            </div>
-          </div>
-          <div class="panel subsection">
-            <div class="card-head">
-              <p class="eyebrow">Live State</p>
-              <h4>Open Positions</h4>
-            </div>
+            </section>
+          </section>
+
+          <section class="feature-panel">
+            <div class="section-head"><p class="eyebrow">Open Positions</p></div>
             <div id="grapes-active-positions" class="position-grid"></div>
-          </div>
-          <div class="panel subsection">
-            <div class="card-head">
-              <p class="eyebrow">Assets</p>
-              <h4>Asset Validation</h4>
-            </div>
-            <div id="grapes-asset-cards-detail" class="asset-card-grid"></div>
-          </div>
-          <div class="panel subsection">
-            <div class="card-head">
-              <p class="eyebrow">Regime</p>
-              <h4>Regime Performance</h4>
-            </div>
-            <div id="grapes-regime" class="regime-grid"></div>
-          </div>
-          <div class="panel subsection">
-            <div class="card-head">
-              <p class="eyebrow">Monthly</p>
-              <h4>Monthly Performance & Heatmap</h4>
-            </div>
+          </section>
+
+          <section class="content-grid two-col">
+            <section class="feature-panel profile-panel">
+              <div class="section-head"><p class="eyebrow">Asset Validation</p></div>
+              <div id="grapes-asset-cards-detail" class="asset-card-grid"></div>
+            </section>
+            <section class="feature-panel profile-panel">
+              <div class="section-head"><p class="eyebrow">Regime Performance</p></div>
+              <div id="grapes-regime" class="regime-grid"></div>
+            </section>
+          </section>
+
+          <section class="feature-panel">
+            <div class="section-head"><p class="eyebrow">Monthly Performance</p></div>
             <div id="grapes-monthly-summary" class="mini-summary-row"></div>
             <canvas id="grapes-heatmap-canvas" class="heatmap-canvas"></canvas>
-          </div>
-          <div class="panel subsection">
-            <div class="card-head">
-              <p class="eyebrow">Trade Explorer</p>
-              <h4>Trade Explorer</h4>
-            </div>
+          </section>
+
+          <section class="feature-panel">
+            <div class="section-head"><p class="eyebrow">Trade Explorer</p></div>
             <div id="grapes-trade-meta" class="mini-summary-row"></div>
             <div class="trade-filters">
               <select id="grapes-trade-scope">
@@ -191,77 +166,67 @@
               </table>
             </div>
             <div id="grapes-trade-cards" class="trade-card-list"></div>
-          </div>
+          </section>
         </section>
 
-        <section class="panel view-panel" data-panel="citrus">
-          <div class="panel-head">
-            <div>
+        <section class="view-panel strategy-view" data-panel="citrus">
+          <section class="strategy-header">
+            <div class="strategy-header-copy">
               <p class="eyebrow">Strategy Detail</p>
-              <h3>Cortex Citrus</h3>
+              <h2>Cortex Citrus</h2>
               <p class="section-note">Cross-asset opportunistic mandate focused on extracting asymmetric dislocations with tighter participation quality.</p>
             </div>
-          </div>
-          <div id="citrus-board-cards" class="strategy-grid board-grid"></div>
-          <div class="subview-bar">
+            <div id="citrus-board-cards" class="strategy-header-metrics"></div>
+          </section>
+
+          <section class="toolbar-row">
             <div class="subview-switch" id="citrus-lens-switch">
               <button class="subview-tab active" data-strategy="citrus" data-lens="backtest" type="button">Backtest</button>
               <button class="subview-tab" data-strategy="citrus" data-lens="live" type="button">Live</button>
             </div>
             <div id="citrus-lens-note" class="lens-note"></div>
-          </div>
+          </section>
+
           <div id="citrus-snapshot-cards" class="snapshot-grid"></div>
-          <div class="detail-grid">
-            <div class="panel subsection">
-              <div class="card-head">
+
+          <section class="content-grid two-col">
+            <section class="feature-panel">
+              <div class="section-head">
                 <p class="eyebrow">Performance</p>
-                <h4>Three-Asset Profit Overlay</h4>
+                <div class="chart-legend" id="citrus-legend"></div>
               </div>
-              <div class="chart-legend" id="citrus-legend"></div>
               <canvas id="citrus-return-canvas" class="chart-canvas"></canvas>
-            </div>
-            <div class="panel subsection">
-              <div class="card-head">
-                <p class="eyebrow">Profile</p>
-                <h4>Strategy Profile</h4>
-              </div>
+            </section>
+            <section class="feature-panel">
+              <div class="section-head"><p class="eyebrow">Profile</p></div>
               <div id="citrus-summary" class="stack-list"></div>
-            </div>
-          </div>
-          <div class="panel subsection">
-            <div class="card-head">
-              <p class="eyebrow">Live State</p>
-              <h4>Open Positions</h4>
-            </div>
+            </section>
+          </section>
+
+          <section class="feature-panel">
+            <div class="section-head"><p class="eyebrow">Open Positions</p></div>
             <div id="citrus-active-positions" class="position-grid"></div>
-          </div>
-          <div class="panel subsection">
-            <div class="card-head">
-              <p class="eyebrow">Assets</p>
-              <h4>Asset Validation</h4>
-            </div>
-            <div id="citrus-asset-cards-detail" class="asset-card-grid"></div>
-          </div>
-          <div class="panel subsection">
-            <div class="card-head">
-              <p class="eyebrow">Regime</p>
-              <h4>Regime Performance</h4>
-            </div>
-            <div id="citrus-regime" class="regime-grid"></div>
-          </div>
-          <div class="panel subsection">
-            <div class="card-head">
-              <p class="eyebrow">Monthly</p>
-              <h4>Monthly Performance & Heatmap</h4>
-            </div>
+          </section>
+
+          <section class="content-grid two-col">
+            <section class="feature-panel">
+              <div class="section-head"><p class="eyebrow">Asset Validation</p></div>
+              <div id="citrus-asset-cards-detail" class="asset-card-grid"></div>
+            </section>
+            <section class="feature-panel">
+              <div class="section-head"><p class="eyebrow">Regime Performance</p></div>
+              <div id="citrus-regime" class="regime-grid"></div>
+            </section>
+          </section>
+
+          <section class="feature-panel">
+            <div class="section-head"><p class="eyebrow">Monthly Performance</p></div>
             <div id="citrus-monthly-summary" class="mini-summary-row"></div>
             <canvas id="citrus-heatmap-canvas" class="heatmap-canvas"></canvas>
-          </div>
-          <div class="panel subsection">
-            <div class="card-head">
-              <p class="eyebrow">Trade Explorer</p>
-              <h4>Trade Explorer</h4>
-            </div>
+          </section>
+
+          <section class="feature-panel">
+            <div class="section-head"><p class="eyebrow">Trade Explorer</p></div>
             <div id="citrus-trade-meta" class="mini-summary-row"></div>
             <div class="trade-filters">
               <select id="citrus-trade-scope">
@@ -290,10 +255,10 @@
               </table>
             </div>
             <div id="citrus-trade-cards" class="trade-card-list"></div>
-          </div>
+          </section>
         </section>
       </main>
     </div>
-    <script type="module" src="./strategy_os.js?v=20260327d"></script>
+    <script src="./strategy_os.js?v=20260328-reset"></script>
   </body>
 </html>
