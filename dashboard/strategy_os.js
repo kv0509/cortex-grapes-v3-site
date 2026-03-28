@@ -500,16 +500,6 @@ function renderCitrusAssets(data) {
   if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows, !detailRows.length);
 }
 
-function syncSleevePanelHeights() {
-  const panels = Array.from(document.querySelectorAll(".sleeve-grid .sleeve-panel"));
-  if (panels.length < 2) return;
-  panels.forEach((panel) => { panel.style.minHeight = ""; });
-  const maxHeight = Math.max(...panels.map((panel) => panel.getBoundingClientRect().height));
-  panels.forEach((panel) => {
-    panel.style.minHeight = `${Math.ceil(maxHeight)}px`;
-  });
-}
-
 function renderActivePositions(targetId, positions) {
   const target = document.getElementById(targetId);
   if (!target) return;
@@ -534,6 +524,15 @@ function renderActivePositions(targetId, positions) {
     </article>`).join("");
 }
 
+function getDisplayedActivePositions(strategyKey, fallbackPositions = []) {
+  const lens = state.lenses[strategyKey] || "backtest";
+  if (lens === "live") {
+    const livePositions = getStrategyLensData(strategyKey)?.active_positions;
+    if (Array.isArray(livePositions) && livePositions.length) return livePositions;
+  }
+  return Array.isArray(fallbackPositions) ? fallbackPositions : [];
+}
+
 function renderGrapesSummary(data) {
   const grapes = data.strategies.grapes;
   const rows = [...I18N[state.lang].grapesProfileRows];
@@ -555,7 +554,7 @@ function renderGrapesSummary(data) {
     { title: "Sharpe", value: fmtNum(grapes.summary.sharpe), label: state.lang === "zh" ? "风险调整后收益" : "Risk-adjusted return" },
   ]);
   renderSnapshotCards("grapes", "🍇 Grapes", getStrategyLensData("grapes"));
-  renderActivePositions("grapes-active-positions", grapes.active_positions || []);
+  renderActivePositions("grapes-active-positions", getDisplayedActivePositions("grapes", grapes.active_positions || []));
 }
 
 function renderGrapesRegime(data) {
@@ -589,7 +588,7 @@ function renderCitrusSummary(data) {
     { title: "Sharpe", value: fmtNum(p.sharpe || 0), label: state.lang === "zh" ? "风险调整后收益" : "Risk-adjusted return" },
   ]);
   renderSnapshotCards("citrus", "🍊 Citrus", getStrategyLensData("citrus"));
-  renderActivePositions("citrus-active-positions", data.strategies.citrus.active_positions || []);
+  renderActivePositions("citrus-active-positions", getDisplayedActivePositions("citrus", data.strategies.citrus.active_positions || []));
 }
 
 function renderCitrusRegime(data) {
@@ -1396,7 +1395,6 @@ function render(data) {
   renderComparison(data);
   renderGrapesAssets(data);
   renderCitrusAssets(data);
-  syncSleevePanelHeights();
   renderGrapesSummary(data);
   renderGrapesRegime(data);
   renderCitrusSummary(data);

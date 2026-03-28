@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-03-27 08:00:00",
+    "updated_at": "2026-03-28 00:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1"
@@ -43402,10 +43402,10 @@
           "symbol": "BTCUSDT",
           "direction": "LONG",
           "entry_price": 71759.2,
-          "current_price": 66663.2,
-          "current_pnl_pct": -7.1,
+          "current_price": 66191.8,
+          "current_pnl_pct": -7.76,
           "entry_ts": "2026-03-25 08:00",
-          "hold_hours": 48.0,
+          "hold_hours": 64.0,
           "position_size": 1.0,
           "peak_pnl_pct": 0.0,
           "realized_pnl_pct": 0.0,
@@ -53153,37 +53153,19 @@
       },
       "active_positions": [
         {
-          "asset": "ETH",
-          "symbol": "ETHUSDT",
-          "direction": "LONG",
-          "entry_price": 2185.01,
-          "current_price": 2064.95,
-          "current_pnl_pct": -5.49,
-          "entry_ts": "2026-03-25 08:00",
-          "hold_hours": 44.0,
-          "remaining_size": 0.457664,
-          "original_size": 0.457664,
-          "partial_taken": false,
-          "breakeven_armed": false,
-          "peak_pnl_pct": 0.0,
-          "entry_liq_imbalance": 1.826,
-          "entry_z_price": 1.436,
-          "capital": 9999.5
-        },
-        {
           "asset": "SOL",
           "symbol": "SOLUSDT",
           "direction": "SHORT",
           "entry_price": 86.36,
-          "current_price": 85.86,
-          "current_pnl_pct": 0.58,
+          "current_price": 82.54,
+          "current_pnl_pct": 4.42,
           "entry_ts": "2026-03-27 00:00",
-          "hold_hours": 4.0,
+          "hold_hours": 24.0,
           "remaining_size": 11.53258,
           "original_size": 11.53258,
           "partial_taken": false,
           "breakeven_armed": false,
-          "peak_pnl_pct": 0.58,
+          "peak_pnl_pct": 4.42,
           "entry_liq_imbalance": -1.703,
           "entry_z_price": -1.224,
           "capital": 9959.04
@@ -62835,16 +62817,16 @@
         },
         "live": {
           "summary": {
-            "final_equity": 6053.21,
-            "net_pnl_usd": 53.21,
-            "total_return_pct": 0.89,
-            "profit_factor": 1.48,
-            "trades": 9,
-            "win_rate_pct": 55.6,
+            "final_equity": 5963.62,
+            "net_pnl_usd": -36.38,
+            "total_return_pct": -0.61,
+            "profit_factor": 0.82,
+            "trades": 10,
+            "win_rate_pct": 50.0,
             "avg_win_usd": 32.72,
-            "avg_loss_usd": -27.59,
+            "avg_loss_usd": -39.99,
             "sharpe": 0.0,
-            "max_dd_pct": -1.67
+            "max_dd_pct": -3.13
           },
           "portfolio_curve": [
             {
@@ -62886,6 +62868,10 @@
             {
               "ts": "2026-03-27 00:00:00",
               "equity": 6053.21
+            },
+            {
+              "ts": "2026-03-27 08:00:00",
+              "equity": 5963.62
             }
           ],
           "asset_curves": {
@@ -62927,6 +62913,10 @@
               {
                 "ts": "2026-03-23 20:00:00",
                 "pnl": -42.72
+              },
+              {
+                "ts": "2026-03-27 08:00:00",
+                "pnl": -132.31
               }
             ],
             "SOL": [
@@ -62945,17 +62935,17 @@
             ]
           },
           "monthly_summary": {
-            "profitable_months": 1,
-            "losing_months": 0,
+            "profitable_months": 0,
+            "losing_months": 1,
             "best_month": {
               "label": "2026-03",
-              "pnl_usd": 53.21,
-              "return_pct": 0.89
+              "pnl_usd": -36.38,
+              "return_pct": -0.61
             },
             "worst_month": {
               "label": "2026-03",
-              "pnl_usd": 53.21,
-              "return_pct": 0.89
+              "pnl_usd": -36.38,
+              "return_pct": -0.61
             }
           },
           "monthly_breakdown": [
@@ -62963,11 +62953,11 @@
               "label": "2026-03",
               "year": 2026,
               "month": 3,
-              "trade_count": 9,
+              "trade_count": 10,
               "wins": 5,
-              "losses": 4,
-              "net_pnl": 53.21,
-              "return_pct": 0.89
+              "losses": 5,
+              "net_pnl": -36.38,
+              "return_pct": -0.61
             }
           ],
           "monthly_heatmap": [
@@ -62978,11 +62968,11 @@
                   "label": "2026-03",
                   "year": 2026,
                   "month": 3,
-                  "trade_count": 9,
+                  "trade_count": 10,
                   "wins": 5,
-                  "losses": 4,
-                  "net_pnl": 53.21,
-                  "return_pct": 0.89
+                  "losses": 5,
+                  "net_pnl": -36.38,
+                  "return_pct": -0.61
                 }
               ]
             }
@@ -62999,11 +62989,11 @@
               },
               {
                 "regime_proxy": "TRANSITION",
-                "trades": 7,
-                "win_rate_pct": 57.14,
-                "total_pnl_usd": 67.19,
-                "avg_pnl_usd": 9.6,
-                "profit_factor": 1.87
+                "trades": 8,
+                "win_rate_pct": 50.0,
+                "total_pnl_usd": -22.4,
+                "avg_pnl_usd": -2.8,
+                "profit_factor": 0.87
               }
             ]
           },
@@ -63106,6 +63096,17 @@
               "exit_price": 86.36,
               "net_pnl_usd": -39.96,
               "roi_pct_on_margin": -199.82
+            },
+            {
+              "asset": "ETH",
+              "direction": "LONG",
+              "entry_ts": "2026-03-25 08:00",
+              "exit_ts": "2026-03-27 08:00",
+              "hold_hours": 48.0,
+              "entry_price": 2185.01,
+              "exit_price": 1990.24,
+              "net_pnl_usd": -89.59,
+              "roi_pct_on_margin": -447.97
             }
           ]
         }

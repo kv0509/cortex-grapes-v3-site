@@ -501,6 +501,11 @@ body {
   margin-bottom: 0;
 }
 
+.sleeve-grid > .sleeve-panel:last-child .card-head {
+  margin-top: -16px;
+  padding-top: 0;
+}
+
 .sleeve-grid .card-head .eyebrow {
   margin: 0;
   white-space: nowrap;
@@ -707,26 +712,23 @@ body {
   align-self: stretch;
   margin-top: 18px;
   padding-top: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.sleeve-panel .asset-card {
+  min-height: 288px;
+  height: 100%;
 }
 
-.sleeve-panel-grapes {
-  background: linear-gradient(180deg, rgba(15, 28, 20, 0.94), rgba(10, 20, 15, 0.96));
+.sleeve-panel-shared {
+  background:
+    linear-gradient(180deg, rgba(15, 28, 20, 0.94), rgba(10, 20, 15, 0.96));
 }
 
-.sleeve-panel-grapes::after {
+.sleeve-panel-shared::after {
   background:
     radial-gradient(circle at 82% 12%, rgba(51, 209, 122, 0.08), transparent 26%),
     linear-gradient(180deg, rgba(51, 209, 122, 0.025), transparent 32%);
-}
-
-.sleeve-panel-citrus {
-  background: linear-gradient(180deg, rgba(21, 24, 17, 0.94), rgba(16, 19, 14, 0.96));
-}
-
-.sleeve-panel-citrus::after {
-  background:
-    radial-gradient(circle at 80% 12%, rgba(199, 158, 75, 0.09), transparent 28%),
-    linear-gradient(180deg, rgba(199, 158, 75, 0.025), transparent 34%);
 }
 
 .subsection {
@@ -734,10 +736,20 @@ body {
 }
 
 .detail-grid+.panel.subsection,
-.panel.subsection+.panel.subsection,
-.strategy-grid+.comparison-wrap,
-.comparison-wrap+.sleeve-grid {
+.strategy-grid+.comparison-wrap {
   margin-top: 16px;
+}
+
+.comparison-wrap+.sleeve-grid {
+  margin-top: 0;
+}
+
+.panel.subsection + .panel.subsection {
+  margin-top: 16px;
+}
+
+.sleeve-grid > .panel.subsection + .panel.subsection {
+  margin-top: 0;
 }
 
 .comparison-card {
@@ -854,6 +866,7 @@ body {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
+  grid-auto-rows: 1fr;
   flex: 1;
 }
 
@@ -862,8 +875,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.02);
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 10px;
   height: 100%;
 }
@@ -893,7 +905,6 @@ body {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   align-content: start;
-  margin-top: auto;
 }
 
 .asset-stat {
