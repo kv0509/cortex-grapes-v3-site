@@ -1079,17 +1079,28 @@ function buildDailyPnlSeries(trades) {
     grouped.set(day, (grouped.get(day) || 0) + Number(trade.net_pnl_usd || 0));
   });
 
-  const firstDay = new Date(`${ordered[0].exit_ts.slice(0, 10)}T00:00:00`);
-  const lastDay = new Date(`${ordered[ordered.length - 1].exit_ts.slice(0, 10)}T00:00:00`);
+  const parseUtcDate = (dayText) => {
+    const [year, month, day] = String(dayText).split("-").map((value) => Number(value));
+    return new Date(Date.UTC(year, Math.max(0, month - 1), day));
+  };
+  const formatUtcDate = (date) => {
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const firstDay = parseUtcDate(ordered[0].exit_ts.slice(0, 10));
+  const lastDay = parseUtcDate(ordered[ordered.length - 1].exit_ts.slice(0, 10));
   const rows = [];
   let running = 0;
   const cursor = new Date(firstDay);
 
   while (cursor <= lastDay) {
-    const key = cursor.toISOString().slice(0, 10);
+    const key = formatUtcDate(cursor);
     running += grouped.get(key) || 0;
     rows.push({ ts: key, pnl: Number(running.toFixed(2)) });
-    cursor.setDate(cursor.getDate() + 1);
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
   }
 
   return rows.slice(-180);
@@ -1102,11 +1113,11 @@ function drawDailyPnlChart(canvas, trades) {
   if (!series.length) return;
   const m = { top: 20, right: 28, bottom: 58, left: 92 };
   const vals = series.map((row) => Number(row.pnl)).filter(Number.isFinite);
-  const scale = buildZeroBasedNiceScale(vals, 6);
+  const scale = buildNiceScale(vals, 6, { includeZero: true });
   const xTicks = buildCalendarXAxisTicks(series, width, m);
   drawAxes(ctx, width, height, m, scale.ticks, xTicks);
   const points = toPoints(
-    series.map((row) => ({ ts: row.ts, pnl: Math.max(0, Number(row.pnl)) })),
+    series.map((row) => ({ ts: row.ts, pnl: Number(row.pnl) })),
     "pnl",
     width,
     height,
