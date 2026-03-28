@@ -34,6 +34,7 @@ const I18N = {
     dualBoard: "Dual-Strategy Command Board",
     dualBoardNote: "Two mandates on one normalized capital base, so relative quality, contribution, and allocation fitness stay readable.",
     equityOverlay: "Equity Overlay",
+    cumulativeEquity: "Cumulative Equity",
     coreCompare: "Relative Quality",
     grapesSleeves: "Asset Profit Distribution",
     citrusSleeves: "Asset Profit Distribution",
@@ -109,6 +110,7 @@ const I18N = {
     dualBoard: "双策略主控板",
     dualBoardNote: "两套不同 mandate 放在统一资金基准上展示，让相对质量、贡献度与配置价值保持清晰可读。",
     equityOverlay: "组合收益曲线",
+    cumulativeEquity: "累计权益曲线",
     coreCompare: "相对质量对照",
     grapesSleeves: "资产收益分布",
     citrusSleeves: "资产收益分布",
@@ -1065,14 +1067,14 @@ function drawSmoothLine(ctx, points, color, fill = false) {
   ctx.restore();
 }
 
-function toPoints(series, valueKey, width, height, m, minOverride = null, maxOverride = null) {
+function toPoints(series, valueKey, width, height, m, minOverride = null, maxOverride = null, baselineValue = 0) {
   const vals = series.map((row) => Number(row[valueKey])).filter(Number.isFinite);
   const scale = buildNiceScale(vals);
   const min = minOverride ?? scale.min;
   const max = maxOverride ?? scale.max;
-  const zeroNormalized = (0 - min) / Math.max(1e-9, max - min);
-  const baselineY = zeroNormalized >= 0 && zeroNormalized <= 1
-    ? height - m.bottom - zeroNormalized * (height - m.top - m.bottom)
+  const baselineNormalized = (baselineValue - min) / Math.max(1e-9, max - min);
+  const baselineY = baselineNormalized >= 0 && baselineNormalized <= 1
+    ? height - m.bottom - baselineNormalized * (height - m.top - m.bottom)
     : height - m.bottom;
   return series.map((row) => {
     const x = getXPositionForSeriesPoint(series, series.indexOf(row), width, m);
@@ -1179,6 +1181,24 @@ function buildDailyPnlSeries(trades) {
   return rows.slice(-180);
 }
 
+function buildTradeEquitySeries(trades, baseEquity = 0) {
+  const ordered = [...(trades || [])]
+    .filter((trade) => trade?.exit_ts)
+    .sort((a, b) => String(a.exit_ts).localeCompare(String(b.exit_ts)));
+  if (!ordered.length) return [];
+
+  let running = Number(baseEquity || 0);
+  return ordered.map((trade, index) => {
+    running += Number(trade.net_pnl_usd || 0);
+    return {
+      ts: String(trade.exit_ts),
+      equity: Number(running.toFixed(2)),
+      pnl: Number((running - Number(baseEquity || 0)).toFixed(2)),
+      tradeIndex: index + 1,
+    };
+  });
+}
+
 function drawDailyPnlChart(canvas, trades) {
   const series = buildDailyPnlSeries(trades);
   const { ctx, width, height } = resizeCanvas(canvas);
@@ -1219,11 +1239,46 @@ function drawDailyPnlChart(canvas, trades) {
   drawFixedAxisLabels(ctx, width, height, m, scale.ticks, series, () => xTicks);
 }
 
+function drawTradeEquityChart(canvas, trades, baseEquity = 0) {
+  const series = buildTradeEquitySeries(trades, baseEquity);
+  const { ctx, width, height } = resizeCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  if (!series.length) return;
+  const m = { top: 20, right: 28, bottom: 58, left: 92 };
+  const vals = series.map((row) => Number(row.equity)).filter(Number.isFinite);
+  const scale = buildNiceScale([...vals, Number(baseEquity || 0)], 6);
+  const xTicks = buildCalendarXAxisTicks(series, width, m);
+  drawAxes(ctx, width, height, m, scale.ticks, xTicks);
+  const points = toPoints(
+    series.map((row) => ({ ts: row.ts, equity: Number(row.equity) })),
+    "equity",
+    width,
+    height,
+    m,
+    scale.min,
+    scale.max,
+    Number(baseEquity || 0)
+  );
+  if (points[0]?.baselineY) {
+    ctx.save();
+    ctx.strokeStyle = "rgba(231,239,233,0.16)";
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(m.left, points[0].baselineY);
+    ctx.lineTo(width - m.right, points[0].baselineY);
+    ctx.stroke();
+    ctx.restore();
+  }
+  drawSignedPnlAreaAndLine(ctx, points, series.map((row) => Number(row.pnl)));
+  drawPointMarkers(ctx, points, Number(series[series.length - 1]?.pnl || 0) < 0 ? COLORS.red : COLORS.green);
+  drawFixedAxisLabels(ctx, width, height, m, scale.ticks, series, () => xTicks);
+}
+
 function drawGrapesChart(canvas, data) {
   const lens = state.lenses.grapes || "backtest";
   const view = getStrategyLensData("grapes");
   if (lens === "live") {
-    drawDailyPnlChart(canvas, view?.all_trades || []);
+    drawTradeEquityChart(canvas, view?.all_trades || [], view?.summary?.initial_equity || 0);
     return "single";
   }
   drawAssetOverlayChart(canvas, view?.asset_curves || data.strategies.grapes.asset_curves || {});
@@ -1234,7 +1289,7 @@ function drawCitrusAssetReturns(canvas, data) {
   const lens = state.lenses.citrus || "backtest";
   const view = getStrategyLensData("citrus");
   if (lens === "live") {
-    drawDailyPnlChart(canvas, view?.all_trades || []);
+    drawTradeEquityChart(canvas, view?.all_trades || [], view?.summary?.initial_equity || 0);
     return "single";
   }
   drawAssetOverlayChart(canvas, view?.asset_curves || data.strategies.citrus.asset_curves || {});
@@ -1407,9 +1462,9 @@ function renderCharts(data) {
   if (grapesDetail && grapesDetail.offsetParent !== null) {
     const mode = drawGrapesChart(grapesDetail, data);
     const title = document.querySelector('[data-panel="grapes"] .detail-grid .panel:first-child h4');
-    if (title) title.textContent = mode === "single" ? t("totalPnlCurve") : t("assetOverlay");
+    if (title) title.textContent = mode === "single" ? t("cumulativeEquity") : t("assetOverlay");
     renderLegend("grapes-legend", mode === "single"
-      ? [{ label: "Total PnL", color: COLORS.green }]
+      ? [{ label: t("cumulativeEquity"), color: COLORS.green }]
       : [
         { label: "BTC", color: COLORS.green },
         { label: "ETH", color: COLORS.blue },
@@ -1421,9 +1476,9 @@ function renderCharts(data) {
   if (citrusDetail && citrusDetail.offsetParent !== null) {
     const mode = drawCitrusAssetReturns(citrusDetail, data);
     const title = document.querySelector('[data-panel="citrus"] .detail-grid .panel:first-child h4');
-    if (title) title.textContent = mode === "single" ? t("totalPnlCurve") : t("assetOverlay");
+    if (title) title.textContent = mode === "single" ? t("cumulativeEquity") : t("assetOverlay");
     renderLegend("citrus-legend", mode === "single"
-      ? [{ label: "Total PnL", color: COLORS.green }]
+      ? [{ label: t("cumulativeEquity"), color: COLORS.green }]
       : [
         { label: "BTC", color: COLORS.green },
         { label: "ETH", color: COLORS.blue },
