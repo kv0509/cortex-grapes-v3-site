@@ -931,7 +931,7 @@ function drawPointMarkers(ctx, points, color) {
   ctx.restore();
 }
 
-function drawSignedPnlLine(ctx, points, values) {
+function buildSignedPnlSegments(points, values) {
   if (points.length < 2 || points.length !== values.length) return;
   const segments = [];
   let current = [];
@@ -965,12 +965,41 @@ function drawSignedPnlLine(ctx, points, values) {
     const cross = {
       x: p1.x + ((p2.x - p1.x) * ratio),
       y: p1.y + ((p2.y - p1.y) * ratio),
+      baselineY: p1.baselineY,
     };
     current.push(cross);
     pushCurrent(color1);
     current.push(cross, p2);
     if (i === points.length - 2) pushCurrent(color2);
   }
+
+  return segments;
+}
+
+function drawSignedPnlAreaAndLine(ctx, points, values) {
+  const segments = buildSignedPnlSegments(points, values) || [];
+  segments.forEach((segment) => {
+    const baselineY = segment.points[0]?.baselineY ?? points[0]?.baselineY ?? 0;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(segment.points[0].x, baselineY);
+    segment.points.forEach((point) => {
+      ctx.lineTo(point.x, point.y);
+    });
+    ctx.lineTo(segment.points[segment.points.length - 1].x, baselineY);
+    ctx.closePath();
+    const area = ctx.createLinearGradient(0, Math.min(...segment.points.map((point) => point.y)), 0, Math.max(...segment.points.map((point) => point.y)));
+    if (segment.color === COLORS.red) {
+      area.addColorStop(0, "rgba(224,109,109,0.10)");
+      area.addColorStop(1, "rgba(224,109,109,0.28)");
+    } else {
+      area.addColorStop(0, "rgba(51,209,122,0.26)");
+      area.addColorStop(1, "rgba(51,209,122,0.06)");
+    }
+    ctx.fillStyle = area;
+    ctx.fill();
+    ctx.restore();
+  });
 
   segments.forEach((segment) => drawSmoothLine(ctx, segment.points, segment.color, false));
 }
@@ -1169,7 +1198,7 @@ function drawDailyPnlChart(canvas, trades) {
     scale.min,
     scale.max
   );
-  drawSignedPnlLine(ctx, points, series.map((row) => Number(row.pnl)));
+  drawSignedPnlAreaAndLine(ctx, points, series.map((row) => Number(row.pnl)));
   const lastPoint = points[points.length - 1];
   const lastValue = Number(series[series.length - 1]?.pnl || 0);
   drawPointMarkers(
