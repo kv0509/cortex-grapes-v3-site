@@ -931,6 +931,50 @@ function drawPointMarkers(ctx, points, color) {
   ctx.restore();
 }
 
+function drawSignedPnlLine(ctx, points, values) {
+  if (points.length < 2 || points.length !== values.length) return;
+  const segments = [];
+  let current = [];
+
+  const pushCurrent = (color) => {
+    if (current.length >= 2) segments.push({ color, points: current });
+    current = [];
+  };
+
+  for (let i = 0; i < points.length - 1; i += 1) {
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const v1 = Number(values[i] || 0);
+    const v2 = Number(values[i + 1] || 0);
+    const color1 = v1 < 0 ? COLORS.red : COLORS.green;
+    const color2 = v2 < 0 ? COLORS.red : COLORS.green;
+
+    if (!current.length) current.push(p1);
+
+    if (color1 === color2 || v1 === v2) {
+      if (segments.length && segments[segments.length - 1].color !== color1 && current.length >= 2) {
+        pushCurrent(color1);
+        current.push(p1);
+      }
+      current.push(p2);
+      if (i === points.length - 2) pushCurrent(color1);
+      continue;
+    }
+
+    const ratio = (0 - v1) / (v2 - v1);
+    const cross = {
+      x: p1.x + ((p2.x - p1.x) * ratio),
+      y: p1.y + ((p2.y - p1.y) * ratio),
+    };
+    current.push(cross);
+    pushCurrent(color1);
+    current.push(cross, p2);
+    if (i === points.length - 2) pushCurrent(color2);
+  }
+
+  segments.forEach((segment) => drawSmoothLine(ctx, segment.points, segment.color, false));
+}
+
 function drawSmoothLine(ctx, points, color, fill = false) {
   if (points.length < 2) return;
   const chartHeight = ctx.canvas.height / (window.devicePixelRatio || 1);
@@ -1125,8 +1169,14 @@ function drawDailyPnlChart(canvas, trades) {
     scale.min,
     scale.max
   );
-  drawSmoothLine(ctx, points, COLORS.green, true);
-  drawPointMarkers(ctx, points.filter((_, index) => index % 14 === 0 || index === points.length - 1), COLORS.green);
+  drawSignedPnlLine(ctx, points, series.map((row) => Number(row.pnl)));
+  const lastPoint = points[points.length - 1];
+  const lastValue = Number(series[series.length - 1]?.pnl || 0);
+  drawPointMarkers(
+    ctx,
+    points.filter((_, index) => index % 14 === 0).concat(lastPoint ? [lastPoint] : []),
+    lastValue < 0 ? COLORS.red : COLORS.green
+  );
   drawFixedAxisLabels(ctx, width, height, m, scale.ticks, series, () => xTicks);
 }
 
