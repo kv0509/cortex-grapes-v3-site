@@ -990,11 +990,11 @@ function drawSignedPnlAreaAndLine(ctx, points, values) {
     ctx.closePath();
     const area = ctx.createLinearGradient(0, Math.min(...segment.points.map((point) => point.y)), 0, Math.max(...segment.points.map((point) => point.y)));
     if (segment.color === COLORS.red) {
-      area.addColorStop(0, "rgba(224,109,109,0.10)");
-      area.addColorStop(1, "rgba(224,109,109,0.28)");
+      area.addColorStop(0, "rgba(224,109,109,0.18)");
+      area.addColorStop(1, "rgba(224,109,109,0.46)");
     } else {
-      area.addColorStop(0, "rgba(51,209,122,0.26)");
-      area.addColorStop(1, "rgba(51,209,122,0.06)");
+      area.addColorStop(0, "rgba(51,209,122,0.18)");
+      area.addColorStop(1, "rgba(51,209,122,0.42)");
     }
     ctx.fillStyle = area;
     ctx.fill();
@@ -1198,6 +1198,16 @@ function drawDailyPnlChart(canvas, trades) {
     scale.min,
     scale.max
   );
+  if (scale.min < 0 && scale.max > 0 && points[0]?.baselineY) {
+    ctx.save();
+    ctx.strokeStyle = "rgba(231,239,233,0.16)";
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(m.left, points[0].baselineY);
+    ctx.lineTo(width - m.right, points[0].baselineY);
+    ctx.stroke();
+    ctx.restore();
+  }
   drawSignedPnlAreaAndLine(ctx, points, series.map((row) => Number(row.pnl)));
   const lastPoint = points[points.length - 1];
   const lastValue = Number(series[series.length - 1]?.pnl || 0);
