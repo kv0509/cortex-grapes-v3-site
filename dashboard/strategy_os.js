@@ -269,7 +269,8 @@ function buildOverviewTradeRows(strategyKey, data) {
     entry_ts: row.entry_time || row.entry_ts || "—",
     exit_ts: "—",
     size: row.size ?? row.qty ?? "—",
-    pnl: Number(row.current_pnl_usd ?? 0),
+    pnl: Number(row.current_pnl_pct ?? 0),
+    pnl_is_pct: true,
     status: "Open",
   }));
   const closedRows = trades.slice(0, 4).map((row) => ({
@@ -279,6 +280,7 @@ function buildOverviewTradeRows(strategyKey, data) {
     exit_ts: row.exit_ts,
     size: row.size ?? row.position_size ?? "—",
     pnl: Number(row.net_pnl_usd || 0),
+    pnl_is_pct: false,
     status: "Closed",
   }));
   return [...openRows, ...closedRows].slice(0, 5);
@@ -418,7 +420,7 @@ function renderHero(data) {
     </div>
     <div class="overview-metric-cell">
       <span class="overview-topbar-label">Avg PF</span>
-      <strong class="overview-metric-value">${fmtNum(stats.avgPf, 2)}</strong>
+      <strong class="overview-metric-value ${Number(stats.avgPf || 0) >= 1 ? "pos" : "neg"}">${fmtNum(stats.avgPf, 2)}</strong>
     </div>
     <div class="overview-metric-cell">
       <span class="overview-topbar-label">Last Update</span>
@@ -436,65 +438,44 @@ function renderOverviewSummary(data) {
   const grapesScore = Number(grapesLive.total_return_pct || 0);
   const citrusScore = Number(citrusLive.total_return_pct || 0);
   const leaderKey = grapesScore === citrusScore ? "tie" : (grapesScore > citrusScore ? "grapes" : "citrus");
-  const backtestBlock = (label, emoji, tone, summary) => `
-    <section class="backtest-block ${tone}">
-      <div class="backtest-title">${emoji} ${label}</div>
-      <div class="backtest-table">
-        <div><span>Total Return</span><strong>${fmtPct(summary.total_return_pct || 0, 2)}</strong></div>
-        <div><span>Sharpe</span><strong>${fmtNum(summary.sharpe || 0, 2)}</strong></div>
-        <div><span>Max DD</span><strong class="${Number(summary.max_dd_pct || 0) < 0 ? "neg" : ""}">${fmtPct(summary.max_dd_pct || 0, 2)}</strong></div>
-        <div><span>Profit Factor</span><strong>${fmtNum(summary.profit_factor || 0, 2)}</strong></div>
-        <div><span>Win Rate</span><strong>${fmtPct(summary.win_rate_pct || 0, 1)}</strong></div>
-        <div><span>Trades</span><strong>${summary.trades || 0}</strong></div>
-      </div>
-    </section>
-  `;
-  const renderStrategyBlock = (label, emoji, tone, live, key) => `
-    <section class="decision-block strategy ${tone} ${leaderKey === key ? "is-leader" : ""} ${leaderKey !== "tie" && leaderKey !== key ? "is-muted" : ""}">
-      <div class="decision-block-head">
-        <div class="decision-block-title">
-          <span>${emoji}</span>
-          <strong>${label}</strong>
-        </div>
+  const renderStrategyRow = (label, emoji, live, key) => `
+    <div class="rail-row strategy ${leaderKey === key ? "is-leader" : ""} ${leaderKey !== "tie" && leaderKey !== key ? "is-muted" : ""}">
+      <div class="rail-row-head">
+        <span class="rail-row-name">${emoji} ${label}</span>
         ${leaderKey === key ? '<span class="leader-badge">Leader</span>' : ""}
       </div>
-      <div class="decision-primary ${Number(live.net_pnl_usd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(live.net_pnl_usd || 0)}</div>
-      <div class="decision-metrics">
-        <div class="decision-metric"><span>Return</span><strong>${fmtPct(live.total_return_pct || 0, 2)}</strong></div>
-        <div class="decision-metric"><span>PF</span><strong>${fmtNum(live.profit_factor || 0, 2)}</strong></div>
-        <div class="decision-metric"><span>Trades</span><strong>${live.trades || 0}</strong></div>
+      <div class="rail-kpi-grid">
+        <div><span>PnL</span><strong class="${Number(live.net_pnl_usd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(live.net_pnl_usd || 0)}</strong></div>
+        <div><span>Return</span><strong class="${Number(live.total_return_pct || 0) < 0 ? "neg" : "pos"}">${fmtPct(live.total_return_pct || 0, 2)}</strong></div>
+        <div><span>PF</span><strong class="${Number(live.profit_factor || 0) >= 1 ? "pos" : "neg"}">${fmtNum(live.profit_factor || 0, 2)}</strong></div>
+        <div><span>Trades</span><strong>${live.trades || 0}</strong></div>
       </div>
-    </section>
+    </div>
   `;
   target.innerHTML = `
-    <section class="decision-block total">
-      <span class="overview-topbar-label">Total PnL</span>
-      <div class="decision-total ${stats.totalPnl < 0 ? "neg" : "pos"}">${fmtUsd(stats.totalPnl)}</div>
-      <div class="decision-subline">${fmtPct(stats.totalReturn, 2)} total return</div>
+    <section class="rail-section summary">
+      <div class="rail-title">Live Summary</div>
+      <div class="rail-summary-line">
+        <strong class="decision-total ${stats.totalPnl < 0 ? "neg" : "pos"}">${fmtUsd(stats.totalPnl)}</strong>
+        <span class="${stats.totalReturn < 0 ? "neg" : "pos"}">${fmtPct(stats.totalReturn, 2)} total return</span>
+      </div>
+      ${renderStrategyRow("Grapes", "🍇", grapesLive, "grapes")}
+      ${renderStrategyRow("Citrus", "🍊", citrusLive, "citrus")}
     </section>
-    ${renderStrategyBlock("Grapes", "🍇", "grapes", grapesLive, "grapes")}
-    ${renderStrategyBlock("Citrus", "🍊", "citrus", citrusLive, "citrus")}
     <section class="rail-section">
       <div class="rail-title">Risk Metrics</div>
-      <div class="risk-grid">
-        <div class="risk-tile"><span>Max Drawdown</span><strong class="neg">${fmtPct(stats.maxDdPct, 1)}</strong></div>
-        <div class="risk-tile"><span>Sharpe</span><strong>${fmtNum((Number(grapesLive.sharpe || 0) + Number(citrusLive.sharpe || 0)) / 2, 2)}</strong></div>
-        <div class="risk-tile"><span>Win Rate</span><strong>${fmtPct(stats.winRate, 1)}</strong></div>
-        <div class="risk-tile"><span>Avg Win</span><strong class="pos">${fmtUsd((Number(grapesLive.avg_win_usd || 0) + Number(citrusLive.avg_win_usd || 0)) / 2)}</strong></div>
-        <div class="risk-tile"><span>Avg Loss</span><strong class="neg">${fmtUsd((Number(grapesLive.avg_loss_usd || 0) + Number(citrusLive.avg_loss_usd || 0)) / 2)}</strong></div>
-        <div class="risk-tile"><span>Leader</span><strong>${leaderKey === "tie" ? "Tie" : leaderKey === "grapes" ? "🍇 Grapes" : "🍊 Citrus"}</strong></div>
+      <div class="rail-table compact">
+        <div><span>Max Drawdown</span><strong class="neg">${fmtPct(stats.maxDdPct, 1)}</strong></div>
+        <div><span>Sharpe</span><strong>${fmtNum((Number(grapesLive.sharpe || 0) + Number(citrusLive.sharpe || 0)) / 2, 2)}</strong></div>
+        <div><span>Win Rate</span><strong class="${Number(stats.winRate || 0) >= 50 ? "pos" : "neg"}">${fmtPct(stats.winRate, 1)}</strong></div>
+        <div><span>Avg Win</span><strong class="pos">${fmtUsd((Number(grapesLive.avg_win_usd || 0) + Number(citrusLive.avg_win_usd || 0)) / 2)}</strong></div>
+        <div><span>Avg Loss</span><strong class="neg">${fmtUsd((Number(grapesLive.avg_loss_usd || 0) + Number(citrusLive.avg_loss_usd || 0)) / 2)}</strong></div>
+        <div><span>Leader</span><strong>${leaderKey === "tie" ? "Tie" : leaderKey === "grapes" ? "🍇 Grapes" : "🍊 Citrus"}</strong></div>
       </div>
     </section>
     <section class="rail-section">
       <div class="rail-title">Equity Curve</div>
       <canvas id="overview-relative-canvas" class="chart-canvas mini"></canvas>
-    </section>
-    <section class="rail-section">
-      <div class="rail-title">Backtest Statistics</div>
-      <div class="backtest-stack">
-        ${backtestBlock("Grapes", "🍇", "grapes", data.strategies.grapes.execution_views?.backtest?.summary || {})}
-        ${backtestBlock("Citrus", "🍊", "citrus", data.strategies.citrus.execution_views?.backtest?.summary || {})}
-      </div>
     </section>
   `;
 }
@@ -533,25 +514,28 @@ function renderOverviewStrategyTape(data) {
     const preview = buildOverviewTradeRows(row.key, data);
     const current = row.active[0];
     return `
-      <article class="strategy-terminal-panel ${row.key}">
-        <div class="strategy-terminal-head">
-          <div>
-            <div class="strategy-terminal-name">${row.name}</div>
-            <div class="strategy-terminal-role">${row.key === "grapes" ? "Live Trend Engine" : "Live Adaptive Engine"}</div>
+        <article class="strategy-terminal-panel ${row.key}">
+          <div class="strategy-terminal-head">
+            <div>
+              <div class="strategy-terminal-name">${row.name}</div>
+              <div class="strategy-terminal-role">${row.key === "grapes" ? "Live Trend Engine" : "Live Adaptive Engine"}</div>
+            </div>
           </div>
-          <div class="strategy-terminal-pnl ${Number(row.netPnl) < 0 ? "neg" : "pos"}">${fmtSignedCompactUsd(row.netPnl)}</div>
-        </div>
         <div class="terminal-open-row">
           <div>
             <span class="strategy-ledger-label">Current Open Position</span>
-            <strong>${current ? `${current.asset} ${current.direction}` : "Flat"}</strong>
+            <strong>
+              ${current
+                ? `<span class="dir-chip ${String(current.direction).toLowerCase()}">${current.direction}</span> ${current.asset}`
+                : "Flat"}
+            </strong>
           </div>
           <div class="${current && Number(current.current_pnl_pct || 0) < 0 ? "neg" : "pos"}">${current ? fmtPct(current.current_pnl_pct || 0, 2) : "—"}</div>
         </div>
         <div class="terminal-metric-row">
           <div><span>Live PnL</span><strong class="${Number(row.netPnl) < 0 ? "neg" : "pos"}">${fmtUsd(row.netPnl)}</strong></div>
-          <div><span>Return</span><strong>${fmtPct(row.totalReturn || 0, 2)}</strong></div>
-          <div><span>Profit Factor</span><strong>${fmtNum(row.pf || 0, 2)}</strong></div>
+          <div><span>Return</span><strong class="${Number(row.totalReturn || 0) < 0 ? "neg" : "pos"}">${fmtPct(row.totalReturn || 0, 2)}</strong></div>
+          <div><span>Profit Factor</span><strong class="${Number(row.pf || 0) >= 1 ? "pos" : "neg"}">${fmtNum(row.pf || 0, 2)}</strong></div>
           <div><span>Total Trades</span><strong>${row.trades || 0}</strong></div>
         </div>
         <div class="terminal-performer-row">
@@ -578,7 +562,6 @@ function renderOverviewStrategyTape(data) {
                 <th>Side</th>
                 <th>Entry</th>
                 <th>Exit</th>
-                <th>Size</th>
                 <th>PnL</th>
                 <th>Status</th>
               </tr>
@@ -590,9 +573,8 @@ function renderOverviewStrategyTape(data) {
                   <td><span class="dir-chip ${String(trade.direction || "").toLowerCase()}">${trade.direction || "—"}</span></td>
                   <td class="mono">${fmtDate(trade.entry_ts)}</td>
                   <td class="mono">${trade.exit_ts === "—" ? "—" : fmtDate(trade.exit_ts)}</td>
-                  <td class="mono">${typeof trade.size === "number" ? fmtNum(trade.size, 2) : trade.size}</td>
-                  <td class="${Number(trade.pnl || 0) < 0 ? "neg" : "pos"}">${fmtSignedCompactUsd(trade.pnl)}</td>
-                  <td>${trade.status}</td>
+                  <td class="${Number(trade.pnl || 0) < 0 ? "neg" : "pos"}">${trade.pnl_is_pct ? fmtPct(trade.pnl, 2) : fmtSignedCompactUsd(trade.pnl)}</td>
+                  <td class="${String(trade.status).toLowerCase() === "closed" ? "closed-status" : ""}">${trade.status}</td>
                 </tr>
               `).join("")}
             </tbody>
@@ -612,7 +594,7 @@ function renderBoardCards(targetId, rows) {
         <div><h4>${row.title}</h4><p>${row.subtitle || ""}</p></div>
       </div>
       <div class="strategy-main single">
-        <div><div class="main-number ${row.negative ? "neg" : ""}" style="${row.negative ? `color:${COLORS.red}` : row.highlight ? `color:${COLORS.green}` : ""}">${row.value}</div><div class="kpi-sub">${row.label}</div></div>
+        <div><div class="main-number ${row.negative ? "neg" : row.highlight ? "pos" : ""}">${row.value}</div><div class="kpi-sub">${row.label}</div></div>
       </div>
     </article>`).join("");
 }
@@ -630,17 +612,15 @@ function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
   target.innerHTML = `
     <article class="snapshot-card">
       <div class="snapshot-head">
-        <span class="snapshot-label">${t(
+        <span class="snapshot-label rail-title">${t(
           lens === "live" ? "liveSnapshot" : "backtestSnapshot"
         )}</span>
-        <strong>${strategyLabel}</strong>
       </div>
-      <div class="snapshot-main">${fmtUsd(s.final_equity || 0)}</div>
-      <div class="snapshot-sub">Final Equity</div>
-      <div class="snapshot-metrics">
-        <div><span>Total Return</span><strong>${fmtPct(s.total_return_pct || 0)}</strong></div>
-        <div><span>Net PnL</span><strong>${fmtUsd(s.net_pnl_usd || 0)}</strong></div>
-        <div><span>Profit Factor</span><strong>${fmtNum(s.profit_factor || 0)}</strong></div>
+      <div class="snapshot-main decision-total ${lens === "live" ? (Number(s.net_pnl_usd || 0) < 0 ? "neg" : "pos") : "neutral"}">${fmtUsd(s.net_pnl_usd || 0)}</div>
+      <div class="snapshot-sub decision-subline">Net PnL</div>
+      <div class="snapshot-metrics rail-kpi-grid">
+        <div><span>Total Return</span><strong class="${Number(s.total_return_pct || 0) < 0 ? "neg" : "pos"}">${fmtPct(s.total_return_pct || 0)}</strong></div>
+        <div><span>Profit Factor</span><strong class="${Number(s.profit_factor || 0) >= 1 ? "pos" : "neg"}">${fmtNum(s.profit_factor || 0)}</strong></div>
         <div><span>Trades</span><strong>${s.trades || 0}</strong></div>
       </div>
     </article>
@@ -690,31 +670,21 @@ function renderLegend(targetId, items) {
 
 function renderGrapesAssets(data) {
   const detailTarget = document.getElementById("grapes-asset-cards-detail");
+  const lens = (state.lenses.grapes === "extended" ? "backtest" : state.lenses.grapes) || "backtest";
   const topRows = data.strategies.grapes.asset_stats || [];
   const detailRows = computeAssetValidationStats(getStrategyLensData("grapes")?.all_trades || []);
   const totalPnlForRow = (row) => row.total_pnl ?? row.totalPnl ?? row.total_pnl_usd_20;
-  const avgPnlForRow = (row) => row.avg_pnl ?? row.avgPnl ?? row.avg_pnl_usd_20;
+  const tradesForRow = (row) => row.trades ?? 0;
+  const winRateForRow = (row) => row.win_rate_pct ?? row.winRatePct ?? 0;
   const renderRows = (rows) => rows.map((row) => `
     <article class="asset-card">
-      <div class="asset-card-head">
-        <strong class="asset-symbol">${row.asset}</strong>
-        <span class="asset-caption">validation row</span>
+      <div class="rail-row-head">
+        <span class="rail-row-name">${row.asset}</span>
+        <strong class="asset-inline-pnl ${lens === "live" ? (totalPnlForRow(row) < 0 ? "neg" : "pos") : "neutral"}">${fmtUsd(totalPnlForRow(row))}</strong>
       </div>
-      <div class="asset-main">
-        <div class="asset-pnl-line">
-          <span class="asset-pnl-label">Net PnL</span>
-          <strong class="headline ${totalPnlForRow(row) < 0 ? "red" : ""}">${fmtUsd(totalPnlForRow(row))}</strong>
-        </div>
-        <div class="asset-stat-grid">
-          <div class="asset-stat"><span>${t("trades")}</span><strong>${row.trades}</strong></div>
-          <div class="asset-stat"><span>${t("winRate")}</span><strong>${fmtPct(row.win_rate_pct ?? row.winRatePct, 2)}</strong></div>
-          <div class="asset-stat"><span>${t("pf")}</span><strong>${Number.isFinite(row.profit_factor ?? row.profitFactor) ? fmtNum(row.profit_factor ?? row.profitFactor, 2) : "∞"}</strong></div>
-          <div class="asset-stat"><span>${t("avgPnl")}</span><strong>${fmtUsd(avgPnlForRow(row))}</strong></div>
-        </div>
-      </div>
-      <div class="asset-side-note">
-        <strong>${fmtPct(row.win_rate_pct ?? row.winRatePct, 1)}</strong>
-        <span>${state.lang === "zh" ? "hit rate" : "hit rate"}</span>
+      <div class="rail-kpi-grid compact">
+        <div><span>${t("trades")}</span><strong>${tradesForRow(row)}</strong></div>
+        <div><span>${t("winRate")}</span><strong class="${Number(winRateForRow(row)) >= 50 ? "pos" : "neg"}">${fmtPct(winRateForRow(row), 1)}</strong></div>
       </div>
     </article>`).join("");
   if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows);
@@ -722,6 +692,7 @@ function renderGrapesAssets(data) {
 
 function renderCitrusAssets(data) {
   const detailTarget = document.getElementById("citrus-asset-cards-detail");
+  const lens = (state.lenses.citrus === "extended" ? "backtest" : state.lenses.citrus) || "backtest";
   const topRows = data.strategies.citrus.assets || [];
   const detailRows = computeAssetValidationStats(getStrategyLensData("citrus")?.all_trades || []);
   const totalPnlForRow = (row, useLegacy) => useLegacy ? row.total_pnl_usd_20 : row.totalPnl;
@@ -738,25 +709,13 @@ function renderCitrusAssets(data) {
   const winRateForRow = (row, useLegacy) => useLegacy ? row.win_rate_pct : row.winRatePct;
   const renderRows = (rows, useLegacy = false) => rows.map((row) => `
     <article class="asset-card">
-      <div class="asset-card-head">
-        <strong class="asset-symbol">${row.asset}</strong>
-        <span class="asset-caption">validation row</span>
+      <div class="rail-row-head">
+        <span class="rail-row-name">${row.asset}</span>
+        <strong class="asset-inline-pnl ${lens === "live" ? (totalPnlForRow(row, useLegacy) < 0 ? "neg" : "pos") : "neutral"}">${fmtUsd(totalPnlForRow(row, useLegacy))}</strong>
       </div>
-      <div class="asset-main">
-        <div class="asset-pnl-line">
-          <span class="asset-pnl-label">Net PnL</span>
-          <strong class="headline ${totalPnlForRow(row, useLegacy) < 0 ? "red" : ""}">${fmtUsd(totalPnlForRow(row, useLegacy))}</strong>
-        </div>
-        <div class="asset-stat-grid">
-          <div class="asset-stat"><span>${t("trades")}</span><strong>${row.trades}</strong></div>
-          <div class="asset-stat"><span>${t("winRate")}</span><strong>${fmtPct(winRateForRow(row, useLegacy), 2)}</strong></div>
-          <div class="asset-stat"><span>${t("pf")}</span><strong>${Number.isFinite(profitFactorForRow(row, useLegacy)) ? fmtNum(profitFactorForRow(row, useLegacy), 2) : "∞"}</strong></div>
-          <div class="asset-stat"><span>${t("avgPnl")}</span><strong>${fmtUsd(avgPnlForRow(row, useLegacy))}</strong></div>
-        </div>
-      </div>
-      <div class="asset-side-note">
-        <strong>${fmtPct(winRateForRow(row, useLegacy), 1)}</strong>
-        <span>${state.lang === "zh" ? "hit rate" : "hit rate"}</span>
+      <div class="rail-kpi-grid compact">
+        <div><span>${t("trades")}</span><strong>${row.trades}</strong></div>
+        <div><span>${t("winRate")}</span><strong class="${Number(winRateForRow(row, useLegacy)) >= 50 ? "pos" : "neg"}">${fmtPct(winRateForRow(row, useLegacy), 1)}</strong></div>
       </div>
     </article>`).join("");
   if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows, !detailRows.length);
@@ -772,16 +731,14 @@ function renderActivePositions(targetId, positions) {
   target.innerHTML = positions.map((row) => `
     <article class="position-card">
       <div class="position-head">
-        <strong>${row.asset}</strong>
+        <strong class="rail-row-name">${row.asset}</strong>
         <span class="dir-chip ${String(row.direction).toLowerCase()}">${row.direction}</span>
       </div>
-      <div class="position-grid-inner">
-        <div><span>${t("entryTime")}</span><strong>${fmtDate(row.entry_ts)}</strong></div>
+      <div class="rail-kpi-grid compact">
         <div><span>${t("entryPrice")}</span><strong>${fmtNum(row.entry_price, 2)}</strong></div>
         ${row.current_price !== undefined ? `<div><span>Current Price</span><strong>${fmtNum(row.current_price, 2)}</strong></div>` : ""}
         ${row.hold_hours !== undefined ? `<div><span>${t("holdHours")}</span><strong>${row.hold_hours}h</strong></div>` : ""}
         ${row.current_pnl_pct !== undefined ? `<div><span>Current PnL</span><strong class="${Number(row.current_pnl_pct || 0) >= 0 ? "pos" : "neg"}">${fmtPct(row.current_pnl_pct || 0, 2)}</strong></div>` : ""}
-        <div><span>${t("peakPnl")}</span><strong class="${Number(row.peak_pnl_pct || 0) >= 0 ? "pos" : "neg"}">${fmtPct(row.peak_pnl_pct || 0, 2)}</strong></div>
       </div>
     </article>`).join("");
 }
@@ -797,24 +754,6 @@ function getDisplayedActivePositions(strategyKey, fallbackPositions = []) {
 
 function renderGrapesSummary(data) {
   const grapes = data.strategies.grapes;
-  const rows = [...I18N[state.lang].grapesProfileRows];
-  rows[3][2] = state.lang === "zh"
-    ? `当前组合 ${fmtPct(grapes.summary.total_return_pct)}，PF ${fmtNum(grapes.summary.profit_factor || 0)}，更像一套追求长期复利质量的资产引擎。`
-    : `Current return ${fmtPct(grapes.summary.total_return_pct)} with PF ${fmtNum(grapes.summary.profit_factor || 0)}. The engine leans toward cleaner compounding rather than forced activity.`;
-  document.getElementById("grapes-summary").innerHTML = rows.map(([label, value, note]) => `
-    <div class="stack-row narrative">
-      <div class="stack-copy">
-        <span class="label">${label}</span>
-        <strong class="stack-title">${value}</strong>
-        <p class="stack-note">${note}</p>
-      </div>
-    </div>`).join("");
-  renderBoardCards("grapes-board-cards", [
-    { title: "Final Equity", value: fmtUsd(grapes.summary.final_equity), label: fmtBaseCapitalLabel(grapes.summary.initial_equity || 0), highlight: false },
-    { title: "Total Return", value: fmtPct(grapes.summary.total_return_pct), label: state.lang === "zh" ? "组合总回报" : "Total portfolio return", highlight: true },
-    { title: "Max DD", value: fmtPct(grapes.summary.max_drawdown_pct), label: state.lang === "zh" ? "最大回撤" : "Maximum drawdown", negative: true },
-    { title: "Sharpe", value: fmtNum(grapes.summary.sharpe), label: state.lang === "zh" ? "风险调整后收益" : "Risk-adjusted return" },
-  ]);
   renderSnapshotCards("grapes", "🍇 Grapes", getStrategyLensData("grapes"));
   renderActivePositions("grapes-active-positions", getDisplayedActivePositions("grapes", grapes.active_positions || []));
 }
@@ -822,33 +761,17 @@ function renderGrapesSummary(data) {
 function renderGrapesRegime(data) {
   const detail = getStrategyLensData("grapes")?.regime_snapshot?.regime_detail || [];
   const map = { TREND_UP: t("trendUp"), TREND_DOWN: t("trendDown"), RANGE_CHOP: t("rangeChop"), TRANSITION: t("transition") };
-  document.getElementById("grapes-regime").innerHTML = detail.map((row) => `
+  const target = document.getElementById("grapes-regime");
+  if (!target) return;
+  target.innerHTML = detail.map((row) => `
     <article class="regime-card">
       <h5>${map[row.regime_proxy] || row.regime_proxy}</h5>
-      <p>${row.trades} ${state.lang === "zh" ? "笔" : "trades"} · ${t("winRate")} ${fmtPct(row.win_rate_pct)} · ${t("totalPnl")} ${fmtUsd(row.total_pnl_usd)}</p>
+      <p>${row.trades} ${state.lang === "zh" ? "笔" : "trades"} · ${t("winRate")} <strong class="${Number(row.win_rate_pct || 0) >= 50 ? "pos" : "neg"}">${fmtPct(row.win_rate_pct)}</strong> · ${t("totalPnl")} <strong class="${Number(row.total_pnl_usd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(row.total_pnl_usd)}</strong></p>
     </article>`).join("");
 }
 
 function renderCitrusSummary(data) {
   const p = data.strategies.citrus.portfolio;
-  const rows = [...I18N[state.lang].citrusProfileRows];
-  rows[3][2] = state.lang === "zh"
-    ? `当前组合 ${fmtPct(p.total_return_pct_on_base)}，Sharpe ${fmtNum(p.sharpe || 0)}，胜率 ${fmtPct(p.win_rate_pct, 1)}，更像一套持续打磨执行质量的资产组合。`
-    : `Current return ${fmtPct(p.total_return_pct_on_base)} with Sharpe ${fmtNum(p.sharpe || 0)} and win rate ${fmtPct(p.win_rate_pct, 1)}. The focus stays on cleaner participation and adaptive opportunity capture.`;
-  document.getElementById("citrus-summary").innerHTML = rows.map(([label, value, note]) => `
-    <div class="stack-row narrative">
-      <div class="stack-copy">
-        <span class="label">${label}</span>
-        <strong class="stack-title">${value}</strong>
-        <p class="stack-note">${note}</p>
-      </div>
-    </div>`).join("");
-  renderBoardCards("citrus-board-cards", [
-    { title: "Final Equity", value: fmtUsd(p.final_equity), label: fmtBaseCapitalLabel(data.strategies.citrus.normalization?.synthetic_base_equity_usd || 0) },
-    { title: "Total Return", value: fmtPct(p.total_return_pct_on_base), label: state.lang === "zh" ? "组合总回报" : "Total portfolio return", highlight: true },
-    { title: "Max DD", value: fmtPct(p.max_dd_pct || 0), label: state.lang === "zh" ? "最大回撤" : "Maximum drawdown", negative: true },
-    { title: "Sharpe", value: fmtNum(p.sharpe || 0), label: state.lang === "zh" ? "风险调整后收益" : "Risk-adjusted return" },
-  ]);
   renderSnapshotCards("citrus", "🍊 Citrus", getStrategyLensData("citrus"));
   renderActivePositions("citrus-active-positions", getDisplayedActivePositions("citrus", data.strategies.citrus.active_positions || []));
 }
@@ -861,7 +784,7 @@ function renderCitrusRegime(data) {
   target.innerHTML = detail.map((row) => `
     <article class="regime-card">
       <h5>${map[row.regime_proxy] || row.regime_proxy}</h5>
-      <p>${row.trades} ${state.lang === "zh" ? "笔" : "trades"} · ${t("winRate")} ${fmtPct(row.win_rate_pct)} · ${t("totalPnl")} ${fmtUsd(row.total_pnl_usd)}</p>
+      <p>${row.trades} ${state.lang === "zh" ? "笔" : "trades"} · ${t("winRate")} <strong class="${Number(row.win_rate_pct || 0) >= 50 ? "pos" : "neg"}">${fmtPct(row.win_rate_pct)}</strong> · ${t("totalPnl")} <strong class="${Number(row.total_pnl_usd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(row.total_pnl_usd)}</strong></p>
     </article>`).join("");
 }
 
@@ -1631,12 +1554,53 @@ function drawCitrusAssetReturns(canvas, data) {
 }
 
 function drawOverviewRelativeChart(canvas, data) {
-  const grapesSeries = buildTradeEquitySeries(data.strategies.grapes.execution_views?.live?.all_trades || [], 0)
-    .map((row) => ({ ts: row.ts, pnl: Number(row.pnl || 0) }));
-  const citrusSeries = buildTradeEquitySeries(data.strategies.citrus.execution_views?.live?.all_trades || [], 0)
-    .map((row) => ({ ts: row.ts, pnl: Number(row.pnl || 0) }));
-  if (!grapesSeries.length && !citrusSeries.length) return;
-  drawDualCurveChart(canvas, grapesSeries, "pnl", citrusSeries, "pnl", "#8d6bff", "#ffb03b");
+  const toRelativeCurve = (strategyKey, fallbackTrades = []) => {
+    const liveView = data.strategies[strategyKey].execution_views?.live || {};
+    const portfolio = liveView.portfolio_curve || [];
+    if (portfolio.length >= 2) {
+      const base = Number(portfolio[0]?.equity || 0);
+      return portfolio.map((row) => ({
+        ts: row.ts,
+        pnl: Number((Number(row.equity || 0) - base).toFixed(2)),
+      }));
+    }
+    return buildTradeEquitySeries(fallbackTrades, 0).map((row) => ({ ts: row.ts, pnl: Number(row.pnl || 0) }));
+  };
+
+  const grapesSeries = toRelativeCurve("grapes", data.strategies.grapes.execution_views?.live?.all_trades || []);
+  const citrusSeries = toRelativeCurve("citrus", data.strategies.citrus.execution_views?.live?.all_trades || []);
+  const combined = [...grapesSeries.map((row) => Number(row.pnl)), ...citrusSeries.map((row) => Number(row.pnl))].filter(Number.isFinite);
+  if (!combined.length) return;
+
+  const { ctx, width, height } = resizeCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const m = { top: 12, right: 10, bottom: 28, left: 44 };
+  const scale = buildNiceScale([...combined, 0], 5, { includeZero: true });
+  const maxLen = Math.max(grapesSeries.length, citrusSeries.length);
+  const tickSeries = Array.from({ length: Math.max(2, maxLen) }, (_, index) => ({
+    ts: (grapesSeries[index]?.ts || citrusSeries[index]?.ts || ""),
+    pnl: 0,
+  }));
+  const xTicks = buildProgressXAxisTicks(tickSeries, width, m).filter((_, idx, arr) => idx === 0 || idx === arr.length - 1 || idx === Math.floor(arr.length / 2));
+  drawAxes(ctx, width, height, m, scale.ticks, xTicks);
+
+  const gPoints = toIndexedPoints(grapesSeries, "pnl", width, height, m, scale.min, scale.max, 0);
+  const cPoints = toIndexedPoints(citrusSeries, "pnl", width, height, m, scale.min, scale.max, 0);
+
+  if (gPoints[0]?.baselineY) {
+    ctx.save();
+    ctx.strokeStyle = "rgba(231,239,233,0.1)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(m.left, gPoints[0].baselineY);
+    ctx.lineTo(width - m.right, gPoints[0].baselineY);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  drawSmoothLine(ctx, gPoints, "#8d6bff", false);
+  drawSmoothLine(ctx, cPoints, "#ffb03b", false);
+  drawFixedAxisLabels(ctx, width, height, m, scale.ticks.slice(0, 3), tickSeries, () => xTicks);
 }
 
 function renderTradeMeta(targetId, trades) {
@@ -1647,9 +1611,9 @@ function renderTradeMeta(targetId, trades) {
   const total = trades.reduce((sum, trade) => sum + Number(trade.net_pnl_usd || 0), 0);
   target.innerHTML = `
     <span><strong>${trades.length}</strong> ${t("currentFilteredTrades")}</span>
-    <span><strong>${wins}</strong> ${t("wins")}</span>
-    <span><strong>${losses}</strong> ${t("losses")}</span>
-    <span><strong>${fmtUsd(total)}</strong> ${t("totalPnl")}</span>
+    <span><strong class="pos">${wins}</strong> ${t("wins")}</span>
+    <span><strong class="neg">${losses}</strong> ${t("losses")}</span>
+    <span><strong class="${Number(total) < 0 ? "neg" : "pos"}">${fmtUsd(total)}</strong> ${t("totalPnl")}</span>
   `;
 }
 
@@ -1700,22 +1664,24 @@ function renderTradeCards(targetId, trades, includeType = false) {
     const movePct = entryPx > 0
       ? (((exitPx - entryPx) / entryPx) * (isShort ? -100 : 100))
       : 0;
+    const status = trade.exit_ts ? "Closed" : "Open";
+    const exitLabel = trade.exit_ts ? fmtDate(trade.exit_ts) : "—";
     return `
       <article class="trade-card">
         <div class="trade-card-head">
-          <div class="trade-card-title">
-            <strong>${trade.asset}</strong>
-            <span class="dir-chip ${String(sideLabel).toLowerCase()} ${sideClass}">${sideLabel}</span>
-          </div>
-          <strong class="${pnl >= 0 ? "pos" : "neg"}">${fmtUsd(pnl)}</strong>
+          <strong>${trade.asset}</strong>
+          <span class="dir-chip ${String(sideLabel).toLowerCase()} ${sideClass}">${sideLabel}</span>
         </div>
-        <div class="trade-card-meta">
-          <div><span>${t("holdHours")}</span><strong>${trade.hold_hours}h</strong></div>
-          <div><span>${t("entry")}</span><strong class="mono">${trade.entry_ts}</strong></div>
-          <div><span>${t("exit")}</span><strong class="mono">${trade.exit_ts}</strong></div>
+        <div class="trade-card-row">
+          <div><span>${t("entry")}</span><strong class="mono">${fmtDate(trade.entry_ts)}</strong></div>
+          <div><span>${t("exit")}</span><strong class="mono">${exitLabel}</strong></div>
+          <div><span>${t("pnl")}</span><strong class="${pnl >= 0 ? "pos" : "neg"}">${fmtUsd(pnl)}</strong></div>
+          <div><span>Status</span><strong class="${status === "Closed" ? "closed-status" : ""}">${status}</strong></div>
+        </div>
+        <div class="trade-card-row secondary">
           <div><span>Entry Px</span><strong class="mono">${fmtNum(trade.entry_price, 2)}</strong></div>
           <div><span>Exit Px</span><strong class="mono">${fmtNum(trade.exit_price, 2)}</strong></div>
-          <div><span>${t("side")}</span><strong class="${sideClass}">${sideLabel}</strong></div>
+          <div><span>${t("holdHours")}</span><strong>${trade.hold_hours}h</strong></div>
           <div><span>Move</span><strong class="${movePct >= 0 ? "pos" : "neg"}">${fmtPct(movePct, 2)}</strong></div>
         </div>
       </article>
@@ -1784,9 +1750,9 @@ function renderMonthlySummary(targetId, monthlySummary, winRate) {
   const target = document.getElementById(targetId);
   if (!target || !monthlySummary) return;
   target.innerHTML = `
-    <span><strong>${monthlySummary.profitable_months}</strong> ${t("profitableMonths")}</span>
-    <span><strong>${monthlySummary.losing_months}</strong> ${t("losingMonths")}</span>
-    <span><strong>${fmtPct(winRate, 1)}</strong> ${t("winRate")}</span>
+    <span><strong class="pos">${monthlySummary.profitable_months}</strong> ${t("profitableMonths")}</span>
+    <span><strong class="neg">${monthlySummary.losing_months}</strong> ${t("losingMonths")}</span>
+    <span><strong class="${Number(winRate || 0) >= 50 ? "pos" : "neg"}">${fmtPct(winRate, 1)}</strong> ${t("winRate")}</span>
     <span><strong>${monthlySummary.best_month?.label || "—"}</strong> ${t("bestMonth")}</span>
   `;
 }
@@ -1795,9 +1761,8 @@ function renderCharts(data) {
   const overview = document.getElementById("overlay-overview-canvas");
   if (overview && overview.offsetParent !== null) {
     drawOverlayStrategyChart(overview, data);
-    renderLegend("overview-legend", [
-      { label: "Combined Live PnL", color: COLORS.green },
-    ]);
+    const legend = document.getElementById("overview-legend");
+    if (legend) legend.innerHTML = "";
   }
 
   const overviewRelative = document.getElementById("overview-relative-canvas");

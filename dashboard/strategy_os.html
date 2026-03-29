@@ -14,10 +14,10 @@
     <div class="page-shell">
       <header class="site-header">
         <div class="site-brand">
-          <img class="brand-logo" src="./assets/nts-alpha-lab-logo.png" alt="NTS Alpha Lab" />
-          <div class="brand-copy">
-            <span class="brand-kicker">NTS Alpha Lab</span>
-            <strong>Strategy OS</strong>
+          <img class="brand-mark" src="./favicon.svg" alt="NTS Alpha Lab" />
+          <div class="brand-wordmark">
+            <strong>NTS Alpha Lab</strong>
+            <span>Strategy OS</span>
           </div>
         </div>
         <nav class="site-nav" id="top-switch">
@@ -36,8 +36,6 @@
 
       <main class="page-main">
         <section class="view-panel is-active" data-panel="all">
-          <section class="overview-topbar" id="hero-status"></section>
-
           <section class="overview-main-grid">
             <section class="overview-chart-surface">
               <div class="section-head minimal">
@@ -54,53 +52,32 @@
         </section>
 
         <section class="view-panel strategy-view" data-panel="grapes">
-          <section class="strategy-header">
-            <div class="strategy-header-copy">
-              <p class="eyebrow">Strategy Detail</p>
-              <h2>Cortex Grapes</h2>
-              <p class="section-note">Trend and structure mandate designed for cleaner compounding through persistent market phases.</p>
-            </div>
-            <div id="grapes-board-cards" class="strategy-header-metrics"></div>
-          </section>
-
-          <section class="toolbar-row">
-            <div class="subview-switch" id="grapes-lens-switch">
-              <button class="subview-tab active" data-strategy="grapes" data-lens="backtest" type="button">Backtest</button>
-              <button class="subview-tab" data-strategy="grapes" data-lens="live" type="button">Live</button>
-            </div>
-            <div id="grapes-lens-note" class="lens-note"></div>
-          </section>
-
-          <div id="grapes-snapshot-cards" class="snapshot-grid"></div>
-
-          <section class="content-grid two-col">
+          <section class="strategy-main-grid">
             <section class="feature-panel performance-panel">
               <div class="section-head">
-                <p class="eyebrow">Performance</p>
+                <p class="eyebrow">Cortex Grapes</p>
                 <div class="chart-legend" id="grapes-legend"></div>
               </div>
               <canvas id="grapes-detail-canvas" class="chart-canvas"></canvas>
             </section>
-            <section class="feature-panel performance-panel">
-              <div class="section-head"><p class="eyebrow">Profile</p></div>
-              <div id="grapes-summary" class="stack-list"></div>
-            </section>
-          </section>
-
-          <section class="feature-panel">
-            <div class="section-head"><p class="eyebrow">Open Positions</p></div>
-            <div id="grapes-active-positions" class="position-grid"></div>
-          </section>
-
-          <section class="content-grid two-col">
-            <section class="feature-panel profile-panel">
-              <div class="section-head"><p class="eyebrow">Asset Validation</p></div>
-              <div id="grapes-asset-cards-detail" class="asset-card-grid"></div>
-            </section>
-            <section class="feature-panel profile-panel">
-              <div class="section-head"><p class="eyebrow">Regime Performance</p></div>
-              <div id="grapes-regime" class="regime-grid"></div>
-            </section>
+            <aside class="strategy-rail">
+              <section class="toolbar-row">
+                <div class="subview-switch" id="grapes-lens-switch">
+                  <button class="subview-tab active" data-strategy="grapes" data-lens="backtest" type="button">Backtest</button>
+                  <button class="subview-tab" data-strategy="grapes" data-lens="live" type="button">Live</button>
+                </div>
+                <div id="grapes-lens-note" class="lens-note"></div>
+              </section>
+              <div id="grapes-snapshot-cards" class="snapshot-grid"></div>
+              <section class="feature-panel rail-panel">
+                <div class="section-head"><p class="eyebrow">Open Positions</p></div>
+                <div id="grapes-active-positions" class="position-grid"></div>
+              </section>
+              <section class="feature-panel rail-panel">
+                <div class="section-head"><p class="eyebrow">Asset Validation</p></div>
+                <div id="grapes-asset-cards-detail" class="asset-card-grid"></div>
+              </section>
+            </aside>
           </section>
 
           <section class="feature-panel">
@@ -143,53 +120,32 @@
         </section>
 
         <section class="view-panel strategy-view" data-panel="citrus">
-          <section class="strategy-header">
-            <div class="strategy-header-copy">
-              <p class="eyebrow">Strategy Detail</p>
-              <h2>Cortex Citrus</h2>
-              <p class="section-note">Cross-asset opportunistic mandate focused on extracting asymmetric dislocations with tighter participation quality.</p>
-            </div>
-            <div id="citrus-board-cards" class="strategy-header-metrics"></div>
-          </section>
-
-          <section class="toolbar-row">
-            <div class="subview-switch" id="citrus-lens-switch">
-              <button class="subview-tab active" data-strategy="citrus" data-lens="backtest" type="button">Backtest</button>
-              <button class="subview-tab" data-strategy="citrus" data-lens="live" type="button">Live</button>
-            </div>
-            <div id="citrus-lens-note" class="lens-note"></div>
-          </section>
-
-          <div id="citrus-snapshot-cards" class="snapshot-grid"></div>
-
-          <section class="content-grid two-col">
-            <section class="feature-panel">
+          <section class="strategy-main-grid">
+            <section class="feature-panel performance-panel">
               <div class="section-head">
-                <p class="eyebrow">Performance</p>
+                <p class="eyebrow">Cortex Citrus</p>
                 <div class="chart-legend" id="citrus-legend"></div>
               </div>
               <canvas id="citrus-return-canvas" class="chart-canvas"></canvas>
             </section>
-            <section class="feature-panel">
-              <div class="section-head"><p class="eyebrow">Profile</p></div>
-              <div id="citrus-summary" class="stack-list"></div>
-            </section>
-          </section>
-
-          <section class="feature-panel">
-            <div class="section-head"><p class="eyebrow">Open Positions</p></div>
-            <div id="citrus-active-positions" class="position-grid"></div>
-          </section>
-
-          <section class="content-grid two-col">
-            <section class="feature-panel">
-              <div class="section-head"><p class="eyebrow">Asset Validation</p></div>
-              <div id="citrus-asset-cards-detail" class="asset-card-grid"></div>
-            </section>
-            <section class="feature-panel">
-              <div class="section-head"><p class="eyebrow">Regime Performance</p></div>
-              <div id="citrus-regime" class="regime-grid"></div>
-            </section>
+            <aside class="strategy-rail">
+              <section class="toolbar-row">
+                <div class="subview-switch" id="citrus-lens-switch">
+                  <button class="subview-tab active" data-strategy="citrus" data-lens="backtest" type="button">Backtest</button>
+                  <button class="subview-tab" data-strategy="citrus" data-lens="live" type="button">Live</button>
+                </div>
+                <div id="citrus-lens-note" class="lens-note"></div>
+              </section>
+              <div id="citrus-snapshot-cards" class="snapshot-grid"></div>
+              <section class="feature-panel rail-panel">
+                <div class="section-head"><p class="eyebrow">Open Positions</p></div>
+                <div id="citrus-active-positions" class="position-grid"></div>
+              </section>
+              <section class="feature-panel rail-panel">
+                <div class="section-head"><p class="eyebrow">Asset Validation</p></div>
+                <div id="citrus-asset-cards-detail" class="asset-card-grid"></div>
+              </section>
+            </aside>
           </section>
 
           <section class="feature-panel">
