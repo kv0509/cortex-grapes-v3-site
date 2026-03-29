@@ -916,6 +916,43 @@ function syncTradeValueOptions(strategyKey) {
     state.tradeFilters[strategyKey].value = options[0] || "all";
   }
   valueSelect.value = state.tradeFilters[strategyKey].value;
+  renderTradeValueTabs(strategyKey, options);
+}
+
+function renderTradeScopeTabs(strategyKey) {
+  const target = document.getElementById(`${strategyKey}-trade-scope-tabs`);
+  const scopeSelect = document.getElementById(`${strategyKey}-trade-scope`);
+  if (!target || !scopeSelect) return;
+  const current = state.tradeFilters[strategyKey]?.scope || scopeSelect.value || "month";
+  const items = [
+    { value: "month", label: t("monthly") },
+    { value: "year", label: t("yearly") },
+    { value: "all", label: t("all") },
+  ];
+  target.innerHTML = items.map((item) => `
+    <button
+      class="trade-scope-tab ${current === item.value ? "active" : ""}"
+      type="button"
+      data-strategy="${strategyKey}"
+      data-scope="${item.value}"
+    >${item.label}</button>
+  `).join("");
+}
+
+function renderTradeValueTabs(strategyKey, options = null) {
+  const target = document.getElementById(`${strategyKey}-trade-value-tabs`);
+  const valueSelect = document.getElementById(`${strategyKey}-trade-value`);
+  if (!target || !valueSelect) return;
+  const values = options || Array.from(valueSelect.options).map((option) => option.value);
+  const current = state.tradeFilters[strategyKey]?.value || valueSelect.value || values[0] || "all";
+  target.innerHTML = values.map((value) => `
+    <button
+      class="trade-value-tab ${current === value ? "active" : ""}"
+      type="button"
+      data-strategy="${strategyKey}"
+      data-value="${value}"
+    >${value === "all" ? t("allPeriods") : value}</button>
+  `).join("");
 }
 
 function drawAxes(ctx, width, height, m, yTicks = [], xTicks = []) {
@@ -1800,26 +1837,31 @@ function renderTradeCards(targetId, trades, includeType = false) {
     const isShort = dir === "SHORT";
     const sideLabel = isLong ? "Long" : isShort ? "Short" : "—";
     const sideClass = isLong ? "pos" : isShort ? "neg" : "";
-    const entryPx = Number(trade.entry_price || 0);
-    const exitPx = Number(trade.exit_price || 0);
-    const movePct = entryPx > 0
-      ? (((exitPx - entryPx) / entryPx) * (isShort ? -100 : 100))
-      : 0;
     const status = trade.exit_ts ? t("closed") : t("open");
     const exitLabel = trade.exit_ts ? fmtTradeDate(trade.exit_ts) : "—";
     return `
-      <article class="trade-card">
+      <article class="trade-card overview-mobile-trade">
         <div class="trade-card-head">
           <strong>${trade.asset}</strong>
           <span class="dir-chip ${String(sideLabel).toLowerCase()} ${sideClass}">${sideLabel}</span>
         </div>
-        <div class="trade-card-row primary">
-          <div><span>${t("entry")}</span><strong class="mono">${fmtTradeDate(trade.entry_ts)}</strong></div>
-          <div><span>${t("exit")}</span><strong class="mono">${exitLabel}</strong></div>
-        </div>
-        <div class="trade-card-row secondary">
-          <div><span>${t("pnl")}</span><strong class="${pnl >= 0 ? "pos" : "neg"}">${fmtUsd(pnl)}</strong></div>
-          <div><span>${t("status")}</span><strong class="${status === t("closed") ? "closed-status" : ""}">${status}</strong></div>
+        <div class="trade-mobile-grid">
+          <div class="trade-mobile-row">
+            <span>${t("entry")}</span>
+            <strong class="mono">${fmtTradeMonthDay(trade.entry_ts)}</strong>
+          </div>
+          <div class="trade-mobile-row">
+            <span>${t("exit")}</span>
+            <strong class="mono">${exitLabel === "—" ? "—" : fmtTradeMonthDay(trade.exit_ts)}</strong>
+          </div>
+          <div class="trade-mobile-row">
+            <span>${t("pnl")}</span>
+            <strong class="${pnl >= 0 ? "pos" : "neg"}">${fmtUsd(pnl)}</strong>
+          </div>
+          <div class="trade-mobile-row">
+            <span>${t("status")}</span>
+            <strong class="${status === t("closed") ? "closed-status" : ""}">${status}</strong>
+          </div>
         </div>
       </article>
     `;
@@ -1998,13 +2040,33 @@ function bindTradeFilters() {
   ["grapes", "citrus"].forEach((strategyKey) => {
     const scopeSelect = document.getElementById(`${strategyKey}-trade-scope`);
     const valueSelect = document.getElementById(`${strategyKey}-trade-value`);
+    const scopeTabs = document.getElementById(`${strategyKey}-trade-scope-tabs`);
+    const valueTabs = document.getElementById(`${strategyKey}-trade-value-tabs`);
     if (!scopeSelect || !valueSelect) return;
     scopeSelect.addEventListener("change", () => {
       syncTradeValueOptions(strategyKey);
+      renderTradeScopeTabs(strategyKey);
+      renderTradeSection(strategyKey, strategyKey === "grapes");
+    });
+    scopeTabs?.addEventListener("click", (event) => {
+      const btn = event.target.closest(".trade-scope-tab");
+      if (!btn) return;
+      scopeSelect.value = btn.dataset.scope;
+      syncTradeValueOptions(strategyKey);
+      renderTradeScopeTabs(strategyKey);
       renderTradeSection(strategyKey, strategyKey === "grapes");
     });
     valueSelect.addEventListener("change", () => {
       state.tradeFilters[strategyKey].value = valueSelect.value;
+      renderTradeValueTabs(strategyKey);
+      renderTradeSection(strategyKey, strategyKey === "grapes");
+    });
+    valueTabs?.addEventListener("click", (event) => {
+      const btn = event.target.closest(".trade-value-tab");
+      if (!btn) return;
+      valueSelect.value = btn.dataset.value;
+      state.tradeFilters[strategyKey].value = btn.dataset.value;
+      renderTradeValueTabs(strategyKey);
       renderTradeSection(strategyKey, strategyKey === "grapes");
     });
   });
@@ -2044,6 +2106,10 @@ function render(data) {
   renderMonthlySummary("citrus-monthly-summary", citrusLens?.monthly_summary, citrusLens?.summary?.win_rate_pct || 0);
   syncTradeValueOptions("grapes");
   syncTradeValueOptions("citrus");
+  renderTradeScopeTabs("grapes");
+  renderTradeScopeTabs("citrus");
+  renderTradeValueTabs("grapes");
+  renderTradeValueTabs("citrus");
   renderTradeSection("grapes", true);
   renderTradeSection("citrus", false);
   renderCharts(data);

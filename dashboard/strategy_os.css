@@ -1307,6 +1307,51 @@ select {
   border-bottom: 1px solid rgba(154, 201, 177, 0.08);
 }
 
+.trade-scope-tabs {
+  display: none;
+}
+
+.trade-value-tabs {
+  display: none;
+}
+
+
+.trade-scope-tab {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  padding: 10px 12px;
+  font: 10px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.trade-scope-tab.active {
+  background: rgba(51, 209, 122, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(51, 209, 122, 0.28);
+  color: var(--green);
+}
+
+.trade-value-tab {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  padding: 10px 12px;
+  font: 10px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.trade-value-tab.active {
+  background: rgba(51, 209, 122, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(51, 209, 122, 0.28);
+  color: var(--green);
+}
+
+
 .trade-filters select {
   padding: 10px 12px;
   border: 1px solid var(--line);
@@ -1881,41 +1926,76 @@ select {
 
 @media (max-width: 760px) {
   .page-shell {
-    padding: 18px 16px 46px;
+    padding: 14px 14px 42px;
   }
 
   .site-header {
-    grid-template-columns: 1fr;
-    justify-items: start;
-  }
-
-  .site-nav,
-  .site-controls {
-    justify-self: start;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    justify-items: stretch;
+    gap: 0;
+    margin-bottom: 12px;
+    background: rgba(11, 17, 15, 0.76);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   .site-brand {
-    min-height: 64px;
-    padding: 12px 16px;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
+    min-height: 48px;
+    gap: 8px;
+    padding: 0 10px;
+    justify-self: start;
+  }
+
+  .brand-mark {
+    width: 28px;
+    height: 28px;
+  }
+
+  .brand-wordmark strong {
+    font-size: 12px;
+  }
+
+  .brand-wordmark span {
+    font-size: 8px;
   }
 
   .site-nav {
     width: 100%;
-    justify-self: stretch;
+    min-height: 34px;
+    margin: 0 8px;
   }
 
   .switch-tab {
     flex: 1 1 0;
     text-align: center;
+    padding: 7px 4px;
+    font-size: 10px;
+    letter-spacing: -0.01em;
   }
 
   .site-controls {
-    width: 100%;
-    padding: 10px 16px 0;
+    width: auto;
+    min-height: 48px;
+    padding: 0 8px 0 0;
     border-left: 0;
-    justify-content: space-between;
+    justify-content: flex-end;
+  }
+
+  .lang-switch {
+    min-height: 30px;
+  }
+
+  .lang-tab {
+    padding: 6px 7px;
+    font-size: 8px;
+  }
+
+  #updated-at-header {
+    display: none;
   }
 
   .asset-card-grid,
@@ -2123,6 +2203,49 @@ select {
     gap: 8px;
   }
 
+  .trade-scope-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .trade-value-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .trade-value-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .trade-scope-tab {
+    min-height: 42px;
+    padding: 10px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  #grapes-trade-scope,
+  #citrus-trade-scope,
+  #grapes-trade-value,
+  #citrus-trade-value {
+    display: none;
+  }
+
+  .trade-filters select {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 36px 10px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-color: rgba(154, 201, 177, 0.18);
+    background: rgba(11, 17, 15, 0.92);
+  }
+
   .table-scroll {
     display: none;
   }
@@ -2135,6 +2258,10 @@ select {
   .trade-card {
     padding: 0;
     border-top: 0;
+    background: transparent;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
   }
 
   .trade-card + .trade-card {
@@ -2151,78 +2278,77 @@ select {
     font-size: 14px;
   }
 
-  .trade-card-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 12px;
+  .trade-mobile-grid {
+    display: grid;
   }
 
-  .trade-card-row div {
-    padding: 10px 0;
+  .trade-mobile-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
     border-top: 1px solid rgba(154, 201, 177, 0.08);
   }
 
-  .trade-card-row div:nth-child(-n + 2) {
-    border-top: 0;
-  }
-
-  .trade-card-row.secondary {
-    border-top: 1px solid rgba(154, 201, 177, 0.12);
-  }
-
-  .trade-card-row span {
-    margin-bottom: 4px;
+  .trade-mobile-row span {
     font: 10px var(--mono);
+    color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
 
-  .trade-card-row strong {
-    font-size: 13px;
+  .trade-mobile-row strong {
+    font-size: 12px;
+    text-align: right;
   }
 }
 
 @media (max-width: 420px) {
   .page-shell {
-    padding: 12px 10px 32px;
+    padding: 12px 12px 36px;
   }
 
   .site-header {
+    top: 0;
     margin-bottom: 10px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
   }
 
   .site-brand {
-    min-height: 58px;
-    padding: 10px 12px;
-    gap: 10px;
+    min-height: 44px;
+    padding: 0 8px;
+    gap: 6px;
+    justify-content: flex-start;
   }
 
   .brand-mark {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
   }
 
   .brand-wordmark strong {
-    font-size: 15px;
+    font-size: 11px;
   }
 
   .brand-wordmark span {
-    font-size: 9px;
+    font-size: 8px;
   }
 
   .switch-tab {
-    padding: 11px 8px;
-    font-size: 12px;
-  }
-
-  .lang-tab {
-    padding: 10px 10px;
+    padding: 6px 3px;
     font-size: 9px;
   }
 
+  .lang-tab {
+    padding: 5px 6px;
+    font-size: 8px;
+  }
+
   .site-controls {
-    padding: 8px 12px 0;
-    gap: 8px;
-    font-size: 10px;
+    min-height: 44px;
+    padding: 0 6px 0 0;
+    gap: 6px;
   }
 
   .overview-summary-panel {
@@ -2446,30 +2572,37 @@ select {
     padding: 2px 0;
   }
 
-  .trade-card-row {
-    gap: 0 10px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .trade-filters {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin: 6px 0 10px;
+    padding-bottom: 8px;
   }
 
-  .trade-card-row div {
-    display: grid;
-    gap: 4px;
-    padding: 8px 0;
+  .trade-scope-tab {
+    min-height: 40px;
+    padding: 9px 4px;
+    font-size: 9px;
   }
 
-  .trade-card-row.primary {
-    border-top: 0;
+  .trade-value-tab {
+    min-height: 38px;
+    padding: 8px 10px;
+    font-size: 9px;
   }
 
-  .trade-card-row.secondary {
-    border-top: 1px solid rgba(154, 201, 177, 0.1);
+
+  .trade-filters select {
+    min-height: 40px;
+    padding: 9px 34px 9px 10px;
+    font-size: 11px;
   }
 
-  .trade-card-row span {
-    line-height: 1.2;
+  .trade-mobile-row {
+    padding: 7px 0;
   }
 
-  .trade-card-row strong {
+  .trade-mobile-row strong {
     line-height: 1.25;
   }
 }
