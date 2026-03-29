@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-03-29 08:00:00",
+    "updated_at": "2026-03-29 12:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1"
@@ -43396,24 +43396,7 @@
           "roi_pct_on_margin": -463.44
         }
       ],
-      "active_positions": [
-        {
-          "asset": "BTC",
-          "symbol": "BTCUSDT",
-          "direction": "LONG",
-          "entry_price": 71759.2,
-          "current_price": 66780.8,
-          "current_pnl_pct": -6.94,
-          "entry_ts": "2026-03-25 08:00",
-          "hold_hours": 96.0,
-          "position_size": 1.0,
-          "peak_pnl_pct": 0.0,
-          "realized_pnl_pct": 0.0,
-          "tiered": false,
-          "hard_tp_done": false,
-          "breakeven_armed": false
-        }
-      ],
+      "active_positions": [],
       "execution_views": {
         "backtest": {
           "summary": {
@@ -49370,16 +49353,16 @@
         },
         "live": {
           "summary": {
-            "final_equity": 5905.63,
-            "net_pnl_usd": -94.37,
-            "total_return_pct": -1.57,
-            "profit_factor": 0.82,
-            "trades": 11,
-            "win_rate_pct": 63.6,
+            "final_equity": 5758.38,
+            "net_pnl_usd": -241.62,
+            "total_return_pct": -4.03,
+            "profit_factor": 0.65,
+            "trades": 12,
+            "win_rate_pct": 58.3,
             "avg_win_usd": 63.39,
-            "avg_loss_usd": -134.53,
+            "avg_loss_usd": -137.08,
             "sharpe": 0.0,
-            "max_dd_pct": -8.28
+            "max_dd_pct": -10.57
           },
           "portfolio_curve": [
             {
@@ -49429,6 +49412,10 @@
             {
               "ts": "2026-03-27 08:00:00",
               "equity": 5905.63
+            },
+            {
+              "ts": "2026-03-29 12:00:00",
+              "equity": 5758.38
             }
           ],
           "asset_curves": {
@@ -49492,6 +49479,10 @@
               {
                 "ts": "2026-03-21 16:00:00",
                 "pnl": -42.33
+              },
+              {
+                "ts": "2026-03-29 12:00:00",
+                "pnl": -189.58
               }
             ]
           },
@@ -49500,13 +49491,13 @@
             "losing_months": 1,
             "best_month": {
               "label": "2026-03",
-              "pnl_usd": -94.37,
-              "return_pct": -1.57
+              "pnl_usd": -241.62,
+              "return_pct": -4.03
             },
             "worst_month": {
               "label": "2026-03",
-              "pnl_usd": -94.37,
-              "return_pct": -1.57
+              "pnl_usd": -241.62,
+              "return_pct": -4.03
             }
           },
           "monthly_breakdown": [
@@ -49514,11 +49505,11 @@
               "label": "2026-03",
               "year": 2026,
               "month": 3,
-              "trade_count": 11,
+              "trade_count": 12,
               "wins": 7,
-              "losses": 4,
-              "net_pnl": -94.37,
-              "return_pct": -1.57
+              "losses": 5,
+              "net_pnl": -241.62,
+              "return_pct": -4.03
             }
           ],
           "monthly_heatmap": [
@@ -49529,11 +49520,11 @@
                   "label": "2026-03",
                   "year": 2026,
                   "month": 3,
-                  "trade_count": 11,
+                  "trade_count": 12,
                   "wins": 7,
-                  "losses": 4,
-                  "net_pnl": -94.37,
-                  "return_pct": -1.57
+                  "losses": 5,
+                  "net_pnl": -241.62,
+                  "return_pct": -4.03
                 }
               ]
             }
@@ -49550,11 +49541,11 @@
               },
               {
                 "regime_proxy": "TRANSITION",
-                "trades": 7,
-                "win_rate_pct": 57.14,
-                "total_pnl_usd": -19.62,
-                "avg_pnl_usd": -2.8,
-                "profit_factor": 0.95
+                "trades": 8,
+                "win_rate_pct": 50.0,
+                "total_pnl_usd": -166.87,
+                "avg_pnl_usd": -20.86,
+                "profit_factor": 0.68
               }
             ]
           },
@@ -49690,6 +49681,18 @@
               "exit_price": 1990.01,
               "net_pnl_usd": -161.7,
               "roi_pct_on_margin": -808.48
+            },
+            {
+              "asset": "BTC",
+              "direction": "LONG",
+              "type": "Trend",
+              "entry_ts": "2026-03-25 08:00",
+              "exit_ts": "2026-03-29 12:00",
+              "hold_hours": 100.0,
+              "entry_price": 71759.2,
+              "exit_price": 66475.9,
+              "net_pnl_usd": -147.25,
+              "roi_pct_on_margin": -736.25
             }
           ]
         }
@@ -53157,15 +53160,15 @@
           "symbol": "SOLUSDT",
           "direction": "SHORT",
           "entry_price": 86.36,
-          "current_price": 82.52,
-          "current_pnl_pct": 4.45,
+          "current_price": 81.76,
+          "current_pnl_pct": 5.33,
           "entry_ts": "2026-03-27 00:00",
-          "hold_hours": 56.0,
+          "hold_hours": 60.0,
           "remaining_size": 11.53258,
           "original_size": 11.53258,
           "partial_taken": false,
           "breakeven_armed": false,
-          "peak_pnl_pct": 5.05,
+          "peak_pnl_pct": 5.33,
           "entry_liq_imbalance": -1.703,
           "entry_z_price": -1.224,
           "capital": 9959.04
