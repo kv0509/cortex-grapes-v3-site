@@ -51,6 +51,7 @@ const I18N = {
     regimePerformance: "Regime Performance",
     monthlyHeatmap: "Monthly Performance & Heatmap",
     tradeExplorer: "Trade Explorer",
+    assetCurves: "Asset Curves",
     monthly: "Monthly",
     yearly: "Yearly",
     all: "All",
@@ -155,6 +156,7 @@ const I18N = {
     regimePerformance: "阶段表现",
     monthlyHeatmap: "月度表现与热力图",
     tradeExplorer: "交易明细",
+    assetCurves: "资产曲线",
     monthly: "月度",
     yearly: "年度",
     all: "全部",
@@ -258,6 +260,24 @@ function fmtUsd(v) { return new Intl.NumberFormat("en-US", { style: "currency", 
 function fmtPct(v, d = 2) { const n = Number(v || 0); return `${n >= 0 ? "+" : ""}${n.toFixed(d)}%`; }
 function fmtNum(v, d = 2) { return Number(v || 0).toFixed(d); }
 function fmtDate(ts) { return String(ts || "").slice(0, 16); }
+function fmtTradeDate(ts) {
+  const text = String(ts || "");
+  if (!text || text === "—") return "—";
+  return text.slice(5, 16);
+}
+function fmtTradeMonthDay(ts) {
+  const text = String(ts || "");
+  if (!text || text === "—") return "—";
+  const date = new Date(text.replace(" ", "T"));
+  if (Number.isNaN(date.getTime())) return text.slice(5, 16);
+  return new Intl.DateTimeFormat(state.lang === "zh" ? "zh-CN" : "en-US", {
+    month: state.lang === "zh" ? "numeric" : "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(date);
+}
 function fmtUpdatedAt(ts) { return String(ts || "").slice(0, 16); }
 function fmtSignedCompactUsd(v, d = 0) {
   const n = Number(v || 0);
@@ -410,6 +430,7 @@ function applyLanguage() {
   setPanelTitleFromBody("grapes-summary", t("strategyProfile"));
   setPanelTitleFromBody("grapes-active-positions", t("openPositions"));
   setPanelTitleFromBody("grapes-asset-cards-detail", t("assetValidation"));
+  setText('[data-panel="grapes"] .strategy-rail .asset-curves-panel .eyebrow', t("assetCurves"));
   setPanelTitleFromBody("grapes-regime", t("regimePerformance"));
   setPanelTitleFromBody("grapes-monthly-summary", t("monthlyHeatmap"));
   setPanelTitleFromBody("grapes-trade-meta", t("tradeExplorer"));
@@ -420,6 +441,7 @@ function applyLanguage() {
   setPanelTitleFromBody("citrus-summary", t("strategyProfile"));
   setPanelTitleFromBody("citrus-active-positions", t("openPositions"));
   setPanelTitleFromBody("citrus-asset-cards-detail", t("assetValidation"));
+  setText('[data-panel="citrus"] .strategy-rail .asset-curves-panel .eyebrow', t("assetCurves"));
   setPanelTitleFromBody("citrus-regime", t("regimePerformance"));
   setPanelTitleFromBody("citrus-monthly-summary", t("monthlyHeatmap"));
   setPanelTitleFromBody("citrus-trade-meta", t("tradeExplorer"));
@@ -438,11 +460,16 @@ function applyLanguage() {
 }
 
 function renderHero(data) {
-  const updatedText = `${t("updated")} ${fmtUpdatedAt(data.meta.updated_at)}`;
   const updatedMain = document.getElementById("updated-at");
   const updatedHeader = document.getElementById("updated-at-header");
-  if (updatedMain) updatedMain.textContent = updatedText;
-  if (updatedHeader) updatedHeader.textContent = updatedText;
+  const updatedValue = fmtUpdatedAt(data.meta.updated_at);
+  if (updatedMain) updatedMain.textContent = `${t("updated")} ${updatedValue}`;
+  if (updatedHeader) {
+    updatedHeader.innerHTML = `
+      <span class="updated-stamp-label">${t("updated")}</span>
+      <strong class="updated-stamp-value">${updatedValue}</strong>
+    `;
+  }
   const target = document.getElementById("hero-status");
   if (!target) return;
   const grapes = data.strategies.grapes;
@@ -504,7 +531,7 @@ function renderOverviewSummary(data) {
       <div class="rail-kpi-grid">
         <div><span>PnL</span><strong class="${Number(live.net_pnl_usd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(live.net_pnl_usd || 0)}</strong></div>
         <div><span>${t("returnLabel")}</span><strong class="${Number(live.total_return_pct || 0) < 0 ? "neg" : "pos"}">${fmtPct(live.total_return_pct || 0, 2)}</strong></div>
-        <div><span>PF</span><strong class="${Number(live.profit_factor || 0) >= 1 ? "pos" : "neg"}">${fmtNum(live.profit_factor || 0, 2)}</strong></div>
+        <div><span>PF</span><strong>${fmtNum(live.profit_factor || 0, 2)}</strong></div>
         <div><span>${t("trades")}</span><strong>${live.trades || 0}</strong></div>
       </div>
     </div>
@@ -531,7 +558,10 @@ function renderOverviewSummary(data) {
       </div>
     </section>
     <section class="rail-section">
-      <div class="rail-title">${t("equityCurve")}</div>
+      <div class="rail-title">
+        <span>${t("equityCurve")}</span>
+        <div class="chart-legend" id="overview-relative-legend"></div>
+      </div>
       <canvas id="overview-relative-canvas" class="chart-canvas mini"></canvas>
     </section>
   `;
@@ -569,7 +599,7 @@ function renderOverviewStrategyTape(data) {
   target.innerHTML = rows.map((row) => {
     const top = getStrategyBestWorst(row.tradesList || []);
     const preview = buildOverviewTradeRows(row.key, data);
-    const current = row.active[0];
+    const currentRows = row.active.slice(0, 3);
     return `
         <article class="strategy-terminal-panel ${row.key}">
           <div class="strategy-terminal-head">
@@ -579,20 +609,25 @@ function renderOverviewStrategyTape(data) {
             </div>
           </div>
         <div class="terminal-open-row">
-          <div>
-            <span class="strategy-ledger-label">${t("currentOpenPosition")}</span>
-            <strong>
-              ${current
-                ? `<span class="dir-chip ${String(current.direction).toLowerCase()}">${current.direction}</span> ${current.asset}`
-                : t("flat")}
-            </strong>
+          <span class="strategy-ledger-label">${t("currentOpenPosition")}</span>
+          <div class="terminal-open-list">
+            ${currentRows.length
+              ? currentRows.map((current) => `
+                <div class="terminal-open-item">
+                  <strong>${current.asset}</strong>
+                  <div class="terminal-open-side">
+                    <span class="dir-chip ${String(current.direction).toLowerCase()}">${current.direction}</span>
+                    <span class="${Number(current.current_pnl_pct || 0) < 0 ? "neg" : "pos"}">${fmtPct(current.current_pnl_pct || 0, 2)}</span>
+                  </div>
+                </div>
+              `).join("")
+              : `<div class="terminal-open-item empty"><strong>${t("flat")}</strong><div>—</div></div>`}
           </div>
-          <div class="${current && Number(current.current_pnl_pct || 0) < 0 ? "neg" : "pos"}">${current ? fmtPct(current.current_pnl_pct || 0, 2) : "—"}</div>
         </div>
         <div class="terminal-metric-row">
           <div><span>${t("livePnl")}</span><strong class="${Number(row.netPnl) < 0 ? "neg" : "pos"}">${fmtUsd(row.netPnl)}</strong></div>
           <div><span>${t("returnLabel")}</span><strong class="${Number(row.totalReturn || 0) < 0 ? "neg" : "pos"}">${fmtPct(row.totalReturn || 0, 2)}</strong></div>
-          <div><span>${t("profitFactor")}</span><strong class="${Number(row.pf || 0) >= 1 ? "pos" : "neg"}">${fmtNum(row.pf || 0, 2)}</strong></div>
+          <div><span>${t("profitFactor")}</span><strong>${fmtNum(row.pf || 0, 2)}</strong></div>
           <div><span>${t("totalTradesLabel")}</span><strong>${row.trades || 0}</strong></div>
         </div>
         <div class="terminal-performer-row">
@@ -626,12 +661,12 @@ function renderOverviewStrategyTape(data) {
             <tbody>
               ${preview.map((trade) => `
                 <tr>
-                  <td>${trade.asset || "—"}</td>
-                  <td><span class="dir-chip ${String(trade.direction || "").toLowerCase()}">${trade.direction || "—"}</span></td>
-                  <td class="mono">${fmtDate(trade.entry_ts)}</td>
-                  <td class="mono">${trade.exit_ts === "—" ? "—" : fmtDate(trade.exit_ts)}</td>
-                  <td class="${Number(trade.pnl || 0) < 0 ? "neg" : "pos"}">${trade.pnl_is_pct ? fmtPct(trade.pnl, 2) : fmtSignedCompactUsd(trade.pnl)}</td>
-                  <td class="${String(trade.status).toLowerCase() === "closed" ? "closed-status" : ""}">${trade.status}</td>
+                  <td data-label="${t("asset")}">${trade.asset || "—"}</td>
+                  <td data-label="${t("side")}"><span class="dir-chip ${String(trade.direction || "").toLowerCase()}">${trade.direction || "—"}</span></td>
+                  <td data-label="${t("entry")}" class="mono">${fmtTradeMonthDay(trade.entry_ts)}</td>
+                  <td data-label="${t("exit")}" class="mono">${trade.exit_ts === "—" ? "—" : fmtTradeMonthDay(trade.exit_ts)}</td>
+                  <td data-label="${t("pnl")}" class="${Number(trade.pnl || 0) < 0 ? "neg" : "pos"}">${trade.pnl_is_pct ? fmtPct(trade.pnl, 2) : fmtSignedCompactUsd(trade.pnl)}</td>
+                  <td data-label="${t("status")}" class="${String(trade.status).toLowerCase() === "closed" ? "closed-status" : ""}">${trade.status}</td>
                 </tr>
               `).join("")}
             </tbody>
@@ -662,10 +697,7 @@ function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
   if (!target || !viewData) return;
   const lens = (state.lenses[strategyKey] === "extended" ? "backtest" : state.lenses[strategyKey]) || "backtest";
   const s = viewData.summary || {};
-  if (note) {
-    const noteKey = lens === "live" ? "snapshotNoteLive" : "snapshotNoteBacktest";
-    note.textContent = t(noteKey);
-  }
+  if (note) note.textContent = "";
   target.innerHTML = `
     <article class="snapshot-card">
       <div class="snapshot-head">
@@ -673,12 +705,18 @@ function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
           lens === "live" ? "liveSnapshot" : "backtestSnapshot"
         )}</span>
       </div>
-      <div class="snapshot-main decision-total ${lens === "live" ? (Number(s.net_pnl_usd || 0) < 0 ? "neg" : "pos") : "neutral"}">${fmtUsd(s.net_pnl_usd || 0)}</div>
-      <div class="snapshot-sub decision-subline">Net PnL</div>
-      <div class="snapshot-metrics rail-kpi-grid">
-        <div><span>Total Return</span><strong class="${Number(s.total_return_pct || 0) < 0 ? "neg" : "pos"}">${fmtPct(s.total_return_pct || 0)}</strong></div>
-        <div><span>Profit Factor</span><strong class="${Number(s.profit_factor || 0) >= 1 ? "pos" : "neg"}">${fmtNum(s.profit_factor || 0)}</strong></div>
-        <div><span>Trades</span><strong>${s.trades || 0}</strong></div>
+      <div class="snapshot-layout">
+        <div class="snapshot-primary">
+          <div class="snapshot-main decision-total ${lens === "live" ? (Number(s.net_pnl_usd || 0) < 0 ? "neg" : "pos") : "neutral"}">${fmtUsd(s.net_pnl_usd || 0)}</div>
+          <div class="snapshot-primary-meta">
+            <span class="snapshot-sub decision-subline">Net PnL</span>
+            <strong class="${Number(s.total_return_pct || 0) < 0 ? "neg" : "pos"}">${fmtPct(s.total_return_pct || 0)}</strong>
+          </div>
+        </div>
+        <div class="snapshot-metrics rail-kpi-grid">
+          <div><span>PF</span><strong>${fmtNum(s.profit_factor || 0)}</strong></div>
+          <div><span>Trades</span><strong>${s.trades || 0}</strong></div>
+        </div>
       </div>
     </article>
   `;
@@ -739,9 +777,9 @@ function renderGrapesAssets(data) {
         <span class="rail-row-name">${row.asset}</span>
         <strong class="asset-inline-pnl ${lens === "live" ? (totalPnlForRow(row) < 0 ? "neg" : "pos") : "neutral"}">${fmtUsd(totalPnlForRow(row))}</strong>
       </div>
-      <div class="rail-kpi-grid compact">
-        <div><span>${t("trades")}</span><strong>${tradesForRow(row)}</strong></div>
-        <div><span>${t("winRate")}</span><strong class="${Number(winRateForRow(row)) >= 50 ? "pos" : "neg"}">${fmtPct(winRateForRow(row), 1)}</strong></div>
+      <div class="asset-meta-line">
+        <span>${t("trades")} ${tradesForRow(row)}</span>
+        <span>${t("winRate")} <strong class="${Number(winRateForRow(row)) >= 50 ? "pos" : "neg"}">${fmtPct(winRateForRow(row), 1)}</strong></span>
       </div>
     </article>`).join("");
   if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows);
@@ -770,9 +808,9 @@ function renderCitrusAssets(data) {
         <span class="rail-row-name">${row.asset}</span>
         <strong class="asset-inline-pnl ${lens === "live" ? (totalPnlForRow(row, useLegacy) < 0 ? "neg" : "pos") : "neutral"}">${fmtUsd(totalPnlForRow(row, useLegacy))}</strong>
       </div>
-      <div class="rail-kpi-grid compact">
-        <div><span>${t("trades")}</span><strong>${row.trades}</strong></div>
-        <div><span>${t("winRate")}</span><strong class="${Number(winRateForRow(row, useLegacy)) >= 50 ? "pos" : "neg"}">${fmtPct(winRateForRow(row, useLegacy), 1)}</strong></div>
+      <div class="asset-meta-line">
+        <span>${t("trades")} ${row.trades}</span>
+        <span>${t("winRate")} <strong class="${Number(winRateForRow(row, useLegacy)) >= 50 ? "pos" : "neg"}">${fmtPct(winRateForRow(row, useLegacy), 1)}</strong></span>
       </div>
     </article>`).join("");
   if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows, !detailRows.length);
@@ -984,10 +1022,11 @@ function getVisibleSeriesStartDate(series) {
   const last = parsed[parsed.length - 1];
   const spanDays = Math.max(1, Math.round((last.getTime() - first.getTime()) / (24 * 3600 * 1000)));
   if (spanDays < 365) return first;
-  const startOfYear = new Date(`${first.getFullYear()}-01-01T00:00:00`);
-  return first.getTime() > startOfYear.getTime()
-    ? new Date(`${first.getFullYear() + 1}-01-01T00:00:00`)
-    : startOfYear;
+  const isYearStartDay = first.getMonth() === 0 && first.getDate() === 1;
+  if (isYearStartDay) {
+    return new Date(`${first.getFullYear()}-01-01T00:00:00`);
+  }
+  return new Date(`${first.getFullYear() + 1}-01-01T00:00:00`);
 }
 
 function getXPositionForSeriesPoint(series, index, width, m) {
@@ -1588,6 +1627,45 @@ function drawTradeEquityChart(canvas, trades, baseEquity = 0) {
   drawFixedAxisLabels(ctx, width, height, m, scale.ticks, series, () => xTicks);
 }
 
+function drawPortfolioPnlChart(canvas, portfolioCurve = [], trades = []) {
+  const series = Array.isArray(portfolioCurve) && portfolioCurve.length >= 2
+    ? (() => {
+      const base = Number(portfolioCurve[0]?.equity || 0);
+      return portfolioCurve.map((row) => ({
+        ts: row.ts,
+        pnl: Number((Number(row.equity || 0) - base).toFixed(2)),
+      }));
+    })()
+    : buildTradeEquitySeries(trades, 0).map((row) => ({
+      ts: row.ts,
+      pnl: Number(row.pnl || 0),
+    }));
+  const { ctx, width, height } = resizeCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  if (!series.length) return;
+  const m = { top: 20, right: 28, bottom: 58, left: 92 };
+  const scale = buildNiceScale(series.map((row) => Number(row.pnl)).filter(Number.isFinite), 6, { includeZero: true });
+  const xTicks = buildCalendarXAxisTicks(series, width, m);
+  drawAxes(ctx, width, height, m, scale.ticks, xTicks);
+  const points = toPoints(series, "pnl", width, height, m, scale.min, scale.max, 0);
+  if (scale.min < 0 && scale.max > 0 && points[0]?.baselineY) {
+    ctx.save();
+    ctx.strokeStyle = "rgba(231,239,233,0.16)";
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(m.left, points[0].baselineY);
+    ctx.lineTo(width - m.right, points[0].baselineY);
+    ctx.stroke();
+    ctx.restore();
+  }
+  drawSignedPnlAreaAndLine(ctx, points, series.map((row) => Number(row.pnl)));
+  const lastPoint = points[points.length - 1];
+  if (lastPoint) {
+    drawPointMarkers(ctx, [lastPoint], Number(series[series.length - 1]?.pnl || 0) < 0 ? COLORS.red : COLORS.green);
+  }
+  drawFixedAxisLabels(ctx, width, height, m, scale.ticks, series, () => xTicks);
+}
+
 function drawGrapesChart(canvas, data) {
   const lens = state.lenses.grapes || "backtest";
   const view = getStrategyLensData("grapes");
@@ -1595,8 +1673,8 @@ function drawGrapesChart(canvas, data) {
     drawTradeEquityChart(canvas, view?.all_trades || [], view?.summary?.initial_equity || 0);
     return "single";
   }
-  drawAssetOverlayChart(canvas, view?.asset_curves || data.strategies.grapes.asset_curves || {});
-  return "overlay";
+  drawPortfolioPnlChart(canvas, view?.portfolio_curve || [], view?.all_trades || []);
+  return "single";
 }
 
 function drawCitrusAssetReturns(canvas, data) {
@@ -1606,8 +1684,14 @@ function drawCitrusAssetReturns(canvas, data) {
     drawTradeEquityChart(canvas, view?.all_trades || [], view?.summary?.initial_equity || 0);
     return "single";
   }
-  drawAssetOverlayChart(canvas, view?.asset_curves || data.strategies.citrus.asset_curves || {});
-  return "overlay";
+  drawPortfolioPnlChart(canvas, view?.portfolio_curve || [], view?.all_trades || []);
+  return "single";
+}
+
+function drawStrategyAssetMiniChart(canvas, strategyKey, data) {
+  const view = getStrategyLensData(strategyKey);
+  const assetCurves = view?.asset_curves || data.strategies[strategyKey].asset_curves || {};
+  drawAssetOverlayChart(canvas, assetCurves);
 }
 
 function drawOverviewRelativeChart(canvas, data) {
@@ -1694,8 +1778,8 @@ function renderTradeTable(targetId, trades, includeType = false) {
       <tr>
         <td class="mono">${trade.asset}</td>
         <td class="mono ${sideClass}">${sideLabel}</td>
-        <td class="mono">${trade.entry_ts}</td>
-        <td class="mono">${trade.exit_ts}</td>
+        <td class="mono">${fmtTradeDate(trade.entry_ts)}</td>
+        <td class="mono">${fmtTradeDate(trade.exit_ts)}</td>
         <td class="mono">${fmtNum(trade.entry_price, 2)}</td>
         <td class="mono">${fmtNum(trade.exit_price, 2)}</td>
         <td class="mono">${trade.hold_hours}h</td>
@@ -1721,8 +1805,8 @@ function renderTradeCards(targetId, trades, includeType = false) {
     const movePct = entryPx > 0
       ? (((exitPx - entryPx) / entryPx) * (isShort ? -100 : 100))
       : 0;
-    const status = trade.exit_ts ? "Closed" : "Open";
-    const exitLabel = trade.exit_ts ? fmtDate(trade.exit_ts) : "—";
+    const status = trade.exit_ts ? t("closed") : t("open");
+    const exitLabel = trade.exit_ts ? fmtTradeDate(trade.exit_ts) : "—";
     return `
       <article class="trade-card">
         <div class="trade-card-head">
@@ -1730,10 +1814,12 @@ function renderTradeCards(targetId, trades, includeType = false) {
           <span class="dir-chip ${String(sideLabel).toLowerCase()} ${sideClass}">${sideLabel}</span>
         </div>
         <div class="trade-card-row primary">
-          <div><span>${t("entry")}</span><strong class="mono">${fmtDate(trade.entry_ts)}</strong></div>
+          <div><span>${t("entry")}</span><strong class="mono">${fmtTradeDate(trade.entry_ts)}</strong></div>
           <div><span>${t("exit")}</span><strong class="mono">${exitLabel}</strong></div>
+        </div>
+        <div class="trade-card-row secondary">
           <div><span>${t("pnl")}</span><strong class="${pnl >= 0 ? "pos" : "neg"}">${fmtUsd(pnl)}</strong></div>
-          <div><span>Status</span><strong class="${status === "Closed" ? "closed-status" : ""}">${status}</strong></div>
+          <div><span>${t("status")}</span><strong class="${status === t("closed") ? "closed-status" : ""}">${status}</strong></div>
         </div>
       </article>
     `;
@@ -1752,16 +1838,24 @@ function drawMonthlyHeatmap(canvas, monthlyHeatmap) {
   ctx.clearRect(0, 0, width, height);
   const years = monthlyHeatmap || [];
   if (!years.length) return;
-  const pad = { top: 16, right: 12, bottom: 28, left: 42 };
+  const mobile = width <= 420;
+  const pad = mobile
+    ? { top: 12, right: 8, bottom: 22, left: 30 }
+    : { top: 16, right: 12, bottom: 28, left: 42 };
   const rows = years.length;
   const cols = 12;
   const cellW = (width - pad.left - pad.right) / cols;
   const cellH = (height - pad.top - pad.bottom) / rows;
   const all = years.flatMap((row) => row.months || []);
   const maxAbs = Math.max(...all.map((m) => Math.abs(Number(m.return_pct || 0))), 1);
-  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const months = mobile
+    ? ["J","F","M","A","M","J","J","A","S","O","N","D"]
+    : ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const mono = getComputedStyle(document.documentElement).getPropertyValue("--mono") || "IBM Plex Mono";
+  const baseFont = mobile ? 9 : 11;
+  const subFont = mobile ? 7 : 10;
 
-  ctx.font = `11px ${getComputedStyle(document.documentElement).getPropertyValue("--mono") || 'IBM Plex Mono'}`;
+  ctx.font = `${baseFont}px ${mono}`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
@@ -1769,7 +1863,7 @@ function drawMonthlyHeatmap(canvas, monthlyHeatmap) {
     const y = pad.top + r * cellH;
     ctx.fillStyle = COLORS.muted;
     ctx.textAlign = "right";
-    ctx.fillText(String(yearRow.year), pad.left - 10, y + cellH / 2);
+    ctx.fillText(mobile ? String(yearRow.year).slice(2) : String(yearRow.year), pad.left - (mobile ? 6 : 10), y + cellH / 2);
     ctx.textAlign = "center";
     const map = new Map((yearRow.months || []).map((m) => [Number(m.month), m]));
     for (let month = 1; month <= 12; month += 1) {
@@ -1781,17 +1875,20 @@ function drawMonthlyHeatmap(canvas, monthlyHeatmap) {
       ctx.fillRect(x + 1, y + 1, cellW - 2, cellH - 2);
       if (data) {
         ctx.fillStyle = COLORS.text;
-        ctx.fillText(`${v > 0 ? "+" : ""}${v.toFixed(0)}%`, x + cellW / 2, y + cellH / 2 - 8);
-        ctx.fillStyle = COLORS.muted;
-        ctx.font = `10px ${getComputedStyle(document.documentElement).getPropertyValue("--mono") || 'IBM Plex Mono'}`;
-        ctx.fillText(fmtUsd(data.net_pnl), x + cellW / 2, y + cellH / 2 + 8);
-        ctx.font = `11px ${getComputedStyle(document.documentElement).getPropertyValue("--mono") || 'IBM Plex Mono'}`;
+        ctx.fillText(`${v > 0 ? "+" : ""}${v.toFixed(0)}%`, x + cellW / 2, y + cellH / 2 - (mobile ? 0 : 8));
+        if (!mobile) {
+          ctx.fillStyle = COLORS.muted;
+          ctx.font = `${subFont}px ${mono}`;
+          ctx.fillText(fmtUsd(data.net_pnl), x + cellW / 2, y + cellH / 2 + 8);
+          ctx.font = `${baseFont}px ${mono}`;
+        }
       }
     }
   });
 
   ctx.fillStyle = COLORS.muted;
   years[years.length - 1] && months.forEach((label, i) => {
+    if (mobile && i % 2 === 1) return;
     const x = pad.left + i * cellW + cellW / 2;
     ctx.fillText(label, x, height - 12);
   });
@@ -1819,6 +1916,10 @@ function renderCharts(data) {
   const overviewRelative = document.getElementById("overview-relative-canvas");
   if (overviewRelative && overviewRelative.offsetParent !== null) {
     drawOverviewRelativeChart(overviewRelative, data);
+    renderLegend("overview-relative-legend", [
+      { label: "Grapes", color: "#8d6bff" },
+      { label: "Citrus", color: "#ffb03b" },
+    ]);
   }
 
   const grapesDetail = document.getElementById("grapes-detail-canvas");
@@ -1852,8 +1953,28 @@ function renderCharts(data) {
   const grapesHeatmap = document.getElementById("grapes-heatmap-canvas");
   if (grapesHeatmap && grapesHeatmap.offsetParent !== null) drawMonthlyHeatmap(grapesHeatmap, getStrategyLensData("grapes")?.monthly_heatmap || data.strategies.grapes.monthly_heatmap);
 
+  const grapesMini = document.getElementById("grapes-asset-curves-canvas");
+  if (grapesMini && grapesMini.offsetParent !== null) {
+    drawStrategyAssetMiniChart(grapesMini, "grapes", data);
+    renderLegend("grapes-asset-curves-legend", [
+      { label: "BTC", color: COLORS.green },
+      { label: "ETH", color: COLORS.blue },
+      { label: "SOL", color: COLORS.amber },
+    ]);
+  }
+
   const citrusHeatmap = document.getElementById("citrus-heatmap-canvas");
   if (citrusHeatmap && citrusHeatmap.offsetParent !== null) drawMonthlyHeatmap(citrusHeatmap, getStrategyLensData("citrus")?.monthly_heatmap || data.strategies.citrus.monthly_heatmap);
+
+  const citrusMini = document.getElementById("citrus-asset-curves-canvas");
+  if (citrusMini && citrusMini.offsetParent !== null) {
+    drawStrategyAssetMiniChart(citrusMini, "citrus", data);
+    renderLegend("citrus-asset-curves-legend", [
+      { label: "BTC", color: COLORS.green },
+      { label: "ETH", color: COLORS.blue },
+      { label: "SOL", color: COLORS.amber },
+    ]);
+  }
 }
 
 function bindSwitches() {

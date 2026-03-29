@@ -16,8 +16,8 @@
         <div class="site-brand">
           <img class="brand-mark" src="./favicon.svg" alt="NTS Alpha Lab" />
           <div class="brand-wordmark">
-            <strong>NTS Alpha Lab</strong>
-            <span>Strategy OS</span>
+            <strong>NTS</strong>
+            <span>Alpha Labs</span>
           </div>
         </div>
         <nav class="site-nav" id="top-switch">
@@ -72,6 +72,13 @@
               <section class="feature-panel rail-panel">
                 <div class="section-head"><p class="eyebrow">Open Positions</p></div>
                 <div id="grapes-active-positions" class="position-grid"></div>
+              </section>
+              <section class="feature-panel rail-panel asset-curves-panel">
+                <div class="section-head">
+                  <p class="eyebrow">Asset Curves</p>
+                  <div class="chart-legend" id="grapes-asset-curves-legend"></div>
+                </div>
+                <canvas id="grapes-asset-curves-canvas" class="chart-canvas mini"></canvas>
               </section>
               <section class="feature-panel rail-panel">
                 <div class="section-head"><p class="eyebrow">Asset Validation</p></div>
@@ -141,6 +148,13 @@
                 <div class="section-head"><p class="eyebrow">Open Positions</p></div>
                 <div id="citrus-active-positions" class="position-grid"></div>
               </section>
+              <section class="feature-panel rail-panel asset-curves-panel">
+                <div class="section-head">
+                  <p class="eyebrow">Asset Curves</p>
+                  <div class="chart-legend" id="citrus-asset-curves-legend"></div>
+                </div>
+                <canvas id="citrus-asset-curves-canvas" class="chart-canvas mini"></canvas>
+              </section>
               <section class="feature-panel rail-panel">
                 <div class="section-head"><p class="eyebrow">Asset Validation</p></div>
                 <div id="citrus-asset-cards-detail" class="asset-card-grid"></div>
@@ -187,6 +201,10 @@
           </section>
         </section>
       </main>
+
+      <footer class="site-footer">
+        <span>Copyright &copy; 2026 NTS Alpha Labs. All rights reserved.</span>
+      </footer>
     </div>
     <script src="./strategy_os.js?v=20260328-reset"></script>
   </body>
