@@ -203,9 +203,85 @@ function fmtPct(v, d = 2) { const n = Number(v || 0); return `${n >= 0 ? "+" : "
 function fmtNum(v, d = 2) { return Number(v || 0).toFixed(d); }
 function fmtDate(ts) { return String(ts || "").slice(0, 16); }
 function fmtUpdatedAt(ts) { return String(ts || "").slice(0, 16); }
+function fmtSignedCompactUsd(v, d = 0) {
+  const n = Number(v || 0);
+  const sign = n > 0 ? "+" : n < 0 ? "−" : "";
+  return `${sign}$${Math.abs(n).toFixed(d)}`;
+}
 function fmtBaseCapitalLabel(amount) {
   const value = fmtUsd(amount);
   return state.lang === "zh" ? `统一 ${value} base` : `${value} base capital`;
+}
+
+function buildOverviewLiveStats(data) {
+  const grapesLive = data.strategies.grapes.execution_views?.live?.summary || {};
+  const citrusLive = data.strategies.citrus.execution_views?.live?.summary || {};
+  const allTrades = [
+    ...(data.strategies.grapes.execution_views?.live?.all_trades || []),
+    ...(data.strategies.citrus.execution_views?.live?.all_trades || []),
+  ];
+  const totalPnl = Number(grapesLive.net_pnl_usd || 0) + Number(citrusLive.net_pnl_usd || 0);
+  const totalTrades = Number(grapesLive.trades || 0) + Number(citrusLive.trades || 0);
+  const wins = allTrades.filter((row) => Number(row.net_pnl_usd || 0) > 0).length;
+  const totalInitial = (Number(grapesLive.final_equity || 0) - Number(grapesLive.net_pnl_usd || 0))
+    + (Number(citrusLive.final_equity || 0) - Number(citrusLive.net_pnl_usd || 0));
+  const totalReturn = totalInitial ? (totalPnl / totalInitial) * 100 : 0;
+  const avgPf = ((Number(grapesLive.profit_factor || 0) + Number(citrusLive.profit_factor || 0)) / 2) || 0;
+  const combinedSeries = buildTradeEquitySeries([
+    ...((data.strategies.grapes.execution_views?.live?.all_trades || []).map((row) => ({ ...row, strategy: "Grapes" }))),
+    ...((data.strategies.citrus.execution_views?.live?.all_trades || []).map((row) => ({ ...row, strategy: "Citrus" }))),
+  ], 0);
+  let peak = -Infinity;
+  let maxDdPct = 0;
+  combinedSeries.forEach((row) => {
+    const equity = Number(row.equity || 0);
+    peak = Math.max(peak, equity);
+    if (peak > 0) {
+      maxDdPct = Math.min(maxDdPct, ((equity - peak) / peak) * 100);
+    }
+  });
+  return {
+    totalPnl,
+    totalTrades,
+    totalReturn,
+    winRate: totalTrades ? (wins / totalTrades) * 100 : 0,
+    avgPf,
+    maxDdPct,
+  };
+}
+
+function getStrategyBestWorst(trades) {
+  const stats = computeAssetValidationStats(trades || []).sort((a, b) => Number(b.totalPnl || 0) - Number(a.totalPnl || 0));
+  return {
+    best: stats[0] || null,
+    worst: stats[stats.length - 1] || null,
+  };
+}
+
+function buildOverviewTradeRows(strategyKey, data) {
+  const strategy = data.strategies[strategyKey];
+  const active = strategy.active_positions || [];
+  const trades = [...(strategy.execution_views?.live?.all_trades || [])]
+    .sort((a, b) => String(b.exit_ts || "").localeCompare(String(a.exit_ts || "")));
+  const openRows = active.map((row) => ({
+    asset: row.asset,
+    direction: row.direction,
+    entry_ts: row.entry_time || row.entry_ts || "—",
+    exit_ts: "—",
+    size: row.size ?? row.qty ?? "—",
+    pnl: Number(row.current_pnl_usd ?? 0),
+    status: "Open",
+  }));
+  const closedRows = trades.slice(0, 4).map((row) => ({
+    asset: row.asset,
+    direction: row.direction,
+    entry_ts: row.entry_ts,
+    exit_ts: row.exit_ts,
+    size: row.size ?? row.position_size ?? "—",
+    pnl: Number(row.net_pnl_usd || 0),
+    status: "Closed",
+  }));
+  return [...openRows, ...closedRows].slice(0, 5);
 }
 
 function setActiveView(view) {
@@ -303,76 +379,123 @@ function applyLanguage() {
 }
 
 function renderHero(data) {
-  document.getElementById("updated-at").textContent = `${t("updated")} ${fmtUpdatedAt(data.meta.updated_at)}`;
+  const updatedText = `${t("updated")} ${fmtUpdatedAt(data.meta.updated_at)}`;
+  const updatedMain = document.getElementById("updated-at");
+  const updatedHeader = document.getElementById("updated-at-header");
+  if (updatedMain) updatedMain.textContent = updatedText;
+  if (updatedHeader) updatedHeader.textContent = updatedText;
   const target = document.getElementById("hero-status");
   if (!target) return;
   const grapes = data.strategies.grapes;
   const citrus = data.strategies.citrus;
-  const grapesLive = grapes.execution_views?.live || {};
-  const citrusLive = citrus.execution_views?.live || {};
-  const totalEquity = Number(grapes.summary.final_equity || 0) + Number(citrus.portfolio.final_equity || 0);
-  const totalPnl = Number(grapes.summary.net_pnl_usd || 0) + Number(citrus.portfolio.net_pnl_usd || 0);
-  const livePnl = Number(grapesLive.summary?.net_pnl_usd || 0) + Number(citrusLive.summary?.net_pnl_usd || 0);
-  const livePositions = (grapes.active_positions?.length || 0) + (citrus.active_positions?.length || 0);
+  const stats = buildOverviewLiveStats(data);
+  const positions = [
+    ...(grapes.active_positions || []).map((row) => ({ ...row, strategy: "Grapes" })),
+    ...(citrus.active_positions || []).map((row) => ({ ...row, strategy: "Citrus" })),
+  ];
+  const positionLabel = positions.length ? positions.map((row) => row.asset).join(" · ") : "Flat";
   target.innerHTML = `
-    <article class="hero-stat hero-stat-main">
-      <div class="hero-stat-label">${state.lang === "zh" ? "Combined Equity" : "Combined Equity"}</div>
-      <div class="hero-stat-value">${fmtUsd(totalEquity)}</div>
-      <div class="hero-stat-sub">${state.lang === "zh" ? "两套 live engine 当前合并资本。" : "Combined live capital across both engines."}</div>
-    </article>
-    <article class="hero-stat hero-stat-line">
-      <span class="hero-line-label">${state.lang === "zh" ? "Net PnL" : "Net PnL"}</span>
-      <strong class="hero-line-value ${totalPnl < 0 ? "neg" : "pos"}">${fmtUsd(totalPnl)}</strong>
-    </article>
-    <article class="hero-stat hero-stat-line">
-      <span class="hero-line-label">${state.lang === "zh" ? "Live PnL" : "Live PnL"}</span>
-      <strong class="hero-line-value ${livePnl < 0 ? "neg" : "pos"}">${fmtUsd(livePnl)}</strong>
-    </article>
-    <article class="hero-stat hero-stat-line">
-      <span class="hero-line-label">${state.lang === "zh" ? "Open Risk" : "Open Risk"}</span>
-      <strong class="hero-line-value">${livePositions}</strong>
-    </article>
-    <article class="hero-stat hero-stat-line">
-      <span class="hero-line-label">${state.lang === "zh" ? "Base Capital" : "Base Capital"}</span>
-      <strong class="hero-line-value">${fmtUsd((grapes.summary.initial_equity || 0) + (citrus.portfolio.synthetic_base_equity_usd || citrus.portfolio.final_equity - citrus.portfolio.net_pnl_usd || 0))}</strong>
-    </article>
-    <article class="hero-stat hero-stat-line">
-      <span class="hero-line-label">${state.lang === "zh" ? "Last Sync" : "Last Sync"}</span>
-      <strong class="hero-line-value">${fmtUpdatedAt(data.meta.updated_at)}</strong>
-    </article>
+    <div class="overview-metric-cell">
+      <span class="overview-topbar-label">Positions</span>
+      <strong class="overview-metric-value">${positions.length}</strong>
+      <span class="overview-metric-sub">${positionLabel}</span>
+    </div>
+    <div class="overview-metric-cell">
+      <span class="overview-topbar-label">Total PnL</span>
+      <strong class="overview-metric-value ${stats.totalPnl < 0 ? "neg" : "pos"}">${fmtSignedCompactUsd(stats.totalPnl)}</strong>
+    </div>
+    <div class="overview-metric-cell">
+      <span class="overview-topbar-label">Total Return</span>
+      <strong class="overview-metric-value ${stats.totalReturn < 0 ? "neg" : "pos"}">${fmtPct(stats.totalReturn, 2)}</strong>
+    </div>
+    <div class="overview-metric-cell">
+      <span class="overview-topbar-label">Total Trades</span>
+      <strong class="overview-metric-value">${stats.totalTrades}</strong>
+    </div>
+    <div class="overview-metric-cell">
+      <span class="overview-topbar-label">Win Rate</span>
+      <strong class="overview-metric-value">${fmtPct(stats.winRate, 1)}</strong>
+    </div>
+    <div class="overview-metric-cell">
+      <span class="overview-topbar-label">Avg PF</span>
+      <strong class="overview-metric-value">${fmtNum(stats.avgPf, 2)}</strong>
+    </div>
+    <div class="overview-metric-cell">
+      <span class="overview-topbar-label">Last Update</span>
+      <strong class="overview-metric-value">${fmtUpdatedAt(data.meta.updated_at)}</strong>
+    </div>
   `;
 }
 
-function renderOverviewStatusStrip(data) {
-  const grapes = data.strategies.grapes;
-  const citrus = data.strategies.citrus;
-  const target = document.getElementById("overview-status-strip");
+function renderOverviewSummary(data) {
+  const target = document.getElementById("overview-summary");
   if (!target) return;
-  const grapesLive = grapes.execution_views?.live || {};
-  const citrusLive = citrus.execution_views?.live || {};
-  const totalLivePnl = Number(grapesLive.summary?.net_pnl_usd || 0) + Number(citrusLive.summary?.net_pnl_usd || 0);
-  const livePositions = (grapes.active_positions?.length || 0) + (citrus.active_positions?.length || 0);
+  const grapesLive = data.strategies.grapes.execution_views?.live?.summary || {};
+  const citrusLive = data.strategies.citrus.execution_views?.live?.summary || {};
+  const stats = buildOverviewLiveStats(data);
+  const grapesScore = Number(grapesLive.total_return_pct || 0);
+  const citrusScore = Number(citrusLive.total_return_pct || 0);
+  const leaderKey = grapesScore === citrusScore ? "tie" : (grapesScore > citrusScore ? "grapes" : "citrus");
+  const backtestBlock = (label, emoji, tone, summary) => `
+    <section class="backtest-block ${tone}">
+      <div class="backtest-title">${emoji} ${label}</div>
+      <div class="backtest-table">
+        <div><span>Total Return</span><strong>${fmtPct(summary.total_return_pct || 0, 2)}</strong></div>
+        <div><span>Sharpe</span><strong>${fmtNum(summary.sharpe || 0, 2)}</strong></div>
+        <div><span>Max DD</span><strong class="${Number(summary.max_dd_pct || 0) < 0 ? "neg" : ""}">${fmtPct(summary.max_dd_pct || 0, 2)}</strong></div>
+        <div><span>Profit Factor</span><strong>${fmtNum(summary.profit_factor || 0, 2)}</strong></div>
+        <div><span>Win Rate</span><strong>${fmtPct(summary.win_rate_pct || 0, 1)}</strong></div>
+        <div><span>Trades</span><strong>${summary.trades || 0}</strong></div>
+      </div>
+    </section>
+  `;
+  const renderStrategyBlock = (label, emoji, tone, live, key) => `
+    <section class="decision-block strategy ${tone} ${leaderKey === key ? "is-leader" : ""} ${leaderKey !== "tie" && leaderKey !== key ? "is-muted" : ""}">
+      <div class="decision-block-head">
+        <div class="decision-block-title">
+          <span>${emoji}</span>
+          <strong>${label}</strong>
+        </div>
+        ${leaderKey === key ? '<span class="leader-badge">Leader</span>' : ""}
+      </div>
+      <div class="decision-primary ${Number(live.net_pnl_usd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(live.net_pnl_usd || 0)}</div>
+      <div class="decision-metrics">
+        <div class="decision-metric"><span>Return</span><strong>${fmtPct(live.total_return_pct || 0, 2)}</strong></div>
+        <div class="decision-metric"><span>PF</span><strong>${fmtNum(live.profit_factor || 0, 2)}</strong></div>
+        <div class="decision-metric"><span>Trades</span><strong>${live.trades || 0}</strong></div>
+      </div>
+    </section>
+  `;
   target.innerHTML = `
-    <article class="overview-status-tile">
-      <div class="overview-status-label">Capital</div>
-      <div class="overview-status-value">${fmtUsd((grapes.summary.initial_equity || 0) + (citrus.portfolio.synthetic_base_equity_usd || citrus.portfolio.final_equity - citrus.portfolio.net_pnl_usd || 0))}</div>
-      <div class="overview-status-note">${state.lang === "zh" ? "统一归一资金基准" : "Normalized base"}</div>
-    </article>
-    <article class="overview-status-tile">
-      <div class="overview-status-label">Live PnL</div>
-      <div class="overview-status-value ${totalLivePnl < 0 ? "neg" : "pos"}">${fmtUsd(totalLivePnl)}</div>
-      <div class="overview-status-note">${state.lang === "zh" ? "当前账本汇总" : "Current ledger"}</div>
-    </article>
-    <article class="overview-status-tile">
-      <div class="overview-status-label">Open Risk</div>
-      <div class="overview-status-value">${livePositions}</div>
-      <div class="overview-status-note">${state.lang === "zh" ? "当前未平仓仓位" : "Open positions"}</div>
-    </article>
-    <article class="overview-status-tile">
-      <div class="overview-status-label">Last Sync</div>
-      <div class="overview-status-value">${fmtUpdatedAt(data.meta.updated_at)}</div>
-      <div class="overview-status-note">${state.lang === "zh" ? "最新刷新时间" : "Dashboard refresh"}</div>
-    </article>
+    <section class="decision-block total">
+      <span class="overview-topbar-label">Total PnL</span>
+      <div class="decision-total ${stats.totalPnl < 0 ? "neg" : "pos"}">${fmtUsd(stats.totalPnl)}</div>
+      <div class="decision-subline">${fmtPct(stats.totalReturn, 2)} total return</div>
+    </section>
+    ${renderStrategyBlock("Grapes", "🍇", "grapes", grapesLive, "grapes")}
+    ${renderStrategyBlock("Citrus", "🍊", "citrus", citrusLive, "citrus")}
+    <section class="rail-section">
+      <div class="rail-title">Risk Metrics</div>
+      <div class="risk-grid">
+        <div class="risk-tile"><span>Max Drawdown</span><strong class="neg">${fmtPct(stats.maxDdPct, 1)}</strong></div>
+        <div class="risk-tile"><span>Sharpe</span><strong>${fmtNum((Number(grapesLive.sharpe || 0) + Number(citrusLive.sharpe || 0)) / 2, 2)}</strong></div>
+        <div class="risk-tile"><span>Win Rate</span><strong>${fmtPct(stats.winRate, 1)}</strong></div>
+        <div class="risk-tile"><span>Avg Win</span><strong class="pos">${fmtUsd((Number(grapesLive.avg_win_usd || 0) + Number(citrusLive.avg_win_usd || 0)) / 2)}</strong></div>
+        <div class="risk-tile"><span>Avg Loss</span><strong class="neg">${fmtUsd((Number(grapesLive.avg_loss_usd || 0) + Number(citrusLive.avg_loss_usd || 0)) / 2)}</strong></div>
+        <div class="risk-tile"><span>Leader</span><strong>${leaderKey === "tie" ? "Tie" : leaderKey === "grapes" ? "🍇 Grapes" : "🍊 Citrus"}</strong></div>
+      </div>
+    </section>
+    <section class="rail-section">
+      <div class="rail-title">Equity Curve</div>
+      <canvas id="overview-relative-canvas" class="chart-canvas mini"></canvas>
+    </section>
+    <section class="rail-section">
+      <div class="rail-title">Backtest Statistics</div>
+      <div class="backtest-stack">
+        ${backtestBlock("Grapes", "🍇", "grapes", data.strategies.grapes.execution_views?.backtest?.summary || {})}
+        ${backtestBlock("Citrus", "🍊", "citrus", data.strategies.citrus.execution_views?.backtest?.summary || {})}
+      </div>
+    </section>
   `;
 }
 
@@ -382,41 +505,102 @@ function renderOverviewStrategyTape(data) {
   const rows = [
     {
       key: "grapes",
-      name: "Cortex Grapes",
-      role: "Compounding Mandate",
-      totalReturn: data.strategies.grapes.summary.total_return_pct,
-      finalEquity: data.strategies.grapes.summary.final_equity,
-      netPnl: data.strategies.grapes.summary.net_pnl_usd,
-      pf: data.strategies.grapes.summary.profit_factor,
-      trades: data.strategies.grapes.summary.trade_count,
-      winRate: data.strategies.grapes.summary.win_rate_pct,
+      name: "🍇 Grapes",
+      status: (data.strategies.grapes.active_positions || []).length ? "Active" : "Flat",
+      netPnl: data.strategies.grapes.execution_views?.live?.summary?.net_pnl_usd,
+      totalReturn: data.strategies.grapes.execution_views?.live?.summary?.total_return_pct,
+      trades: data.strategies.grapes.execution_views?.live?.summary?.trades,
+      pf: data.strategies.grapes.execution_views?.live?.summary?.profit_factor,
+      winRate: data.strategies.grapes.execution_views?.live?.summary?.win_rate_pct,
+      active: data.strategies.grapes.active_positions || [],
+      tradesList: data.strategies.grapes.execution_views?.live?.all_trades || [],
     },
     {
       key: "citrus",
-      name: "Cortex Citrus",
-      role: "Adaptive Mandate",
-      totalReturn: data.strategies.citrus.portfolio.total_return_pct_on_base,
-      finalEquity: data.strategies.citrus.portfolio.final_equity,
-      netPnl: data.strategies.citrus.portfolio.net_pnl_usd,
-      pf: data.strategies.citrus.portfolio.profit_factor,
-      trades: data.strategies.citrus.portfolio.trades,
-      winRate: data.strategies.citrus.portfolio.win_rate_pct,
+      name: "🍊 Citrus",
+      status: (data.strategies.citrus.active_positions || []).length ? "Active" : "Flat",
+      netPnl: data.strategies.citrus.execution_views?.live?.summary?.net_pnl_usd,
+      totalReturn: data.strategies.citrus.execution_views?.live?.summary?.total_return_pct,
+      trades: data.strategies.citrus.execution_views?.live?.summary?.trades,
+      pf: data.strategies.citrus.execution_views?.live?.summary?.profit_factor,
+      winRate: data.strategies.citrus.execution_views?.live?.summary?.win_rate_pct,
+      active: data.strategies.citrus.active_positions || [],
+      tradesList: data.strategies.citrus.execution_views?.live?.all_trades || [],
     },
   ];
-  target.innerHTML = rows.map((row) => `
-    <article class="strategy-tape-row ${row.key}">
-      <div class="strategy-tape-head">
-        <div class="strategy-tape-name">${row.name}</div>
-        <div class="strategy-tape-role">${row.role}</div>
-      </div>
-      <div class="strategy-tape-body">
-        <div class="strategy-tape-metric"><span>Return</span><strong class="${Number(row.totalReturn) < 0 ? "neg" : "pos"}">${fmtPct(row.totalReturn, 2)}</strong></div>
-        <div class="strategy-tape-metric"><span>Equity</span><strong>${fmtUsd(row.finalEquity)}</strong></div>
-        <div class="strategy-tape-metric"><span>PnL</span><strong class="${Number(row.netPnl) < 0 ? "neg" : "pos"}">${fmtUsd(row.netPnl)}</strong></div>
-        <div class="strategy-tape-metric"><span>Quality</span><strong>${fmtNum(row.pf, 2)} PF · ${fmtPct(row.winRate, 1)} WR · ${row.trades}</strong></div>
-      </div>
-    </article>
-  `).join("");
+  target.innerHTML = rows.map((row) => {
+    const top = getStrategyBestWorst(row.tradesList || []);
+    const preview = buildOverviewTradeRows(row.key, data);
+    const current = row.active[0];
+    return `
+      <article class="strategy-terminal-panel ${row.key}">
+        <div class="strategy-terminal-head">
+          <div>
+            <div class="strategy-terminal-name">${row.name}</div>
+            <div class="strategy-terminal-role">${row.key === "grapes" ? "Live Trend Engine" : "Live Adaptive Engine"}</div>
+          </div>
+          <div class="strategy-terminal-pnl ${Number(row.netPnl) < 0 ? "neg" : "pos"}">${fmtSignedCompactUsd(row.netPnl)}</div>
+        </div>
+        <div class="terminal-open-row">
+          <div>
+            <span class="strategy-ledger-label">Current Open Position</span>
+            <strong>${current ? `${current.asset} ${current.direction}` : "Flat"}</strong>
+          </div>
+          <div class="${current && Number(current.current_pnl_pct || 0) < 0 ? "neg" : "pos"}">${current ? fmtPct(current.current_pnl_pct || 0, 2) : "—"}</div>
+        </div>
+        <div class="terminal-metric-row">
+          <div><span>Live PnL</span><strong class="${Number(row.netPnl) < 0 ? "neg" : "pos"}">${fmtUsd(row.netPnl)}</strong></div>
+          <div><span>Return</span><strong>${fmtPct(row.totalReturn || 0, 2)}</strong></div>
+          <div><span>Profit Factor</span><strong>${fmtNum(row.pf || 0, 2)}</strong></div>
+          <div><span>Total Trades</span><strong>${row.trades || 0}</strong></div>
+        </div>
+        <div class="terminal-performer-row">
+          <div>
+            <span class="strategy-ledger-label">Best Performer</span>
+            <strong>${top.best?.asset || "—"}</strong>
+            <div class="pos">${top.best ? fmtSignedCompactUsd(top.best.totalPnl) : "—"}</div>
+          </div>
+          <div>
+            <span class="strategy-ledger-label">Worst Performer</span>
+            <strong>${top.worst?.asset || "—"}</strong>
+            <div class="neg">${top.worst ? fmtSignedCompactUsd(top.worst.totalPnl) : "—"}</div>
+          </div>
+        </div>
+        <div class="terminal-table-wrap">
+          <div class="terminal-table-head">
+            <span class="strategy-ledger-label">Trade History</span>
+            <span class="terminal-table-count">${row.trades || 0} trades</span>
+          </div>
+          <table class="overview-trade-table">
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Side</th>
+                <th>Entry</th>
+                <th>Exit</th>
+                <th>Size</th>
+                <th>PnL</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${preview.map((trade) => `
+                <tr>
+                  <td>${trade.asset || "—"}</td>
+                  <td><span class="dir-chip ${String(trade.direction || "").toLowerCase()}">${trade.direction || "—"}</span></td>
+                  <td class="mono">${fmtDate(trade.entry_ts)}</td>
+                  <td class="mono">${trade.exit_ts === "—" ? "—" : fmtDate(trade.exit_ts)}</td>
+                  <td class="mono">${typeof trade.size === "number" ? fmtNum(trade.size, 2) : trade.size}</td>
+                  <td class="${Number(trade.pnl || 0) < 0 ? "neg" : "pos"}">${fmtSignedCompactUsd(trade.pnl)}</td>
+                  <td>${trade.status}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </article>
+    `;
+  }).join("");
 }
 
 function renderBoardCards(targetId, rows) {
@@ -466,7 +650,17 @@ function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
 function renderComparison(data) {
   const target = document.getElementById("comparison-table");
   if (!target) return;
-  const rows = data.comparison_rows || [];
+  const grapesLive = data.strategies.grapes.execution_views?.live?.summary || {};
+  const citrusLive = data.strategies.citrus.execution_views?.live?.summary || {};
+  const grapesPos = data.strategies.grapes.active_positions || [];
+  const citrusPos = data.strategies.citrus.active_positions || [];
+  const rows = [
+    { label: "Live Equity", grapes: fmtUsd(grapesLive.final_equity || 0), citrus: fmtUsd(citrusLive.final_equity || 0), delta: fmtUsd((grapesLive.final_equity || 0) - (citrusLive.final_equity || 0)) },
+    { label: "Net PnL", grapes: fmtUsd(grapesLive.net_pnl_usd || 0), citrus: fmtUsd(citrusLive.net_pnl_usd || 0), delta: fmtUsd((grapesLive.net_pnl_usd || 0) - (citrusLive.net_pnl_usd || 0)) },
+    { label: "Return", grapes: fmtPct(grapesLive.total_return_pct || 0, 2), citrus: fmtPct(citrusLive.total_return_pct || 0, 2), delta: fmtPct((grapesLive.total_return_pct || 0) - (citrusLive.total_return_pct || 0), 2) },
+    { label: "Win Rate", grapes: fmtPct(grapesLive.win_rate_pct || 0, 1), citrus: fmtPct(citrusLive.win_rate_pct || 0, 1), delta: fmtPct((grapesLive.win_rate_pct || 0) - (citrusLive.win_rate_pct || 0), 1) },
+    { label: "Open Positions", grapes: `${grapesPos.length}`, citrus: `${citrusPos.length}`, delta: `${grapesPos.length - citrusPos.length}` },
+  ];
   target.innerHTML = `
     <div class="comparison-row comparison-head">
       <div class="label">Metric</div>
@@ -566,42 +760,6 @@ function renderCitrusAssets(data) {
       </div>
     </article>`).join("");
   if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows, !detailRows.length);
-}
-
-function renderOverviewSleeves(data) {
-  const target = document.getElementById("overview-sleeves");
-  if (!target) return;
-  const renderBlock = (title, rows, palette) => {
-    const maxAbs = Math.max(1, ...rows.map((row) => Math.abs(Number((row.total_pnl ?? row.totalPnl ?? row.total_pnl_usd_20) || 0))));
-    return `
-      <section class="overview-sleeve-block">
-        <div class="overview-sleeve-title">
-          <strong>${title}</strong>
-          <span>${state.lang === "zh" ? "asset contribution" : "asset contribution"}</span>
-        </div>
-        ${rows.map((row) => {
-          const pnl = Number((row.total_pnl ?? row.totalPnl ?? row.total_pnl_usd_20) || 0);
-          const trades = Number(row.trades || 0);
-          const winRate = Number((row.win_rate_pct ?? row.winRatePct) || 0);
-          const width = Math.max(6, Math.round((Math.abs(pnl) / maxAbs) * 100));
-          const color = pnl < 0 ? COLORS.red : (palette[row.asset] || COLORS.green);
-          return `
-            <div class="overview-sleeve-row">
-              <div class="overview-sleeve-asset">${row.asset}</div>
-              <div class="overview-sleeve-bar"><span style="width:${width}%;background:${color};opacity:${pnl < 0 ? 0.85 : 0.72}"></span></div>
-              <div class="overview-sleeve-pnl ${pnl < 0 ? "neg" : "pos"}">${fmtUsd(pnl)}</div>
-              <div class="overview-sleeve-trades">${trades}</div>
-              <div class="overview-sleeve-wr">${fmtPct(winRate, 1)}</div>
-            </div>
-          `;
-        }).join("")}
-      </section>
-    `;
-  };
-  target.innerHTML = [
-    renderBlock("Grapes", data.strategies.grapes.asset_stats || [], { BTC: COLORS.green, ETH: COLORS.blue, SOL: COLORS.amber }),
-    renderBlock("Citrus", data.strategies.citrus.assets || [], { BTC: COLORS.green, ETH: COLORS.blue, SOL: COLORS.amber }),
-  ].join("");
 }
 
 function renderActivePositions(targetId, positions) {
@@ -1279,24 +1437,22 @@ function drawOverlayStrategyChart(canvas, data) {
   const { ctx, width, height } = resizeCanvas(canvas);
   const m = { top: 20, right: 28, bottom: 58, left: 92 };
   ctx.clearRect(0, 0, width, height);
-  const grapesSeries = data.strategies.grapes.equity_curve || [];
-  const citrusSeries = data.strategies.citrus.portfolio_curve || [];
-  if (!grapesSeries.length || !citrusSeries.length) return;
-  const grapesBase = Number(grapesSeries[0]?.equity || 0);
-  const citrusBase = Number(citrusSeries[0]?.equity || 0);
-  const grapesPnl = grapesSeries.map((row) => ({ ts: row.ts, pnl: Math.max(0, Number(row.equity || 0) - grapesBase) }));
-  const citrusPnl = citrusSeries.map((row) => ({ ts: row.ts, pnl: Math.max(0, Number(row.equity || 0) - citrusBase) }));
-  const scale = buildZeroBasedNiceScale([
-    ...grapesPnl.map((row) => Number(row.pnl)),
-    ...citrusPnl.map((row) => Number(row.pnl)),
-  ]);
-  const xTicks = buildCalendarXAxisTicks(grapesPnl, width, m);
+  const grapesLive = data.strategies.grapes.execution_views?.live || {};
+  const citrusLive = data.strategies.citrus.execution_views?.live || {};
+  const trades = [
+    ...((grapesLive.all_trades || []).map((row) => ({ ...row, strategy: "Grapes" }))),
+    ...((citrusLive.all_trades || []).map((row) => ({ ...row, strategy: "Citrus" }))),
+  ].sort((a, b) => String(a.exit_ts).localeCompare(String(b.exit_ts)));
+  const combinedSeries = buildTradeEquitySeries(trades, 0).map((row) => ({ ts: row.ts, pnl: Number(row.pnl || 0) }));
+  if (!combinedSeries.length) return;
+  const scale = buildTightProfitScale(combinedSeries.map((row) => Number(row.pnl)), 5);
+  const xTicks = buildProgressXAxisTicks(combinedSeries, width, m);
   drawAxes(ctx, width, height, m, scale.ticks, xTicks);
-  const grapesPoints = toPoints(grapesPnl, "pnl", width, height, m, scale.min, scale.max);
-  const citrusPoints = toPoints(citrusPnl, "pnl", width, height, m, scale.min, scale.max);
-  drawSmoothLine(ctx, grapesPoints, COLORS.green, true);
-  drawSmoothLine(ctx, citrusPoints, COLORS.blue, false);
-  drawFixedAxisLabels(ctx, width, height, m, scale.ticks, grapesPnl, () => xTicks);
+  const points = toIndexedPoints(combinedSeries, "pnl", width, height, m, scale.min, scale.max, 0);
+  drawSignedPnlAreaAndLine(ctx, points, combinedSeries.map((row) => Number(row.pnl)));
+  const lastPoint = points[points.length - 1];
+  if (lastPoint) drawPointMarkers(ctx, [lastPoint], Number(combinedSeries[combinedSeries.length - 1]?.pnl || 0) < 0 ? COLORS.red : COLORS.green);
+  drawFixedAxisLabels(ctx, width, height, m, scale.ticks, combinedSeries, () => xTicks);
 }
 
 function drawAssetOverlayChart(canvas, assetCurves) {
@@ -1474,6 +1630,15 @@ function drawCitrusAssetReturns(canvas, data) {
   return "overlay";
 }
 
+function drawOverviewRelativeChart(canvas, data) {
+  const grapesSeries = buildTradeEquitySeries(data.strategies.grapes.execution_views?.live?.all_trades || [], 0)
+    .map((row) => ({ ts: row.ts, pnl: Number(row.pnl || 0) }));
+  const citrusSeries = buildTradeEquitySeries(data.strategies.citrus.execution_views?.live?.all_trades || [], 0)
+    .map((row) => ({ ts: row.ts, pnl: Number(row.pnl || 0) }));
+  if (!grapesSeries.length && !citrusSeries.length) return;
+  drawDualCurveChart(canvas, grapesSeries, "pnl", citrusSeries, "pnl", "#8d6bff", "#ffb03b");
+}
+
 function renderTradeMeta(targetId, trades) {
   const target = document.getElementById(targetId);
   if (!target) return;
@@ -1631,9 +1796,13 @@ function renderCharts(data) {
   if (overview && overview.offsetParent !== null) {
     drawOverlayStrategyChart(overview, data);
     renderLegend("overview-legend", [
-      { label: "Grapes", color: COLORS.green },
-      { label: "Citrus", color: COLORS.blue },
+      { label: "Combined Live PnL", color: COLORS.green },
     ]);
+  }
+
+  const overviewRelative = document.getElementById("overview-relative-canvas");
+  if (overviewRelative && overviewRelative.offsetParent !== null) {
+    drawOverviewRelativeChart(overviewRelative, data);
   }
 
   const grapesDetail = document.getElementById("grapes-detail-canvas");
@@ -1724,10 +1893,8 @@ function bindLensSwitches() {
 function render(data) {
   applyLanguage();
   renderHero(data);
-  renderOverviewStatusStrip(data);
+  renderOverviewSummary(data);
   renderOverviewStrategyTape(data);
-  renderComparison(data);
-  renderOverviewSleeves(data);
   renderGrapesAssets(data);
   renderCitrusAssets(data);
   renderGrapesSummary(data);

@@ -30,54 +30,27 @@
             <button class="lang-tab active" data-lang="en" type="button">EN</button>
             <button class="lang-tab" data-lang="zh" type="button">中文</button>
           </div>
-          <span id="updated-at">--</span>
+          <span id="updated-at-header">--</span>
         </div>
       </header>
 
       <main class="page-main">
         <section class="view-panel is-active" data-panel="all">
-          <section class="overview-command-deck" id="master-board-hero">
-            <div class="overview-shell-head">
-              <p class="eyebrow">Overview</p>
-              <span class="overview-shell-note">live first</span>
-            </div>
-            <section class="overview-hero">
-              <div class="hero-side" id="hero-status"></div>
+          <section class="overview-topbar" id="hero-status"></section>
+
+          <section class="overview-main-grid">
+            <section class="overview-chart-surface">
+              <div class="section-head minimal">
+                <p class="eyebrow">Combined Live PnL</p>
+                <div class="chart-legend" id="overview-legend"></div>
+              </div>
+              <canvas id="overlay-overview-canvas" class="chart-canvas tall"></canvas>
             </section>
+
+            <aside class="overview-summary-panel" id="overview-summary"></aside>
           </section>
 
-          <section class="metric-ribbon overview-ribbon-shell" id="overview-status-strip"></section>
-
-          <section class="feature-panel chart-panel overview-chart-stage">
-            <div class="section-head minimal">
-              <p class="eyebrow">Live Overlay</p>
-              <div class="chart-legend" id="overview-legend"></div>
-            </div>
-            <canvas id="overlay-overview-canvas" class="chart-canvas tall"></canvas>
-          </section>
-
-          <section class="overview-support-grid">
-            <section class="feature-panel rail-panel">
-              <div class="section-head minimal">
-                <p class="eyebrow">Strategy Read</p>
-              </div>
-              <div class="dual-modules" id="overview-strategy-tape"></div>
-            </section>
-
-            <section class="feature-panel rail-panel">
-              <div class="section-head minimal">
-                <p class="eyebrow">Relative Matrix</p>
-              </div>
-              <div class="comparison-table technical" id="comparison-table"></div>
-            </section>
-
-            <section class="feature-panel rail-panel">
-              <div class="section-head minimal">
-                <p class="eyebrow">Sleeve Contribution</p>
-              </div>
-              <div id="overview-sleeves" class="overview-sleeves"></div>
-            </section>
-          </section>
+          <section class="overview-secondary-grid" id="overview-strategy-tape"></section>
         </section>
 
         <section class="view-panel strategy-view" data-panel="grapes">
