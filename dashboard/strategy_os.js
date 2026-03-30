@@ -103,6 +103,9 @@ const I18N = {
     backtestSnapshot: "Backtest Snapshot",
     liveSnapshot: "Live Execution",
     liveSummary: "Live Summary",
+    total: "Total",
+    realized: "Realized",
+    unrealized: "Unrealized",
     riskMetrics: "Risk Metrics",
     equityCurve: "Equity Curve",
     leader: "Leader",
@@ -125,6 +128,10 @@ const I18N = {
     active: "Active",
     flat: "Flat",
     tie: "Tie",
+    liveMarkUnavailable: "Live mark unavailable. Using static snapshot.",
+    liveMarkStale: "Live mark stale. Holding last snapshot.",
+    staticSnapshotMode: "Static snapshot mode.",
+    markAt: "Mark",
     combinedLivePnl: "Combined Live PnL",
     totalReturnNote: "total return",
     maxDrawdown: "Max Drawdown",
@@ -208,6 +215,9 @@ const I18N = {
     backtestSnapshot: "回测结果",
     liveSnapshot: "实盘执行",
     liveSummary: "实盘摘要",
+    total: "总计",
+    realized: "已实现",
+    unrealized: "未实现",
     riskMetrics: "风险指标",
     equityCurve: "权益曲线",
     leader: "领先策略",
@@ -230,6 +240,10 @@ const I18N = {
     active: "运行中",
     flat: "空仓",
     tie: "持平",
+    liveMarkUnavailable: "实时标记不可用，当前使用静态快照。",
+    liveMarkStale: "实时标记已过期，当前保持上一份快照。",
+    staticSnapshotMode: "当前为静态快照模式。",
+    markAt: "标记于",
     combinedLivePnl: "组合实盘收益",
     totalReturnNote: "总回报",
     maxDrawdown: "最大回撤",
@@ -376,9 +390,9 @@ function getLiveFeedStatusLabel() {
 function getLiveFeedFallbackNote() {
   const status = getLiveFeedStatus();
   if (status === "live") return "";
-  if (status === "reconnecting") return "Live mark unavailable. Using static snapshot.";
-  if (status === "stale") return "Live mark stale. Holding last snapshot.";
-  return "Static snapshot mode.";
+  if (status === "reconnecting") return t("liveMarkUnavailable");
+  if (status === "stale") return t("liveMarkStale");
+  return t("staticSnapshotMode");
 }
 
 function getStrategyLiveBreakdown(strategyKey, data = state.data) {
@@ -577,6 +591,8 @@ function applyLanguage() {
     if (heading) heading.textContent = title;
   };
   setText('.switch-tab[data-view="all"]', state.lang === "zh" ? "总览" : "Overview");
+  setText('.switch-tab[data-view="grapes"]', state.lang === "zh" ? "🍇 Grapes" : "🍇 Grapes");
+  setText('.switch-tab[data-view="citrus"]', state.lang === "zh" ? "🍊 Citrus" : "🍊 Citrus");
   setText('[data-panel="all"] .overview-chart-surface .eyebrow', t("combinedLivePnl"));
   setText('[data-panel="grapes"] .panel-head .eyebrow', t("strategyDetail"));
   setText('[data-panel="grapes"] .panel-head h3', t("grapesName"));
@@ -691,9 +707,9 @@ function renderOverviewSummary(data) {
         ${leaderKey === key ? `<span class="leader-badge">${t("leader")}</span>` : ""}
       </div>
       <div class="rail-kpi-grid">
-        <div><span>Total</span><strong class="${Number(live.net_pnl_usd || 0) < 0 ? "neg" : "pos"} ${getValueFlashClass(`${key}-overview-total`, live.net_pnl_usd || 0)}">${fmtUsd(live.net_pnl_usd || 0)}</strong></div>
-        <div><span>Realized</span><strong class="${Number(breakdown.realizedPnlUsd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(breakdown.realizedPnlUsd || 0)}</strong></div>
-        <div><span>Unrealized</span><strong class="${Number(breakdown.unrealizedPnlUsd || 0) < 0 ? "neg" : "pos"} ${getValueFlashClass(`${key}-overview-unrealized`, breakdown.unrealizedPnlUsd || 0)}">${fmtUsd(breakdown.unrealizedPnlUsd || 0)}</strong></div>
+        <div><span>${t("total")}</span><strong class="${Number(live.net_pnl_usd || 0) < 0 ? "neg" : "pos"} ${getValueFlashClass(`${key}-overview-total`, live.net_pnl_usd || 0)}">${fmtUsd(live.net_pnl_usd || 0)}</strong></div>
+        <div><span>${t("realized")}</span><strong class="${Number(breakdown.realizedPnlUsd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(breakdown.realizedPnlUsd || 0)}</strong></div>
+        <div><span>${t("unrealized")}</span><strong class="${Number(breakdown.unrealizedPnlUsd || 0) < 0 ? "neg" : "pos"} ${getValueFlashClass(`${key}-overview-unrealized`, breakdown.unrealizedPnlUsd || 0)}">${fmtUsd(breakdown.unrealizedPnlUsd || 0)}</strong></div>
         <div><span>${t("returnLabel")}</span><strong class="${Number(live.total_return_pct || 0) < 0 ? "neg" : "pos"}">${fmtPct(live.total_return_pct || 0, 2)}</strong></div>
         <div><span>PF</span><strong>${fmtNum(live.profit_factor || 0, 2)}</strong></div>
         <div><span>${t("trades")}</span><strong>${live.trades || 0}</strong></div>
@@ -878,15 +894,15 @@ function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
         <div class="snapshot-primary">
           <div class="snapshot-main decision-total ${lens === "live" ? (Number(s.net_pnl_usd || 0) < 0 ? "neg" : "pos") : "neutral"} ${lens === "live" ? getValueFlashClass(`${strategyKey}-snapshot-total`, s.net_pnl_usd || 0) : ""}">${fmtUsd(s.net_pnl_usd || 0)}</div>
           <div class="snapshot-primary-meta">
-            <span class="snapshot-sub decision-subline">Net PnL</span>
+            <span class="snapshot-sub decision-subline">${t("pnl")}</span>
             <strong class="${Number(s.total_return_pct || 0) < 0 ? "neg" : "pos"}">${fmtPct(s.total_return_pct || 0)}</strong>
           </div>
         </div>
         <div class="snapshot-metrics rail-kpi-grid">
-          ${lens === "live" ? `<div><span>Realized</span><strong class="${Number(breakdown.realizedPnlUsd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(breakdown.realizedPnlUsd || 0)}</strong></div>` : ""}
-          ${lens === "live" ? `<div><span>Unrealized</span><strong class="${Number(breakdown.unrealizedPnlUsd || 0) < 0 ? "neg" : "pos"} ${getValueFlashClass(`${strategyKey}-snapshot-unrealized`, breakdown.unrealizedPnlUsd || 0)}">${fmtUsd(breakdown.unrealizedPnlUsd || 0)}</strong></div>` : ""}
-          <div><span>PF</span><strong>${fmtNum(s.profit_factor || 0)}</strong></div>
-          <div><span>Trades</span><strong>${s.trades || 0}</strong></div>
+          ${lens === "live" ? `<div><span>${t("realized")}</span><strong class="${Number(breakdown.realizedPnlUsd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(breakdown.realizedPnlUsd || 0)}</strong></div>` : ""}
+          ${lens === "live" ? `<div><span>${t("unrealized")}</span><strong class="${Number(breakdown.unrealizedPnlUsd || 0) < 0 ? "neg" : "pos"} ${getValueFlashClass(`${strategyKey}-snapshot-unrealized`, breakdown.unrealizedPnlUsd || 0)}">${fmtUsd(breakdown.unrealizedPnlUsd || 0)}</strong></div>` : ""}
+          <div><span>${t("pf")}</span><strong>${fmtNum(s.profit_factor || 0)}</strong></div>
+          <div><span>${t("trades")}</span><strong>${s.trades || 0}</strong></div>
         </div>
       </div>
     </article>
@@ -2313,7 +2329,7 @@ function renderCharts(data) {
         { label: "SOL", color: COLORS.amber },
       ];
     if ((state.lenses.grapes || "backtest") === "live") {
-      grapesLegend.push({ label: `Mark ${fmtTimeOnly(state.livePrices.lastTickAt)}`, color: COLORS.muted });
+      grapesLegend.push({ label: `${t("markAt")} ${fmtTimeOnly(state.livePrices.lastTickAt)}`, color: COLORS.muted });
     }
     renderLegend("grapes-legend", grapesLegend);
   }
@@ -2331,7 +2347,7 @@ function renderCharts(data) {
         { label: "SOL", color: COLORS.amber },
       ];
     if ((state.lenses.citrus || "backtest") === "live") {
-      citrusLegend.push({ label: `Mark ${fmtTimeOnly(state.livePrices.lastTickAt)}`, color: COLORS.muted });
+      citrusLegend.push({ label: `${t("markAt")} ${fmtTimeOnly(state.livePrices.lastTickAt)}`, color: COLORS.muted });
     }
     renderLegend("citrus-legend", citrusLegend);
   }

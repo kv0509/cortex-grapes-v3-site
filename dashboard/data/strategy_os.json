@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-03-29 20:00:00",
+    "updated_at": "2026-03-30 00:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1"
@@ -53154,26 +53154,7 @@
           }
         ]
       },
-      "active_positions": [
-        {
-          "asset": "SOL",
-          "symbol": "SOLUSDT",
-          "direction": "SHORT",
-          "entry_price": 86.36,
-          "current_price": 81.34,
-          "current_pnl_pct": 5.81,
-          "entry_ts": "2026-03-27 00:00",
-          "hold_hours": 68.0,
-          "remaining_size": 11.53258,
-          "original_size": 11.53258,
-          "partial_taken": false,
-          "breakeven_armed": false,
-          "peak_pnl_pct": 5.81,
-          "entry_liq_imbalance": -1.703,
-          "entry_z_price": -1.224,
-          "capital": 9959.04
-        }
-      ],
+      "active_positions": [],
       "all_trades": [
         {
           "asset": "BTC",
@@ -62820,16 +62801,16 @@
         },
         "live": {
           "summary": {
-            "final_equity": 5963.62,
-            "net_pnl_usd": -36.38,
-            "total_return_pct": -0.61,
-            "profit_factor": 0.82,
-            "trades": 10,
-            "win_rate_pct": 50.0,
-            "avg_win_usd": 32.72,
-            "avg_loss_usd": -39.99,
+            "final_equity": 5998.23,
+            "net_pnl_usd": -1.77,
+            "total_return_pct": -0.03,
+            "profit_factor": 1.0,
+            "trades": 11,
+            "win_rate_pct": 54.5,
+            "avg_win_usd": 66.36,
+            "avg_loss_usd": -79.99,
             "sharpe": 0.0,
-            "max_dd_pct": -3.13
+            "max_dd_pct": -6.1
           },
           "portfolio_curve": [
             {
@@ -62838,43 +62819,47 @@
             },
             {
               "ts": "2026-03-13 00:00:00",
-              "equity": 6032.09
+              "equity": 6064.17
             },
             {
               "ts": "2026-03-13 20:00:00",
-              "equity": 6051.09
+              "equity": 6102.18
             },
             {
               "ts": "2026-03-16 20:00:00",
-              "equity": 6096.12
+              "equity": 6192.24
             },
             {
               "ts": "2026-03-17 00:00:00",
-              "equity": 6156.04
+              "equity": 6312.08
             },
             {
               "ts": "2026-03-18 16:00:00",
-              "equity": 6127.3
+              "equity": 6254.61
             },
             {
               "ts": "2026-03-22 12:00:00",
-              "equity": 6134.85
+              "equity": 6269.7
             },
             {
               "ts": "2026-03-23 20:00:00",
-              "equity": 6101.87
+              "equity": 6203.73
             },
             {
               "ts": "2026-03-27 00:00:00",
-              "equity": 6093.17
+              "equity": 6186.35
             },
             {
               "ts": "2026-03-27 00:00:00",
-              "equity": 6053.21
+              "equity": 6106.42
             },
             {
               "ts": "2026-03-27 08:00:00",
-              "equity": 5963.62
+              "equity": 5927.23
+            },
+            {
+              "ts": "2026-03-30 00:00:00",
+              "equity": 5998.23
             }
           ],
           "asset_curves": {
@@ -62885,19 +62870,19 @@
               },
               {
                 "ts": "2026-03-13 00:00:00",
-                "pnl": 32.09
+                "pnl": 64.17
               },
               {
                 "ts": "2026-03-16 20:00:00",
-                "pnl": 77.12
+                "pnl": 154.24
               },
               {
                 "ts": "2026-03-22 12:00:00",
-                "pnl": 84.66
+                "pnl": 169.33
               },
               {
                 "ts": "2026-03-27 00:00:00",
-                "pnl": 75.97
+                "pnl": 151.94
               }
             ],
             "ETH": [
@@ -62907,19 +62892,19 @@
               },
               {
                 "ts": "2026-03-13 20:00:00",
-                "pnl": 19.0
+                "pnl": 38.01
               },
               {
                 "ts": "2026-03-18 16:00:00",
-                "pnl": -9.73
+                "pnl": -19.47
               },
               {
                 "ts": "2026-03-23 20:00:00",
-                "pnl": -42.72
+                "pnl": -85.43
               },
               {
                 "ts": "2026-03-27 08:00:00",
-                "pnl": -132.31
+                "pnl": -264.62
               }
             ],
             "SOL": [
@@ -62929,11 +62914,15 @@
               },
               {
                 "ts": "2026-03-17 00:00:00",
-                "pnl": 59.92
+                "pnl": 119.84
               },
               {
                 "ts": "2026-03-27 00:00:00",
-                "pnl": 19.96
+                "pnl": 39.91
+              },
+              {
+                "ts": "2026-03-30 00:00:00",
+                "pnl": 110.92
               }
             ]
           },
@@ -62942,13 +62931,13 @@
             "losing_months": 1,
             "best_month": {
               "label": "2026-03",
-              "pnl_usd": -36.38,
-              "return_pct": -0.61
+              "pnl_usd": -1.77,
+              "return_pct": -0.03
             },
             "worst_month": {
               "label": "2026-03",
-              "pnl_usd": -36.38,
-              "return_pct": -0.61
+              "pnl_usd": -1.77,
+              "return_pct": -0.03
             }
           },
           "monthly_breakdown": [
@@ -62956,11 +62945,11 @@
               "label": "2026-03",
               "year": 2026,
               "month": 3,
-              "trade_count": 10,
-              "wins": 5,
+              "trade_count": 11,
+              "wins": 6,
               "losses": 5,
-              "net_pnl": -36.38,
-              "return_pct": -0.61
+              "net_pnl": -1.77,
+              "return_pct": -0.03
             }
           ],
           "monthly_heatmap": [
@@ -62971,11 +62960,11 @@
                   "label": "2026-03",
                   "year": 2026,
                   "month": 3,
-                  "trade_count": 10,
-                  "wins": 5,
+                  "trade_count": 11,
+                  "wins": 6,
                   "losses": 5,
-                  "net_pnl": -36.38,
-                  "return_pct": -0.61
+                  "net_pnl": -1.77,
+                  "return_pct": -0.03
                 }
               ]
             }
@@ -62986,17 +62975,17 @@
                 "regime_proxy": "RANGE_CHOP",
                 "trades": 2,
                 "win_rate_pct": 50.0,
-                "total_pnl_usd": -13.98,
-                "avg_pnl_usd": -6.99,
+                "total_pnl_usd": -27.96,
+                "avg_pnl_usd": -13.98,
                 "profit_factor": 0.58
               },
               {
                 "regime_proxy": "TRANSITION",
-                "trades": 8,
-                "win_rate_pct": 50.0,
-                "total_pnl_usd": -22.4,
-                "avg_pnl_usd": -2.8,
-                "profit_factor": 0.87
+                "trades": 9,
+                "win_rate_pct": 55.56,
+                "total_pnl_usd": 26.19,
+                "avg_pnl_usd": 2.91,
+                "profit_factor": 1.08
               }
             ]
           },
@@ -63009,8 +62998,8 @@
               "hold_hours": 72.0,
               "entry_price": 69113.1,
               "exit_price": 71366.3,
-              "net_pnl_usd": 32.09,
-              "roi_pct_on_margin": 160.43
+              "net_pnl_usd": 64.17,
+              "roi_pct_on_margin": 320.85
             },
             {
               "asset": "ETH",
@@ -63020,8 +63009,8 @@
               "hold_hours": 48.0,
               "entry_price": 2050.99,
               "exit_price": 2091.01,
-              "net_pnl_usd": 19.0,
-              "roi_pct_on_margin": 95.01
+              "net_pnl_usd": 38.01,
+              "roi_pct_on_margin": 190.03
             },
             {
               "asset": "BTC",
@@ -63031,8 +63020,8 @@
               "hold_hours": 92.0,
               "entry_price": 71585.3,
               "exit_price": 74846.4,
-              "net_pnl_usd": 45.03,
-              "roi_pct_on_margin": 225.16
+              "net_pnl_usd": 90.07,
+              "roi_pct_on_margin": 450.33
             },
             {
               "asset": "SOL",
@@ -63042,8 +63031,8 @@
               "hold_hours": 100.0,
               "entry_price": 89.66,
               "exit_price": 94.02,
-              "net_pnl_usd": 59.92,
-              "roi_pct_on_margin": 299.6
+              "net_pnl_usd": 119.84,
+              "roi_pct_on_margin": 599.2
             },
             {
               "asset": "ETH",
@@ -63053,8 +63042,8 @@
               "hold_hours": 48.0,
               "entry_price": 2248.43,
               "exit_price": 2184.91,
-              "net_pnl_usd": -28.74,
-              "roi_pct_on_margin": -143.68
+              "net_pnl_usd": -57.47,
+              "roi_pct_on_margin": -287.37
             },
             {
               "asset": "BTC",
@@ -63064,8 +63053,8 @@
               "hold_hours": 72.0,
               "entry_price": 69372.7,
               "exit_price": 68814.9,
-              "net_pnl_usd": 7.54,
-              "roi_pct_on_margin": 37.72
+              "net_pnl_usd": 15.09,
+              "roi_pct_on_margin": 75.45
             },
             {
               "asset": "ETH",
@@ -63075,8 +63064,8 @@
               "hold_hours": 48.0,
               "entry_price": 2083.37,
               "exit_price": 2151.01,
-              "net_pnl_usd": -32.98,
-              "roi_pct_on_margin": -164.91
+              "net_pnl_usd": -65.97,
+              "roi_pct_on_margin": -329.83
             },
             {
               "asset": "BTC",
@@ -63086,8 +63075,8 @@
               "hold_hours": 84.0,
               "entry_price": 68170.6,
               "exit_price": 68728.8,
-              "net_pnl_usd": -8.69,
-              "roi_pct_on_margin": -43.46
+              "net_pnl_usd": -17.38,
+              "roi_pct_on_margin": -86.92
             },
             {
               "asset": "SOL",
@@ -63097,8 +63086,8 @@
               "hold_hours": 72.0,
               "entry_price": 89.91,
               "exit_price": 86.36,
-              "net_pnl_usd": -39.96,
-              "roi_pct_on_margin": -199.82
+              "net_pnl_usd": -79.93,
+              "roi_pct_on_margin": -399.64
             },
             {
               "asset": "ETH",
@@ -63108,8 +63097,19 @@
               "hold_hours": 48.0,
               "entry_price": 2185.01,
               "exit_price": 1990.24,
-              "net_pnl_usd": -89.59,
-              "roi_pct_on_margin": -447.97
+              "net_pnl_usd": -179.19,
+              "roi_pct_on_margin": -895.95
+            },
+            {
+              "asset": "SOL",
+              "direction": "SHORT",
+              "entry_ts": "2026-03-27 00:00",
+              "exit_ts": "2026-03-30 00:00",
+              "hold_hours": 72.0,
+              "entry_price": 86.36,
+              "exit_price": 83.24,
+              "net_pnl_usd": 71.0,
+              "roi_pct_on_margin": 355.02
             }
           ]
         }

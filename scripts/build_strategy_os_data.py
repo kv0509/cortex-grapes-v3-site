@@ -25,6 +25,8 @@ OUTPUT_JSON = DATA_DIR / "strategy_os.json"
 FIXED_MARGIN_USD = 20.0
 LEVERAGE = 100.0
 FIXED_NOTIONAL_USD = FIXED_MARGIN_USD * LEVERAGE
+CITRUS_LIVE_DB_FIXED_NOTIONAL_USD = 1000.0
+CITRUS_LIVE_PNL_SCALE = FIXED_NOTIONAL_USD / CITRUS_LIVE_DB_FIXED_NOTIONAL_USD
 GRAPES_BASE_EQUITY_USD = 6000.0
 CITRUS_BASE_EQUITY_USD = 6000.0
 GRAPES_LIVE_DB = ROOT / "Live" / "db" / "grapes_model_v1.db"
@@ -669,7 +671,9 @@ def load_citrus_live_trades_df() -> pd.DataFrame:
         return df
 
     df["asset"] = df["symbol"].astype(str).str.replace("USDT", "", regex=False)
-    df["scaled_net_pnl_usd"] = df["net_pnl"].astype(float)
+    # Citrus live ledger stores realized PnL on a 1000U notional basis. The
+    # website normalizes both strategies to 20U margin x 100x leverage = 2000U.
+    df["scaled_net_pnl_usd"] = df["net_pnl"].astype(float) * CITRUS_LIVE_PNL_SCALE
     df["entry_dt"] = pd.to_datetime(df["entry_time"])
     df["exit_dt"] = pd.to_datetime(df["exit_time"])
     df["hold_hours"] = (df["bars_held"].astype(float) * 4.0).round(1)

@@ -2013,7 +2013,7 @@ select {
     position: sticky;
     top: 0;
     z-index: 30;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
     align-items: center;
     justify-items: stretch;
     gap: 0;
@@ -2025,53 +2025,71 @@ select {
 
   .site-brand {
     min-height: 48px;
-    gap: 8px;
-    padding: 0 10px;
+    gap: 6px;
+    padding: 0 6px;
     justify-self: start;
+    min-width: 0;
   }
 
   .brand-mark {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .brand-wordmark {
+    display: none;
   }
 
   .brand-wordmark strong {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .brand-wordmark span {
-    font-size: 8px;
+    font-size: 7px;
   }
 
   .site-nav {
     width: 100%;
     min-height: 34px;
-    margin: 0 8px;
+    min-width: 0;
+    margin: 0 2px 0 1px;
   }
 
   .switch-tab {
     flex: 1 1 0;
     text-align: center;
-    padding: 7px 4px;
-    font-size: 10px;
+    min-width: 0;
+    padding: 7px 2px;
+    font-size: 8.5px;
     letter-spacing: -0.01em;
   }
 
   .site-controls {
     width: auto;
     min-height: 48px;
-    padding: 0 8px 0 0;
+    padding: 0 6px 0 4px;
     border-left: 0;
     justify-content: flex-end;
+    gap: 8px;
   }
 
   .lang-switch {
-    min-height: 30px;
+    min-height: 34px;
+    flex: 0 0 auto;
+    flex-direction: column;
   }
 
   .lang-tab {
-    padding: 6px 7px;
+    width: 100%;
+    padding: 4px 6px;
     font-size: 8px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    line-height: 1.1;
+  }
+
+  .lang-tab:last-child {
+    border-bottom: 0;
   }
 
   #updated-at-header {
@@ -2392,43 +2410,43 @@ select {
   .site-header {
     top: 0;
     margin-bottom: 10px;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
   }
 
   .site-brand {
     min-height: 44px;
-    padding: 0 8px;
-    gap: 6px;
+    padding: 0 4px;
+    gap: 5px;
     justify-content: flex-start;
   }
 
   .brand-mark {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 
   .brand-wordmark strong {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .brand-wordmark span {
-    font-size: 8px;
+    font-size: 6.5px;
   }
 
   .switch-tab {
-    padding: 6px 3px;
-    font-size: 9px;
+    padding: 6px 2px;
+    font-size: 8px;
   }
 
   .lang-tab {
-    padding: 5px 6px;
-    font-size: 8px;
+    padding: 4px 5px;
+    font-size: 7.5px;
   }
 
   .site-controls {
     min-height: 44px;
-    padding: 0 6px 0 0;
-    gap: 6px;
+    padding: 0 5px 0 4px;
+    gap: 7px;
   }
 
   .overview-summary-panel {
