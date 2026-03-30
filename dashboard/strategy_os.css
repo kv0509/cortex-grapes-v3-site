@@ -226,6 +226,12 @@ select {
   text-align: left;
 }
 
+.updated-stamp-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .updated-stamp-label {
   color: var(--muted);
   font: 10px var(--mono);
@@ -233,10 +239,55 @@ select {
   letter-spacing: 0.12em;
 }
 
+.live-feed-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 78px;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font: 10px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.live-feed-pill.live {
+  color: var(--green);
+  border-color: rgba(51, 209, 122, 0.28);
+  background: rgba(51, 209, 122, 0.08);
+}
+
+.live-feed-pill.reconnecting,
+.live-feed-pill.stale {
+  color: var(--amber);
+  border-color: rgba(255, 158, 61, 0.28);
+  background: rgba(255, 158, 61, 0.08);
+}
+
 .updated-stamp-value {
   color: var(--text);
   font: 12px var(--mono);
   letter-spacing: 0.02em;
+}
+
+.updated-fallback-note {
+  color: var(--muted);
+  font: 10px var(--mono);
+  letter-spacing: 0.02em;
+}
+
+.flash-up,
+.flash-down {
+  transition: color 180ms ease, text-shadow 180ms ease;
+}
+
+.flash-up {
+  text-shadow: 0 0 10px rgba(51, 209, 122, 0.28);
+}
+
+.flash-down {
+  text-shadow: 0 0 10px rgba(224, 109, 109, 0.28);
 }
 
 .page-main {
@@ -833,6 +884,7 @@ select {
   border-radius: 0;
   box-shadow: none;
   border-top: 1px solid var(--line);
+  min-height: 92px;
 }
 
 .snapshot-head {
@@ -868,6 +920,7 @@ select {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
   gap: 24px;
+  min-height: 64px;
 }
 
 .snapshot-primary {
@@ -1020,6 +1073,10 @@ select {
   background: transparent;
   border-radius: 0;
   box-shadow: none;
+}
+
+.strategy-rail .rail-panel:first-of-type {
+  min-height: 132px;
 }
 
 .strategy-rail .asset-curves-panel {
@@ -1217,6 +1274,15 @@ select {
 .asset-card .rail-kpi-grid span,
 .position-card .rail-kpi-grid span {
   font-size: 10px;
+}
+
+.quote-stale-tag {
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--amber);
+  font: 9px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .asset-card .rail-kpi-grid strong,
@@ -1437,9 +1503,16 @@ select {
 
 .position-card.empty {
   display: grid;
-  place-items: center;
-  min-height: 128px;
+  align-content: start;
+  min-height: 96px;
   color: var(--muted);
+  padding-top: 2px;
+}
+
+.position-card.empty p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .overview-topbar {
@@ -1519,7 +1592,7 @@ select {
 }
 
 .rail-section {
-  padding: 12px 16px 14px;
+  padding: 10px 14px 12px;
   border-bottom: 0;
 }
 
@@ -1528,7 +1601,7 @@ select {
 }
 
 .rail-section.summary {
-  padding-top: 14px;
+  padding-top: 12px;
 }
 
 .rail-title,
@@ -1541,14 +1614,14 @@ select {
   font: 11px var(--mono);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .rail-summary-line {
   display: grid;
-  gap: 6px;
-  padding-bottom: 12px;
-  margin-bottom: 12px;
+  gap: 4px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
   border-bottom: 1px solid rgba(154, 201, 177, 0.08);
 }
 
@@ -1560,7 +1633,7 @@ select {
 }
 
 .rail-row {
-  padding: 12px 0;
+  padding: 10px 0;
   border-bottom: 1px solid rgba(154, 201, 177, 0.08);
 }
 
@@ -1582,7 +1655,7 @@ select {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .rail-row-name {
@@ -1595,7 +1668,7 @@ select {
 .rail-kpi-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 14px;
+  gap: 8px 12px;
 }
 
 .rail-kpi-grid div,
@@ -1694,6 +1767,7 @@ select {
   border: 1px solid var(--line);
   border-top: 0;
   background: rgba(11, 17, 15, 0.92);
+  align-items: stretch;
 }
 
 .strategy-terminal-panel {
@@ -1701,6 +1775,8 @@ select {
   gap: 0;
   background: #0d1210;
   border-right: 1px solid var(--line);
+  height: 100%;
+  grid-template-rows: auto auto auto auto 1fr;
 }
 
 .strategy-terminal-panel:last-child {
@@ -1759,6 +1835,8 @@ select {
 .terminal-open-list {
   display: grid;
   gap: 8px;
+  align-content: start;
+  min-height: 44px;
 }
 
 .terminal-open-item {
@@ -1818,6 +1896,8 @@ select {
 
 .terminal-table-wrap {
   padding: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 .terminal-table-head {

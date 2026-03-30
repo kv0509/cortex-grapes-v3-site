@@ -12,6 +12,8 @@ const COLORS = {
   panel: "#101b16",
 };
 
+const LIVE_FIXED_NOTIONAL_USD = 2000;
+
 const state = {
   data: null,
   view: localStorage.getItem("strategy_os_view") || "all",
@@ -21,6 +23,21 @@ const state = {
   tradeFilters: {
     grapes: { scope: "month", value: "latest" },
     citrus: { scope: "month", value: "latest" },
+  },
+  livePrices: {
+    socket: null,
+    reconnectTimer: null,
+    subscribedSymbols: [],
+    prices: {},
+    pricesMeta: {},
+    renderTimer: null,
+    connected: false,
+    lastTickAt: null,
+    heartbeatTimer: null,
+    lastRenderedValues: {},
+  },
+  chartScales: {
+    overviewLivePnl: null,
   },
 };
 
@@ -279,10 +296,134 @@ function fmtTradeMonthDay(ts) {
   }).format(date);
 }
 function fmtUpdatedAt(ts) { return String(ts || "").slice(0, 16); }
+function fmtTimeOnly(ts) {
+  const date = ts ? new Date(ts) : new Date();
+  if (Number.isNaN(date.getTime())) return "—";
+  return date.toTimeString().slice(0, 8);
+}
 function fmtSignedCompactUsd(v, d = 0) {
   const n = Number(v || 0);
   const sign = n > 0 ? "+" : n < 0 ? "−" : "";
   return `${sign}$${Math.abs(n).toFixed(d)}`;
+}
+
+function normalizeSymbol(symbol) {
+  return String(symbol || "").trim().toUpperCase();
+}
+
+function getLiveMarkPrice(symbol, fallbackPrice = 0) {
+  const normalized = normalizeSymbol(symbol);
+  const live = Number(state.livePrices.prices[normalized]);
+  return Number.isFinite(live) && live > 0 ? live : Number(fallbackPrice || 0);
+}
+
+function getLiveQuoteAgeMs(symbol) {
+  const normalized = normalizeSymbol(symbol);
+  const tickTs = Number(state.livePrices.pricesMeta[normalized]?.ts || 0);
+  return tickTs > 0 ? (Date.now() - tickTs) : Infinity;
+}
+
+function isLiveQuoteStale(symbol) {
+  return getLiveQuoteAgeMs(symbol) > 12000;
+}
+
+function markActivePosition(position) {
+  if (!position) return position;
+  const entryPrice = Number(position.entry_price || 0);
+  const symbol = position.symbol || `${position.asset || ""}USDT`;
+  const currentPrice = getLiveMarkPrice(symbol, position.current_price || entryPrice);
+  const directionInt = String(position.direction || "").toUpperCase() === "SHORT" ? -1 : 1;
+  const currentPnlPct = entryPrice > 0
+    ? (((currentPrice - entryPrice) / entryPrice) * directionInt * 100.0)
+    : Number(position.current_pnl_pct || 0);
+  const currentPnlUsd = (currentPnlPct / 100.0) * LIVE_FIXED_NOTIONAL_USD;
+  return {
+    ...position,
+    current_price: roundNumber(currentPrice, 4),
+    current_pnl_pct: roundNumber(currentPnlPct, 2),
+    current_pnl_usd: roundNumber(currentPnlUsd, 2),
+    quote_stale: isLiveQuoteStale(symbol),
+  };
+}
+
+function getMarkedActivePositions(positions = []) {
+  return (positions || []).map((position) => markActivePosition(position));
+}
+
+function roundNumber(value, digits = 2) {
+  const numeric = Number(value || 0);
+  return Number(numeric.toFixed(digits));
+}
+
+function getLiveFeedStatus() {
+  if (state.livePrices.connected) {
+    const ageMs = state.livePrices.lastTickAt ? (Date.now() - state.livePrices.lastTickAt) : Infinity;
+    if (ageMs <= 12000) return "live";
+    return "stale";
+  }
+  if (state.livePrices.subscribedSymbols.length) return "reconnecting";
+  return "idle";
+}
+
+function getLiveFeedStatusLabel() {
+  const status = getLiveFeedStatus();
+  if (status === "live") return "Live";
+  if (status === "stale") return "Stale";
+  if (status === "reconnecting") return "Reconnecting";
+  return "Idle";
+}
+
+function getLiveFeedFallbackNote() {
+  const status = getLiveFeedStatus();
+  if (status === "live") return "";
+  if (status === "reconnecting") return "Live mark unavailable. Using static snapshot.";
+  if (status === "stale") return "Live mark stale. Holding last snapshot.";
+  return "Static snapshot mode.";
+}
+
+function getStrategyLiveBreakdown(strategyKey, data = state.data) {
+  const strategy = data?.strategies?.[strategyKey];
+  const baseSummary = strategy?.execution_views?.live?.summary || {};
+  const markedPositions = getMarkedActivePositions(strategy?.active_positions || []);
+  const unrealizedPnlUsd = markedPositions
+    .map((position) => Number(position.current_pnl_usd))
+    .filter(Number.isFinite)
+    .reduce((sum, value) => sum + value, 0);
+  const realizedPnlUsd = Number(baseSummary.net_pnl_usd || 0);
+  const totalPnlUsd = realizedPnlUsd + unrealizedPnlUsd;
+  return {
+    realizedPnlUsd: roundNumber(realizedPnlUsd, 2),
+    unrealizedPnlUsd: roundNumber(unrealizedPnlUsd, 2),
+    totalPnlUsd: roundNumber(totalPnlUsd, 2),
+  };
+}
+
+function getValueFlashClass(key, nextValue) {
+  const numeric = Number(nextValue);
+  if (!Number.isFinite(numeric)) return "";
+  const prev = state.livePrices.lastRenderedValues[key];
+  state.livePrices.lastRenderedValues[key] = numeric;
+  if (!Number.isFinite(prev) || Math.abs(prev - numeric) < 1e-9) return "";
+  return numeric > prev ? "flash-up" : "flash-down";
+}
+
+function getStrategyLiveSummary(strategyKey, data = state.data) {
+  const strategy = data?.strategies?.[strategyKey];
+  const baseSummary = { ...(strategy?.execution_views?.live?.summary || {}) };
+  if (!strategy) return baseSummary;
+  const breakdown = getStrategyLiveBreakdown(strategyKey, data);
+  const realizedNet = Number(baseSummary.net_pnl_usd || 0);
+  const initialEquity = Number(baseSummary.final_equity || 0) - realizedNet;
+  const netPnlUsd = breakdown.totalPnlUsd;
+  const finalEquity = Number.isFinite(initialEquity) ? initialEquity + netPnlUsd : Number(baseSummary.final_equity || 0);
+  return {
+    ...baseSummary,
+    net_pnl_usd: roundNumber(netPnlUsd, 2),
+    final_equity: roundNumber(finalEquity, 2),
+    total_return_pct: initialEquity > 0 ? roundNumber((netPnlUsd / initialEquity) * 100, 2) : Number(baseSummary.total_return_pct || 0),
+    unrealized_pnl_usd: breakdown.unrealizedPnlUsd,
+    realized_pnl_usd: breakdown.realizedPnlUsd,
+  };
 }
 function fmtBaseCapitalLabel(amount) {
   const value = fmtUsd(amount);
@@ -290,8 +431,8 @@ function fmtBaseCapitalLabel(amount) {
 }
 
 function buildOverviewLiveStats(data) {
-  const grapesLive = data.strategies.grapes.execution_views?.live?.summary || {};
-  const citrusLive = data.strategies.citrus.execution_views?.live?.summary || {};
+  const grapesLive = getStrategyLiveSummary("grapes", data);
+  const citrusLive = getStrategyLiveSummary("citrus", data);
   const allTrades = [
     ...(data.strategies.grapes.execution_views?.live?.all_trades || []),
     ...(data.strategies.citrus.execution_views?.live?.all_trades || []),
@@ -336,7 +477,7 @@ function getStrategyBestWorst(trades) {
 
 function buildOverviewTradeRows(strategyKey, data) {
   const strategy = data.strategies[strategyKey];
-  const active = strategy.active_positions || [];
+  const active = getMarkedActivePositions(strategy.active_positions || []);
   const trades = [...(strategy.execution_views?.live?.all_trades || [])]
     .sort((a, b) => String(b.exit_ts || "").localeCompare(String(a.exit_ts || "")));
   const openRows = active.map((row) => ({
@@ -349,7 +490,7 @@ function buildOverviewTradeRows(strategyKey, data) {
     pnl_is_pct: true,
     status: "Open",
   }));
-  const closedRows = trades.slice(0, 4).map((row) => ({
+  const closedRows = trades.slice(0, 5).map((row) => ({
     asset: row.asset,
     direction: row.direction,
     entry_ts: row.entry_ts,
@@ -359,7 +500,21 @@ function buildOverviewTradeRows(strategyKey, data) {
     pnl_is_pct: false,
     status: "Closed",
   }));
-  return [...openRows, ...closedRows].slice(0, 5);
+  const rows = [...openRows, ...closedRows].slice(0, 5);
+  while (rows.length < 5) {
+    rows.push({
+      asset: "—",
+      direction: "—",
+      entry_ts: "—",
+      exit_ts: "—",
+      size: "—",
+      pnl: null,
+      pnl_is_pct: false,
+      status: "—",
+      is_placeholder: true,
+    });
+  }
+  return rows;
 }
 
 function setActiveView(view) {
@@ -465,9 +620,14 @@ function renderHero(data) {
   const updatedValue = fmtUpdatedAt(data.meta.updated_at);
   if (updatedMain) updatedMain.textContent = `${t("updated")} ${updatedValue}`;
   if (updatedHeader) {
+    const fallbackNote = getLiveFeedFallbackNote();
     updatedHeader.innerHTML = `
-      <span class="updated-stamp-label">${t("updated")}</span>
+      <span class="updated-stamp-top">
+        <span class="live-feed-pill ${getLiveFeedStatus()}">${getLiveFeedStatusLabel()}</span>
+        <span class="updated-stamp-label">${t("updated")}</span>
+      </span>
       <strong class="updated-stamp-value">${updatedValue}</strong>
+      ${fallbackNote ? `<span class="updated-fallback-note">${fallbackNote}</span>` : ""}
     `;
   }
   const target = document.getElementById("hero-status");
@@ -516,20 +676,24 @@ function renderHero(data) {
 function renderOverviewSummary(data) {
   const target = document.getElementById("overview-summary");
   if (!target) return;
-  const grapesLive = data.strategies.grapes.execution_views?.live?.summary || {};
-  const citrusLive = data.strategies.citrus.execution_views?.live?.summary || {};
+  const grapesLive = getStrategyLiveSummary("grapes", data);
+  const citrusLive = getStrategyLiveSummary("citrus", data);
+  const grapesBreakdown = getStrategyLiveBreakdown("grapes", data);
+  const citrusBreakdown = getStrategyLiveBreakdown("citrus", data);
   const stats = buildOverviewLiveStats(data);
   const grapesScore = Number(grapesLive.total_return_pct || 0);
   const citrusScore = Number(citrusLive.total_return_pct || 0);
   const leaderKey = grapesScore === citrusScore ? "tie" : (grapesScore > citrusScore ? "grapes" : "citrus");
-  const renderStrategyRow = (label, emoji, live, key) => `
+  const renderStrategyRow = (label, emoji, live, breakdown, key) => `
     <div class="rail-row strategy ${leaderKey === key ? "is-leader" : ""} ${leaderKey !== "tie" && leaderKey !== key ? "is-muted" : ""}">
       <div class="rail-row-head">
         <span class="rail-row-name">${emoji} ${label}</span>
         ${leaderKey === key ? `<span class="leader-badge">${t("leader")}</span>` : ""}
       </div>
       <div class="rail-kpi-grid">
-        <div><span>PnL</span><strong class="${Number(live.net_pnl_usd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(live.net_pnl_usd || 0)}</strong></div>
+        <div><span>Total</span><strong class="${Number(live.net_pnl_usd || 0) < 0 ? "neg" : "pos"} ${getValueFlashClass(`${key}-overview-total`, live.net_pnl_usd || 0)}">${fmtUsd(live.net_pnl_usd || 0)}</strong></div>
+        <div><span>Realized</span><strong class="${Number(breakdown.realizedPnlUsd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(breakdown.realizedPnlUsd || 0)}</strong></div>
+        <div><span>Unrealized</span><strong class="${Number(breakdown.unrealizedPnlUsd || 0) < 0 ? "neg" : "pos"} ${getValueFlashClass(`${key}-overview-unrealized`, breakdown.unrealizedPnlUsd || 0)}">${fmtUsd(breakdown.unrealizedPnlUsd || 0)}</strong></div>
         <div><span>${t("returnLabel")}</span><strong class="${Number(live.total_return_pct || 0) < 0 ? "neg" : "pos"}">${fmtPct(live.total_return_pct || 0, 2)}</strong></div>
         <div><span>PF</span><strong>${fmtNum(live.profit_factor || 0, 2)}</strong></div>
         <div><span>${t("trades")}</span><strong>${live.trades || 0}</strong></div>
@@ -540,11 +704,11 @@ function renderOverviewSummary(data) {
     <section class="rail-section summary">
       <div class="rail-title">${t("liveSummary")}</div>
       <div class="rail-summary-line">
-        <strong class="decision-total ${stats.totalPnl < 0 ? "neg" : "pos"}">${fmtUsd(stats.totalPnl)}</strong>
+        <strong class="decision-total ${stats.totalPnl < 0 ? "neg" : "pos"} ${getValueFlashClass("overview-total-pnl", stats.totalPnl)}">${fmtUsd(stats.totalPnl)}</strong>
         <span class="${stats.totalReturn < 0 ? "neg" : "pos"}">${fmtPct(stats.totalReturn, 2)} ${t("totalReturnNote")}</span>
       </div>
-      ${renderStrategyRow("Grapes", "🍇", grapesLive, "grapes")}
-      ${renderStrategyRow("Citrus", "🍊", citrusLive, "citrus")}
+      ${renderStrategyRow("Grapes", "🍇", grapesLive, grapesBreakdown, "grapes")}
+      ${renderStrategyRow("Citrus", "🍊", citrusLive, citrusBreakdown, "citrus")}
     </section>
     <section class="rail-section">
       <div class="rail-title">${t("riskMetrics")}</div>
@@ -570,29 +734,33 @@ function renderOverviewSummary(data) {
 function renderOverviewStrategyTape(data) {
   const target = document.getElementById("overview-strategy-tape");
   if (!target) return;
+  const grapesActive = getMarkedActivePositions(data.strategies.grapes.active_positions || []);
+  const citrusActive = getMarkedActivePositions(data.strategies.citrus.active_positions || []);
+  const grapesLive = getStrategyLiveSummary("grapes", data);
+  const citrusLive = getStrategyLiveSummary("citrus", data);
   const rows = [
     {
       key: "grapes",
       name: "🍇 Grapes",
-      status: (data.strategies.grapes.active_positions || []).length ? t("active") : t("flat"),
-      netPnl: data.strategies.grapes.execution_views?.live?.summary?.net_pnl_usd,
-      totalReturn: data.strategies.grapes.execution_views?.live?.summary?.total_return_pct,
-      trades: data.strategies.grapes.execution_views?.live?.summary?.trades,
-      pf: data.strategies.grapes.execution_views?.live?.summary?.profit_factor,
-      winRate: data.strategies.grapes.execution_views?.live?.summary?.win_rate_pct,
-      active: data.strategies.grapes.active_positions || [],
+      status: grapesActive.length ? t("active") : t("flat"),
+      netPnl: grapesLive.net_pnl_usd,
+      totalReturn: grapesLive.total_return_pct,
+      trades: grapesLive.trades,
+      pf: grapesLive.profit_factor,
+      winRate: grapesLive.win_rate_pct,
+      active: grapesActive,
       tradesList: data.strategies.grapes.execution_views?.live?.all_trades || [],
     },
     {
       key: "citrus",
       name: "🍊 Citrus",
-      status: (data.strategies.citrus.active_positions || []).length ? t("active") : t("flat"),
-      netPnl: data.strategies.citrus.execution_views?.live?.summary?.net_pnl_usd,
-      totalReturn: data.strategies.citrus.execution_views?.live?.summary?.total_return_pct,
-      trades: data.strategies.citrus.execution_views?.live?.summary?.trades,
-      pf: data.strategies.citrus.execution_views?.live?.summary?.profit_factor,
-      winRate: data.strategies.citrus.execution_views?.live?.summary?.win_rate_pct,
-      active: data.strategies.citrus.active_positions || [],
+      status: citrusActive.length ? t("active") : t("flat"),
+      netPnl: citrusLive.net_pnl_usd,
+      totalReturn: citrusLive.total_return_pct,
+      trades: citrusLive.trades,
+      pf: citrusLive.profit_factor,
+      winRate: citrusLive.win_rate_pct,
+      active: citrusActive,
       tradesList: data.strategies.citrus.execution_views?.live?.all_trades || [],
     },
   ];
@@ -662,10 +830,10 @@ function renderOverviewStrategyTape(data) {
               ${preview.map((trade) => `
                 <tr>
                   <td data-label="${t("asset")}">${trade.asset || "—"}</td>
-                  <td data-label="${t("side")}"><span class="dir-chip ${String(trade.direction || "").toLowerCase()}">${trade.direction || "—"}</span></td>
+                  <td data-label="${t("side")}">${trade.is_placeholder ? "—" : `<span class="dir-chip ${String(trade.direction || "").toLowerCase()}">${trade.direction || "—"}</span>`}</td>
                   <td data-label="${t("entry")}" class="mono">${fmtTradeMonthDay(trade.entry_ts)}</td>
                   <td data-label="${t("exit")}" class="mono">${trade.exit_ts === "—" ? "—" : fmtTradeMonthDay(trade.exit_ts)}</td>
-                  <td data-label="${t("pnl")}" class="${Number(trade.pnl || 0) < 0 ? "neg" : "pos"}">${trade.pnl_is_pct ? fmtPct(trade.pnl, 2) : fmtSignedCompactUsd(trade.pnl)}</td>
+                  <td data-label="${t("pnl")}" class="${trade.pnl == null ? "" : Number(trade.pnl || 0) < 0 ? "neg" : "pos"}">${trade.pnl == null ? "—" : trade.pnl_is_pct ? fmtPct(trade.pnl, 2) : fmtSignedCompactUsd(trade.pnl)}</td>
                   <td data-label="${t("status")}" class="${String(trade.status).toLowerCase() === "closed" ? "closed-status" : ""}">${trade.status}</td>
                 </tr>
               `).join("")}
@@ -696,7 +864,8 @@ function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
   const note = document.getElementById(`${strategyKey}-lens-note`);
   if (!target || !viewData) return;
   const lens = (state.lenses[strategyKey] === "extended" ? "backtest" : state.lenses[strategyKey]) || "backtest";
-  const s = viewData.summary || {};
+  const s = lens === "live" ? getStrategyLiveSummary(strategyKey) : (viewData.summary || {});
+  const breakdown = lens === "live" ? getStrategyLiveBreakdown(strategyKey) : null;
   if (note) note.textContent = "";
   target.innerHTML = `
     <article class="snapshot-card">
@@ -707,13 +876,15 @@ function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
       </div>
       <div class="snapshot-layout">
         <div class="snapshot-primary">
-          <div class="snapshot-main decision-total ${lens === "live" ? (Number(s.net_pnl_usd || 0) < 0 ? "neg" : "pos") : "neutral"}">${fmtUsd(s.net_pnl_usd || 0)}</div>
+          <div class="snapshot-main decision-total ${lens === "live" ? (Number(s.net_pnl_usd || 0) < 0 ? "neg" : "pos") : "neutral"} ${lens === "live" ? getValueFlashClass(`${strategyKey}-snapshot-total`, s.net_pnl_usd || 0) : ""}">${fmtUsd(s.net_pnl_usd || 0)}</div>
           <div class="snapshot-primary-meta">
             <span class="snapshot-sub decision-subline">Net PnL</span>
             <strong class="${Number(s.total_return_pct || 0) < 0 ? "neg" : "pos"}">${fmtPct(s.total_return_pct || 0)}</strong>
           </div>
         </div>
         <div class="snapshot-metrics rail-kpi-grid">
+          ${lens === "live" ? `<div><span>Realized</span><strong class="${Number(breakdown.realizedPnlUsd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(breakdown.realizedPnlUsd || 0)}</strong></div>` : ""}
+          ${lens === "live" ? `<div><span>Unrealized</span><strong class="${Number(breakdown.unrealizedPnlUsd || 0) < 0 ? "neg" : "pos"} ${getValueFlashClass(`${strategyKey}-snapshot-unrealized`, breakdown.unrealizedPnlUsd || 0)}">${fmtUsd(breakdown.unrealizedPnlUsd || 0)}</strong></div>` : ""}
           <div><span>PF</span><strong>${fmtNum(s.profit_factor || 0)}</strong></div>
           <div><span>Trades</span><strong>${s.trades || 0}</strong></div>
         </div>
@@ -819,11 +990,12 @@ function renderCitrusAssets(data) {
 function renderActivePositions(targetId, positions) {
   const target = document.getElementById(targetId);
   if (!target) return;
-  if (!positions || !positions.length) {
+  const markedPositions = getMarkedActivePositions(positions || []);
+  if (!markedPositions.length) {
     target.innerHTML = `<article class="position-card empty"><p>${t("noOpenPositions")}</p></article>`;
     return;
   }
-  target.innerHTML = positions.map((row) => `
+  target.innerHTML = markedPositions.map((row) => `
     <article class="position-card">
       <div class="position-head">
         <strong class="rail-row-name">${row.asset}</strong>
@@ -831,9 +1003,9 @@ function renderActivePositions(targetId, positions) {
       </div>
       <div class="rail-kpi-grid compact">
         <div><span>${t("entryPrice")}</span><strong>${fmtNum(row.entry_price, 2)}</strong></div>
-        ${row.current_price !== undefined ? `<div><span>Current Price</span><strong>${fmtNum(row.current_price, 2)}</strong></div>` : ""}
+        ${row.current_price !== undefined ? `<div><span>Current Price ${row.quote_stale ? '<em class="quote-stale-tag">stale</em>' : ""}</span><strong class="${getValueFlashClass(`${targetId}-${row.symbol}-price`, row.current_price || 0)}">${fmtNum(row.current_price, 2)}</strong></div>` : ""}
         ${row.hold_hours !== undefined ? `<div><span>${t("holdHours")}</span><strong>${row.hold_hours}h</strong></div>` : ""}
-        ${row.current_pnl_pct !== undefined ? `<div><span>Current PnL</span><strong class="${Number(row.current_pnl_pct || 0) >= 0 ? "pos" : "neg"}">${fmtPct(row.current_pnl_pct || 0, 2)}</strong></div>` : ""}
+        ${row.current_pnl_pct !== undefined ? `<div><span>Current PnL</span><strong class="${Number(row.current_pnl_pct || 0) >= 0 ? "pos" : "neg"} ${getValueFlashClass(`${targetId}-${row.symbol}-pnl`, row.current_pnl_pct || 0)}">${fmtPct(row.current_pnl_pct || 0, 2)}</strong></div>` : ""}
       </div>
     </article>`).join("");
 }
@@ -1210,6 +1382,43 @@ function buildTightProfitScale(values, targetTickCount = 5) {
   return { min, max, ticks };
 }
 
+function buildSoftDynamicProfitScale(values, memoryKey, targetTickCount = 5) {
+  const next = buildTightProfitScale(values, targetTickCount);
+  const prev = state.chartScales[memoryKey];
+  if (!prev) {
+    state.chartScales[memoryKey] = next;
+    return next;
+  }
+
+  const range = Math.max(1, next.max - next.min);
+  const expandThresholdMax = prev.max - range * 0.12;
+  const expandThresholdMin = prev.min + range * 0.12;
+  const needsExpand = next.max > expandThresholdMax || next.min < expandThresholdMin;
+
+  if (needsExpand) {
+    state.chartScales[memoryKey] = next;
+    return next;
+  }
+
+  const prevRange = Math.max(1, prev.max - prev.min);
+  const nextRange = Math.max(1, next.max - next.min);
+  const paddedMin = Math.min(0, next.min - nextRange * 0.06);
+  const paddedMax = Math.max(0, next.max + nextRange * 0.06);
+  const shrinkCandidate = buildTightProfitScale([paddedMin, paddedMax], targetTickCount);
+  const blend = 0.18;
+  const blended = buildTightProfitScale([
+    prev.min + ((shrinkCandidate.min - prev.min) * blend),
+    prev.max + ((shrinkCandidate.max - prev.max) * blend),
+  ], targetTickCount);
+
+  if ((prevRange - nextRange) / prevRange < 0.08) {
+    return prev;
+  }
+
+  state.chartScales[memoryKey] = blended;
+  return blended;
+}
+
 function drawAxisLabels(ctx, width, height, m, min, max, series) {
   ctx.save();
   ctx.fillStyle = COLORS.muted;
@@ -1261,6 +1470,29 @@ function drawPointMarkers(ctx, points, color) {
     ctx.arc(point.x, point.y, 3.2, 0, Math.PI * 2);
     ctx.fill();
   });
+  ctx.restore();
+}
+
+function drawLiveTailMarker(ctx, point, color, label) {
+  if (!point) return;
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.moveTo(point.x + 8, point.y);
+  ctx.lineTo((ctx.canvas.width / (window.devicePixelRatio || 1)) - 12, point.y);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  ctx.arc(point.x, point.y, 5.2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = COLORS.text;
+  ctx.font = `10px ${getComputedStyle(document.documentElement).getPropertyValue("--mono") || "IBM Plex Mono"}`;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "bottom";
+  ctx.fillText(label, Math.min(point.x + 10, (ctx.canvas.width / (window.devicePixelRatio || 1)) - 72), point.y - 8);
   ctx.restore();
 }
 
@@ -1343,6 +1575,7 @@ function drawPolyline(ctx, points, color) {
 
 function drawSignedPnlAreaAndLine(ctx, points, values, opts = {}) {
   const stepped = opts.stepped === true;
+  const linear = opts.linear === true;
   const segments = buildSignedPnlSegments(points, values) || [];
   segments.forEach((segment) => {
     const segmentPoints = stepped ? expandStepPoints(segment.points) : segment.points;
@@ -1371,6 +1604,8 @@ function drawSignedPnlAreaAndLine(ctx, points, values, opts = {}) {
   segments.forEach((segment) => {
     const segmentPoints = stepped ? expandStepPoints(segment.points) : segment.points;
     if (stepped) {
+      drawPolyline(ctx, segmentPoints, segment.color);
+    } else if (linear) {
       drawPolyline(ctx, segmentPoints, segment.color);
     } else {
       drawSmoothLine(ctx, segmentPoints, segment.color, false);
@@ -1499,15 +1734,29 @@ function drawOverlayStrategyChart(canvas, data) {
     ...((grapesLive.all_trades || []).map((row) => ({ ...row, strategy: "Grapes" }))),
     ...((citrusLive.all_trades || []).map((row) => ({ ...row, strategy: "Citrus" }))),
   ].sort((a, b) => String(a.exit_ts).localeCompare(String(b.exit_ts)));
-  const combinedSeries = buildTradeEquitySeries(trades, 0).map((row) => ({ ts: row.ts, pnl: Number(row.pnl || 0) }));
+  const livePositions = [
+    ...(data.strategies.grapes.active_positions || []),
+    ...(data.strategies.citrus.active_positions || []),
+  ];
+  const combinedSeries = buildLiveTailSeries(trades, livePositions, 0).map((row) => ({
+    ts: row.ts,
+    pnl: Number(row.pnl || 0),
+    liveTail: Boolean(row.liveTail),
+  }));
   if (!combinedSeries.length) return;
-  const scale = buildTightProfitScale(combinedSeries.map((row) => Number(row.pnl)), 5);
+  const scale = buildSoftDynamicProfitScale(combinedSeries.map((row) => Number(row.pnl)), "overviewLivePnl", 5);
   const xTicks = buildProgressXAxisTicks(combinedSeries, width, m);
   drawAxes(ctx, width, height, m, scale.ticks, xTicks);
   const points = toIndexedPoints(combinedSeries, "pnl", width, height, m, scale.min, scale.max, 0);
-  drawSignedPnlAreaAndLine(ctx, points, combinedSeries.map((row) => Number(row.pnl)));
+  drawSignedPnlAreaAndLine(ctx, points, combinedSeries.map((row) => Number(row.pnl)), { linear: true });
   const lastPoint = points[points.length - 1];
-  if (lastPoint) drawPointMarkers(ctx, [lastPoint], Number(combinedSeries[combinedSeries.length - 1]?.pnl || 0) < 0 ? COLORS.red : COLORS.green);
+  const lastValue = Number(combinedSeries[combinedSeries.length - 1]?.pnl || 0);
+  const lastColor = lastValue < 0 ? COLORS.red : COLORS.green;
+  if (lastPoint && combinedSeries[combinedSeries.length - 1]?.liveTail) {
+    drawLiveTailMarker(ctx, lastPoint, lastColor, fmtSignedCompactUsd(lastValue));
+  } else if (lastPoint) {
+    drawPointMarkers(ctx, [lastPoint], lastColor);
+  }
   drawFixedAxisLabels(ctx, width, height, m, scale.ticks, combinedSeries, () => xTicks);
 }
 
@@ -1584,6 +1833,41 @@ function buildTradeEquitySeries(trades, baseEquity = 0) {
       tradeIndex: index + 1,
     };
   });
+}
+
+function buildLiveTailSeries(trades, positions = [], baseEquity = 0) {
+  const baseSeries = buildTradeEquitySeries(trades, baseEquity);
+  const markedPositions = getMarkedActivePositions(positions || []);
+  const unrealizedPnlUsd = markedPositions
+    .map((position) => Number(position.current_pnl_usd))
+    .filter(Number.isFinite)
+    .reduce((sum, value) => sum + value, 0);
+
+  if (!markedPositions.length) return baseSeries;
+
+  const lastEquity = baseSeries.length
+    ? Number(baseSeries[baseSeries.length - 1].equity || 0)
+    : Number(baseEquity || 0);
+  const liveEquity = roundNumber(lastEquity + unrealizedPnlUsd, 2);
+  const livePnl = roundNumber(liveEquity - Number(baseEquity || 0), 2);
+  const nowTs = new Date().toISOString().slice(0, 16).replace("T", " ");
+
+  if (!baseSeries.length) {
+    return [
+      { ts: nowTs, equity: liveEquity, pnl: livePnl, tradeIndex: 0 },
+    ];
+  }
+
+  return [
+    ...baseSeries,
+    {
+      ts: nowTs,
+      equity: liveEquity,
+      pnl: livePnl,
+      tradeIndex: baseSeries.length + 1,
+      liveTail: true,
+    },
+  ];
 }
 
 function drawDailyPnlChart(canvas, trades) {
@@ -1664,6 +1948,48 @@ function drawTradeEquityChart(canvas, trades, baseEquity = 0) {
   drawFixedAxisLabels(ctx, width, height, m, scale.ticks, series, () => xTicks);
 }
 
+function drawLiveTradeEquityChart(canvas, trades, positions, baseEquity = 0) {
+  const series = buildLiveTailSeries(trades, positions, baseEquity);
+  const { ctx, width, height } = resizeCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  if (!series.length) return;
+  const m = { top: 10, right: 14, bottom: 38, left: 68 };
+  const vals = series.map((row) => Number(row.equity)).filter(Number.isFinite);
+  const scale = buildNiceScale([...vals, Number(baseEquity || 0)], 6);
+  const xTicks = buildProgressXAxisTicks(series, width, m);
+  drawAxes(ctx, width, height, m, scale.ticks, xTicks);
+  const points = toIndexedPoints(
+    series.map((row) => ({ ts: row.ts, equity: Number(row.equity) })),
+    "equity",
+    width,
+    height,
+    m,
+    scale.min,
+    scale.max,
+    Number(baseEquity || 0)
+  );
+  if (points[0]?.baselineY) {
+    ctx.save();
+    ctx.strokeStyle = "rgba(231,239,233,0.16)";
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(m.left, points[0].baselineY);
+    ctx.lineTo(width - m.right, points[0].baselineY);
+    ctx.stroke();
+    ctx.restore();
+  }
+  drawSignedPnlAreaAndLine(ctx, points, series.map((row) => Number(row.pnl)), { linear: true });
+  const lastPoint = points[points.length - 1];
+  const lastValue = Number(series[series.length - 1]?.pnl || 0);
+  const lastColor = lastValue < 0 ? COLORS.red : COLORS.green;
+  if (lastPoint && series[series.length - 1]?.liveTail) {
+    drawLiveTailMarker(ctx, lastPoint, lastColor, fmtSignedCompactUsd(lastValue));
+  } else if (lastPoint) {
+    drawPointMarkers(ctx, [lastPoint], lastColor);
+  }
+  drawFixedAxisLabels(ctx, width, height, m, scale.ticks, series, () => xTicks);
+}
+
 function drawPortfolioPnlChart(canvas, portfolioCurve = [], trades = []) {
   const series = Array.isArray(portfolioCurve) && portfolioCurve.length >= 2
     ? (() => {
@@ -1707,7 +2033,12 @@ function drawGrapesChart(canvas, data) {
   const lens = state.lenses.grapes || "backtest";
   const view = getStrategyLensData("grapes");
   if (lens === "live") {
-    drawTradeEquityChart(canvas, view?.all_trades || [], view?.summary?.initial_equity || 0);
+    drawLiveTradeEquityChart(
+      canvas,
+      view?.all_trades || [],
+      data.strategies.grapes.active_positions || [],
+      view?.summary?.initial_equity || 0
+    );
     return "single";
   }
   drawPortfolioPnlChart(canvas, view?.portfolio_curve || [], view?.all_trades || []);
@@ -1718,7 +2049,12 @@ function drawCitrusAssetReturns(canvas, data) {
   const lens = state.lenses.citrus || "backtest";
   const view = getStrategyLensData("citrus");
   if (lens === "live") {
-    drawTradeEquityChart(canvas, view?.all_trades || [], view?.summary?.initial_equity || 0);
+    drawLiveTradeEquityChart(
+      canvas,
+      view?.all_trades || [],
+      data.strategies.citrus.active_positions || [],
+      view?.summary?.initial_equity || 0
+    );
     return "single";
   }
   drawPortfolioPnlChart(canvas, view?.portfolio_curve || [], view?.all_trades || []);
@@ -1969,13 +2305,17 @@ function renderCharts(data) {
     const mode = drawGrapesChart(grapesDetail, data);
     const title = document.querySelector('[data-panel="grapes"] .detail-grid .panel:first-child h4');
     if (title) title.textContent = mode === "single" ? t("cumulativeEquity") : t("assetOverlay");
-    renderLegend("grapes-legend", mode === "single"
+    const grapesLegend = mode === "single"
       ? [{ label: t("cumulativeEquity"), color: COLORS.green }]
       : [
         { label: "BTC", color: COLORS.green },
         { label: "ETH", color: COLORS.blue },
         { label: "SOL", color: COLORS.amber },
-      ]);
+      ];
+    if ((state.lenses.grapes || "backtest") === "live") {
+      grapesLegend.push({ label: `Mark ${fmtTimeOnly(state.livePrices.lastTickAt)}`, color: COLORS.muted });
+    }
+    renderLegend("grapes-legend", grapesLegend);
   }
 
   const citrusDetail = document.getElementById("citrus-return-canvas");
@@ -1983,13 +2323,17 @@ function renderCharts(data) {
     const mode = drawCitrusAssetReturns(citrusDetail, data);
     const title = document.querySelector('[data-panel="citrus"] .detail-grid .panel:first-child h4');
     if (title) title.textContent = mode === "single" ? t("cumulativeEquity") : t("assetOverlay");
-    renderLegend("citrus-legend", mode === "single"
+    const citrusLegend = mode === "single"
       ? [{ label: t("cumulativeEquity"), color: COLORS.green }]
       : [
         { label: "BTC", color: COLORS.green },
         { label: "ETH", color: COLORS.blue },
         { label: "SOL", color: COLORS.amber },
-      ]);
+      ];
+    if ((state.lenses.citrus || "backtest") === "live") {
+      citrusLegend.push({ label: `Mark ${fmtTimeOnly(state.livePrices.lastTickAt)}`, color: COLORS.muted });
+    }
+    renderLegend("citrus-legend", citrusLegend);
   }
 
   const grapesHeatmap = document.getElementById("grapes-heatmap-canvas");
@@ -2115,6 +2459,121 @@ function render(data) {
   renderCharts(data);
 }
 
+function getLiveOpenSymbols(data = state.data) {
+  if (!data?.strategies) return [];
+  const symbols = [
+    ...(data.strategies.grapes?.active_positions || []).map((row) => normalizeSymbol(row.symbol || `${row.asset || ""}USDT`)),
+    ...(data.strategies.citrus?.active_positions || []).map((row) => normalizeSymbol(row.symbol || `${row.asset || ""}USDT`)),
+  ].filter(Boolean);
+  return Array.from(new Set(symbols)).sort();
+}
+
+function scheduleLiveMarkRender() {
+  if (!state.data || state.livePrices.renderTimer) return;
+  state.livePrices.renderTimer = window.setTimeout(() => {
+    state.livePrices.renderTimer = null;
+    renderHero(state.data);
+    renderOverviewSummary(state.data);
+    renderOverviewStrategyTape(state.data);
+    renderGrapesSummary(state.data);
+    renderCitrusSummary(state.data);
+    const overviewCanvas = document.getElementById("overlay-overview-canvas");
+    if (overviewCanvas && overviewCanvas.offsetParent !== null) drawOverlayStrategyChart(overviewCanvas, state.data);
+    const overviewRelative = document.getElementById("overview-relative-canvas");
+    if (overviewRelative && overviewRelative.offsetParent !== null) {
+      drawOverviewRelativeChart(overviewRelative, state.data);
+      renderLegend("overview-relative-legend", [
+        { label: "Grapes", color: "#8d6bff" },
+        { label: "Citrus", color: "#ffb03b" },
+      ]);
+    }
+    if (state.view === "grapes") {
+      const grapesCanvas = document.getElementById("grapes-detail-canvas");
+      if (grapesCanvas && grapesCanvas.offsetParent !== null && (state.lenses.grapes || "backtest") === "live") {
+        drawGrapesChart(grapesCanvas, state.data);
+      }
+    }
+    if (state.view === "citrus") {
+      const citrusCanvas = document.getElementById("citrus-return-canvas");
+      if (citrusCanvas && citrusCanvas.offsetParent !== null && (state.lenses.citrus || "backtest") === "live") {
+        drawCitrusAssetReturns(citrusCanvas, state.data);
+      }
+    }
+  }, 120);
+}
+
+function closeLivePriceSocket() {
+  if (state.livePrices.reconnectTimer) {
+    window.clearTimeout(state.livePrices.reconnectTimer);
+    state.livePrices.reconnectTimer = null;
+  }
+  if (state.livePrices.socket) {
+    state.livePrices.socket.onopen = null;
+    state.livePrices.socket.onmessage = null;
+    state.livePrices.socket.onerror = null;
+    state.livePrices.socket.onclose = null;
+    state.livePrices.socket.close();
+    state.livePrices.socket = null;
+  }
+}
+
+function connectLivePriceSocket() {
+  const symbols = getLiveOpenSymbols();
+  const currentKey = state.livePrices.subscribedSymbols.join(",");
+  const nextKey = symbols.join(",");
+  if (currentKey === nextKey && state.livePrices.socket) return;
+
+  closeLivePriceSocket();
+  state.livePrices.subscribedSymbols = symbols;
+
+  if (!symbols.length) {
+    state.livePrices.prices = {};
+    scheduleLiveMarkRender();
+    return;
+  }
+
+  const streamPath = symbols.map((symbol) => `${symbol.toLowerCase()}@miniTicker`).join("/");
+  const socket = new WebSocket(`wss://stream.binance.com:9443/stream?streams=${streamPath}`);
+  state.livePrices.socket = socket;
+
+  socket.onopen = () => {
+    state.livePrices.connected = true;
+    scheduleLiveMarkRender();
+  };
+
+  socket.onmessage = (event) => {
+    try {
+      const payload = JSON.parse(event.data);
+      const data = payload?.data || payload;
+      const symbol = normalizeSymbol(data?.s);
+      const mark = Number(data?.c);
+      if (!symbol || !Number.isFinite(mark) || mark <= 0) return;
+      state.livePrices.prices[symbol] = mark;
+      state.livePrices.pricesMeta[symbol] = { ts: Date.now() };
+      state.livePrices.lastTickAt = Date.now();
+      scheduleLiveMarkRender();
+    } catch (error) {
+      console.warn("strategy os live price parse failed", error);
+    }
+  };
+
+  socket.onerror = () => {
+    state.livePrices.connected = false;
+    socket.close();
+  };
+
+  socket.onclose = () => {
+    if (state.livePrices.socket !== socket) return;
+    state.livePrices.socket = null;
+    state.livePrices.connected = false;
+    if (state.livePrices.reconnectTimer) window.clearTimeout(state.livePrices.reconnectTimer);
+    state.livePrices.reconnectTimer = window.setTimeout(() => {
+      state.livePrices.reconnectTimer = null;
+      connectLivePriceSocket();
+    }, 3000);
+  };
+}
+
 async function init() {
   const res = await fetch(DATA_URL, { cache: "no-store" });
   const raw = await res.json();
@@ -2129,6 +2588,7 @@ async function init() {
   bindLensSwitches();
   bindTradeFilters();
   render(raw);
+  connectLivePriceSocket();
   setActiveView(state.view);
   window.addEventListener("resize", () => render(state.data));
   startAutoRefresh();
@@ -2142,6 +2602,7 @@ async function refreshDataSilently() {
     state.data = raw;
     state.lastUpdatedAt = raw.meta.updated_at;
     render(raw);
+    connectLivePriceSocket();
   }
 }
 
@@ -2149,6 +2610,11 @@ function startAutoRefresh() {
   window.setInterval(() => {
     refreshDataSilently().catch((err) => console.warn("strategy os refresh failed", err));
   }, 30000);
+  if (!state.livePrices.heartbeatTimer) {
+    state.livePrices.heartbeatTimer = window.setInterval(() => {
+      renderHero(state.data || { meta: { updated_at: state.lastUpdatedAt || "—" } });
+    }, 2000);
+  }
 }
 
 init().catch((err) => {
