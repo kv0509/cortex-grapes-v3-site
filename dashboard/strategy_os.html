@@ -24,6 +24,7 @@
           <button class="switch-tab active" data-view="all" type="button">Overview</button>
           <button class="switch-tab" data-view="grapes" type="button">🍇 Grapes</button>
           <button class="switch-tab" data-view="citrus" type="button">🍊 Citrus</button>
+          <button class="switch-tab" data-view="equity" type="button">📈 Equity</button>
         </nav>
         <div class="site-controls">
           <div class="lang-switch" id="lang-switch">
@@ -202,6 +203,83 @@
               </table>
             </div>
             <div id="citrus-trade-cards" class="trade-card-list"></div>
+          </section>
+        </section>
+
+        <section class="view-panel strategy-view" data-panel="equity">
+          <section class="strategy-main-grid">
+            <section class="feature-panel performance-panel">
+              <div class="section-head">
+                <p class="eyebrow">Cortex Equity</p>
+                <div class="chart-legend" id="equity-legend"></div>
+              </div>
+              <canvas id="equity-return-canvas" class="chart-canvas"></canvas>
+            </section>
+            <aside class="strategy-rail">
+              <section class="toolbar-row">
+                <div class="subview-switch" id="equity-lens-switch">
+                  <button class="subview-tab active" data-strategy="equity" data-lens="backtest" type="button">Backtest</button>
+                  <button class="subview-tab" data-strategy="equity" data-lens="live" type="button">Live</button>
+                </div>
+                <div id="equity-lens-note" class="lens-note"></div>
+              </section>
+              <div id="equity-snapshot-cards" class="snapshot-grid"></div>
+              <section class="feature-panel rail-panel">
+                <div class="section-head"><p class="eyebrow">Open Positions</p></div>
+                <div id="equity-active-positions" class="position-grid"></div>
+              </section>
+              <section class="feature-panel rail-panel asset-curves-panel">
+                <div class="section-head">
+                  <p class="eyebrow">Asset Curves</p>
+                  <div class="chart-legend" id="equity-asset-curves-legend"></div>
+                </div>
+                <canvas id="equity-asset-curves-canvas" class="chart-canvas mini"></canvas>
+              </section>
+              <section class="feature-panel rail-panel">
+                <div class="section-head"><p class="eyebrow">Asset Validation</p></div>
+                <div id="equity-asset-cards-detail" class="asset-card-grid"></div>
+              </section>
+            </aside>
+          </section>
+
+          <section class="feature-panel">
+            <div class="section-head"><p class="eyebrow">Monthly Performance</p></div>
+            <div id="equity-monthly-summary" class="mini-summary-row"></div>
+            <canvas id="equity-heatmap-canvas" class="heatmap-canvas"></canvas>
+          </section>
+
+          <section class="feature-panel">
+            <div class="section-head"><p class="eyebrow">Trade Explorer</p></div>
+            <div id="equity-trade-meta" class="mini-summary-row"></div>
+            <div class="trade-filters">
+              <div id="equity-trade-scope-tabs" class="trade-scope-tabs"></div>
+              <select id="equity-trade-scope">
+                <option value="month">Monthly</option>
+                <option value="year">Yearly</option>
+                <option value="all">All</option>
+              </select>
+              <div id="equity-trade-value-tabs" class="trade-value-tabs"></div>
+              <select id="equity-trade-value"></select>
+            </div>
+            <div class="table-scroll">
+              <table class="trade-table">
+                <thead>
+                  <tr>
+                    <th>Asset</th>
+                    <th>Side</th>
+                    <th>Entry</th>
+                    <th>Exit</th>
+                    <th>Entry Px</th>
+                    <th>Exit Px</th>
+                    <th>Hold</th>
+                    <th>PnL</th>
+                    <th>Move</th>
+                  </tr>
+                </thead>
+                <tbody id="equity-trade-table"></tbody>
+              </table>
+            </div>
+            <div id="equity-trade-cards" class="trade-card-list"></div>
           </section>
         </section>
       </main>

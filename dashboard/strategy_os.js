@@ -13,16 +13,24 @@ const COLORS = {
 };
 
 const LIVE_FIXED_NOTIONAL_USD = 2000;
+const STRATEGY_KEYS = ["grapes", "citrus", "equity"];
+const OVERVIEW_STRATEGY_KEYS = ["grapes", "citrus"];
+const STRATEGY_META = {
+  grapes: { label: "Grapes", display: "🍇 Grapes", role: "Live Trend Engine", overviewColor: "#8d6bff", strategyColor: COLORS.green },
+  citrus: { label: "Citrus", display: "🍊 Citrus", role: "Live Adaptive Engine", overviewColor: "#ffb03b", strategyColor: COLORS.green },
+  equity: { label: "Equity", display: "📈 Equity", role: "Synthetic Flow PPO Engine", overviewColor: "#63a4ff", strategyColor: COLORS.blue },
+};
 
 const state = {
   data: null,
   view: localStorage.getItem("strategy_os_view") || "all",
   lang: localStorage.getItem("strategy_os_lang") || "en",
   lastUpdatedAt: null,
-  lenses: JSON.parse(localStorage.getItem("strategy_os_lenses") || '{"grapes":"backtest","citrus":"backtest"}'),
+  lenses: JSON.parse(localStorage.getItem("strategy_os_lenses") || '{"grapes":"backtest","citrus":"backtest","equity":"backtest"}'),
   tradeFilters: {
     grapes: { scope: "month", value: "latest" },
     citrus: { scope: "month", value: "latest" },
+    equity: { scope: "month", value: "latest" },
   },
   livePrices: {
     socket: null,
@@ -60,6 +68,8 @@ const I18N = {
     grapesNote: "Trend and structure mandate designed for cleaner compounding through persistent market phases.",
     citrusName: "Cortex Citrus",
     citrusNote: "Cross-asset opportunistic mandate focused on extracting asymmetric dislocations with tighter participation quality.",
+    equityName: "Cortex Equity",
+    equityNote: "Synthetic Flow PPO mandate for US500 structure, using walk-forward and Monte Carlo validation instead of crypto positioning data.",
     assetOverlay: "Three-Asset Profit Overlay",
     totalPnlCurve: "Daily Total PnL",
     strategyProfile: "Strategy Profile",
@@ -172,6 +182,8 @@ const I18N = {
     grapesNote: "偏趋势与结构的 mandate，目标是在更持续的市场阶段中提高复利质量。",
     citrusName: "Cortex Citrus",
     citrusNote: "偏多资产机会捕捉的 mandate，目标是在更快变化的阶段里提高参与质量与配置效率。",
+    equityName: "Cortex Equity",
+    equityNote: "面向 US500 的 Synthetic Flow PPO 策略，使用 walk-forward 与 Monte Carlo 口径验证，而不是 crypto positioning 数据。",
     assetOverlay: "三资产收益叠图",
     totalPnlCurve: "日度累计收益",
     strategyProfile: "策略轮廓",
@@ -270,6 +282,14 @@ const I18N = {
 
 function t(key) {
   return I18N[state.lang][key] ?? I18N.en[key] ?? key;
+}
+
+function getStrategyLabel(strategyKey) {
+  return STRATEGY_META[strategyKey]?.label || strategyKey;
+}
+
+function getStrategyDisplay(strategyKey) {
+  return STRATEGY_META[strategyKey]?.display || strategyKey;
 }
 
 function parseTimestamp(raw) {
@@ -445,23 +465,25 @@ function fmtBaseCapitalLabel(amount) {
 }
 
 function buildOverviewLiveStats(data) {
-  const grapesLive = getStrategyLiveSummary("grapes", data);
-  const citrusLive = getStrategyLiveSummary("citrus", data);
-  const allTrades = [
-    ...(data.strategies.grapes.execution_views?.live?.all_trades || []),
-    ...(data.strategies.citrus.execution_views?.live?.all_trades || []),
-  ];
-  const totalPnl = Number(grapesLive.net_pnl_usd || 0) + Number(citrusLive.net_pnl_usd || 0);
-  const totalTrades = Number(grapesLive.trades || 0) + Number(citrusLive.trades || 0);
+  const liveSummaries = OVERVIEW_STRATEGY_KEYS.map((key) => getStrategyLiveSummary(key, data));
+  const allTrades = OVERVIEW_STRATEGY_KEYS.flatMap((key) => data.strategies[key]?.execution_views?.live?.all_trades || []);
+  const totalPnl = liveSummaries.reduce((sum, row) => sum + Number(row.net_pnl_usd || 0), 0);
+  const totalTrades = liveSummaries.reduce((sum, row) => sum + Number(row.trades || 0), 0);
   const wins = allTrades.filter((row) => Number(row.net_pnl_usd || 0) > 0).length;
-  const totalInitial = (Number(grapesLive.final_equity || 0) - Number(grapesLive.net_pnl_usd || 0))
-    + (Number(citrusLive.final_equity || 0) - Number(citrusLive.net_pnl_usd || 0));
+  const totalInitial = liveSummaries.reduce(
+    (sum, row) => sum + (Number(row.final_equity || 0) - Number(row.net_pnl_usd || 0)),
+    0
+  );
   const totalReturn = totalInitial ? (totalPnl / totalInitial) * 100 : 0;
-  const avgPf = ((Number(grapesLive.profit_factor || 0) + Number(citrusLive.profit_factor || 0)) / 2) || 0;
-  const combinedSeries = buildTradeEquitySeries([
-    ...((data.strategies.grapes.execution_views?.live?.all_trades || []).map((row) => ({ ...row, strategy: "Grapes" }))),
-    ...((data.strategies.citrus.execution_views?.live?.all_trades || []).map((row) => ({ ...row, strategy: "Citrus" }))),
-  ], 0);
+  const avgPf = liveSummaries.length
+    ? (liveSummaries.reduce((sum, row) => sum + Number(row.profit_factor || 0), 0) / liveSummaries.length)
+    : 0;
+  const combinedSeries = buildTradeEquitySeries(
+    OVERVIEW_STRATEGY_KEYS.flatMap((key) =>
+      ((data.strategies[key]?.execution_views?.live?.all_trades || []).map((row) => ({ ...row, strategy: getStrategyLabel(key) })))
+    ),
+    0
+  );
   let peak = -Infinity;
   let maxDdPct = 0;
   combinedSeries.forEach((row) => {
@@ -593,6 +615,7 @@ function applyLanguage() {
   setText('.switch-tab[data-view="all"]', state.lang === "zh" ? "总览" : "Overview");
   setText('.switch-tab[data-view="grapes"]', state.lang === "zh" ? "🍇 Grapes" : "🍇 Grapes");
   setText('.switch-tab[data-view="citrus"]', state.lang === "zh" ? "🍊 Citrus" : "🍊 Citrus");
+  setText('.switch-tab[data-view="equity"]', state.lang === "zh" ? "📈 Equity" : "📈 Equity");
   setText('[data-panel="all"] .overview-chart-surface .eyebrow', t("combinedLivePnl"));
   setText('[data-panel="grapes"] .panel-head .eyebrow', t("strategyDetail"));
   setText('[data-panel="grapes"] .panel-head h3', t("grapesName"));
@@ -616,9 +639,16 @@ function applyLanguage() {
   setPanelTitleFromBody("citrus-regime", t("regimePerformance"));
   setPanelTitleFromBody("citrus-monthly-summary", t("monthlyHeatmap"));
   setPanelTitleFromBody("citrus-trade-meta", t("tradeExplorer"));
+  setPanelTitleFromBody("equity-summary", t("strategyProfile"));
+  setPanelTitleFromBody("equity-active-positions", t("openPositions"));
+  setPanelTitleFromBody("equity-asset-cards-detail", t("assetValidation"));
+  setPanelTitleFromBody("equity-regime", t("regimePerformance"));
+  setPanelTitleFromBody("equity-monthly-summary", t("monthlyHeatmap"));
+  setPanelTitleFromBody("equity-trade-meta", t("tradeExplorer"));
   const grapesScope = document.getElementById("grapes-trade-scope");
   const citrusScope = document.getElementById("citrus-trade-scope");
-  [grapesScope, citrusScope].forEach((select) => {
+  const equityScope = document.getElementById("equity-trade-scope");
+  [grapesScope, citrusScope, equityScope].forEach((select) => {
     if (!select) return;
     select.options[0].text = t("monthly");
     select.options[1].text = t("yearly");
@@ -692,18 +722,20 @@ function renderHero(data) {
 function renderOverviewSummary(data) {
   const target = document.getElementById("overview-summary");
   if (!target) return;
-  const grapesLive = getStrategyLiveSummary("grapes", data);
-  const citrusLive = getStrategyLiveSummary("citrus", data);
-  const grapesBreakdown = getStrategyLiveBreakdown("grapes", data);
-  const citrusBreakdown = getStrategyLiveBreakdown("citrus", data);
+  const strategyRows = OVERVIEW_STRATEGY_KEYS.map((key) => ({
+    key,
+    live: getStrategyLiveSummary(key, data),
+    breakdown: getStrategyLiveBreakdown(key, data),
+  }));
   const stats = buildOverviewLiveStats(data);
-  const grapesScore = Number(grapesLive.total_return_pct || 0);
-  const citrusScore = Number(citrusLive.total_return_pct || 0);
-  const leaderKey = grapesScore === citrusScore ? "tie" : (grapesScore > citrusScore ? "grapes" : "citrus");
-  const renderStrategyRow = (label, emoji, live, breakdown, key) => `
+  const leader = strategyRows
+    .map((row) => ({ key: row.key, score: Number(row.live.total_return_pct || 0) }))
+    .sort((a, b) => b.score - a.score);
+  const leaderKey = leader.length >= 2 && leader[0].score === leader[1].score ? "tie" : (leader[0]?.key || "tie");
+  const renderStrategyRow = ({ key, live, breakdown }) => `
     <div class="rail-row strategy ${leaderKey === key ? "is-leader" : ""} ${leaderKey !== "tie" && leaderKey !== key ? "is-muted" : ""}">
       <div class="rail-row-head">
-        <span class="rail-row-name">${emoji} ${label}</span>
+        <span class="rail-row-name">${getStrategyDisplay(key)}</span>
         ${leaderKey === key ? `<span class="leader-badge">${t("leader")}</span>` : ""}
       </div>
       <div class="rail-kpi-grid">
@@ -723,18 +755,17 @@ function renderOverviewSummary(data) {
         <strong class="decision-total ${stats.totalPnl < 0 ? "neg" : "pos"} ${getValueFlashClass("overview-total-pnl", stats.totalPnl)}">${fmtUsd(stats.totalPnl)}</strong>
         <span class="${stats.totalReturn < 0 ? "neg" : "pos"}">${fmtPct(stats.totalReturn, 2)} ${t("totalReturnNote")}</span>
       </div>
-      ${renderStrategyRow("Grapes", "🍇", grapesLive, grapesBreakdown, "grapes")}
-      ${renderStrategyRow("Citrus", "🍊", citrusLive, citrusBreakdown, "citrus")}
+      ${strategyRows.map((row) => renderStrategyRow(row)).join("")}
     </section>
     <section class="rail-section">
       <div class="rail-title">${t("riskMetrics")}</div>
       <div class="rail-table compact">
         <div><span>${t("maxDrawdown")}</span><strong class="neg">${fmtPct(stats.maxDdPct, 1)}</strong></div>
-        <div><span>Sharpe</span><strong>${fmtNum((Number(grapesLive.sharpe || 0) + Number(citrusLive.sharpe || 0)) / 2, 2)}</strong></div>
+        <div><span>Sharpe</span><strong>${fmtNum(strategyRows.reduce((sum, row) => sum + Number(row.live.sharpe || 0), 0) / Math.max(1, strategyRows.length), 2)}</strong></div>
         <div><span>${t("winRate")}</span><strong class="${Number(stats.winRate || 0) >= 50 ? "pos" : "neg"}">${fmtPct(stats.winRate, 1)}</strong></div>
-        <div><span>${t("avgWin")}</span><strong class="pos">${fmtUsd((Number(grapesLive.avg_win_usd || 0) + Number(citrusLive.avg_win_usd || 0)) / 2)}</strong></div>
-        <div><span>${t("avgLoss")}</span><strong class="neg">${fmtUsd((Number(grapesLive.avg_loss_usd || 0) + Number(citrusLive.avg_loss_usd || 0)) / 2)}</strong></div>
-        <div><span>${t("leader")}</span><strong>${leaderKey === "tie" ? t("tie") : leaderKey === "grapes" ? "🍇 Grapes" : "🍊 Citrus"}</strong></div>
+        <div><span>${t("avgWin")}</span><strong class="pos">${fmtUsd(strategyRows.reduce((sum, row) => sum + Number(row.live.avg_win_usd || 0), 0) / Math.max(1, strategyRows.length))}</strong></div>
+        <div><span>${t("avgLoss")}</span><strong class="neg">${fmtUsd(strategyRows.reduce((sum, row) => sum + Number(row.live.avg_loss_usd || 0), 0) / Math.max(1, strategyRows.length))}</strong></div>
+        <div><span>${t("leader")}</span><strong>${leaderKey === "tie" ? t("tie") : getStrategyDisplay(leaderKey)}</strong></div>
       </div>
     </section>
     <section class="rail-section">
@@ -750,36 +781,22 @@ function renderOverviewSummary(data) {
 function renderOverviewStrategyTape(data) {
   const target = document.getElementById("overview-strategy-tape");
   if (!target) return;
-  const grapesActive = getMarkedActivePositions(data.strategies.grapes.active_positions || []);
-  const citrusActive = getMarkedActivePositions(data.strategies.citrus.active_positions || []);
-  const grapesLive = getStrategyLiveSummary("grapes", data);
-  const citrusLive = getStrategyLiveSummary("citrus", data);
-  const rows = [
-    {
-      key: "grapes",
-      name: "🍇 Grapes",
-      status: grapesActive.length ? t("active") : t("flat"),
-      netPnl: grapesLive.net_pnl_usd,
-      totalReturn: grapesLive.total_return_pct,
-      trades: grapesLive.trades,
-      pf: grapesLive.profit_factor,
-      winRate: grapesLive.win_rate_pct,
-      active: grapesActive,
-      tradesList: data.strategies.grapes.execution_views?.live?.all_trades || [],
-    },
-    {
-      key: "citrus",
-      name: "🍊 Citrus",
-      status: citrusActive.length ? t("active") : t("flat"),
-      netPnl: citrusLive.net_pnl_usd,
-      totalReturn: citrusLive.total_return_pct,
-      trades: citrusLive.trades,
-      pf: citrusLive.profit_factor,
-      winRate: citrusLive.win_rate_pct,
-      active: citrusActive,
-      tradesList: data.strategies.citrus.execution_views?.live?.all_trades || [],
-    },
-  ];
+  const rows = OVERVIEW_STRATEGY_KEYS.map((key) => {
+    const active = getMarkedActivePositions(data.strategies[key].active_positions || []);
+    const live = getStrategyLiveSummary(key, data);
+    return {
+      key,
+      name: getStrategyDisplay(key),
+      status: active.length ? t("active") : t("flat"),
+      netPnl: live.net_pnl_usd,
+      totalReturn: live.total_return_pct,
+      trades: live.trades,
+      pf: live.profit_factor,
+      winRate: live.win_rate_pct,
+      active,
+      tradesList: data.strategies[key].execution_views?.live?.all_trades || [],
+    };
+  });
   target.innerHTML = rows.map((row) => {
     const top = getStrategyBestWorst(row.tradesList || []);
     const preview = buildOverviewTradeRows(row.key, data);
@@ -789,7 +806,7 @@ function renderOverviewStrategyTape(data) {
           <div class="strategy-terminal-head">
             <div>
               <div class="strategy-terminal-name">${row.name}</div>
-              <div class="strategy-terminal-role">${row.key === "grapes" ? "Live Trend Engine" : "Live Adaptive Engine"}</div>
+              <div class="strategy-terminal-role">${STRATEGY_META[row.key]?.role || "Strategy Engine"}</div>
             </div>
           </div>
         <div class="terminal-open-row">
@@ -1003,6 +1020,29 @@ function renderCitrusAssets(data) {
   if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows, !detailRows.length);
 }
 
+function renderEquityAssets(data) {
+  const detailTarget = document.getElementById("equity-asset-cards-detail");
+  const lens = (state.lenses.equity === "extended" ? "backtest" : state.lenses.equity) || "backtest";
+  const topRows = data.strategies.equity.assets || [];
+  const detailRows = computeAssetValidationStats(getStrategyLensData("equity")?.all_trades || []);
+  const renderRows = (rows, useLegacy = false) => rows.map((row) => {
+    const totalPnl = useLegacy ? row.total_pnl_usd_20 : row.totalPnl;
+    const winRate = useLegacy ? row.win_rate_pct : row.winRatePct;
+    return `
+    <article class="asset-card">
+      <div class="rail-row-head">
+        <span class="rail-row-name">${row.asset}</span>
+        <strong class="asset-inline-pnl ${lens === "live" ? (Number(totalPnl || 0) < 0 ? "neg" : "pos") : "neutral"}">${fmtUsd(totalPnl || 0)}</strong>
+      </div>
+      <div class="asset-meta-line">
+        <span>${t("trades")} ${row.trades || 0}</span>
+        <span>${t("winRate")} <strong class="${Number(winRate || 0) >= 50 ? "pos" : "neg"}">${fmtPct(winRate || 0, 1)}</strong></span>
+      </div>
+    </article>`;
+  }).join("");
+  if (detailTarget) detailTarget.innerHTML = renderRows(detailRows.length ? detailRows : topRows, !detailRows.length);
+}
+
 function renderActivePositions(targetId, positions) {
   const target = document.getElementById(targetId);
   if (!target) return;
@@ -1063,6 +1103,23 @@ function renderCitrusRegime(data) {
   const detail = getStrategyLensData("citrus")?.regime_snapshot?.regime_detail || [];
   const map = { TREND_UP: t("trendUp"), TREND_DOWN: t("trendDown"), RANGE_CHOP: t("rangeChop"), TRANSITION: t("transition") };
   const target = document.getElementById("citrus-regime");
+  if (!target) return;
+  target.innerHTML = detail.map((row) => `
+    <article class="regime-card">
+      <h5>${map[row.regime_proxy] || row.regime_proxy}</h5>
+      <p>${row.trades} ${state.lang === "zh" ? "笔" : "trades"} · ${t("winRate")} <strong class="${Number(row.win_rate_pct || 0) >= 50 ? "pos" : "neg"}">${fmtPct(row.win_rate_pct)}</strong> · ${t("totalPnl")} <strong class="${Number(row.total_pnl_usd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(row.total_pnl_usd)}</strong></p>
+    </article>`).join("");
+}
+
+function renderEquitySummary(data) {
+  renderSnapshotCards("equity", "📈 Equity", getStrategyLensData("equity"));
+  renderActivePositions("equity-active-positions", getDisplayedActivePositions("equity", data.strategies.equity.active_positions || []));
+}
+
+function renderEquityRegime(data) {
+  const detail = getStrategyLensData("equity")?.regime_snapshot?.regime_detail || [];
+  const map = { TREND_UP: t("trendUp"), TREND_DOWN: t("trendDown"), RANGE_CHOP: t("rangeChop"), TRANSITION: t("transition"), MR: "MR", TREND: "TREND" };
+  const target = document.getElementById("equity-regime");
   if (!target) return;
   target.innerHTML = detail.map((row) => `
     <article class="regime-card">
@@ -1744,16 +1801,10 @@ function drawOverlayStrategyChart(canvas, data) {
   const { ctx, width, height } = resizeCanvas(canvas);
   const m = { top: 20, right: 28, bottom: 58, left: 92 };
   ctx.clearRect(0, 0, width, height);
-  const grapesLive = data.strategies.grapes.execution_views?.live || {};
-  const citrusLive = data.strategies.citrus.execution_views?.live || {};
-  const trades = [
-    ...((grapesLive.all_trades || []).map((row) => ({ ...row, strategy: "Grapes" }))),
-    ...((citrusLive.all_trades || []).map((row) => ({ ...row, strategy: "Citrus" }))),
-  ].sort((a, b) => String(a.exit_ts).localeCompare(String(b.exit_ts)));
-  const livePositions = [
-    ...(data.strategies.grapes.active_positions || []),
-    ...(data.strategies.citrus.active_positions || []),
-  ];
+  const trades = OVERVIEW_STRATEGY_KEYS.flatMap((key) =>
+    ((data.strategies[key].execution_views?.live?.all_trades || []).map((row) => ({ ...row, strategy: getStrategyLabel(key) })))
+  ).sort((a, b) => String(a.exit_ts).localeCompare(String(b.exit_ts)));
+  const livePositions = OVERVIEW_STRATEGY_KEYS.flatMap((key) => data.strategies[key].active_positions || []);
   const combinedSeries = buildLiveTailSeries(trades, livePositions, 0).map((row) => ({
     ts: row.ts,
     pnl: Number(row.pnl || 0),
@@ -2077,6 +2128,22 @@ function drawCitrusAssetReturns(canvas, data) {
   return "single";
 }
 
+function drawEquityAssetReturns(canvas, data) {
+  const lens = state.lenses.equity || "backtest";
+  const view = getStrategyLensData("equity");
+  if (lens === "live") {
+    drawLiveTradeEquityChart(
+      canvas,
+      view?.all_trades || [],
+      data.strategies.equity.active_positions || [],
+      view?.summary?.initial_equity || 0
+    );
+    return "single";
+  }
+  drawPortfolioPnlChart(canvas, view?.portfolio_curve || [], view?.all_trades || []);
+  return "single";
+}
+
 function drawStrategyAssetMiniChart(canvas, strategyKey, data) {
   const view = getStrategyLensData(strategyKey);
   const assetCurves = view?.asset_curves || data.strategies[strategyKey].asset_curves || {};
@@ -2097,39 +2164,43 @@ function drawOverviewRelativeChart(canvas, data) {
     return buildTradeEquitySeries(fallbackTrades, 0).map((row) => ({ ts: row.ts, pnl: Number(row.pnl || 0) }));
   };
 
-  const grapesSeries = toRelativeCurve("grapes", data.strategies.grapes.execution_views?.live?.all_trades || []);
-  const citrusSeries = toRelativeCurve("citrus", data.strategies.citrus.execution_views?.live?.all_trades || []);
-  const combined = [...grapesSeries.map((row) => Number(row.pnl)), ...citrusSeries.map((row) => Number(row.pnl))].filter(Number.isFinite);
+  const seriesByStrategy = Object.fromEntries(
+    OVERVIEW_STRATEGY_KEYS.map((key) => [key, toRelativeCurve(key, data.strategies[key].execution_views?.live?.all_trades || [])])
+  );
+  const combined = OVERVIEW_STRATEGY_KEYS.flatMap((key) => seriesByStrategy[key].map((row) => Number(row.pnl))).filter(Number.isFinite);
   if (!combined.length) return;
 
   const { ctx, width, height } = resizeCanvas(canvas);
   ctx.clearRect(0, 0, width, height);
   const m = { top: 12, right: 10, bottom: 28, left: 44 };
   const scale = buildNiceScale([...combined, 0], 5, { includeZero: true });
-  const maxLen = Math.max(grapesSeries.length, citrusSeries.length);
+  const maxLen = Math.max(...OVERVIEW_STRATEGY_KEYS.map((key) => seriesByStrategy[key].length));
   const tickSeries = Array.from({ length: Math.max(2, maxLen) }, (_, index) => ({
-    ts: (grapesSeries[index]?.ts || citrusSeries[index]?.ts || ""),
+    ts: OVERVIEW_STRATEGY_KEYS.map((key) => seriesByStrategy[key][index]?.ts).find(Boolean) || "",
     pnl: 0,
   }));
   const xTicks = buildProgressXAxisTicks(tickSeries, width, m).filter((_, idx, arr) => idx === 0 || idx === arr.length - 1 || idx === Math.floor(arr.length / 2));
   drawAxes(ctx, width, height, m, scale.ticks, xTicks);
 
-  const gPoints = toIndexedPoints(grapesSeries, "pnl", width, height, m, scale.min, scale.max, 0);
-  const cPoints = toIndexedPoints(citrusSeries, "pnl", width, height, m, scale.min, scale.max, 0);
+  const pointsByStrategy = Object.fromEntries(
+    OVERVIEW_STRATEGY_KEYS.map((key) => [key, toIndexedPoints(seriesByStrategy[key], "pnl", width, height, m, scale.min, scale.max, 0)])
+  );
 
-  if (gPoints[0]?.baselineY) {
+  const baselinePoints = OVERVIEW_STRATEGY_KEYS.map((key) => pointsByStrategy[key][0]).find(Boolean);
+  if (baselinePoints?.baselineY) {
     ctx.save();
     ctx.strokeStyle = "rgba(231,239,233,0.1)";
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(m.left, gPoints[0].baselineY);
-    ctx.lineTo(width - m.right, gPoints[0].baselineY);
+    ctx.moveTo(m.left, baselinePoints.baselineY);
+    ctx.lineTo(width - m.right, baselinePoints.baselineY);
     ctx.stroke();
     ctx.restore();
   }
 
-  drawSmoothLine(ctx, gPoints, "#8d6bff", false);
-  drawSmoothLine(ctx, cPoints, "#ffb03b", false);
+  OVERVIEW_STRATEGY_KEYS.forEach((key) => {
+    drawSmoothLine(ctx, pointsByStrategy[key], STRATEGY_META[key].overviewColor, false);
+  });
   drawFixedAxisLabels(ctx, width, height, m, scale.ticks.slice(0, 3), tickSeries, () => xTicks);
 }
 
@@ -2310,10 +2381,7 @@ function renderCharts(data) {
   const overviewRelative = document.getElementById("overview-relative-canvas");
   if (overviewRelative && overviewRelative.offsetParent !== null) {
     drawOverviewRelativeChart(overviewRelative, data);
-    renderLegend("overview-relative-legend", [
-      { label: "Grapes", color: "#8d6bff" },
-      { label: "Citrus", color: "#ffb03b" },
-    ]);
+    renderLegend("overview-relative-legend", OVERVIEW_STRATEGY_KEYS.map((key) => ({ label: getStrategyLabel(key), color: STRATEGY_META[key].overviewColor })));
   }
 
   const grapesDetail = document.getElementById("grapes-detail-canvas");
@@ -2346,10 +2414,22 @@ function renderCharts(data) {
         { label: "ETH", color: COLORS.blue },
         { label: "SOL", color: COLORS.amber },
       ];
-    if ((state.lenses.citrus || "backtest") === "live") {
+  if ((state.lenses.citrus || "backtest") === "live") {
       citrusLegend.push({ label: `${t("markAt")} ${fmtTimeOnly(state.livePrices.lastTickAt)}`, color: COLORS.muted });
     }
     renderLegend("citrus-legend", citrusLegend);
+  }
+
+  const equityDetail = document.getElementById("equity-return-canvas");
+  if (equityDetail && equityDetail.offsetParent !== null) {
+    const mode = drawEquityAssetReturns(equityDetail, data);
+    const equityLegend = mode === "single"
+      ? [{ label: t("cumulativeEquity"), color: STRATEGY_META.equity.strategyColor }]
+      : [{ label: "US500", color: STRATEGY_META.equity.strategyColor }];
+    if ((state.lenses.equity || "backtest") === "live") {
+      equityLegend.push({ label: `${t("markAt")} ${fmtTimeOnly(state.livePrices.lastTickAt)}`, color: COLORS.muted });
+    }
+    renderLegend("equity-legend", equityLegend);
   }
 
   const grapesHeatmap = document.getElementById("grapes-heatmap-canvas");
@@ -2377,6 +2457,17 @@ function renderCharts(data) {
       { label: "SOL", color: COLORS.amber },
     ]);
   }
+
+  const equityHeatmap = document.getElementById("equity-heatmap-canvas");
+  if (equityHeatmap && equityHeatmap.offsetParent !== null) drawMonthlyHeatmap(equityHeatmap, getStrategyLensData("equity")?.monthly_heatmap || data.strategies.equity.monthly_heatmap);
+
+  const equityMini = document.getElementById("equity-asset-curves-canvas");
+  if (equityMini && equityMini.offsetParent !== null) {
+    drawStrategyAssetMiniChart(equityMini, "equity", data);
+    renderLegend("equity-asset-curves-legend", [
+      { label: "US500", color: STRATEGY_META.equity.strategyColor },
+    ]);
+  }
 }
 
 function bindSwitches() {
@@ -2397,7 +2488,7 @@ function bindLanguageSwitch() {
 }
 
 function bindTradeFilters() {
-  ["grapes", "citrus"].forEach((strategyKey) => {
+  STRATEGY_KEYS.forEach((strategyKey) => {
     const scopeSelect = document.getElementById(`${strategyKey}-trade-scope`);
     const valueSelect = document.getElementById(`${strategyKey}-trade-value`);
     const scopeTabs = document.getElementById(`${strategyKey}-trade-scope-tabs`);
@@ -2456,31 +2547,39 @@ function render(data) {
   renderOverviewStrategyTape(data);
   renderGrapesAssets(data);
   renderCitrusAssets(data);
+  renderEquityAssets(data);
   renderGrapesSummary(data);
   renderGrapesRegime(data);
   renderCitrusSummary(data);
   renderCitrusRegime(data);
+  renderEquitySummary(data);
+  renderEquityRegime(data);
   const grapesLens = getStrategyLensData("grapes");
   const citrusLens = getStrategyLensData("citrus");
+  const equityLens = getStrategyLensData("equity");
   renderMonthlySummary("grapes-monthly-summary", grapesLens?.monthly_summary, grapesLens?.summary?.win_rate_pct || 0);
   renderMonthlySummary("citrus-monthly-summary", citrusLens?.monthly_summary, citrusLens?.summary?.win_rate_pct || 0);
+  renderMonthlySummary("equity-monthly-summary", equityLens?.monthly_summary, equityLens?.summary?.win_rate_pct || 0);
   syncTradeValueOptions("grapes");
   syncTradeValueOptions("citrus");
+  syncTradeValueOptions("equity");
   renderTradeScopeTabs("grapes");
   renderTradeScopeTabs("citrus");
+  renderTradeScopeTabs("equity");
   renderTradeValueTabs("grapes");
   renderTradeValueTabs("citrus");
+  renderTradeValueTabs("equity");
   renderTradeSection("grapes", true);
   renderTradeSection("citrus", false);
+  renderTradeSection("equity", false);
   renderCharts(data);
 }
 
 function getLiveOpenSymbols(data = state.data) {
   if (!data?.strategies) return [];
-  const symbols = [
-    ...(data.strategies.grapes?.active_positions || []).map((row) => normalizeSymbol(row.symbol || `${row.asset || ""}USDT`)),
-    ...(data.strategies.citrus?.active_positions || []).map((row) => normalizeSymbol(row.symbol || `${row.asset || ""}USDT`)),
-  ].filter(Boolean);
+  const symbols = STRATEGY_KEYS.flatMap((key) =>
+    (data.strategies[key]?.active_positions || []).map((row) => normalizeSymbol(row.symbol || `${row.asset || ""}USDT`))
+  ).filter(Boolean);
   return Array.from(new Set(symbols)).sort();
 }
 
@@ -2493,15 +2592,13 @@ function scheduleLiveMarkRender() {
     renderOverviewStrategyTape(state.data);
     renderGrapesSummary(state.data);
     renderCitrusSummary(state.data);
+    renderEquitySummary(state.data);
     const overviewCanvas = document.getElementById("overlay-overview-canvas");
     if (overviewCanvas && overviewCanvas.offsetParent !== null) drawOverlayStrategyChart(overviewCanvas, state.data);
     const overviewRelative = document.getElementById("overview-relative-canvas");
     if (overviewRelative && overviewRelative.offsetParent !== null) {
       drawOverviewRelativeChart(overviewRelative, state.data);
-      renderLegend("overview-relative-legend", [
-        { label: "Grapes", color: "#8d6bff" },
-        { label: "Citrus", color: "#ffb03b" },
-      ]);
+      renderLegend("overview-relative-legend", OVERVIEW_STRATEGY_KEYS.map((key) => ({ label: getStrategyLabel(key), color: STRATEGY_META[key].overviewColor })));
     }
     if (state.view === "grapes") {
       const grapesCanvas = document.getElementById("grapes-detail-canvas");
@@ -2513,6 +2610,12 @@ function scheduleLiveMarkRender() {
       const citrusCanvas = document.getElementById("citrus-return-canvas");
       if (citrusCanvas && citrusCanvas.offsetParent !== null && (state.lenses.citrus || "backtest") === "live") {
         drawCitrusAssetReturns(citrusCanvas, state.data);
+      }
+    }
+    if (state.view === "equity") {
+      const equityCanvas = document.getElementById("equity-return-canvas");
+      if (equityCanvas && equityCanvas.offsetParent !== null && (state.lenses.equity || "backtest") === "live") {
+        drawEquityAssetReturns(equityCanvas, state.data);
       }
     }
   }, 120);
