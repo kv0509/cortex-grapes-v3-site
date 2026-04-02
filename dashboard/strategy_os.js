@@ -151,6 +151,54 @@ const I18N = {
     trendDown: "Downtrend",
     rangeChop: "Range-bound",
     transition: "Transition",
+    evolutionSectionTitle: "Grapes Evolution",
+    evolutionRuntimeTitle: "Runtime Status",
+    evolutionBaselineTitle: "Current Baseline",
+    evolutionPatternTitle: "Recent Pattern Stats",
+    evolutionDecisionTitle: "Decision Board",
+    evolutionDiscoveriesTitle: "Discoveries",
+    evolutionVpTitle: "Validation / Promotion",
+    evolutionExamplesNote: "Examples shown here are limited to <strong>2025-2026</strong> trades only.",
+    evolutionBriefTitle: "What Evolution Is Seeing",
+    evolutionBriefSummary: "Evolution is useful only if it can separate repeated market problems into different kinds of fixes. Right now this page is meant to show what it is noticing, what it wants to try, and whether that suggestion is mature enough to observe against the current production baseline.",
+    evolutionBriefDoing: "What it is doing",
+    evolutionBriefFocus: "What to focus on",
+    evolutionBriefRead: "How to read this page",
+    evolutionBriefReadBody: "Start from the Decision Board. Read the problem, check the example trades from 2025-2026, then decide whether the proposed response is specific enough to be useful.",
+    evolutionWorkingTitle: "What It Is Working On",
+    evolutionFlowTitle: "Decision Flow",
+    evolutionNoResearch: "No active research threads yet.",
+    evolutionNoPatternStats: "No pattern stats yet.",
+    evolutionNoDecisionCards: "No decision cards yet.",
+    evolutionNoDiscoveries: "No discoveries yet.",
+    evolutionWhy: "Why",
+    evolutionExpected: "Expected impact",
+    evolutionExampleTrades: "Example trades",
+    evolutionScope: "Scope",
+    evolutionAction: "Action",
+    evolutionMode: "Mode",
+    evolutionStage: "Stage",
+    evolutionDecision: "Decision",
+    evolutionWhyFlagged: "Why flagged",
+    evolutionSamples: "Samples",
+    evolutionOutcome: "Outcome",
+    evolutionSeverity: "Severity",
+    evolutionConfidence: "Confidence",
+    evolutionAccepted: "Accepted",
+    evolutionOverfit: "Overfit",
+    evolutionObservationFirst: "Observation comes first",
+    evolutionWaitingProof: "Most proposals are still waiting for proof",
+    evolutionBottleneck: "Current bottleneck",
+    evolutionResearchQuality: "research quality",
+    evolutionDoingBody: "The engine is grouping repeated failures first, then comparing them against the current production baseline.",
+    evolutionFocusBody: "The real question is not whether it found a pattern. The real question is whether different problems lead to different fixes.",
+    evolutionObservationBody: "Anything unstable stays in observation first. The goal here is to watch behaviour without touching production logic too early.",
+    evolutionWaitingBody: "The engine is finding more patterns than it is validating. That is expected. Discovery is cheap, promotion is not.",
+    evolutionBottleneckBody: "The hard part is not finding bad shapes. The hard part is turning similar-looking problems into different, credible fixes.",
+    reason: "Reason",
+    holdMode: "Hold",
+    yes: "YES",
+    no: "NO",
     grapesProfileRows: [
       ["Strategy role", "A compounding engine for structured markets", "Designed to stay patient through noise and push harder when market structure becomes clearer and more persistent."],
       ["How it participates", "Selective in clean directional opportunities", "It prefers higher-quality trend structures instead of reacting to every short-term fluctuation."],
@@ -265,6 +313,54 @@ const I18N = {
     trendDown: "下跌趋势",
     rangeChop: "震荡行情",
     transition: "过渡期",
+    evolutionSectionTitle: "Grapes Evolution",
+    evolutionRuntimeTitle: "运行状态",
+    evolutionBaselineTitle: "当前基线",
+    evolutionPatternTitle: "近期模式统计",
+    evolutionDecisionTitle: "决策看板",
+    evolutionDiscoveriesTitle: "发现列表",
+    evolutionVpTitle: "验证 / 晋升",
+    evolutionExamplesNote: "这里展示的例子只取 <strong>2025-2026</strong> 的交易。",
+    evolutionBriefTitle: "Evolution 现在在看什么",
+    evolutionBriefSummary: "只有当系统能把重复出现的市场问题拆成不同类型的修正方向时，Evolution 才真正有价值。现在这页的作用，是把它看到了什么、想试什么，以及这些建议是否已经成熟到值得进入观察阶段，讲清楚。",
+    evolutionBriefDoing: "它现在在做什么",
+    evolutionBriefFocus: "现在该看什么",
+    evolutionBriefRead: "这页怎么读",
+    evolutionBriefReadBody: "先看决策看板，读问题本身，再看对应的 2025-2026 例子，最后判断这个提议是不是足够具体、值得继续观察。",
+    evolutionWorkingTitle: "它当前在推进什么",
+    evolutionFlowTitle: "决策流程",
+    evolutionNoResearch: "当前没有活跃研究线程。",
+    evolutionNoPatternStats: "当前没有模式统计。",
+    evolutionNoDecisionCards: "当前没有决策条目。",
+    evolutionNoDiscoveries: "当前没有发现记录。",
+    evolutionWhy: "为什么",
+    evolutionExpected: "预期影响",
+    evolutionExampleTrades: "例子交易",
+    evolutionScope: "范围",
+    evolutionAction: "动作",
+    evolutionMode: "模式",
+    evolutionStage: "阶段",
+    evolutionDecision: "结论",
+    evolutionWhyFlagged: "为什么被标记",
+    evolutionSamples: "样本数",
+    evolutionOutcome: "结果",
+    evolutionSeverity: "严重度",
+    evolutionConfidence: "置信度",
+    evolutionAccepted: "是否通过",
+    evolutionOverfit: "过拟合",
+    evolutionObservationFirst: "先进入观察，不急着上线",
+    evolutionWaitingProof: "大多数提议还在等证据",
+    evolutionBottleneck: "当前瓶颈",
+    evolutionResearchQuality: "研究质量",
+    evolutionDoingBody: "系统先把重复出现的失败形态归类，再和当前 production 基线对比。",
+    evolutionFocusBody: "真正该看的，不是它有没有发现 pattern，而是不同问题最后会不会导向不同的修法。",
+    evolutionObservationBody: "只要形态还不稳定，就先进入观察阶段。目的不是立刻改 production，而是先确认行为是不是持续存在。",
+    evolutionWaitingBody: "系统发现问题的速度，会比验证问题的速度快。这是正常的。发现很便宜，晋升很贵。",
+    evolutionBottleneckBody: "真正困难的不是找到坏形状，而是把看起来相似的问题，拆成不同且可信的修正动作。",
+    reason: "原因",
+    holdMode: "保留",
+    yes: "是",
+    no: "否",
     grapesProfileRows: [
       ["策略定位", "面向趋势与结构机会的稳健策略", "这套策略更强调在高质量行情中参与，在不确定阶段减少噪音暴露，让收益曲线尽量平稳向上。"],
       ["如何参与", "偏向清晰、可持续的机会", "系统会在更有延续性的价格结构里建立仓位，而不是追逐每一次短期波动。"],
@@ -292,9 +388,24 @@ function getStrategyDisplay(strategyKey) {
   return STRATEGY_META[strategyKey]?.display || strategyKey;
 }
 
+const MYT_TIMEZONE = "Asia/Kuala_Lumpur";
+
+function parseUtcDate(raw) {
+  const text = String(raw || "").trim();
+  if (!text) return null;
+  if (/^\d{4}-\d{2}$/.test(text)) {
+    const dt = new Date(`${text}-01T00:00:00Z`);
+    return Number.isNaN(dt.getTime()) ? null : dt;
+  }
+  const normalized = text.includes("T") ? text : text.replace(" ", "T");
+  const hasZone = /([zZ]|[+\-]\d{2}:\d{2})$/.test(normalized);
+  const dt = new Date(hasZone ? normalized : `${normalized}Z`);
+  return Number.isNaN(dt.getTime()) ? null : dt;
+}
+
 function parseTimestamp(raw) {
-  const dt = new Date(String(raw).replace(" ", "T"));
-  return Number.isNaN(dt.getTime()) ? null : dt.getTime();
+  const dt = parseUtcDate(raw);
+  return dt ? dt.getTime() : null;
 }
 
 function resizeCanvas(canvas) {
@@ -310,18 +421,42 @@ function resizeCanvas(canvas) {
 function fmtUsd(v) { return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(Number(v || 0)); }
 function fmtPct(v, d = 2) { const n = Number(v || 0); return `${n >= 0 ? "+" : ""}${n.toFixed(d)}%`; }
 function fmtNum(v, d = 2) { return Number(v || 0).toFixed(d); }
-function fmtDate(ts) { return String(ts || "").slice(0, 16); }
+function fmtDate(ts) {
+  const date = parseUtcDate(ts);
+  if (!date) return String(ts || "").slice(0, 16);
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: MYT_TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(date).replace(",", "");
+}
 function fmtTradeDate(ts) {
-  const text = String(ts || "");
-  if (!text || text === "—") return "—";
-  return text.slice(5, 16);
+  const date = parseUtcDate(ts);
+  if (!date) {
+    const text = String(ts || "");
+    if (!text || text === "—") return "—";
+    return text.slice(5, 16);
+  }
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: MYT_TIMEZONE,
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(date).replace(",", "");
 }
 function fmtTradeMonthDay(ts) {
   const text = String(ts || "");
   if (!text || text === "—") return "—";
-  const date = new Date(text.replace(" ", "T"));
-  if (Number.isNaN(date.getTime())) return text.slice(5, 16);
+  const date = parseUtcDate(text);
+  if (!date) return text.slice(5, 16);
   return new Intl.DateTimeFormat(state.lang === "zh" ? "zh-CN" : "en-US", {
+    timeZone: MYT_TIMEZONE,
     month: state.lang === "zh" ? "numeric" : "short",
     day: "numeric",
     hour: "2-digit",
@@ -329,11 +464,29 @@ function fmtTradeMonthDay(ts) {
     hour12: false,
   }).format(date);
 }
-function fmtUpdatedAt(ts) { return String(ts || "").slice(0, 16); }
+function fmtUpdatedAt(ts) {
+  const date = parseUtcDate(ts);
+  if (!date) return String(ts || "").slice(0, 16);
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: MYT_TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(date).replace(",", "");
+}
 function fmtTimeOnly(ts) {
-  const date = ts ? new Date(ts) : new Date();
+  const date = ts ? (parseUtcDate(ts) || new Date()) : new Date();
   if (Number.isNaN(date.getTime())) return "—";
-  return date.toTimeString().slice(0, 8);
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: MYT_TIMEZONE,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).format(date);
 }
 function fmtSignedCompactUsd(v, d = 0) {
   const n = Number(v || 0);
@@ -782,7 +935,8 @@ function renderOverviewStrategyTape(data) {
   const target = document.getElementById("overview-strategy-tape");
   if (!target) return;
   const rows = OVERVIEW_STRATEGY_KEYS.map((key) => {
-    const active = getMarkedActivePositions(data.strategies[key].active_positions || []);
+    const strategy = data.strategies[key] || {};
+    const active = getMarkedActivePositions(strategy.active_positions || []);
     const live = getStrategyLiveSummary(key, data);
     return {
       key,
@@ -794,7 +948,7 @@ function renderOverviewStrategyTape(data) {
       pf: live.profit_factor,
       winRate: live.win_rate_pct,
       active,
-      tradesList: data.strategies[key].execution_views?.live?.all_trades || [],
+      tradesList: strategy.execution_views?.live?.all_trades || [],
     };
   });
   target.innerHTML = rows.map((row) => {
@@ -929,10 +1083,10 @@ function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
 function renderComparison(data) {
   const target = document.getElementById("comparison-table");
   if (!target) return;
-  const grapesLive = data.strategies.grapes.execution_views?.live?.summary || {};
-  const citrusLive = data.strategies.citrus.execution_views?.live?.summary || {};
-  const grapesPos = data.strategies.grapes.active_positions || [];
-  const citrusPos = data.strategies.citrus.active_positions || [];
+  const grapesLive = data.strategies.grapes?.execution_views?.live?.summary || {};
+  const citrusLive = data.strategies.citrus?.execution_views?.live?.summary || {};
+  const grapesPos = data.strategies.grapes?.active_positions || [];
+  const citrusPos = data.strategies.citrus?.active_positions || [];
   const rows = [
     { label: "Live Equity", grapes: fmtUsd(grapesLive.final_equity || 0), citrus: fmtUsd(citrusLive.final_equity || 0), delta: fmtUsd((grapesLive.final_equity || 0) - (citrusLive.final_equity || 0)) },
     { label: "Net PnL", grapes: fmtUsd(grapesLive.net_pnl_usd || 0), citrus: fmtUsd(citrusLive.net_pnl_usd || 0), delta: fmtUsd((grapesLive.net_pnl_usd || 0) - (citrusLive.net_pnl_usd || 0)) },
@@ -970,7 +1124,7 @@ function renderLegend(targetId, items) {
 function renderGrapesAssets(data) {
   const detailTarget = document.getElementById("grapes-asset-cards-detail");
   const lens = (state.lenses.grapes === "extended" ? "backtest" : state.lenses.grapes) || "backtest";
-  const topRows = data.strategies.grapes.asset_stats || [];
+  const topRows = data.strategies.grapes?.asset_stats || [];
   const detailRows = computeAssetValidationStats(getStrategyLensData("grapes")?.all_trades || []);
   const totalPnlForRow = (row) => row.total_pnl ?? row.totalPnl ?? row.total_pnl_usd_20;
   const tradesForRow = (row) => row.trades ?? 0;
@@ -992,7 +1146,7 @@ function renderGrapesAssets(data) {
 function renderCitrusAssets(data) {
   const detailTarget = document.getElementById("citrus-asset-cards-detail");
   const lens = (state.lenses.citrus === "extended" ? "backtest" : state.lenses.citrus) || "backtest";
-  const topRows = data.strategies.citrus.assets || [];
+  const topRows = data.strategies.citrus?.assets || [];
   const detailRows = computeAssetValidationStats(getStrategyLensData("citrus")?.all_trades || []);
   const totalPnlForRow = (row, useLegacy) => useLegacy ? row.total_pnl_usd_20 : row.totalPnl;
   const avgPnlForRow = (row, useLegacy) => {
@@ -1023,7 +1177,7 @@ function renderCitrusAssets(data) {
 function renderEquityAssets(data) {
   const detailTarget = document.getElementById("equity-asset-cards-detail");
   const lens = (state.lenses.equity === "extended" ? "backtest" : state.lenses.equity) || "backtest";
-  const topRows = data.strategies.equity.assets || [];
+  const topRows = data.strategies.equity?.assets || [];
   const detailRows = computeAssetValidationStats(getStrategyLensData("equity")?.all_trades || []);
   const renderRows = (rows, useLegacy = false) => rows.map((row) => {
     const totalPnl = useLegacy ? row.total_pnl_usd_20 : row.totalPnl;
@@ -1076,7 +1230,7 @@ function getDisplayedActivePositions(strategyKey, fallbackPositions = []) {
 }
 
 function renderGrapesSummary(data) {
-  const grapes = data.strategies.grapes;
+  const grapes = data.strategies.grapes || {};
   renderSnapshotCards("grapes", "🍇 Grapes", getStrategyLensData("grapes"));
   renderActivePositions("grapes-active-positions", getDisplayedActivePositions("grapes", grapes.active_positions || []));
 }
@@ -1094,9 +1248,9 @@ function renderGrapesRegime(data) {
 }
 
 function renderCitrusSummary(data) {
-  const p = data.strategies.citrus.portfolio;
+  const citrus = data.strategies.citrus || {};
   renderSnapshotCards("citrus", "🍊 Citrus", getStrategyLensData("citrus"));
-  renderActivePositions("citrus-active-positions", getDisplayedActivePositions("citrus", data.strategies.citrus.active_positions || []));
+  renderActivePositions("citrus-active-positions", getDisplayedActivePositions("citrus", citrus.active_positions || []));
 }
 
 function renderCitrusRegime(data) {
@@ -1112,8 +1266,9 @@ function renderCitrusRegime(data) {
 }
 
 function renderEquitySummary(data) {
+  const equity = data.strategies.equity || {};
   renderSnapshotCards("equity", "📈 Equity", getStrategyLensData("equity"));
-  renderActivePositions("equity-active-positions", getDisplayedActivePositions("equity", data.strategies.equity.active_positions || []));
+  renderActivePositions("equity-active-positions", getDisplayedActivePositions("equity", equity.active_positions || []));
 }
 
 function renderEquityRegime(data) {
@@ -1126,6 +1281,490 @@ function renderEquityRegime(data) {
       <h5>${map[row.regime_proxy] || row.regime_proxy}</h5>
       <p>${row.trades} ${state.lang === "zh" ? "笔" : "trades"} · ${t("winRate")} <strong class="${Number(row.win_rate_pct || 0) >= 50 ? "pos" : "neg"}">${fmtPct(row.win_rate_pct)}</strong> · ${t("totalPnl")} <strong class="${Number(row.total_pnl_usd || 0) < 0 ? "neg" : "pos"}">${fmtUsd(row.total_pnl_usd)}</strong></p>
     </article>`).join("");
+}
+
+function renderEvolutionSummary(data) {
+  const evolution = data.strategies.evolution;
+  if (!evolution) return;
+  const setText = (id, text) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  };
+  const setHtml = (id, html) => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  };
+  setText("evolution-section-title", t("evolutionSectionTitle"));
+  setText("evolution-runtime-title", t("evolutionRuntimeTitle"));
+  setText("evolution-baseline-title", t("evolutionBaselineTitle"));
+  setText("evolution-pattern-title", t("evolutionPatternTitle"));
+  setText("evolution-decision-title", t("evolutionDecisionTitle"));
+  setText("evolution-discoveries-title", t("evolutionDiscoveriesTitle"));
+  setText("evolution-vp-title", t("evolutionVpTitle"));
+  setHtml("evolution-note-copy", t("evolutionExamplesNote"));
+  const baseline = evolution.baseline || {};
+  const full = baseline.full_backtest || {};
+  const oos = baseline.walk_forward_oos || {};
+  const mc = baseline.monte_carlo?.bootstrap || {};
+  const prettyAsset = (value) => String(value || "").replace("USDT", "").toUpperCase() || "Unknown";
+  const humanTag = (tag) => ({
+    high_chase: "high-chase",
+    low_chase: "low-chase",
+    late_trend: "late-trend",
+    low_oi: "low OI",
+    crowded_longs: "crowded longs",
+    crowded_shorts: "crowded shorts",
+    tp50_then_be: "TP50 then BE",
+    signal_exit_loss: "signal-exit loss",
+    trend_follow: "trend-follow",
+    mean_reversion: "mean-reversion",
+    tiered_entry: "tiered entry",
+    core_entry: "core entry",
+    long: "long",
+    short: "short",
+  }[tag] || tag.replace(/_/g, " "));
+  const parsePatternKey = (patternKey) => {
+    const [assetRaw, rawTags = ""] = String(patternKey || "").split(":");
+    const tags = rawTags.split(".").filter(Boolean);
+    return {
+      asset: prettyAsset(assetRaw),
+      tags,
+    };
+  };
+  const describePattern = (patternKey) => {
+    const { asset, tags } = parsePatternKey(patternKey);
+    const side = tags.includes("long") ? "longs" : tags.includes("short") ? "shorts" : "entries";
+    const setup = tags.includes("tiered_entry") ? "tiered setup" : tags.includes("core_entry") ? "core setup" : "mixed setup";
+    const issueTags = tags.filter((tag) => ["high_chase", "low_chase", "late_trend", "low_oi", "crowded_longs", "crowded_shorts", "signal_exit_loss", "tp50_then_be"].includes(tag));
+    const issue = issueTags.length ? issueTags.map(humanTag).join(" + ") : "generic cluster";
+    const style = tags.includes("mean_reversion") ? "mean reversion" : tags.includes("trend_follow") ? "trend" : "mixed";
+    return {
+      asset,
+      title: `${asset} ${style} ${side}`,
+      issue,
+      note: `${setup}${issueTags.length ? `, pattern = ${issue}` : ""}`,
+      setup,
+      style,
+    };
+  };
+  const discoveryLabel = (value) => ({
+    loss_cluster: "Losing cluster",
+    high_variance: "Unstable cluster",
+    positive_edge: "Positive edge",
+  }[value] || value);
+  const mutationLabel = (value) => ({
+    new_veto: "Add a local veto",
+    threshold_adjustment: "Tighten a threshold",
+    shadow_rule: "Run a shadow rule",
+    observation_only: "Observe only",
+  }[value] || value.replace(/_/g, " "));
+  const deploymentLabel = (value) => ({
+    SHADOW: "Observation",
+    PAPER: "Paper",
+    LIVE: "Live",
+  }[value] || value);
+  const queueStatusLabel = (value) => ({
+    PROPOSED: "Pending review",
+    RESEARCH_REQUIRED: "Need more evidence",
+    VALIDATION_PENDING: "Validation running",
+    RESEARCH_ACCEPTED: "Evidence confirmed",
+    VALIDATED_REJECTED: "Rejected",
+    SHADOW_READY: "Ready for observation",
+  }[value] || value.replace(/_/g, " ").toLowerCase());
+  const validationStatusLabel = (value) => ({
+    RESEARCH_ACCEPTED: "Evidence confirmed",
+    REJECT_INSUFFICIENT: "Need more evidence",
+    VALIDATED_REJECTED: "Rejected",
+  }[value] || value.replace(/_/g, " ").toLowerCase());
+  const summarizePatternZh = (pattern, sampleCount) => {
+    const sampleText = sampleCount ? `样本 ${sampleCount} 笔` : "样本仍少";
+    return `${pattern.asset} 这类 ${pattern.style === "trend" ? "趋势" : pattern.style === "mean reversion" ? "均值回归" : "混合"}${pattern.setup === "tiered setup" ? "分层入场" : pattern.setup === "core setup" ? "核心入场" : "入场"}，在 ${pattern.issue} 结构里重复出问题，${sampleText}。`;
+  };
+  const localizeReviewProblem = (row, review, pattern, sampleCount) => {
+    if (state.lang !== "zh") return review.problem_summary || `${pattern.title} keeps showing stress around ${pattern.issue}.`;
+    return review.problem_summary ? summarizePatternZh(pattern, sampleCount) : `${pattern.asset} 这类 setup 在 ${pattern.issue} 这里反复出现压力。`;
+  };
+  const localizeReviewWhy = (row, review, discovery, sampleCount) => {
+    if (state.lang !== "zh") {
+      let whyLine = review.why_flagged || "Pattern is being tracked, but evidence is still limited.";
+      if (discovery?.discovery_type === "loss_cluster") whyLine = review.why_flagged || `This cluster is losing together across ${sampleCount} samples.`;
+      else if (discovery?.discovery_type === "high_variance") whyLine = review.why_flagged || `Results are unstable across ${sampleCount} similar trades, so entry quality looks unreliable.`;
+      else if (discovery?.discovery_type === "positive_edge") whyLine = review.why_flagged || `This setup keeps outperforming, so the engine wants to observe whether the edge is repeatable.`;
+      return whyLine;
+    }
+    if (discovery?.discovery_type === "loss_cluster") return `这一簇交易在同一种结构里一起亏钱，说明问题更像是可重复的坏形状，不像单笔偶发噪音。`;
+    if (discovery?.discovery_type === "high_variance") return `这类交易方向看起来相近，但结果分布很散，说明入场质量不稳定，现在还不能直接当 production 规则上线。`;
+    if (discovery?.discovery_type === "positive_edge") return `这类结构目前偏正向，但证据还不够厚，所以先观察，不急着放大。`;
+    return `系统已经看到重复问题，但证据还不够厚，先保留在研究队列。`;
+  };
+  const localizeExpectedImpact = (row, review, pattern) => {
+    if (state.lang !== "zh") {
+      if (review.expected_impact) return review.expected_impact;
+      if (row.mutation_type === "new_veto") return `Reduce tail losses in ${pattern.issue} setups, with some risk of skipping a few valid trend continuations.`;
+      if (row.mutation_type === "threshold_adjustment") return `Raise entry quality and cut weaker signals, at the cost of slightly fewer trades.`;
+      if (row.mutation_type === "shadow_rule") return `Measure whether this edge is real before changing production behaviour.`;
+      return "Minimal effect for now because this stays in observation only.";
+    }
+    if (row.mutation_type === "new_veto") return `如果以后证据继续变厚，这类提案更像是用一个局部 veto 去削掉左尾，但会有少做一部分正常延续单的代价。`;
+    if (row.mutation_type === "threshold_adjustment") return `如果走 threshold 方向，目标是提高入场质量，代价是交易数会更少。`;
+    if (row.mutation_type === "shadow_rule") return `现在先旁路观察，不改 production，只验证这个想法是不是真的稳定。`;
+    return `短期内不会影响 production，主要作用是继续积累证据。`;
+  };
+  const verdictLabel = (value) => {
+    if (state.lang !== "zh") return value;
+    return ({ "Promote Candidate": "可继续推进", "Strong Reject": "暂不接受", "Observe": "继续观察" }[value] || value);
+  };
+  const discoveryWhy = (row) => {
+    if (state.lang === "zh") {
+      if (row.discovery_type === "loss_cluster") return `这类结构里有 ${row.sample_count} 笔一起变差，已经不像单笔偶发。`;
+      if (row.discovery_type === "high_variance") return `这类结构目前有 ${row.sample_count} 笔，但结果分布太散，还不能直接下结论。`;
+      if (row.discovery_type === "positive_edge") return `这类结构目前偏正向，系统想继续观察它是不是稳定 edge。`;
+      return `系统在 ${row.sample_count} 笔样本里看到了重复模式。`;
+    }
+    const type = discoveryLabel(row.discovery_type);
+    if (row.discovery_type === "loss_cluster") return `${row.sample_count} samples are losing together in this setup.`;
+    if (row.discovery_type === "high_variance") return `${row.sample_count} samples are too unstable, even when direction looks similar.`;
+    if (row.discovery_type === "positive_edge") return `${row.sample_count} samples are consistently strong, so the engine wants to observe the edge.`;
+    return `${type} found in ${row.sample_count} samples.`;
+  };
+  const discoveriesByPattern = new Map((evolution.discoveries || []).map((row) => [row.pattern_key, row]));
+  const validationsByProposal = new Map((evolution.validations || []).map((row) => [row.proposal_id, row]));
+  const promotionsByProposal = new Map((evolution.promotions || []).map((row) => [row.proposal_id, row]));
+  const exampleTradeLabel = (trade) => {
+    const side = Number(trade.direction || 0) > 0 ? (state.lang === "zh" ? "多" : "long") : Number(trade.direction || 0) < 0 ? (state.lang === "zh" ? "空" : "short") : (state.lang === "zh" ? "平" : "flat");
+    const outcome = Number(trade.pnl_pct || 0) > 0 ? (state.lang === "zh" ? "赢" : "win") : Number(trade.pnl_pct || 0) < 0 ? (state.lang === "zh" ? "亏" : "loss") : (state.lang === "zh" ? "平" : "flat");
+    const source = trade.source === "live" ? (state.lang === "zh" ? "实盘" : "live") : (state.lang === "zh" ? "回测" : "backtest");
+    const ts = String(trade.entry_signal_ts || "").slice(0, 16);
+    const symbol = prettyAsset(trade.symbol);
+    return `${symbol} ${side} · ${ts} · ${outcome} · ${source}`;
+  };
+  const exampleTradeSummary = (row) => {
+    const samples = Array.isArray(row.example_trades) ? row.example_trades : [];
+    if (!samples.length) return state.lang === "zh" ? "当前面板里没有匹配到 2025-2026 的例子交易。" : "No matching 2025-2026 example trades in the current panel.";
+    return samples.map(exampleTradeLabel).join(" / ");
+  };
+  const terminalExamples = (row) => {
+    const samples = Array.isArray(row.example_trades) ? row.example_trades : [];
+    if (!samples.length) return state.lang === "zh" ? "没有匹配到 2025-2026 交易。" : "No matching 2025-2026 trades.";
+    return samples.slice(0, 3).map(exampleTradeLabel).join("  |  ");
+  };
+  const mutationSummary = (row) => {
+    const pattern = describePattern(row.pattern_key);
+    const discovery = discoveriesByPattern.get(row.pattern_key);
+    const validation = validationsByProposal.get(row.proposal_id);
+    const promotion = promotionsByProposal.get(row.proposal_id);
+    const review = row.research_review || {};
+    const sampleCount = Number(discovery?.sample_count || 0);
+    const problem = localizeReviewProblem(row, review, pattern, sampleCount);
+    let verdict = review.verdict === "promote_candidate" ? "Promote Candidate" : review.verdict === "strong_reject" ? "Strong Reject" : review.verdict === "observe" ? "Observe" : "Observe";
+    if (promotion?.approved && promotion?.target_stage === "SHADOW") verdict = "Promote Candidate";
+    else if (validation && !validation.accepted) verdict = "Strong Reject";
+    else if (sampleCount >= 10 && discovery?.discovery_type === "loss_cluster") verdict = "Promote Candidate";
+
+    let whyLine = localizeReviewWhy(row, review, discovery, sampleCount);
+    if (state.lang !== "zh" && !review.why_flagged && validation?.accepted) {
+      whyLine = `${whyLine} Validation says the evidence is good enough to keep watching.`;
+    } else if (state.lang !== "zh" && !review.why_flagged && validation && !validation.accepted) {
+      whyLine = `${whyLine} Validation did not clear the bar yet.`;
+    }
+
+    let expectedImpact = localizeExpectedImpact(row, review, pattern);
+
+    return {
+      problem,
+      examples: exampleTradeSummary(row),
+      verdict: verdictLabel(verdict),
+      whyLine,
+      expectedImpact,
+    };
+  };
+  const validationSummary = (row) => {
+    if (state.lang === "zh") {
+      const accepted = row.accepted ? "这一轮验证通过了研究门槛。" : "这一轮验证还没有通过。";
+      const prod = row.production_decision === "ACCEPT_PRODUCTION" ? "它已经足够进入下一阶段观察。" : "它还不够进入下一阶段。";
+      return `${accepted}${prod} 过拟合风险：${String(row.overfit_risk || "unknown")}。`;
+    }
+    const accepted = row.accepted ? "The evidence passed research review." : "The evidence did not pass review.";
+    const prod = row.production_decision === "ACCEPT_PRODUCTION" ? "It is strong enough to move into observation." : "It is not strong enough for the next stage.";
+    return `${accepted} ${prod} Overfit risk ${String(row.overfit_risk || "unknown")}.`;
+  };
+  const promotionSummary = (row) => {
+    if (state.lang === "zh") {
+      const stage = row.target_stage === "SHADOW" ? "进入 observation" : `进入 ${String(row.target_stage || "").toLowerCase()}`;
+      return row.approved ? `已批准，当前进入${stage}。` : `当前未批准。${row.reason || ""}`.trim();
+    }
+    const stage = row.target_stage === "SHADOW" ? "moved into observation" : `moved to ${String(row.target_stage || "").toLowerCase()}`;
+    return row.approved ? `Approved and ${stage}.` : `Not approved. ${row.reason || ""}`.trim();
+  };
+  const compactBaselineName = () => {
+    const raw = String(baseline.version || baseline.display_name || "").toLowerCase();
+    if (!raw) return "Grapes Baseline";
+    if (raw.includes("sol052") || raw.includes("sol 0.52/0.50")) return "Grapes V3.3.1";
+    if (raw.includes("eth_bucket")) return "Grapes V3.3";
+    return "Grapes Baseline";
+  };
+  const discoveryCount = Number(evolution.runtime?.discoveries || 0);
+  const validationCount = Number(evolution.runtime?.validations || 0);
+  const promotionCount = Number(evolution.runtime?.promotions || 0);
+  const runtime = evolution.runtime || {};
+  const decisionRows = (evolution.mutations || []).slice(0, 6);
+  const patternRows = (evolution.pattern_stats || []).slice(0, 6);
+  const discoveryRows = (evolution.discoveries || []).slice(0, 6);
+  const validationRows = (evolution.validations || []).slice(0, 4);
+  const promotionRows = (evolution.promotions || []).slice(0, 4);
+
+  renderBoardCards("evolution-snapshot-cards", [
+    {
+      title: "Baseline",
+      subtitle: `${full.trades || 0} trades`,
+      value: compactBaselineName(),
+      label: `PF ${fmtNum(full.profit_factor || 0, 2)} · Sharpe ${fmtNum(full.sharpe || 0, 2)}`,
+      highlight: Number(full.total_pnl_usd || 0) >= 0,
+    },
+    {
+      title: "Evidence",
+      subtitle: `${oos.folds || 0} folds + MC`,
+      value: validationCount ? `${validationCount} reviewed` : "No reviews",
+      label: `${promotionCount} promoted to observation`,
+      highlight: Number(oos.oos_pnl_usd || 0) >= 0,
+    },
+    {
+      title: "Coverage",
+      subtitle: `${evolution.runtime?.reflections || 0} reflections`,
+      value: `${discoveryCount} clusters`,
+      label: "Built from 2025-2026 examples",
+      highlight: discoveryCount > 0,
+    },
+  ]);
+
+  const briefTitle = document.getElementById("evolution-brief-title");
+  const briefVersion = document.getElementById("evolution-brief-version");
+  const briefSummary = document.getElementById("evolution-brief-summary");
+  const briefPoints = document.getElementById("evolution-brief-points");
+  if (briefTitle) briefTitle.textContent = t("evolutionBriefTitle");
+  if (briefVersion) briefVersion.textContent = compactBaselineName();
+  if (briefSummary) {
+    briefSummary.textContent = t("evolutionBriefSummary");
+  }
+  if (briefPoints) {
+    briefPoints.innerHTML = [
+      {
+        title: t("evolutionBriefDoing"),
+        body: `${discoveryCount} clusters have been flagged from ${evolution.runtime?.reflections || 0} reflections. ${t("evolutionDoingBody")}`,
+      },
+      {
+        title: t("evolutionBriefFocus"),
+        body: t("evolutionFocusBody"),
+      },
+      {
+        title: t("evolutionBriefRead"),
+        body: t("evolutionBriefReadBody"),
+      },
+    ].map((item) => `
+      <div class="evolution-brief-point">
+        <strong>${item.title}</strong>
+        <span>${item.body}</span>
+      </div>
+    `).join("");
+  }
+
+  const focusList = document.getElementById("evolution-focus-list");
+  if (focusList) {
+    focusList.innerHTML = decisionRows.length ? decisionRows.slice(0, 3).map((row) => {
+      const summary = mutationSummary(row);
+      return `
+        <article class="evolution-focus-item">
+          <div class="evolution-focus-head">
+            <strong>${summary.problem}</strong>
+            <span>${summary.verdict}</span>
+          </div>
+          <p>${summary.whyLine}</p>
+        </article>
+      `;
+    }).join("") : `<article class="evolution-focus-item"><p>${t("evolutionNoResearch")}</p></article>`;
+  }
+
+  const stageFlow = document.getElementById("evolution-stage-flow");
+  if (stageFlow) {
+    const pendingMutations = Math.max(0, Number(runtime.mutations || 0) - Number(runtime.validations || 0));
+    const observedPromotions = Number(runtime.promotions || 0);
+    stageFlow.innerHTML = [
+      {
+        title: t("evolutionObservationFirst"),
+        meta: `${promotionCount} promoted`,
+        body: t("evolutionObservationBody"),
+        tags: [`${observedPromotions} observed`, `${validationCount} reviewed`],
+      },
+      {
+        title: t("evolutionWaitingProof"),
+        meta: `${pendingMutations} pending`,
+        body: t("evolutionWaitingBody"),
+        tags: [`${discoveryCount} clusters`, `${Number(runtime.mutations || 0)} mutations`],
+      },
+      {
+        title: t("evolutionBottleneck"),
+        meta: t("evolutionResearchQuality"),
+        body: t("evolutionBottleneckBody"),
+        tags: ["local veto", "threshold", "observe only"],
+      },
+    ].map((item) => `
+      <article class="evolution-stage-item">
+        <div class="evolution-stage-head">
+          <strong>${item.title}</strong>
+          <span>${item.meta}</span>
+        </div>
+        <p>${item.body}</p>
+        <div class="evolution-stage-tags">
+          ${item.tags.map((tag) => `<span>${tag}</span>`).join("")}
+        </div>
+      </article>
+    `).join("");
+  }
+
+  const runtimeTarget = document.getElementById("evolution-runtime-cards");
+  if (runtimeTarget) {
+    const cards = [
+      ["DB", runtime.db_exists ? "Online" : "Offline", runtime.db_exists],
+      ["Reflections", `${runtime.reflections || 0}`, Number(runtime.reflections || 0) > 0],
+      ["Discoveries", `${runtime.discoveries || 0}`, Number(runtime.discoveries || 0) > 0],
+      ["Mutations", `${runtime.mutations || 0}`, Number(runtime.mutations || 0) > 0],
+      ["Validations", `${runtime.validations || 0}`, Number(runtime.validations || 0) > 0],
+      ["Promotions", `${runtime.promotions || 0}`, Number(runtime.promotions || 0) > 0],
+    ];
+    runtimeTarget.innerHTML = cards.map(([label, value, positive]) => `
+      <article class="asset-card evolution-stat-card">
+        <div class="rail-row-head">
+          <span class="rail-row-name">${label}</span>
+          <strong class="${positive ? "pos" : ""}">${value}</strong>
+        </div>
+      </article>
+    `).join("");
+  }
+
+  const baselineMeta = document.getElementById("evolution-baseline-meta");
+  if (baselineMeta) {
+    baselineMeta.innerHTML = `
+      <span>Version <strong>${compactBaselineName()}</strong></span>
+      <span>Profile <strong>Canonical no-HYPE</strong></span>
+      <span>Last Activity <strong>${runtime.last_activity_at || "—"}</strong></span>
+    `;
+  }
+
+  const patternTarget = document.getElementById("evolution-pattern-stats");
+  if (patternTarget) {
+    patternTarget.innerHTML = patternRows.length ? `
+      <div class="evolution-mini-table">
+        <div class="evolution-mini-table-head">
+          <span>${t("evolutionPatternTitle")}</span>
+          <span>N</span>
+          <span>WR</span>
+          <span>${t("avgPnl")}</span>
+        </div>
+        ${patternRows.map((row) => `
+          <div class="evolution-mini-row">
+            <div>
+              <strong>${describePattern(row.pattern_key).title}</strong>
+              <span>${describePattern(row.pattern_key).issue}</span>
+            </div>
+            <strong>${row.sample_count}</strong>
+            <strong class="${Number(row.win_rate || 0) >= 50 ? "pos" : "neg"}">${fmtPct(row.win_rate || 0, 1)}</strong>
+            <strong class="${Number(row.avg_pnl_pct || 0) >= 0 ? "pos" : "neg"}">${fmtPct(row.avg_pnl_pct || 0, 2)}</strong>
+          </div>
+        `).join("")}
+      </div>
+    ` : `<article class="trade-card evolution-card empty"><p>${t("evolutionNoPatternStats")}</p></article>`;
+  }
+
+  const decisionCards = document.getElementById("evolution-decision-cards");
+  if (decisionCards) {
+    decisionCards.innerHTML = decisionRows.length ? decisionRows.map((row) => {
+      const summary = mutationSummary(row);
+      return `
+      <article class="evolution-log-row decision-row">
+        <div class="evolution-log-head">
+          <strong>${summary.problem}</strong>
+          <div class="evolution-log-meta">
+            <span class="decision-verdict">${summary.verdict}</span>
+            <span>${fmtTradeDate(row.updated_at)}</span>
+          </div>
+        </div>
+        <div class="evolution-log-grid">
+          <div><span>${t("evolutionScope")}</span><strong>${row.target_scope || "—"}</strong></div>
+          <div><span>${t("evolutionAction")}</span><strong>${mutationLabel(row.mutation_type)}</strong></div>
+          <div><span>${t("evolutionMode")}</span><strong>${deploymentLabel(row.deployment_mode)}</strong></div>
+          <div><span>${t("status")}</span><strong>${queueStatusLabel(row.status)}</strong></div>
+        </div>
+        <div class="evolution-log-block">
+          <span>${t("evolutionWhy")}</span>
+          <p>${summary.whyLine}</p>
+        </div>
+        <div class="evolution-log-inline">
+          <span><strong>${t("evolutionExpected")}</strong> ${summary.expectedImpact}</span>
+          <span class="mono"><strong>${t("evolutionExampleTrades")}</strong> ${terminalExamples(row)}</span>
+        </div>
+      </article>
+    `; }).join("") : `<article class="trade-card evolution-card empty"><p>${t("evolutionNoDecisionCards")}</p></article>`;
+  }
+
+  const discoveriesTarget = document.getElementById("evolution-discoveries");
+  if (discoveriesTarget) {
+    discoveriesTarget.innerHTML = discoveryRows.length ? discoveryRows.map((row) => `
+      <article class="evolution-log-row compact">
+        <div class="evolution-log-head">
+          <strong>${describePattern(row.pattern_key).title}</strong>
+          <div class="evolution-log-meta">
+            <span>${discoveryLabel(row.discovery_type)}</span>
+            <span>${fmtTradeDate(row.created_at)}</span>
+          </div>
+        </div>
+        <div class="evolution-log-grid">
+          <div><span>${t("evolutionSeverity")}</span><strong>${row.severity}</strong></div>
+          <div><span>${t("evolutionConfidence")}</span><strong>${fmtNum(row.confidence || 0, 3)}</strong></div>
+          <div><span>${t("evolutionSamples")}</span><strong>${row.sample_count}</strong></div>
+          <div><span>${t("status")}</span><strong>${queueStatusLabel(row.status)}</strong></div>
+        </div>
+        <div class="evolution-log-block">
+          <span>${t("evolutionWhyFlagged")}</span>
+          <p>${discoveryWhy(row)}</p>
+        </div>
+      </article>
+    `).join("") : `<article class="trade-card evolution-card empty"><p>${t("evolutionNoDiscoveries")}</p></article>`;
+  }
+
+  const vpTarget = document.getElementById("evolution-validation-promotion");
+  if (vpTarget) {
+    const vHtml = validationRows.length ? validationRows.map((row) => `
+      <article class="evolution-log-row compact">
+        <div class="evolution-log-head">
+          <strong>Validation · ${row.proposal_id}</strong>
+          <div class="evolution-log-meta"><span>${fmtTradeDate(row.created_at)}</span></div>
+        </div>
+        <div class="evolution-log-grid">
+          <div><span>${t("status")}</span><strong>${validationStatusLabel(row.status)}</strong></div>
+          <div><span>${t("evolutionAccepted")}</span><strong class="${row.accepted ? "pos" : "neg"}">${row.accepted ? t("yes") : t("no")}</strong></div>
+          <div><span>${t("evolutionOverfit")}</span><strong>${row.overfit_risk}</strong></div>
+          <div><span>${t("evolutionStage")}</span><strong>${t("evolutionVpTitle").split(" / ")[0] || "Validation"}</strong></div>
+        </div>
+        <div class="evolution-log-block"><span>${t("evolutionDecision")}</span><p>${validationSummary(row)}</p></div>
+      </article>
+    `).join("") : "";
+    const pHtml = promotionRows.length ? promotionRows.map((row) => `
+      <article class="evolution-log-row compact">
+        <div class="evolution-log-head">
+          <strong>Promotion · ${row.proposal_id}</strong>
+          <div class="evolution-log-meta"><span>${fmtTradeDate(row.created_at)}</span></div>
+        </div>
+        <div class="evolution-log-grid">
+          <div><span>${t("evolutionStage")}</span><strong>${row.target_stage}</strong></div>
+          <div><span>${t("evolutionAccepted")}</span><strong class="${row.approved ? "pos" : "neg"}">${row.approved ? t("yes") : t("no")}</strong></div>
+          <div><span>${t("reason")}</span><strong>${row.reason}</strong></div>
+          <div><span>${t("evolutionMode")}</span><strong>${row.approved ? deploymentLabel("SHADOW") : t("holdMode")}</strong></div>
+        </div>
+        <div class="evolution-log-block"><span>${t("evolutionDecision")}</span><p>${promotionSummary(row)}</p></div>
+      </article>
+    `).join("") : "";
+    vpTarget.innerHTML = (vHtml || pHtml) ? `${vHtml}${pHtml}` : `<article class="trade-card evolution-card empty"><p>No validation or promotion records yet.</p></article>`;
+  }
 }
 
 function tradePeriodValue(trade, scope) {
@@ -1281,20 +1920,31 @@ function buildNiceScale(values, tickCount = 5, opts = {}) {
 }
 
 function formatAxisDateLabel(rawTs, spanMs) {
+  const date = parseUtcDate(rawTs);
   const text = String(rawTs || "");
-  if (!text) return "";
-  if (/^\d{4}-\d{2}$/.test(text)) return text;
-  const datePart = text.slice(0, 10);
-  if (spanMs <= 180 * 24 * 3600 * 1000) return datePart.slice(5);
-  return datePart.replace(/-/g, ".");
+  if (!date) {
+    if (!text) return "";
+    if (/^\d{4}-\d{2}$/.test(text)) return text;
+    const datePart = text.slice(0, 10);
+    if (spanMs <= 180 * 24 * 3600 * 1000) return datePart.slice(5);
+    return datePart.replace(/-/g, ".");
+  }
+  if (spanMs <= 180 * 24 * 3600 * 1000) {
+    return new Intl.DateTimeFormat("en-GB", {
+      timeZone: MYT_TIMEZONE,
+      month: "2-digit",
+      day: "2-digit",
+    }).format(date);
+  }
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: MYT_TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+  }).format(date).replace("/", ".").replace("/", ".");
 }
 
 function parseSeriesDate(rawTs) {
-  const text = String(rawTs || "");
-  if (!text) return null;
-  const normalized = text.length === 7 ? `${text}-01T00:00:00` : text.replace(" ", "T");
-  const date = new Date(normalized);
-  return Number.isNaN(date.getTime()) ? null : date;
+  return parseUtcDate(rawTs);
 }
 
 function getVisibleSeriesStartDate(series) {
@@ -2103,7 +2753,7 @@ function drawGrapesChart(canvas, data) {
     drawLiveTradeEquityChart(
       canvas,
       view?.all_trades || [],
-      data.strategies.grapes.active_positions || [],
+      data.strategies.grapes?.active_positions || [],
       view?.summary?.initial_equity || 0
     );
     return "single";
@@ -2119,7 +2769,7 @@ function drawCitrusAssetReturns(canvas, data) {
     drawLiveTradeEquityChart(
       canvas,
       view?.all_trades || [],
-      data.strategies.citrus.active_positions || [],
+      data.strategies.citrus?.active_positions || [],
       view?.summary?.initial_equity || 0
     );
     return "single";
@@ -2135,7 +2785,7 @@ function drawEquityAssetReturns(canvas, data) {
     drawLiveTradeEquityChart(
       canvas,
       view?.all_trades || [],
-      data.strategies.equity.active_positions || [],
+      data.strategies.equity?.active_positions || [],
       view?.summary?.initial_equity || 0
     );
     return "single";
@@ -2146,13 +2796,13 @@ function drawEquityAssetReturns(canvas, data) {
 
 function drawStrategyAssetMiniChart(canvas, strategyKey, data) {
   const view = getStrategyLensData(strategyKey);
-  const assetCurves = view?.asset_curves || data.strategies[strategyKey].asset_curves || {};
+  const assetCurves = view?.asset_curves || data.strategies[strategyKey]?.asset_curves || {};
   drawAssetOverlayChart(canvas, assetCurves);
 }
 
 function drawOverviewRelativeChart(canvas, data) {
   const toRelativeCurve = (strategyKey, fallbackTrades = []) => {
-    const liveView = data.strategies[strategyKey].execution_views?.live || {};
+    const liveView = data.strategies[strategyKey]?.execution_views?.live || {};
     const portfolio = liveView.portfolio_curve || [];
     if (portfolio.length >= 2) {
       const base = Number(portfolio[0]?.equity || 0);
@@ -2165,7 +2815,7 @@ function drawOverviewRelativeChart(canvas, data) {
   };
 
   const seriesByStrategy = Object.fromEntries(
-    OVERVIEW_STRATEGY_KEYS.map((key) => [key, toRelativeCurve(key, data.strategies[key].execution_views?.live?.all_trades || [])])
+    OVERVIEW_STRATEGY_KEYS.map((key) => [key, toRelativeCurve(key, data.strategies[key]?.execution_views?.live?.all_trades || [])])
   );
   const combined = OVERVIEW_STRATEGY_KEYS.flatMap((key) => seriesByStrategy[key].map((row) => Number(row.pnl))).filter(Number.isFinite);
   if (!combined.length) return;
@@ -2433,7 +3083,7 @@ function renderCharts(data) {
   }
 
   const grapesHeatmap = document.getElementById("grapes-heatmap-canvas");
-  if (grapesHeatmap && grapesHeatmap.offsetParent !== null) drawMonthlyHeatmap(grapesHeatmap, getStrategyLensData("grapes")?.monthly_heatmap || data.strategies.grapes.monthly_heatmap);
+  if (grapesHeatmap && grapesHeatmap.offsetParent !== null) drawMonthlyHeatmap(grapesHeatmap, getStrategyLensData("grapes")?.monthly_heatmap || data.strategies.grapes?.monthly_heatmap);
 
   const grapesMini = document.getElementById("grapes-asset-curves-canvas");
   if (grapesMini && grapesMini.offsetParent !== null) {
@@ -2446,7 +3096,7 @@ function renderCharts(data) {
   }
 
   const citrusHeatmap = document.getElementById("citrus-heatmap-canvas");
-  if (citrusHeatmap && citrusHeatmap.offsetParent !== null) drawMonthlyHeatmap(citrusHeatmap, getStrategyLensData("citrus")?.monthly_heatmap || data.strategies.citrus.monthly_heatmap);
+  if (citrusHeatmap && citrusHeatmap.offsetParent !== null) drawMonthlyHeatmap(citrusHeatmap, getStrategyLensData("citrus")?.monthly_heatmap || data.strategies.citrus?.monthly_heatmap);
 
   const citrusMini = document.getElementById("citrus-asset-curves-canvas");
   if (citrusMini && citrusMini.offsetParent !== null) {
@@ -2459,7 +3109,7 @@ function renderCharts(data) {
   }
 
   const equityHeatmap = document.getElementById("equity-heatmap-canvas");
-  if (equityHeatmap && equityHeatmap.offsetParent !== null) drawMonthlyHeatmap(equityHeatmap, getStrategyLensData("equity")?.monthly_heatmap || data.strategies.equity.monthly_heatmap);
+  if (equityHeatmap && equityHeatmap.offsetParent !== null) drawMonthlyHeatmap(equityHeatmap, getStrategyLensData("equity")?.monthly_heatmap || data.strategies.equity?.monthly_heatmap);
 
   const equityMini = document.getElementById("equity-asset-curves-canvas");
   if (equityMini && equityMini.offsetParent !== null) {
@@ -2554,6 +3204,7 @@ function render(data) {
   renderCitrusRegime(data);
   renderEquitySummary(data);
   renderEquityRegime(data);
+  renderEvolutionSummary(data);
   const grapesLens = getStrategyLensData("grapes");
   const citrusLens = getStrategyLensData("citrus");
   const equityLens = getStrategyLensData("equity");

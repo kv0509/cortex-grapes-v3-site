@@ -25,6 +25,7 @@
           <button class="switch-tab" data-view="grapes" type="button">🍇 Grapes</button>
           <button class="switch-tab" data-view="citrus" type="button">🍊 Citrus</button>
           <button class="switch-tab" data-view="equity" type="button">📈 Equity</button>
+          <button class="switch-tab" data-view="evolution" type="button">🧬 Evolution</button>
         </nav>
         <div class="site-controls">
           <div class="lang-switch" id="lang-switch">
@@ -280,6 +281,70 @@
               </table>
             </div>
             <div id="equity-trade-cards" class="trade-card-list"></div>
+          </section>
+        </section>
+
+        <section class="view-panel strategy-view" data-panel="evolution">
+          <section class="strategy-main-grid evolution-main-grid">
+            <section class="feature-panel performance-panel">
+              <div class="section-head">
+                <p id="evolution-section-title" class="eyebrow">Grapes Evolution</p>
+              </div>
+              <div class="evolution-brief-grid">
+                <article class="trade-card evolution-brief-card">
+                  <div class="trade-card-head">
+                    <strong id="evolution-brief-title">Evolution Brief</strong>
+                    <span id="evolution-brief-version">Grapes V3.3.1</span>
+                  </div>
+                  <p id="evolution-brief-summary" class="trade-card-note"></p>
+                  <div id="evolution-brief-points" class="trade-card-list"></div>
+                </article>
+                <div id="evolution-snapshot-cards" class="snapshot-grid evolution-snapshot-grid"></div>
+              </div>
+              <div class="evolution-top-fill">
+                <section class="evolution-terminal-panel">
+                  <div class="section-head"><p class="eyebrow">What It Is Working On</p></div>
+                  <div id="evolution-focus-list" class="evolution-focus-list"></div>
+                </section>
+                <section class="evolution-terminal-panel">
+                  <div class="section-head"><p class="eyebrow">Decision Flow</p></div>
+                  <div id="evolution-stage-flow" class="evolution-stage-flow"></div>
+                </section>
+              </div>
+            </section>
+            <aside class="strategy-rail">
+                <section class="feature-panel rail-panel">
+                <div class="section-head"><p id="evolution-runtime-title" class="eyebrow">Runtime Status</p></div>
+                <div id="evolution-runtime-cards" class="asset-card-grid"></div>
+              </section>
+              <section class="feature-panel rail-panel">
+                <div class="section-head"><p id="evolution-baseline-title" class="eyebrow">Current Baseline</p></div>
+                <div id="evolution-baseline-meta" class="mini-summary-row"></div>
+              </section>
+              <section class="feature-panel rail-panel">
+                <div class="section-head"><p id="evolution-pattern-title" class="eyebrow">Recent Pattern Stats</p></div>
+                <div id="evolution-pattern-stats" class="trade-card-list"></div>
+              </section>
+            </aside>
+          </section>
+
+          <section class="feature-panel">
+            <div class="section-head"><p id="evolution-decision-title" class="eyebrow">Decision Board</p></div>
+            <div id="evolution-decision-cards" class="trade-card-list evolution-decision-grid"></div>
+            <div class="mini-summary-row evolution-note-row">
+              <span id="evolution-note-copy">Examples shown here are limited to <strong>2025-2026</strong> trades only.</span>
+            </div>
+          </section>
+
+          <section class="feature-panel evolution-bottom-grid">
+            <div>
+              <div class="section-head"><p id="evolution-discoveries-title" class="eyebrow">Discoveries</p></div>
+              <div id="evolution-discoveries" class="trade-card-list"></div>
+            </div>
+            <div>
+              <div class="section-head"><p id="evolution-vp-title" class="eyebrow">Validation / Promotion</p></div>
+              <div id="evolution-validation-promotion" class="trade-card-list"></div>
+            </div>
           </section>
         </section>
       </main>
