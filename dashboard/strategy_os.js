@@ -1,4 +1,5 @@
 const DATA_URL = "./data/strategy_os.json";
+const EVOLUTION_API_BASE = "http://127.0.0.1:8000/api/v1/evolution";
 
 const COLORS = {
   text: "#e7efe9",
@@ -47,6 +48,8 @@ const state = {
   chartScales: {
     overviewLivePnl: null,
   },
+  evolutionSelectedPattern: null,
+  evolutionMutationBusyId: null,
 };
 
 const I18N = {
@@ -156,6 +159,11 @@ const I18N = {
     evolutionBaselineTitle: "Current Baseline",
     evolutionPatternTitle: "Recent Pattern Stats",
     evolutionDecisionTitle: "Decision Board",
+    evolutionBridgeTitle: "Bridge Inbox",
+    evolutionPipelineTitle: "Pipeline Status",
+    evolutionRunCycle: "Run Mutation Cycle",
+    evolutionBlockedAt: "Blocked at",
+    evolutionPendingClusters: "clusters pending",
     evolutionDiscoveriesTitle: "Discoveries",
     evolutionVpTitle: "Validation / Promotion",
     evolutionExamplesNote: "Examples shown here are limited to <strong>2025-2026</strong> trades only.",
@@ -170,6 +178,8 @@ const I18N = {
     evolutionNoResearch: "No active research threads yet.",
     evolutionNoPatternStats: "No pattern stats yet.",
     evolutionNoDecisionCards: "No decision cards yet.",
+    evolutionNoBridgeResults: "No imported bridge results yet.",
+    evolutionNoDiscoveryDetail: "Select a cluster to inspect the current evidence and proposed direction.",
     evolutionNoDiscoveries: "No discoveries yet.",
     evolutionWhy: "Why",
     evolutionExpected: "Expected impact",
@@ -184,6 +194,12 @@ const I18N = {
     evolutionOutcome: "Outcome",
     evolutionSeverity: "Severity",
     evolutionConfidence: "Confidence",
+    evolutionHypothesis: "Hypothesis",
+    evolutionRiskNote: "Risk note",
+    evolutionProviderModel: "Provider / model",
+    evolutionAvgPnl: "Avg PnL",
+    evolutionPatternKey: "Pattern",
+    evolutionDiscoveryDetailTitle: "Cluster Detail",
     evolutionAccepted: "Accepted",
     evolutionOverfit: "Overfit",
     evolutionObservationFirst: "Observation comes first",
@@ -318,6 +334,11 @@ const I18N = {
     evolutionBaselineTitle: "当前基线",
     evolutionPatternTitle: "近期模式统计",
     evolutionDecisionTitle: "决策看板",
+    evolutionBridgeTitle: "Bridge 收件箱",
+    evolutionPipelineTitle: "Pipeline 状态",
+    evolutionRunCycle: "运行 Mutation Cycle",
+    evolutionBlockedAt: "当前卡点",
+    evolutionPendingClusters: "个 clusters 待处理",
     evolutionDiscoveriesTitle: "发现列表",
     evolutionVpTitle: "验证 / 晋升",
     evolutionExamplesNote: "这里展示的例子只取 <strong>2025-2026</strong> 的交易。",
@@ -332,6 +353,8 @@ const I18N = {
     evolutionNoResearch: "当前没有活跃研究线程。",
     evolutionNoPatternStats: "当前没有模式统计。",
     evolutionNoDecisionCards: "当前没有决策条目。",
+    evolutionNoBridgeResults: "当前还没有导入的 bridge 结果。",
+    evolutionNoDiscoveryDetail: "点一条 cluster，就能看当前证据和建议方向。",
     evolutionNoDiscoveries: "当前没有发现记录。",
     evolutionWhy: "为什么",
     evolutionExpected: "预期影响",
@@ -346,6 +369,12 @@ const I18N = {
     evolutionOutcome: "结果",
     evolutionSeverity: "严重度",
     evolutionConfidence: "置信度",
+    evolutionHypothesis: "假设",
+    evolutionRiskNote: "风险提示",
+    evolutionProviderModel: "Provider / 模型",
+    evolutionAvgPnl: "平均收益",
+    evolutionPatternKey: "Pattern",
+    evolutionDiscoveryDetailTitle: "Cluster 详情",
     evolutionAccepted: "是否通过",
     evolutionOverfit: "过拟合",
     evolutionObservationFirst: "先进入观察，不急着上线",
@@ -401,6 +430,18 @@ function parseUtcDate(raw) {
   const hasZone = /([zZ]|[+\-]\d{2}:\d{2})$/.test(normalized);
   const dt = new Date(hasZone ? normalized : `${normalized}Z`);
   return Number.isNaN(dt.getTime()) ? null : dt;
+}
+
+async function triggerEvolutionMutation(discoveryId) {
+  const response = await fetch(`${EVOLUTION_API_BASE}/export-discovery/${discoveryId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(detail || `export failed (${response.status})`);
+  }
+  return response.json();
 }
 
 function parseTimestamp(raw) {
@@ -1299,9 +1340,10 @@ function renderEvolutionSummary(data) {
   setText("evolution-baseline-title", t("evolutionBaselineTitle"));
   setText("evolution-pattern-title", t("evolutionPatternTitle"));
   setText("evolution-decision-title", t("evolutionDecisionTitle"));
+  setText("evolution-bridge-title", t("evolutionBridgeTitle"));
+  setText("evolution-pipeline-title", t("evolutionPipelineTitle"));
   setText("evolution-discoveries-title", t("evolutionDiscoveriesTitle"));
   setText("evolution-vp-title", t("evolutionVpTitle"));
-  setHtml("evolution-note-copy", t("evolutionExamplesNote"));
   const baseline = evolution.baseline || {};
   const full = baseline.full_backtest || {};
   const oos = baseline.walk_forward_oos || {};
@@ -1346,6 +1388,57 @@ function renderEvolutionSummary(data) {
       setup,
       style,
     };
+  };
+  const detailIssueLabel = (pattern, discovery) => {
+    if (state.lang === "zh") {
+      if (String(discovery?.discovery_type || "") === "loss_cluster") return "重复亏损";
+      if (String(discovery?.discovery_type || "") === "high_variance") return "入场质量不稳";
+      if (String(discovery?.discovery_type || "") === "positive_edge") return "正向结构待确认";
+      return pattern.issue || "结构异常";
+    }
+    if (String(discovery?.discovery_type || "") === "loss_cluster") return "repeated losses";
+    if (String(discovery?.discovery_type || "") === "high_variance") return "unstable cluster";
+    if (String(discovery?.discovery_type || "") === "positive_edge") return "positive edge";
+    return pattern.issue || "cluster";
+  };
+  const detailHeadline = (pattern, discovery) => {
+    const issue = detailIssueLabel(pattern, discovery);
+    if (state.lang === "zh") {
+      const side = pattern.title.includes("long") ? "趋势多单" : pattern.title.includes("short") ? "趋势空单" : "交易簇";
+      return `${pattern.asset} ${side} — ${issue}`;
+    }
+    return `${pattern.asset} ${pattern.title.replace(`${pattern.asset} `, "")} — ${issue}`;
+  };
+  const detailProblemBody = (row, pattern, avgPnlValue) => {
+    const sampleCount = Number(row.sample_count || 0);
+    const avgText = avgPnlValue == null ? "—" : fmtPct(avgPnlValue, 2);
+    if (state.lang === "zh") {
+      if (row.discovery_type === "loss_cluster") {
+        return `${sampleCount} 笔交易在这类结构里一起亏损，平均亏 ${avgText}。方向本身未必错，问题更像是同一种坏入场在反复出现。`;
+      }
+      if (row.discovery_type === "high_variance") {
+        return `${sampleCount} 笔交易落在同一类 setup，但结果分布很散，平均收益 ${avgText}。方向判断不一定错，更像是入场时机和参与质量不稳定。`;
+      }
+      if (row.discovery_type === "positive_edge") {
+        return `${sampleCount} 笔交易在这类结构里偏正向，平均收益 ${avgText}。现在先把它当成候选 edge，看它是否真的能重复。`;
+      }
+      return `${sampleCount} 笔交易在 ${pattern.issue} 结构里被反复标记，平均收益 ${avgText}。`;
+    }
+    if (row.discovery_type === "loss_cluster") {
+      return `${sampleCount} trades are losing together in this setup, with average pnl ${avgText}. Direction may still be right; the repeated failure looks more like a bad entry shape than random noise.`;
+    }
+    if (row.discovery_type === "high_variance") {
+      return `${sampleCount} trades share the same setup, but outcomes are unstable, with average pnl ${avgText}. The issue looks more like timing and participation quality than pure directional error.`;
+    }
+    if (row.discovery_type === "positive_edge") {
+      return `${sampleCount} trades are leaning positive in this setup, with average pnl ${avgText}. The current job is to confirm whether the edge is repeatable before promoting it.`;
+    }
+    return `${sampleCount} trades have been flagged around ${pattern.issue}, with average pnl ${avgText}.`;
+  };
+  const compactPatternKey = (patternKey) => {
+    const { asset, tags } = parsePatternKey(patternKey);
+    if (!tags.length) return patternKey || "—";
+    return `${asset} · ${tags.map(humanTag).join(" · ")}`;
   };
   const discoveryLabel = (value) => ({
     loss_cluster: "Losing cluster",
@@ -1448,6 +1541,32 @@ function renderEvolutionSummary(data) {
     if (!samples.length) return state.lang === "zh" ? "没有匹配到 2025-2026 交易。" : "No matching 2025-2026 trades.";
     return samples.slice(0, 3).map(exampleTradeLabel).join("  |  ");
   };
+  const renderExampleTradesList = (row) => {
+    const samples = Array.isArray(row.example_trades) ? row.example_trades : [];
+    if (!samples.length) {
+      return `<p class="evolution-empty-note">${state.lang === "zh" ? "当前没有匹配到例子交易。" : "No matching example trades."}</p>`;
+    }
+    return samples.map((trade) => {
+      const side = Number(trade.direction || 0) > 0 ? (state.lang === "zh" ? "多" : "LONG") : Number(trade.direction || 0) < 0 ? (state.lang === "zh" ? "空" : "SHORT") : (state.lang === "zh" ? "平" : "FLAT");
+      const result = Number(trade.pnl_pct || 0) > 0 ? (state.lang === "zh" ? "赢" : "WIN") : Number(trade.pnl_pct || 0) < 0 ? (state.lang === "zh" ? "亏" : "LOSS") : (state.lang === "zh" ? "平" : "FLAT");
+      const pnl = Number(trade.pnl_pct || 0);
+      const pnlClass = pnl >= 0 ? "pos" : "neg";
+      const source = trade.source === "live" ? (state.lang === "zh" ? "实盘" : "live") : (state.lang === "zh" ? "回测" : "backtest");
+      return `
+        <div class="evolution-trade-row">
+          <div class="evolution-trade-main">
+            <strong>${prettyAsset(trade.symbol)} ${side}</strong>
+            <span>${String(trade.entry_signal_ts || "").slice(0, 16)}</span>
+          </div>
+          <div class="evolution-trade-meta">
+            <span>${result}</span>
+            <strong class="${pnlClass}">${fmtPct(pnl, 2)}</strong>
+            <span>${source}</span>
+          </div>
+        </div>
+      `;
+    }).join("");
+  };
   const mutationSummary = (row) => {
     const pattern = describePattern(row.pattern_key);
     const discovery = discoveriesByPattern.get(row.pattern_key);
@@ -1507,147 +1626,191 @@ function renderEvolutionSummary(data) {
   const validationCount = Number(evolution.runtime?.validations || 0);
   const promotionCount = Number(evolution.runtime?.promotions || 0);
   const runtime = evolution.runtime || {};
+  const bridgeRows = (evolution.bridge_results || []).slice(0, 20);
   const decisionRows = (evolution.mutations || []).slice(0, 6);
-  const patternRows = (evolution.pattern_stats || []).slice(0, 6);
-  const discoveryRows = (evolution.discoveries || []).slice(0, 6);
+  const patternRows = (evolution.pattern_stats || []).slice(0, 8);
+  const discoveryRows = (evolution.discoveries || []).slice(0, 12);
   const validationRows = (evolution.validations || []).slice(0, 4);
   const promotionRows = (evolution.promotions || []).slice(0, 4);
+  const patternStatsByKey = new Map((evolution.pattern_stats || []).map((row) => [row.pattern_key, row]));
 
-  renderBoardCards("evolution-snapshot-cards", [
-    {
-      title: "Baseline",
-      subtitle: `${full.trades || 0} trades`,
-      value: compactBaselineName(),
-      label: `PF ${fmtNum(full.profit_factor || 0, 2)} · Sharpe ${fmtNum(full.sharpe || 0, 2)}`,
-      highlight: Number(full.total_pnl_usd || 0) >= 0,
-    },
-    {
-      title: "Evidence",
-      subtitle: `${oos.folds || 0} folds + MC`,
-      value: validationCount ? `${validationCount} reviewed` : "No reviews",
-      label: `${promotionCount} promoted to observation`,
-      highlight: Number(oos.oos_pnl_usd || 0) >= 0,
-    },
-    {
-      title: "Coverage",
-      subtitle: `${evolution.runtime?.reflections || 0} reflections`,
-      value: `${discoveryCount} clusters`,
-      label: "Built from 2025-2026 examples",
-      highlight: discoveryCount > 0,
-    },
-  ]);
-
-  const briefTitle = document.getElementById("evolution-brief-title");
-  const briefVersion = document.getElementById("evolution-brief-version");
-  const briefSummary = document.getElementById("evolution-brief-summary");
-  const briefPoints = document.getElementById("evolution-brief-points");
-  if (briefTitle) briefTitle.textContent = t("evolutionBriefTitle");
-  if (briefVersion) briefVersion.textContent = compactBaselineName();
-  if (briefSummary) {
-    briefSummary.textContent = t("evolutionBriefSummary");
-  }
-  if (briefPoints) {
-    briefPoints.innerHTML = [
-      {
-        title: t("evolutionBriefDoing"),
-        body: `${discoveryCount} clusters have been flagged from ${evolution.runtime?.reflections || 0} reflections. ${t("evolutionDoingBody")}`,
-      },
-      {
-        title: t("evolutionBriefFocus"),
-        body: t("evolutionFocusBody"),
-      },
-      {
-        title: t("evolutionBriefRead"),
-        body: t("evolutionBriefReadBody"),
-      },
-    ].map((item) => `
-      <div class="evolution-brief-point">
-        <strong>${item.title}</strong>
-        <span>${item.body}</span>
+  const statusBar = document.getElementById("evolution-status-bar");
+  if (statusBar) {
+    const items = [
+      { label: "Version", value: compactBaselineName(), positive: true },
+      { label: "PF", value: fmtNum(full.profit_factor || 0, 2), positive: Number(full.profit_factor || 0) >= 1 },
+      { label: "Sharpe", value: fmtNum(full.sharpe || 0, 2), positive: Number(full.sharpe || 0) >= 1 },
+      { label: "Reflections", value: `${runtime.reflections || 0}`, positive: Number(runtime.reflections || 0) > 0 },
+      { label: "Clusters", value: `${discoveryCount}`, positive: discoveryCount > 0 },
+      { label: "DB", value: runtime.db_exists ? "Online" : "Offline", positive: Boolean(runtime.db_exists) },
+    ];
+    statusBar.innerHTML = items.map((item) => `
+      <div class="evolution-status-item">
+        <span>${item.label}</span>
+        <strong class="${item.positive ? "pos" : ""}">${item.value}</strong>
       </div>
     `).join("");
   }
 
-  const focusList = document.getElementById("evolution-focus-list");
-  if (focusList) {
-    focusList.innerHTML = decisionRows.length ? decisionRows.slice(0, 3).map((row) => {
-      const summary = mutationSummary(row);
-      return `
-        <article class="evolution-focus-item">
-          <div class="evolution-focus-head">
-            <strong>${summary.problem}</strong>
-            <span>${summary.verdict}</span>
+  const pipelineTarget = document.getElementById("evolution-pipeline-flow");
+  if (pipelineTarget) {
+    const pipeline = [
+      { label: "Reflections", value: Number(runtime.reflections || 0), active: Number(runtime.reflections || 0) > 0 },
+      { label: "Clusters", value: Number(runtime.discoveries || 0), active: Number(runtime.discoveries || 0) > 0 },
+      { label: "Mutations", value: Number(runtime.mutations || 0), active: Number(runtime.mutations || 0) > 0 },
+      { label: "Validations", value: Number(runtime.validations || 0), active: Number(runtime.validations || 0) > 0 },
+      { label: "Promotions", value: Number(runtime.promotions || 0), active: Number(runtime.promotions || 0) > 0 },
+    ];
+    const maxValue = Math.max(...pipeline.map((item) => item.value), 1);
+    pipelineTarget.innerHTML = pipeline.map((item, index) => `
+      <div class="evolution-funnel-row ${item.active ? "is-active" : ""}">
+        <div class="evolution-funnel-bar-wrap">
+          <div class="evolution-funnel-bar" style="width:${Math.max(18, Math.round((item.value / maxValue) * 100))}%">
+            <strong>${item.value}</strong>
+            <span>${item.label}</span>
           </div>
-          <p>${summary.whyLine}</p>
+        </div>
+        ${index < pipeline.length - 1 ? '<div class="evolution-funnel-arrow">↓</div>' : ""}
+      </div>
+    `).join("");
+  }
+
+  const runtimeSummary = document.getElementById("evolution-runtime-summary");
+  if (runtimeSummary) {
+    runtimeSummary.innerHTML = `
+      <span class="${runtime.db_exists ? "pos" : "neg"}">${runtime.db_exists ? "DB Online" : "DB Offline"}</span>
+      <span>${compactBaselineName()}</span>
+      <span>Canonical no-HYPE</span>
+      <span>${fmtTradeDate(runtime.last_activity_at || "—")}</span>
+    `;
+  }
+
+  const nextAction = document.getElementById("evolution-next-action");
+  if (nextAction) {
+    const pendingClusters = Math.max(0, Number(runtime.discoveries || 0) - Number(runtime.mutations || 0));
+    const blockedStage = pendingClusters > 0 ? "Mutations" : Number(runtime.validations || 0) > Number(runtime.promotions || 0) ? "Promotions" : "Validation";
+    nextAction.innerHTML = `
+      <div class="evolution-next-action-head">
+        <strong>${pendingClusters || Number(runtime.discoveries || 0)} ${t("evolutionPendingClusters")}</strong>
+        <span>${t("evolutionBlockedAt")} ${blockedStage}</span>
+      </div>
+      <button class="evolution-run-button" type="button" data-run-cycle="1">${t("evolutionRunCycle")}</button>
+    `;
+    nextAction.querySelectorAll("[data-run-cycle]").forEach((node) => {
+      node.addEventListener("click", () => {
+        window.alert("Run Mutation Cycle is not wired yet. Current dashboard action still supports per-cluster Run Mutation.");
+      });
+    });
+  }
+
+  if (!state.evolutionSelectedPattern || !discoveryRows.some((row) => row.pattern_key === state.evolutionSelectedPattern)) {
+    state.evolutionSelectedPattern = discoveryRows[0]?.pattern_key || null;
+  }
+
+  const discoveryInbox = document.getElementById("evolution-discovery-inbox");
+  if (discoveryInbox) {
+    discoveryInbox.innerHTML = discoveryRows.length ? discoveryRows.map((row) => {
+      const pattern = describePattern(row.pattern_key);
+      const selected = row.pattern_key === state.evolutionSelectedPattern;
+      const avgPnl = row.avg_pnl_pct ?? patternStatsByKey.get(row.pattern_key)?.avg_pnl_pct;
+      return `
+        <button class="evolution-inbox-row ${selected ? "is-selected" : ""}" type="button" data-pattern-key="${row.pattern_key}">
+          <div class="evolution-inbox-main">
+            <strong>${pattern.title}</strong>
+            <span>${pattern.issue}</span>
+          </div>
+          <div class="evolution-inbox-metrics">
+            <span class="severity-chip severity-${String(row.severity || "").toLowerCase()}">${row.severity}</span>
+            <span>N ${row.sample_count}</span>
+            <span class="${Number(avgPnl || 0) >= 0 ? "pos" : "neg"}">${avgPnl == null ? "—" : fmtPct(avgPnl, 2)}</span>
+          </div>
+        </button>
+      `;
+    }).join("") : `<article class="trade-card evolution-card empty"><p>${t("evolutionNoDiscoveries")}</p></article>`;
+    discoveryInbox.querySelectorAll("[data-pattern-key]").forEach((node) => {
+      node.addEventListener("click", () => {
+        state.evolutionSelectedPattern = node.getAttribute("data-pattern-key");
+        renderEvolutionSummary(data);
+      });
+    });
+  }
+
+  const discoveryDetail = document.getElementById("evolution-discovery-detail");
+  if (discoveryDetail) {
+    const row = discoveryRows.find((item) => item.pattern_key === state.evolutionSelectedPattern);
+    const relatedMutation = decisionRows.find((item) => item.pattern_key === state.evolutionSelectedPattern);
+    const relatedPattern = patternStatsByKey.get(state.evolutionSelectedPattern);
+    const pattern = row ? describePattern(row.pattern_key) : null;
+    if (!row || !pattern) {
+      discoveryDetail.innerHTML = `<article class="trade-card evolution-card empty"><p>${t("evolutionNoDiscoveryDetail")}</p></article>`;
+    } else {
+      const summary = relatedMutation ? mutationSummary(relatedMutation) : null;
+      const mutationBusy = state.evolutionMutationBusyId === row.discovery_id;
+      const mutationAction = relatedMutation
+        ? `<span class="evolution-inline-badge">${queueStatusLabel(relatedMutation.status)}</span>`
+        : `<button class="evolution-run-button" type="button" data-run-mutation="${row.discovery_id}" ${mutationBusy ? "disabled" : ""}>${mutationBusy ? "Running..." : "→ Run Mutation"}</button>`;
+      const avgPnlValue = row.avg_pnl_pct ?? relatedPattern?.avg_pnl_pct;
+      const statusText = relatedMutation
+        ? queueStatusLabel(relatedMutation.status)
+        : (state.lang === "zh" ? "待编译" : "Pending compile");
+      const nextStepText = relatedMutation
+        ? (relatedMutation.hypothesis || summary?.expectedImpact || "—")
+        : (state.lang === "zh" ? "还没有 mutation proposal。" : "No mutation proposal yet.");
+      discoveryDetail.innerHTML = `
+        <article class="evolution-log-row compact">
+          <div class="evolution-log-head">
+            <strong>${detailHeadline(pattern, row)}</strong>
+            <div class="evolution-log-meta">
+              <span class="decision-verdict">${discoveryLabel(row.discovery_type)}</span>
+              <span class="severity-chip severity-${String(row.severity || "").toLowerCase()}">${row.severity}</span>
+              <span>${fmtTradeDate(row.created_at)}</span>
+            </div>
+          </div>
+          <div class="evolution-log-grid">
+            <div><span>${t("evolutionSamples")}</span><strong>${row.sample_count}</strong></div>
+            <div><span>${t("evolutionAvgPnl")}</span><strong class="${Number(avgPnlValue || 0) >= 0 ? "pos" : "neg"}">${avgPnlValue == null ? "—" : fmtPct(avgPnlValue, 2)}</strong></div>
+            <div><span>${t("status")}</span><strong>${queueStatusLabel(row.status)}</strong></div>
+            <div><span>${t("evolutionPatternKey")}</span><strong class="evolution-pattern-key">${compactPatternKey(row.pattern_key)}</strong></div>
+          </div>
+          <div class="evolution-log-block">
+            <span>${state.lang === "zh" ? "核心问题" : "Core Problem"}</span>
+            <p>${detailProblemBody(row, pattern, avgPnlValue)}</p>
+          </div>
+          <div class="evolution-log-block">
+            <div class="evolution-section-row">
+              <span>${state.lang === "zh" ? "改进方向" : "Next Step"}</span>
+              <strong class="evolution-section-status">${statusText}</strong>
+            </div>
+            <p>${nextStepText}</p>
+          </div>
+          <div class="evolution-log-inline">
+            <span><strong>${state.lang === "zh" ? "动作" : "Action"}</strong> ${mutationAction}</span>
+          </div>
+          <div class="evolution-log-block">
+            <span>${state.lang === "zh" ? "典型案例" : t("evolutionExampleTrades")}</span>
+            <div class="evolution-trade-list">${renderExampleTradesList(row)}</div>
+          </div>
         </article>
       `;
-    }).join("") : `<article class="evolution-focus-item"><p>${t("evolutionNoResearch")}</p></article>`;
-  }
-
-  const stageFlow = document.getElementById("evolution-stage-flow");
-  if (stageFlow) {
-    const pendingMutations = Math.max(0, Number(runtime.mutations || 0) - Number(runtime.validations || 0));
-    const observedPromotions = Number(runtime.promotions || 0);
-    stageFlow.innerHTML = [
-      {
-        title: t("evolutionObservationFirst"),
-        meta: `${promotionCount} promoted`,
-        body: t("evolutionObservationBody"),
-        tags: [`${observedPromotions} observed`, `${validationCount} reviewed`],
-      },
-      {
-        title: t("evolutionWaitingProof"),
-        meta: `${pendingMutations} pending`,
-        body: t("evolutionWaitingBody"),
-        tags: [`${discoveryCount} clusters`, `${Number(runtime.mutations || 0)} mutations`],
-      },
-      {
-        title: t("evolutionBottleneck"),
-        meta: t("evolutionResearchQuality"),
-        body: t("evolutionBottleneckBody"),
-        tags: ["local veto", "threshold", "observe only"],
-      },
-    ].map((item) => `
-      <article class="evolution-stage-item">
-        <div class="evolution-stage-head">
-          <strong>${item.title}</strong>
-          <span>${item.meta}</span>
-        </div>
-        <p>${item.body}</p>
-        <div class="evolution-stage-tags">
-          ${item.tags.map((tag) => `<span>${tag}</span>`).join("")}
-        </div>
-      </article>
-    `).join("");
-  }
-
-  const runtimeTarget = document.getElementById("evolution-runtime-cards");
-  if (runtimeTarget) {
-    const cards = [
-      ["DB", runtime.db_exists ? "Online" : "Offline", runtime.db_exists],
-      ["Reflections", `${runtime.reflections || 0}`, Number(runtime.reflections || 0) > 0],
-      ["Discoveries", `${runtime.discoveries || 0}`, Number(runtime.discoveries || 0) > 0],
-      ["Mutations", `${runtime.mutations || 0}`, Number(runtime.mutations || 0) > 0],
-      ["Validations", `${runtime.validations || 0}`, Number(runtime.validations || 0) > 0],
-      ["Promotions", `${runtime.promotions || 0}`, Number(runtime.promotions || 0) > 0],
-    ];
-    runtimeTarget.innerHTML = cards.map(([label, value, positive]) => `
-      <article class="asset-card evolution-stat-card">
-        <div class="rail-row-head">
-          <span class="rail-row-name">${label}</span>
-          <strong class="${positive ? "pos" : ""}">${value}</strong>
-        </div>
-      </article>
-    `).join("");
-  }
-
-  const baselineMeta = document.getElementById("evolution-baseline-meta");
-  if (baselineMeta) {
-    baselineMeta.innerHTML = `
-      <span>Version <strong>${compactBaselineName()}</strong></span>
-      <span>Profile <strong>Canonical no-HYPE</strong></span>
-      <span>Last Activity <strong>${runtime.last_activity_at || "—"}</strong></span>
-    `;
+      discoveryDetail.querySelectorAll("[data-run-mutation]").forEach((node) => {
+        node.addEventListener("click", async () => {
+          const id = Number(node.getAttribute("data-run-mutation"));
+          if (!Number.isFinite(id)) return;
+          state.evolutionMutationBusyId = id;
+          renderEvolutionSummary(data);
+          try {
+            await triggerEvolutionMutation(id);
+            const liveRow = (evolution.discoveries || []).find((item) => Number(item.discovery_id) === id);
+            if (liveRow) liveRow.status = "EXPORTED";
+          } catch (error) {
+            window.alert(`Run Mutation failed: ${error.message || error}`);
+          } finally {
+            state.evolutionMutationBusyId = null;
+            renderEvolutionSummary(data);
+          }
+        });
+      });
+    }
   }
 
   const patternTarget = document.getElementById("evolution-pattern-stats");
@@ -1655,7 +1818,7 @@ function renderEvolutionSummary(data) {
     patternTarget.innerHTML = patternRows.length ? `
       <div class="evolution-mini-table">
         <div class="evolution-mini-table-head">
-          <span>${t("evolutionPatternTitle")}</span>
+          <span>${t("evolutionPatternKey")}</span>
           <span>N</span>
           <span>WR</span>
           <span>${t("avgPnl")}</span>
@@ -1668,7 +1831,7 @@ function renderEvolutionSummary(data) {
             </div>
             <strong>${row.sample_count}</strong>
             <strong class="${Number(row.win_rate || 0) >= 50 ? "pos" : "neg"}">${fmtPct(row.win_rate || 0, 1)}</strong>
-            <strong class="${Number(row.avg_pnl_pct || 0) >= 0 ? "pos" : "neg"}">${fmtPct(row.avg_pnl_pct || 0, 2)}</strong>
+            <strong class="${Number(row.avg_pnl_pct ?? 0) >= 0 ? "pos" : "neg"}">${row.avg_pnl_pct == null ? "—" : fmtPct(row.avg_pnl_pct, 2)}</strong>
           </div>
         `).join("")}
       </div>
@@ -1706,29 +1869,39 @@ function renderEvolutionSummary(data) {
     `; }).join("") : `<article class="trade-card evolution-card empty"><p>${t("evolutionNoDecisionCards")}</p></article>`;
   }
 
-  const discoveriesTarget = document.getElementById("evolution-discoveries");
-  if (discoveriesTarget) {
-    discoveriesTarget.innerHTML = discoveryRows.length ? discoveryRows.map((row) => `
+  const bridgeTarget = document.getElementById("evolution-bridge-results");
+  if (bridgeTarget) {
+    bridgeTarget.innerHTML = bridgeRows.length ? bridgeRows.map((row) => {
+      const pattern = row.pattern_key ? describePattern(row.pattern_key) : null;
+      const title = row.title || (pattern ? pattern.title : row.problem_id);
+      const providerModel = [row.provider, row.model].filter(Boolean).join(" · ") || "—";
+      const changeType = row.proposed_change_type || row.compiler_hint || "—";
+      return `
       <article class="evolution-log-row compact">
         <div class="evolution-log-head">
-          <strong>${describePattern(row.pattern_key).title}</strong>
+          <strong>${title}</strong>
           <div class="evolution-log-meta">
-            <span>${discoveryLabel(row.discovery_type)}</span>
-            <span>${fmtTradeDate(row.created_at)}</span>
+            <span>${row.status || "completed"}</span>
+            <span>${fmtTradeDate(row.completed_at || row.imported_at)}</span>
           </div>
         </div>
         <div class="evolution-log-grid">
-          <div><span>${t("evolutionSeverity")}</span><strong>${row.severity}</strong></div>
-          <div><span>${t("evolutionConfidence")}</span><strong>${fmtNum(row.confidence || 0, 3)}</strong></div>
-          <div><span>${t("evolutionSamples")}</span><strong>${row.sample_count}</strong></div>
-          <div><span>${t("status")}</span><strong>${queueStatusLabel(row.status)}</strong></div>
+          <div><span>${t("evolutionScope")}</span><strong>${pattern ? pattern.title : (row.pattern_key || "—")}</strong></div>
+          <div><span>${t("evolutionAction")}</span><strong>${mutationLabel(changeType)}</strong></div>
+          <div><span>${t("evolutionProviderModel")}</span><strong>${providerModel}</strong></div>
+          <div><span>${t("status")}</span><strong>${row.problem_id}</strong></div>
         </div>
         <div class="evolution-log-block">
-          <span>${t("evolutionWhyFlagged")}</span>
-          <p>${discoveryWhy(row)}</p>
+          <span>${t("evolutionHypothesis")}</span>
+          <p>${row.hypothesis || "—"}</p>
+        </div>
+        <div class="evolution-log-block">
+          <span>${t("evolutionRiskNote")}</span>
+          <p>${row.risk_note || row.why_flagged || "—"}</p>
         </div>
       </article>
-    `).join("") : `<article class="trade-card evolution-card empty"><p>${t("evolutionNoDiscoveries")}</p></article>`;
+    `;
+    }).join("") : `<article class="trade-card evolution-card empty"><p>${t("evolutionNoBridgeResults")}</p></article>`;
   }
 
   const vpTarget = document.getElementById("evolution-validation-promotion");

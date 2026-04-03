@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-03 04:41:47",
-    "data_as_of": "2026-04-03 00:00:00",
+    "updated_at": "2026-04-03 08:06:34",
+    "data_as_of": "2026-04-03 04:51:25",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -43044,11 +43044,11 @@
           "symbol": "ETHUSDT",
           "direction": "LONG",
           "entry_price": 2131.46,
-          "current_price": 2053.0,
-          "current_pnl_pct": -3.68,
+          "current_price": 2064.98,
+          "current_pnl_pct": -3.12,
           "entry_ts": "2026-04-01 08:02",
           "signal_ts": "2026-04-01 04:00",
-          "hold_hours": 40.0,
+          "hold_hours": 44.0,
           "position_size": 1.0,
           "peak_pnl_pct": 0.0,
           "realized_pnl_pct": 0.0,
@@ -52460,10 +52460,10 @@
           "symbol": "ETHUSDT",
           "direction": "SHORT",
           "entry_price": 2032.04,
-          "current_price": 2053.0,
-          "current_pnl_pct": -1.03,
+          "current_price": 2064.98,
+          "current_pnl_pct": -1.62,
           "entry_ts": "2026-04-02 08:00",
-          "hold_hours": 16.0,
+          "hold_hours": 20.0,
           "remaining_size": 0.492116,
           "original_size": 0.492116,
           "partial_taken": false,
@@ -96863,7 +96863,7 @@
     "evolution": {
       "name": "Grapes Evolution",
       "status": "LIVE MONITOR",
-      "report_date": "2026-04-02 09:00:28",
+      "report_date": "2026-04-03 04:51:25",
       "baseline": {
         "version": "btc_eth_high_chase_eth_bucket_sol052_no_hype",
         "display_name": "BTC+ETH High-Chase + ETH Bucket + SOL 0.52/0.50 (No HYPE)",
@@ -96913,20 +96913,22 @@
         "reflections": 233,
         "pattern_stats": 99,
         "discoveries": 22,
-        "mutations": 14,
-        "validations": 14,
-        "promotions": 14,
-        "last_activity_at": "2026-04-02 09:00:28"
+        "mutations": 0,
+        "validations": 0,
+        "promotions": 0,
+        "last_activity_at": "2026-04-03 04:51:25"
       },
       "discoveries": [
         {
+          "discovery_id": 1,
           "pattern_key": "ethusdt:late_trend.trend_follow.tiered_entry.long",
           "discovery_type": "high_variance",
           "severity": "high",
           "confidence": 0.82,
           "sample_count": 12,
-          "status": "OPEN",
-          "created_at": "2026-04-02 07:46:15",
+          "avg_pnl_pct": -0.504,
+          "status": "IMPORTED",
+          "created_at": "2026-04-03 04:51:25",
           "example_trades": [
             {
               "trade_id": "backtest::ETH::2026-01-03 12:00:00::214",
@@ -96934,7 +96936,7 @@
               "direction": 1,
               "entry_signal_ts": "2026-01-03 12:00:00",
               "close_signal_ts": "2026-01-06 00:00:00",
-              "pnl_pct": 391.1702,
+              "pnl_pct": 3.9117,
               "close_reason": "probability_exit",
               "source": "backtest"
             },
@@ -96944,20 +96946,22 @@
               "direction": 1,
               "entry_signal_ts": "2025-05-27 20:00:00",
               "close_signal_ts": "2025-05-30 00:00:00",
-              "pnl_pct": -228.4331,
+              "pnl_pct": -2.2843,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
           ]
         },
         {
+          "discovery_id": 2,
           "pattern_key": "ethusdt:high_chase.late_trend.trend_follow.tiered_entry",
           "discovery_type": "high_variance",
           "severity": "high",
           "confidence": 0.81,
           "sample_count": 11,
-          "status": "OPEN",
-          "created_at": "2026-04-02 07:46:15",
+          "avg_pnl_pct": 0.492,
+          "status": "EXPORTED",
+          "created_at": "2026-04-03 04:51:25",
           "example_trades": [
             {
               "trade_id": "backtest::ETH::2025-12-04 00:00:00::209",
@@ -96965,7 +96969,7 @@
               "direction": 1,
               "entry_signal_ts": "2025-12-04 00:00:00",
               "close_signal_ts": "2025-12-06 00:00:00",
-              "pnl_pct": -541.0493,
+              "pnl_pct": -5.4105,
               "close_reason": "probability_exit",
               "source": "backtest"
             },
@@ -96975,7 +96979,7 @@
               "direction": 1,
               "entry_signal_ts": "2025-08-09 08:00:00",
               "close_signal_ts": "2025-08-11 08:00:00",
-              "pnl_pct": 229.5472,
+              "pnl_pct": 2.2955,
               "close_reason": "probability_exit",
               "source": "backtest"
             },
@@ -96985,61 +96989,22 @@
               "direction": 1,
               "entry_signal_ts": "2025-01-04 20:00:00",
               "close_signal_ts": "2025-01-06 20:00:00",
-              "pnl_pct": 137.761,
+              "pnl_pct": 1.3776,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
           ]
         },
         {
-          "pattern_key": "ethusdt:high_chase.late_trend.trend_follow.tiered_entry",
-          "discovery_type": "positive_edge",
-          "severity": "medium",
-          "confidence": 0.81,
-          "sample_count": 11,
-          "status": "OPEN",
-          "created_at": "2026-04-02 07:46:15",
-          "example_trades": [
-            {
-              "trade_id": "backtest::ETH::2025-12-04 00:00:00::209",
-              "symbol": "ETHUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-12-04 00:00:00",
-              "close_signal_ts": "2025-12-06 00:00:00",
-              "pnl_pct": -541.0493,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::ETH::2025-08-09 08:00:00::190",
-              "symbol": "ETHUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-08-09 08:00:00",
-              "close_signal_ts": "2025-08-11 08:00:00",
-              "pnl_pct": 229.5472,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::ETH::2025-01-04 20:00:00::160",
-              "symbol": "ETHUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-01-04 20:00:00",
-              "close_signal_ts": "2025-01-06 20:00:00",
-              "pnl_pct": 137.761,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
+          "discovery_id": 4,
           "pattern_key": "solusdt:late_trend.trend_follow.tiered_entry.long",
           "discovery_type": "loss_cluster",
           "severity": "high",
           "confidence": 0.813,
           "sample_count": 9,
+          "avg_pnl_pct": -1.176,
           "status": "OPEN",
-          "created_at": "2026-04-02 07:46:15",
+          "created_at": "2026-04-03 04:51:25",
           "example_trades": [
             {
               "trade_id": "backtest::SOL::2025-07-22 16:00:00::186",
@@ -97047,7 +97012,7 @@
               "direction": 1,
               "entry_signal_ts": "2025-07-22 16:00:00",
               "close_signal_ts": "2025-07-24 20:00:00",
-              "pnl_pct": -707.621,
+              "pnl_pct": -7.0762,
               "close_reason": "probability_exit",
               "source": "backtest"
             },
@@ -97057,51 +97022,22 @@
               "direction": 1,
               "entry_signal_ts": "2025-05-09 12:00:00",
               "close_signal_ts": "2025-05-11 16:00:00",
-              "pnl_pct": -125.3958,
+              "pnl_pct": -1.254,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
           ]
         },
         {
-          "pattern_key": "solusdt:late_trend.trend_follow.tiered_entry.long",
-          "discovery_type": "high_variance",
-          "severity": "high",
-          "confidence": 0.79,
-          "sample_count": 9,
-          "status": "OPEN",
-          "created_at": "2026-04-02 07:46:15",
-          "example_trades": [
-            {
-              "trade_id": "backtest::SOL::2025-07-22 16:00:00::186",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-07-22 16:00:00",
-              "close_signal_ts": "2025-07-24 20:00:00",
-              "pnl_pct": -707.621,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::SOL::2025-05-09 12:00:00::171",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-05-09 12:00:00",
-              "close_signal_ts": "2025-05-11 16:00:00",
-              "pnl_pct": -125.3958,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
+          "discovery_id": 6,
           "pattern_key": "solusdt:high_chase.trend_follow.tiered_entry.long",
           "discovery_type": "high_variance",
           "severity": "high",
           "confidence": 0.77,
           "sample_count": 7,
+          "avg_pnl_pct": -0.316,
           "status": "OPEN",
-          "created_at": "2026-04-02 07:46:15",
+          "created_at": "2026-04-03 04:51:25",
           "example_trades": [
             {
               "trade_id": "backtest::SOL::2026-03-23 20:00:00::225",
@@ -97109,7 +97045,7 @@
               "direction": 1,
               "entry_signal_ts": "2026-03-23 20:00:00",
               "close_signal_ts": "2026-03-25 20:00:00",
-              "pnl_pct": 23.6028,
+              "pnl_pct": 0.236,
               "close_reason": "probability_exit",
               "source": "backtest"
             },
@@ -97129,20 +97065,22 @@
               "direction": 1,
               "entry_signal_ts": "2025-09-03 04:00:00",
               "close_signal_ts": "2025-09-05 12:00:00",
-              "pnl_pct": -179.006,
+              "pnl_pct": -1.7901,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
           ]
         },
         {
+          "discovery_id": 7,
           "pattern_key": "solusdt:high_chase.tp50_then_be.trend_follow.tiered_entry",
           "discovery_type": "high_variance",
           "severity": "high",
           "confidence": 0.77,
           "sample_count": 7,
+          "avg_pnl_pct": 6.848,
           "status": "OPEN",
-          "created_at": "2026-04-02 07:46:15",
+          "created_at": "2026-04-03 04:51:25",
           "example_trades": [
             {
               "trade_id": "backtest::SOL::2025-10-01 12:00:00::200",
@@ -97150,7 +97088,7 @@
               "direction": 1,
               "entry_signal_ts": "2025-10-01 12:00:00",
               "close_signal_ts": "2025-10-03 20:00:00",
-              "pnl_pct": 669.8331,
+              "pnl_pct": 6.6983,
               "close_reason": "probability_exit",
               "source": "backtest"
             },
@@ -97160,7 +97098,7 @@
               "direction": 1,
               "entry_signal_ts": "2025-08-22 16:00:00",
               "close_signal_ts": "2025-08-24 20:00:00",
-              "pnl_pct": 588.8438,
+              "pnl_pct": 5.8884,
               "close_reason": "probability_exit",
               "source": "backtest"
             },
@@ -97170,61 +97108,22 @@
               "direction": 1,
               "entry_signal_ts": "2025-04-22 12:00:00",
               "close_signal_ts": "2025-04-25 04:00:00",
-              "pnl_pct": 697.6087,
+              "pnl_pct": 6.9761,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
           ]
         },
         {
-          "pattern_key": "solusdt:high_chase.tp50_then_be.trend_follow.tiered_entry",
-          "discovery_type": "positive_edge",
-          "severity": "medium",
-          "confidence": 0.77,
-          "sample_count": 7,
-          "status": "OPEN",
-          "created_at": "2026-04-02 07:46:15",
-          "example_trades": [
-            {
-              "trade_id": "backtest::SOL::2025-10-01 12:00:00::200",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-10-01 12:00:00",
-              "close_signal_ts": "2025-10-03 20:00:00",
-              "pnl_pct": 669.8331,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::SOL::2025-08-22 16:00:00::195",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-08-22 16:00:00",
-              "close_signal_ts": "2025-08-24 20:00:00",
-              "pnl_pct": 588.8438,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::SOL::2025-04-22 12:00:00::169",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-04-22 12:00:00",
-              "close_signal_ts": "2025-04-25 04:00:00",
-              "pnl_pct": 697.6087,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
+          "discovery_id": 9,
           "pattern_key": "solusdt:late_trend.tp50_then_be.trend_follow.tiered_entry",
           "discovery_type": "high_variance",
           "severity": "high",
           "confidence": 0.77,
           "sample_count": 7,
+          "avg_pnl_pct": 9.199,
           "status": "OPEN",
-          "created_at": "2026-04-02 07:46:15",
+          "created_at": "2026-04-03 04:51:25",
           "example_trades": [
             {
               "trade_id": "backtest::SOL::2025-01-18 08:00:00::161",
@@ -97232,41 +97131,22 @@
               "direction": 1,
               "entry_signal_ts": "2025-01-18 08:00:00",
               "close_signal_ts": "2025-01-20 12:00:00",
-              "pnl_pct": 1112.5356,
+              "pnl_pct": 11.1254,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
           ]
         },
         {
-          "pattern_key": "solusdt:late_trend.tp50_then_be.trend_follow.tiered_entry",
-          "discovery_type": "positive_edge",
-          "severity": "medium",
-          "confidence": 0.77,
-          "sample_count": 7,
-          "status": "OPEN",
-          "created_at": "2026-04-02 07:46:15",
-          "example_trades": [
-            {
-              "trade_id": "backtest::SOL::2025-01-18 08:00:00::161",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-01-18 08:00:00",
-              "close_signal_ts": "2025-01-20 12:00:00",
-              "pnl_pct": 1112.5356,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
+          "discovery_id": 11,
           "pattern_key": "ethusdt:high_chase.trend_follow.tiered_entry.long",
           "discovery_type": "high_variance",
           "severity": "high",
           "confidence": 0.76,
           "sample_count": 6,
+          "avg_pnl_pct": 1.221,
           "status": "OPEN",
-          "created_at": "2026-04-02 07:46:15",
+          "created_at": "2026-04-03 04:51:25",
           "example_trades": [
             {
               "trade_id": "backtest::ETH::2025-07-18 00:00:00::185",
@@ -97274,7 +97154,7 @@
               "direction": 1,
               "entry_signal_ts": "2025-07-18 00:00:00",
               "close_signal_ts": "2025-07-20 00:00:00",
-              "pnl_pct": 311.7993,
+              "pnl_pct": 3.118,
               "close_reason": "probability_exit",
               "source": "backtest"
             },
@@ -97284,627 +97164,45 @@
               "direction": 1,
               "entry_signal_ts": "2025-07-02 16:00:00",
               "close_signal_ts": "2025-07-04 16:00:00",
-              "pnl_pct": -10.4732,
+              "pnl_pct": -0.1047,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
           ]
         },
         {
+          "discovery_id": 12,
           "pattern_key": "ethusdt:crowded_shorts.trend_follow.tiered_entry.short",
           "discovery_type": "high_variance",
           "severity": "high",
           "confidence": 0.76,
           "sample_count": 6,
+          "avg_pnl_pct": 1.864,
           "status": "OPEN",
-          "created_at": "2026-04-02 07:46:15",
+          "created_at": "2026-04-03 04:51:25",
           "example_trades": []
         }
       ],
-      "mutations": [
+      "mutations": [],
+      "validations": [],
+      "promotions": [],
+      "bridge_results": [
         {
-          "proposal_id": "MUT_20260402074615_NEWVETO_ethusdt_late_trend_trend_follow_tier",
+          "problem_id": "disc_1_ethusdt_late_trend_trend_follow_tiered_entry_lon",
+          "discovery_id": 1,
+          "proposal_id": "",
           "pattern_key": "ethusdt:late_trend.trend_follow.tiered_entry.long",
-          "discovery_type": "high_variance",
-          "mutation_type": "observation_only",
-          "target_scope": "ETHUSDT LONG",
-          "deployment_mode": "SHADOW",
-          "status": "SHADOW_READY",
-          "created_at": "2026-04-02 07:46:15",
-          "updated_at": "2026-04-02 08:56:19",
-          "research_review": {
-            "compiler_hint": "observation_only",
-            "confidence": 0.5,
-            "expected_impact": "Prevents premature hard-gating of potentially valid late-trend entries while accumulating statistically sufficient evidence to validate or refute the exhaustion hypothesis; maintains current strategy behavior but increases monitoring granularity for this specific pattern key.",
-            "hypothesis": "ETHUSDT tiered entries in late-trend regimes suffer from exhaustion blindness that requires either regime confirmation or veto logic, but current evidence is insufficient to justify production gating.",
-            "model": "",
-            "problem_summary": "Small-sample cluster (n=12) of tiered long entries in late-trend ETHUSDT regimes exhibiting catastrophic mean returns (-50.4%) and extreme variance, consistent with momentum exhaustion chasing rather than validated trend continuation.",
-            "proposed_change_type": "observe_only",
-            "provider": "moonshot",
-            "risk_note": "Observing rather than intervening risks repeated -50% drawdowns if the pattern is systematic; trade-off is avoiding false positives that would prematurely block valid trend-following alpha on insufficient evidence (n=12).",
-            "title": "ETHUSDT Late-Trend Entry Variance Anomaly",
-            "used_llm": true,
-            "verdict": "observe",
-            "why_flagged": "Extreme downside variance in a narrow tactical pattern suggests entry logic may lack exhaustion detection, but low sample count prevents confident distinction between genuine regime failure and outlier noise."
-          },
-          "example_trades": [
-            {
-              "trade_id": "backtest::ETH::2026-01-03 12:00:00::214",
-              "symbol": "ETHUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2026-01-03 12:00:00",
-              "close_signal_ts": "2026-01-06 00:00:00",
-              "pnl_pct": 391.1702,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::ETH::2025-05-27 20:00:00::173",
-              "symbol": "ETHUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-05-27 20:00:00",
-              "close_signal_ts": "2025-05-30 00:00:00",
-              "pnl_pct": -228.4331,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_ethusdt_high_chase_late_trend_trend_",
-          "pattern_key": "ethusdt:high_chase.late_trend.trend_follow.tiered_entry",
-          "discovery_type": "high_variance",
-          "mutation_type": "observation_only",
-          "target_scope": "ETHUSDT",
-          "deployment_mode": "SHADOW",
-          "status": "SHADOW_READY",
-          "created_at": "2026-04-02 07:46:15",
-          "updated_at": "2026-04-02 08:57:13",
-          "research_review": {
-            "compiler_hint": "observation_only",
-            "confidence": 0.3,
-            "expected_impact": "Accumulate sufficient sample size (target n>50) to determine whether the variance stems from legitimate trend physics or mean-reversion toxicity; prevents premature suppression of potentially viable high-volatility edges while blocking premature deployment of untested risk controls.",
-            "hypothesis": "This pattern exhibits lottery-ticket payoff dynamics requiring larger sample validation before determining if high variance represents acceptable trend asymmetry or toxic late-entry mean reversion.",
-            "model": "",
-            "problem_summary": "Late-trend tiered entries on ETHUSDT exhibit extreme outcome dispersion (variance ~106K vs mean ~49%) across only 11 observations, indicating a potential lottery-ticket payoff structure where outsized winners may mask severe tail losses.",
-            "proposed_change_type": "observe_only",
-            "provider": "moonshot",
-            "risk_note": "Observation delays potential alpha if the pattern is genuinely profitable, but avoids the larger error of deploying hard vetoes or thresholds based on statistically insignificant data that could either kill a valid edge or fail to protect against actual downside clusters.",
-            "title": "ETH Late-Trend Chase: High Variance Lottery Pattern",
-            "used_llm": true,
-            "verdict": "observe",
-            "why_flagged": "The combination of high average returns with massive variance on a minuscule sample (n=11) makes it impossible to distinguish between legitimate asymmetric trend capture and toxic FOMO entries that randomly pay off, creating portfolio instability risk if scaled."
-          },
-          "example_trades": [
-            {
-              "trade_id": "backtest::ETH::2025-12-04 00:00:00::209",
-              "symbol": "ETHUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-12-04 00:00:00",
-              "close_signal_ts": "2025-12-06 00:00:00",
-              "pnl_pct": -541.0493,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::ETH::2025-08-09 08:00:00::190",
-              "symbol": "ETHUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-08-09 08:00:00",
-              "close_signal_ts": "2025-08-11 08:00:00",
-              "pnl_pct": 229.5472,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::ETH::2025-01-04 20:00:00::160",
-              "symbol": "ETHUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-01-04 20:00:00",
-              "close_signal_ts": "2025-01-06 20:00:00",
-              "pnl_pct": 137.761,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_solusdt_late_trend_trend_follow_tier",
-          "pattern_key": "solusdt:late_trend.trend_follow.tiered_entry.long",
-          "discovery_type": "loss_cluster",
-          "mutation_type": "shadow_rule",
-          "target_scope": "SOLUSDT LONG",
-          "deployment_mode": "SHADOW",
-          "status": "SHADOW_READY",
-          "created_at": "2026-04-02 07:46:15",
-          "updated_at": "2026-04-02 09:00:28",
-          "research_review": {
-            "compiler_hint": "shadow_rule",
-            "confidence": 0.5,
-            "expected_impact": "Filter tail-risk entries in SOLUSDT late-trend longs when range_position > 0.75 and OI delta is negative beyond 1 std; expected to cut worst-case drawdowns while preserving entries earlier in trend structure.",
-            "hypothesis": "Entries near local highs with concurrent OI contraction in SOLUSDT late-trend longs capture exhaustion dynamics that produce asymmetric negative returns, and should be vetoed pending validation.",
-            "model": "",
-            "problem_summary": "Late-trend long entries in SOLUSDT triggered when price is stretched (>75% of local range, within 3% of highs) coinciding with sharp Open Interest contraction (dz_oi < -1.0), indicating leveraged distribution rather than trend continuation.",
-            "proposed_change_type": "local_veto",
-            "provider": "moonshot",
-            "risk_note": "Low sample count (n=9) risks overfitting to specific consolidation tops; may shadow-block valid continuation entries during brief OI washouts before leg higher.",
-            "title": "SOL Late-Trend Exhaustion Shadow Veto",
-            "used_llm": true,
-            "verdict": "observe",
-            "why_flagged": "Despite small sample (n=9), the cluster shows catastrophic asymmetric downside (-117% avg) with clear exhaustion signatures: price at range extremes while OI bleeds out, suggesting tiered entries are chasing into smart-money exits."
-          },
-          "example_trades": [
-            {
-              "trade_id": "backtest::SOL::2025-07-22 16:00:00::186",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-07-22 16:00:00",
-              "close_signal_ts": "2025-07-24 20:00:00",
-              "pnl_pct": -707.621,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::SOL::2025-05-09 12:00:00::171",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-05-09 12:00:00",
-              "close_signal_ts": "2025-05-11 16:00:00",
-              "pnl_pct": -125.3958,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_solusdt_high_chase_trend_follow_tier",
-          "pattern_key": "solusdt:high_chase.trend_follow.tiered_entry.long",
-          "discovery_type": "high_variance",
-          "mutation_type": "observation_only",
-          "target_scope": "SOLUSDT LONG",
-          "deployment_mode": "SHADOW",
-          "status": "SHADOW_READY",
-          "created_at": "2026-04-02 07:46:15",
-          "updated_at": "2026-04-02 09:00:28",
-          "research_review": {
-            "compiler_hint": "observation_only",
-            "confidence": 0.5,
-            "expected_impact": "Accumulates additional evidence to determine if high_chase entries require gating, preventing premature veto of potentially profitable trend continuations while flagging the pattern for monitoring.",
-            "hypothesis": "Stretched long entries near local highs on SOLUSDT generate negative expected value with high variance, requiring larger sample confirmation before veto implementation.",
-            "model": "",
-            "problem_summary": "Tiered long entries tagged 'high_chase' on SOLUSDT exhibit extreme outcome variance (variance: 27881) and negative average PnL (-31.6%) across 7 samples, suggesting potential toxicity in late-trend momentum entries but with statistically insufficient data for reliable classification.",
-            "proposed_change_type": "observe_only",
-            "provider": "moonshot",
-            "risk_note": "Continued exposure to potential systematic losses during observation window; delayed protective intervention if pattern is genuinely toxic rather than noise.",
-            "title": "SOLUSDT High-Chase Variance: Observation Phase",
-            "used_llm": true,
-            "verdict": "observe",
-            "why_flagged": "High severity variance clusters indicate potential tail-risk in entry logic, yet the small sample (n=7) prevents distinction between systematic failure and outlier noise."
-          },
-          "example_trades": [
-            {
-              "trade_id": "backtest::SOL::2026-03-23 20:00:00::225",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2026-03-23 20:00:00",
-              "close_signal_ts": "2026-03-25 20:00:00",
-              "pnl_pct": 23.6028,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "live::SOLUSDT|2026-03-23 16:00:00|1|1",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2026-03-23 16:00:00",
-              "close_signal_ts": "2026-03-25 16:00:00",
-              "pnl_pct": 0.0024,
-              "close_reason": "signal_exit",
-              "source": "live"
-            },
-            {
-              "trade_id": "backtest::SOL::2025-09-03 04:00:00::197",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-09-03 04:00:00",
-              "close_signal_ts": "2025-09-05 12:00:00",
-              "pnl_pct": -179.006,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_solusdt_high_chase_tp50_then_be_tren",
-          "pattern_key": "solusdt:high_chase.tp50_then_be.trend_follow.tiered_entry",
-          "discovery_type": "high_variance",
-          "mutation_type": "new_veto",
-          "target_scope": "SOLUSDT",
-          "deployment_mode": "SHADOW",
-          "status": "SHADOW_READY",
-          "created_at": "2026-04-02 07:46:15",
-          "updated_at": "2026-04-02 07:46:15",
-          "research_review": {},
-          "example_trades": [
-            {
-              "trade_id": "backtest::SOL::2025-10-01 12:00:00::200",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-10-01 12:00:00",
-              "close_signal_ts": "2025-10-03 20:00:00",
-              "pnl_pct": 669.8331,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::SOL::2025-08-22 16:00:00::195",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-08-22 16:00:00",
-              "close_signal_ts": "2025-08-24 20:00:00",
-              "pnl_pct": 588.8438,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::SOL::2025-04-22 12:00:00::169",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-04-22 12:00:00",
-              "close_signal_ts": "2025-04-25 04:00:00",
-              "pnl_pct": 697.6087,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_solusdt_late_trend_tp50_then_be_tren",
-          "pattern_key": "solusdt:late_trend.tp50_then_be.trend_follow.tiered_entry",
-          "discovery_type": "high_variance",
-          "mutation_type": "new_veto",
-          "target_scope": "SOLUSDT",
-          "deployment_mode": "SHADOW",
-          "status": "SHADOW_READY",
-          "created_at": "2026-04-02 07:46:15",
-          "updated_at": "2026-04-02 07:46:15",
-          "research_review": {},
-          "example_trades": [
-            {
-              "trade_id": "backtest::SOL::2025-01-18 08:00:00::161",
-              "symbol": "SOLUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-01-18 08:00:00",
-              "close_signal_ts": "2025-01-20 12:00:00",
-              "pnl_pct": 1112.5356,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_ethusdt_high_chase_trend_follow_tier",
-          "pattern_key": "ethusdt:high_chase.trend_follow.tiered_entry.long",
-          "discovery_type": "high_variance",
-          "mutation_type": "new_veto",
-          "target_scope": "ETHUSDT LONG",
-          "deployment_mode": "SHADOW",
-          "status": "SHADOW_READY",
-          "created_at": "2026-04-02 07:46:15",
-          "updated_at": "2026-04-02 07:46:15",
-          "research_review": {},
-          "example_trades": [
-            {
-              "trade_id": "backtest::ETH::2025-07-18 00:00:00::185",
-              "symbol": "ETHUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-07-18 00:00:00",
-              "close_signal_ts": "2025-07-20 00:00:00",
-              "pnl_pct": 311.7993,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::ETH::2025-07-02 16:00:00::179",
-              "symbol": "ETHUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-07-02 16:00:00",
-              "close_signal_ts": "2025-07-04 16:00:00",
-              "pnl_pct": -10.4732,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
-          "proposal_id": "MUT_20260402074615_THRESHOLDA_ethusdt_crowded_shorts_trend_follow_",
-          "pattern_key": "ethusdt:crowded_shorts.trend_follow.tiered_entry.short",
-          "discovery_type": "high_variance",
-          "mutation_type": "threshold_adjustment",
-          "target_scope": "ETHUSDT SHORT",
-          "deployment_mode": "SHADOW",
-          "status": "SHADOW_READY",
-          "created_at": "2026-04-02 07:46:15",
-          "updated_at": "2026-04-02 07:46:15",
-          "research_review": {},
-          "example_trades": []
-        },
-        {
-          "proposal_id": "MUT_20260402074615_SHADOWRULE_ethusdt_crowded_shorts_trend_follow_",
-          "pattern_key": "ethusdt:crowded_shorts.trend_follow.tiered_entry.short",
-          "discovery_type": "positive_edge",
-          "mutation_type": "shadow_rule",
-          "target_scope": "ETHUSDT SHORT",
-          "deployment_mode": "SHADOW",
-          "status": "SHADOW_READY",
-          "created_at": "2026-04-02 07:46:15",
-          "updated_at": "2026-04-02 07:46:15",
-          "research_review": {},
-          "example_trades": []
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_btcusdt_high_chase_tp50_then_be_tren",
-          "pattern_key": "btcusdt:high_chase.tp50_then_be.trend_follow.tiered_entry",
-          "discovery_type": "high_variance",
-          "mutation_type": "new_veto",
-          "target_scope": "BTCUSDT",
-          "deployment_mode": "SHADOW",
-          "status": "SHADOW_READY",
-          "created_at": "2026-04-02 07:46:15",
-          "updated_at": "2026-04-02 07:46:15",
-          "research_review": {},
-          "example_trades": [
-            {
-              "trade_id": "backtest::BTC::2026-01-13 12:00:00::218",
-              "symbol": "BTCUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2026-01-13 12:00:00",
-              "close_signal_ts": "2026-01-17 20:00:00",
-              "pnl_pct": 346.7861,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_btcusdt_late_trend_tp50_then_be_tren",
-          "pattern_key": "btcusdt:late_trend.tp50_then_be.trend_follow.tiered_entry",
-          "discovery_type": "high_variance",
-          "mutation_type": "new_veto",
-          "target_scope": "BTCUSDT",
-          "deployment_mode": "SHADOW",
-          "status": "SHADOW_READY",
-          "created_at": "2026-04-02 07:46:15",
-          "updated_at": "2026-04-02 07:46:15",
-          "research_review": {},
-          "example_trades": [
-            {
-              "trade_id": "backtest::BTC::2026-01-03 12:00:00::215",
-              "symbol": "BTCUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2026-01-03 12:00:00",
-              "close_signal_ts": "2026-01-07 12:00:00",
-              "pnl_pct": 300.946,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::BTC::2025-08-08 20:00:00::191",
-              "symbol": "BTCUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-08-08 20:00:00",
-              "close_signal_ts": "2025-08-12 20:00:00",
-              "pnl_pct": 348.5268,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_btcusdt_late_trend_trend_follow_tier",
-          "pattern_key": "btcusdt:late_trend.trend_follow.tiered_entry.long",
-          "discovery_type": "loss_cluster",
-          "mutation_type": "new_veto",
-          "target_scope": "BTCUSDT LONG",
-          "deployment_mode": "SHADOW",
-          "status": "SHADOW_READY",
-          "created_at": "2026-04-02 07:46:15",
-          "updated_at": "2026-04-02 07:46:15",
-          "research_review": {},
-          "example_trades": [
-            {
-              "trade_id": "backtest::BTC::2025-10-28 08:00:00::206",
-              "symbol": "BTCUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-10-28 08:00:00",
-              "close_signal_ts": "2025-11-01 08:00:00",
-              "pnl_pct": -377.5499,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            },
-            {
-              "trade_id": "backtest::BTC::2025-03-25 12:00:00::167",
-              "symbol": "BTCUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2025-03-25 12:00:00",
-              "close_signal_ts": "2025-03-30 16:00:00",
-              "pnl_pct": -547.4686,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
-        }
-      ],
-      "validations": [
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_ethusdt_late_trend_trend_follow_tier",
-          "status": "RESEARCH_ACCEPTED",
-          "accepted": true,
-          "overfit_risk": "low",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_ethusdt_high_chase_late_trend_trend_",
-          "status": "RESEARCH_ACCEPTED",
-          "accepted": true,
-          "overfit_risk": "low",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_solusdt_late_trend_trend_follow_tier",
-          "status": "RESEARCH_ACCEPTED",
-          "accepted": true,
-          "overfit_risk": "low",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_solusdt_high_chase_trend_follow_tier",
-          "status": "RESEARCH_ACCEPTED",
-          "accepted": true,
-          "overfit_risk": "low",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_solusdt_high_chase_tp50_then_be_tren",
-          "status": "RESEARCH_ACCEPTED",
-          "accepted": true,
-          "overfit_risk": "low",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_solusdt_late_trend_tp50_then_be_tren",
-          "status": "RESEARCH_ACCEPTED",
-          "accepted": true,
-          "overfit_risk": "low",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_ethusdt_high_chase_trend_follow_tier",
-          "status": "RESEARCH_ACCEPTED",
-          "accepted": true,
-          "overfit_risk": "low",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_THRESHOLDA_ethusdt_crowded_shorts_trend_follow_",
-          "status": "RESEARCH_ACCEPTED",
-          "accepted": true,
-          "overfit_risk": "low",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_SHADOWRULE_ethusdt_crowded_shorts_trend_follow_",
-          "status": "RESEARCH_ACCEPTED",
-          "accepted": true,
-          "overfit_risk": "low",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_btcusdt_high_chase_tp50_then_be_tren",
-          "status": "RESEARCH_ACCEPTED",
-          "accepted": true,
-          "overfit_risk": "low",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_btcusdt_late_trend_tp50_then_be_tren",
-          "status": "RESEARCH_ACCEPTED",
-          "accepted": true,
-          "overfit_risk": "low",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_btcusdt_late_trend_trend_follow_tier",
-          "status": "RESEARCH_ACCEPTED",
-          "accepted": true,
-          "overfit_risk": "low",
-          "created_at": "2026-04-02 07:46:15"
-        }
-      ],
-      "promotions": [
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_ethusdt_late_trend_trend_follow_tier",
-          "target_stage": "SHADOW",
-          "approved": true,
-          "reason": "Validation chain satisfied. Safe to promote to shadow.",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_ethusdt_high_chase_late_trend_trend_",
-          "target_stage": "SHADOW",
-          "approved": true,
-          "reason": "Validation chain satisfied. Safe to promote to shadow.",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_solusdt_late_trend_trend_follow_tier",
-          "target_stage": "SHADOW",
-          "approved": true,
-          "reason": "Validation chain satisfied. Safe to promote to shadow.",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_solusdt_high_chase_trend_follow_tier",
-          "target_stage": "SHADOW",
-          "approved": true,
-          "reason": "Validation chain satisfied. Safe to promote to shadow.",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_solusdt_high_chase_tp50_then_be_tren",
-          "target_stage": "SHADOW",
-          "approved": true,
-          "reason": "Validation chain satisfied. Safe to promote to shadow.",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_solusdt_late_trend_tp50_then_be_tren",
-          "target_stage": "SHADOW",
-          "approved": true,
-          "reason": "Validation chain satisfied. Safe to promote to shadow.",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_ethusdt_high_chase_trend_follow_tier",
-          "target_stage": "SHADOW",
-          "approved": true,
-          "reason": "Validation chain satisfied. Safe to promote to shadow.",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_THRESHOLDA_ethusdt_crowded_shorts_trend_follow_",
-          "target_stage": "SHADOW",
-          "approved": true,
-          "reason": "Validation chain satisfied. Safe to promote to shadow.",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_SHADOWRULE_ethusdt_crowded_shorts_trend_follow_",
-          "target_stage": "SHADOW",
-          "approved": true,
-          "reason": "Validation chain satisfied. Safe to promote to shadow.",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_btcusdt_high_chase_tp50_then_be_tren",
-          "target_stage": "SHADOW",
-          "approved": true,
-          "reason": "Validation chain satisfied. Safe to promote to shadow.",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_btcusdt_late_trend_tp50_then_be_tren",
-          "target_stage": "SHADOW",
-          "approved": true,
-          "reason": "Validation chain satisfied. Safe to promote to shadow.",
-          "created_at": "2026-04-02 07:46:15"
-        },
-        {
-          "proposal_id": "MUT_20260402074615_NEWVETO_btcusdt_late_trend_trend_follow_tier",
-          "target_stage": "SHADOW",
-          "approved": true,
-          "reason": "Validation chain satisfied. Safe to promote to shadow.",
-          "created_at": "2026-04-02 07:46:15"
+          "provider": "ollama",
+          "model": "gemma3:4b",
+          "status": "completed",
+          "completed_at": "2026-04-03T06:30:00+00:00",
+          "imported_at": "2026-04-03 06:28:26",
+          "title": "Introduce late-trend veto for ETHUSDT long positions",
+          "why_flagged": "Loss concentration suggests entry logic is too permissive in stretched continuation conditions.",
+          "proposed_change_type": "local_veto",
+          "compiler_hint": "new_veto",
+          "hypothesis": "Implement a local veto gate that blocks stretched late-trend longs near local highs.",
+          "risk_note": "Could skip some valid continuation trades."
         }
       ],
       "pattern_stats": [
@@ -97955,7 +97253,7 @@
           "symbol": "SOLUSDT",
           "sample_count": 7,
           "win_rate": 71.4,
-          "avg_pnl_pct": -31.635,
+          "avg_pnl_pct": -0.316,
           "last_outcome": "win",
           "last_seen_ts": "2026-03-25 20:00:00",
           "example_trades": [
@@ -97965,7 +97263,7 @@
               "direction": 1,
               "entry_signal_ts": "2026-03-23 20:00:00",
               "close_signal_ts": "2026-03-25 20:00:00",
-              "pnl_pct": 23.6028,
+              "pnl_pct": 0.236,
               "close_reason": "probability_exit",
               "source": "backtest"
             },
@@ -97985,7 +97283,7 @@
               "direction": 1,
               "entry_signal_ts": "2025-09-03 04:00:00",
               "close_signal_ts": "2025-09-05 12:00:00",
-              "pnl_pct": -179.006,
+              "pnl_pct": -1.7901,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
@@ -98059,7 +97357,7 @@
           "symbol": "BTCUSDT",
           "sample_count": 5,
           "win_rate": 60.0,
-          "avg_pnl_pct": 56.896,
+          "avg_pnl_pct": 0.569,
           "last_outcome": "win",
           "last_seen_ts": "2026-03-15 16:00:00",
           "example_trades": [
@@ -98069,7 +97367,7 @@
               "direction": 1,
               "entry_signal_ts": "2026-03-11 16:00:00",
               "close_signal_ts": "2026-03-15 16:00:00",
-              "pnl_pct": 161.15,
+              "pnl_pct": 1.6115,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
@@ -98101,7 +97399,7 @@
           "symbol": "BTCUSDT",
           "sample_count": 1,
           "win_rate": 100.0,
-          "avg_pnl_pct": 86.474,
+          "avg_pnl_pct": 0.865,
           "last_outcome": "win",
           "last_seen_ts": "2026-03-07 00:00:00",
           "example_trades": [
@@ -98111,7 +97409,7 @@
               "direction": -1,
               "entry_signal_ts": "2026-03-03 00:00:00",
               "close_signal_ts": "2026-03-07 00:00:00",
-              "pnl_pct": 86.474,
+              "pnl_pct": 0.8647,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
@@ -98122,7 +97420,7 @@
           "symbol": "BTCUSDT",
           "sample_count": 4,
           "win_rate": 100.0,
-          "avg_pnl_pct": 553.07,
+          "avg_pnl_pct": 5.531,
           "last_outcome": "win",
           "last_seen_ts": "2026-03-02 00:00:00",
           "example_trades": [
@@ -98132,7 +97430,7 @@
               "direction": -1,
               "entry_signal_ts": "2026-02-26 00:00:00",
               "close_signal_ts": "2026-03-02 00:00:00",
-              "pnl_pct": 334.43,
+              "pnl_pct": 3.3443,
               "close_reason": "probability_exit",
               "source": "backtest"
             },
@@ -98142,7 +97440,7 @@
               "direction": -1,
               "entry_signal_ts": "2026-01-28 20:00:00",
               "close_signal_ts": "2026-02-01 20:00:00",
-              "pnl_pct": 915.6362,
+              "pnl_pct": 9.1564,
               "close_reason": "probability_exit",
               "source": "backtest"
             },
@@ -98152,7 +97450,7 @@
               "direction": -1,
               "entry_signal_ts": "2025-11-27 12:00:00",
               "close_signal_ts": "2025-12-01 12:00:00",
-              "pnl_pct": 543.1546,
+              "pnl_pct": 5.4315,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
@@ -98163,7 +97461,7 @@
           "symbol": "SOLUSDT",
           "sample_count": 2,
           "win_rate": 100.0,
-          "avg_pnl_pct": 685.268,
+          "avg_pnl_pct": 6.853,
           "last_outcome": "win",
           "last_seen_ts": "2026-02-28 00:00:00",
           "example_trades": [
@@ -98173,7 +97471,7 @@
               "direction": -1,
               "entry_signal_ts": "2026-02-26 00:00:00",
               "close_signal_ts": "2026-02-28 00:00:00",
-              "pnl_pct": 639.8798,
+              "pnl_pct": 6.3988,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
@@ -98184,7 +97482,7 @@
           "symbol": "ETHUSDT",
           "sample_count": 1,
           "win_rate": 100.0,
-          "avg_pnl_pct": 723.047,
+          "avg_pnl_pct": 7.23,
           "last_outcome": "win",
           "last_seen_ts": "2026-01-30 04:00:00",
           "example_trades": [
@@ -98194,7 +97492,7 @@
               "direction": -1,
               "entry_signal_ts": "2026-01-28 04:00:00",
               "close_signal_ts": "2026-01-30 04:00:00",
-              "pnl_pct": 723.0471,
+              "pnl_pct": 7.2305,
               "close_reason": "probability_exit",
               "source": "backtest"
             }
