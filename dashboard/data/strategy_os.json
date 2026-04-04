@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-04 08:05:49",
-    "data_as_of": "2026-04-04 04:00:00",
+    "updated_at": "2026-04-04 12:02:25",
+    "data_as_of": "2026-04-04 08:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -52482,10 +52482,10 @@
           "symbol": "ETHUSDT",
           "direction": "SHORT",
           "entry_price": 2032.04,
-          "current_price": 2052.72,
-          "current_pnl_pct": -1.02,
+          "current_price": 2051.06,
+          "current_pnl_pct": -0.94,
           "entry_ts": "2026-04-02 08:00",
-          "hold_hours": 36.0,
+          "hold_hours": 40.0,
           "remaining_size": 0.492116,
           "original_size": 0.492116,
           "partial_taken": false,
