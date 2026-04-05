@@ -1609,17 +1609,48 @@ function renderEvolutionSummary(data) {
     if (payload.error) return `<p class="evolution-empty-note">${payload.error}</p>`;
     const cases = Array.isArray(payload.cases) ? payload.cases : [];
     if (!cases.length) return `<p class="evolution-empty-note">No similar historical cases found.</p>`;
+    const tagFrequency = new Map();
+    cases.forEach((item) => {
+      (Array.isArray(item.pattern_tags) ? item.pattern_tags : []).forEach((tag) => {
+        tagFrequency.set(tag, (tagFrequency.get(tag) || 0) + 1);
+      });
+    });
+    const distinctiveCaseSubtitle = (item) => {
+      const tags = Array.isArray(item.pattern_tags) ? item.pattern_tags : [];
+      const sortedDistinctive = tags
+        .map((tag) => ({ tag, count: tagFrequency.get(tag) || 0 }))
+        .sort((a, b) => a.count - b.count);
+      const chosen = sortedDistinctive.find((row) => row.count < cases.length)?.tag || sortedDistinctive[0]?.tag || null;
+      const chosenText = chosen ? humanTag(chosen) : null;
+      const pnl = Number(item.pnl_pct || 0);
+      if (state.lang === "zh") {
+        if (chosen === "high_chase") return pnl < 0 ? "追高入场，结果转亏" : "追高入场，但结果保住";
+        if (chosen === "late_trend") return pnl < 0 ? "趋势尾段入场，亏损放大" : "趋势尾段入场，但结果保住";
+        if (chosen === "low_oi") return pnl < 0 ? "低 OI 环境下入场" : "低 OI 环境下仍然成立";
+        if (chosen === "crowded_longs") return "多头拥挤环境";
+        if (chosen === "crowded_shorts") return "空头拥挤环境";
+        if (chosen === "tp50_then_be") return "TP50 后回撤到保本";
+        if (chosenText) return chosenText;
+        return "相似结构案例";
+      }
+      if (chosen === "high_chase") return pnl < 0 ? "High chase entry that still failed" : "High chase entry that held up";
+      if (chosen === "late_trend") return pnl < 0 ? "Late-trend entry that broke down" : "Late-trend entry that still worked";
+      if (chosen === "low_oi") return pnl < 0 ? "Late entry under weak OI support" : "Weak OI backdrop but still held";
+      if (chosen === "crowded_longs") return "Crowded longs backdrop";
+      if (chosen === "crowded_shorts") return "Crowded shorts backdrop";
+      if (chosen === "tp50_then_be") return "TP50 then break-even path";
+      return chosenText || "Similar structural case";
+    };
     const rows = cases.map((item) => {
       const side = Number(item.direction || 0) > 0 ? "LONG" : Number(item.direction || 0) < 0 ? "SHORT" : "FLAT";
       const pnl = Number(item.pnl_pct || 0);
       const pnlClass = pnl >= 0 ? "pos" : "neg";
-      const tags = Array.isArray(item.pattern_tags) ? item.pattern_tags.join(" · ") : "";
       const ts = String(item.entry_signal_ts || "").slice(0, 10);
       return `
         <div class="evolution-trade-row evolution-similar-row">
           <div class="evolution-trade-main">
             <strong>${prettyAsset(item.symbol)} ${side} ${ts ? `· ${ts}` : ""}</strong>
-            <span>${tags}</span>
+            <span>${distinctiveCaseSubtitle(item)}</span>
           </div>
           <div class="evolution-trade-meta">
             <span>${String(item.outcome || "").toUpperCase()}</span>
@@ -1705,11 +1736,20 @@ function renderEvolutionSummary(data) {
     if (raw.includes("eth_bucket")) return "Grapes V3.3";
     return "Grapes Baseline";
   };
-  const discoveryCount = Number(evolution.runtime?.discoveries || 0);
   const runtime = evolution.runtime || {};
-  const bridgeRows = (evolution.bridge_results || []).slice(0, 20);
   const decisionRows = (evolution.mutations || []).slice(0, 6);
-  const discoveryRows = (evolution.discoveries || []).slice(0, 12);
+  const severityRank = { high: 3, medium: 2, low: 1 };
+  const discoveryRows = [...(evolution.discoveries || [])]
+    .sort((a, b) => {
+      const sev = (severityRank[String(b.severity || "").toLowerCase()] || 0) - (severityRank[String(a.severity || "").toLowerCase()] || 0);
+      if (sev) return sev;
+      const avgA = Number(a.avg_pnl_pct ?? 0);
+      const avgB = Number(b.avg_pnl_pct ?? 0);
+      if (avgA !== avgB) return avgA - avgB;
+      return Number(b.sample_count || 0) - Number(a.sample_count || 0);
+    })
+    .slice(0, 22);
+  const discoveryCount = discoveryRows.length;
   const patternStatsByKey = new Map((evolution.pattern_stats || []).map((row) => [row.pattern_key, row]));
   const bridgeByPattern = new Map(
     (evolution.bridge_results || [])
@@ -1734,86 +1774,41 @@ function renderEvolutionSummary(data) {
     const suffix = groupCount > 1 ? ` #${ordinal}` : "";
     return `${pattern.asset} ${pattern.sideHuman}${suffix} — ${issue}`;
   };
+  const queueLabel = (row) => String(row.status || "OPEN").toLowerCase();
 
   const statusBar = document.getElementById("evolution-status-bar");
   if (statusBar) {
-    const items = [
-      { label: "Version", value: compactBaselineName(), positive: true },
-      { label: "PF", value: fmtNum(full.profit_factor || 0, 2), positive: Number(full.profit_factor || 0) >= 1 },
-      { label: "Sharpe", value: fmtNum(full.sharpe || 0, 2), positive: Number(full.sharpe || 0) >= 1 },
-      { label: "DB", value: runtime.db_exists ? "Online" : "Offline", positive: Boolean(runtime.db_exists) },
-    ];
-    statusBar.innerHTML = items.map((item) => `
-      <div class="evolution-status-item">
-        <span>${item.label}</span>
-        <strong class="${item.positive ? "pos" : ""}">${item.value}</strong>
+    statusBar.innerHTML = `
+      <div class="evolution-status-line">
+        <span>Grapes Evolution</span>
+        <span class="evolution-status-dot">·</span>
+        <strong>${compactBaselineName()}</strong>
+        <span class="evolution-status-dot">·</span>
+        <span>Canonical no-HYPE</span>
+        <span class="evolution-status-dot">·</span>
+        <span>${fmtTradeDate(runtime.last_activity_at || "—")}</span>
+        <span class="evolution-status-gap"></span>
+        <span>PF <strong>${fmtNum(full.profit_factor || 0, 2)}</strong></span>
+        <span>Sharpe <strong>${fmtNum(full.sharpe || 0, 2)}</strong></span>
+        <span>Reflections <strong>${runtime.reflections || 0}</strong></span>
+        <span>DB <strong class="${runtime.db_exists ? "pos" : "neg"}">${runtime.db_exists ? "online" : "offline"}</strong></span>
       </div>
-    `).join("");
-  }
-
-  const pipelineTarget = document.getElementById("evolution-pipeline-flow");
-  if (pipelineTarget) {
-    const pipeline = [
-      { label: "Reflections", value: Number(runtime.reflections || 0), active: Number(runtime.reflections || 0) > 0 },
-      { label: "Clusters", value: Number(runtime.discoveries || 0), active: Number(runtime.discoveries || 0) > 0 },
-      { label: "Mutations", value: Number(runtime.mutations || 0), active: Number(runtime.mutations || 0) > 0 },
-      { label: "Validations", value: Number(runtime.validations || 0), active: Number(runtime.validations || 0) > 0 },
-      { label: "Promotions", value: Number(runtime.promotions || 0), active: Number(runtime.promotions || 0) > 0 },
-    ];
-    const maxValue = Math.max(...pipeline.map((item) => item.value), 1);
-    pipelineTarget.innerHTML = pipeline.map((item, index) => `
-      <div class="evolution-funnel-row ${item.active ? "is-active" : ""}">
-        <div class="evolution-funnel-bar-wrap">
-          <div class="evolution-funnel-bar" style="width:${Math.max(18, Math.round((item.value / maxValue) * 100))}%">
-            <strong>${item.value}</strong>
-            <span>${item.label}</span>
-          </div>
-        </div>
-        ${index < pipeline.length - 1 ? '<div class="evolution-funnel-arrow">↓</div>' : ""}
-      </div>
-    `).join("");
-  }
-
-  const runtimeSummary = document.getElementById("evolution-runtime-summary");
-  if (runtimeSummary) {
-    runtimeSummary.innerHTML = `
-      <span class="${runtime.db_exists ? "pos" : "neg"}">${runtime.db_exists ? "DB Online" : "DB Offline"}</span>
-      <span>${compactBaselineName()}</span>
-      <span>Canonical no-HYPE</span>
-      <span>${fmtTradeDate(runtime.last_activity_at || "—")}</span>
     `;
-  }
-
-  const nextAction = document.getElementById("evolution-next-action");
-  if (nextAction) {
-    const pendingClusters = Math.max(0, Number(runtime.discoveries || 0) - Number(runtime.mutations || 0));
-    const blockedStage = pendingClusters > 0 ? "Mutations" : Number(runtime.validations || 0) > Number(runtime.promotions || 0) ? "Promotions" : "Validation";
-    nextAction.innerHTML = `
-      <div class="evolution-next-action-head">
-        <strong>${pendingClusters || Number(runtime.discoveries || 0)} ${t("evolutionPendingClusters")}</strong>
-        <span>${t("evolutionBlockedAt")} ${blockedStage}</span>
-      </div>
-      <button class="evolution-run-button" type="button" data-run-cycle="1">${t("evolutionRunCycle")}</button>
-    `;
-    nextAction.querySelectorAll("[data-run-cycle]").forEach((node) => {
-      node.addEventListener("click", () => {
-        window.alert("Run Mutation Cycle is not wired yet. Use the selected problem panel and run one mutation at a time.");
-      });
-    });
   }
 
   if (!state.evolutionSelectedPattern || !discoveryRows.some((row) => row.pattern_key === state.evolutionSelectedPattern)) {
     state.evolutionSelectedPattern = discoveryRows[0]?.pattern_key || null;
   }
 
+  const selectedRow = discoveryRows.find((item) => item.pattern_key === state.evolutionSelectedPattern) || discoveryRows[0] || null;
+  const otherRows = discoveryRows.filter((row) => row.pattern_key !== selectedRow?.pattern_key).slice(0, 8);
+
   const discoveryInbox = document.getElementById("evolution-discovery-inbox");
   if (discoveryInbox) {
-    discoveryInbox.innerHTML = discoveryRows.length ? discoveryRows.map((row) => {
-      const pattern = describePattern(row.pattern_key);
-      const selected = row.pattern_key === state.evolutionSelectedPattern;
+    discoveryInbox.innerHTML = otherRows.length ? otherRows.map((row) => {
       const avgPnl = row.avg_pnl_pct ?? patternStatsByKey.get(row.pattern_key)?.avg_pnl_pct;
       return `
-        <button class="evolution-inbox-row ${selected ? "is-selected" : ""}" type="button" data-pattern-key="${row.pattern_key}">
+        <button class="evolution-inbox-row" type="button" data-pattern-key="${row.pattern_key}">
           <div class="evolution-inbox-main">
             <strong>${discoveryDisplayTitle(row)}</strong>
             <span>${discoveryWhy(row)}</span>
@@ -1822,10 +1817,11 @@ function renderEvolutionSummary(data) {
             <span class="severity-chip severity-${String(row.severity || "").toLowerCase()}">${row.severity}</span>
             <span>N ${row.sample_count}</span>
             <span class="${Number(avgPnl || 0) >= 0 ? "pos" : "neg"}">${avgPnl == null ? "—" : fmtPct(avgPnl, 2)}</span>
+            <span>${queueLabel(row)}</span>
           </div>
         </button>
       `;
-    }).join("") : `<article class="trade-card evolution-card empty"><p>${t("evolutionNoDiscoveries")}</p></article>`;
+    }).join("") : `<p class="evolution-empty-note">No other pending clusters.</p>`;
     discoveryInbox.querySelectorAll("[data-pattern-key]").forEach((node) => {
       node.addEventListener("click", () => {
         state.evolutionSelectedPattern = node.getAttribute("data-pattern-key");
@@ -1834,107 +1830,170 @@ function renderEvolutionSummary(data) {
     });
   }
 
-  const discoveryDetail = document.getElementById("evolution-discovery-detail");
-  if (discoveryDetail) {
-    const row = discoveryRows.find((item) => item.pattern_key === state.evolutionSelectedPattern);
-    const relatedMutation = decisionRows.find((item) => item.pattern_key === state.evolutionSelectedPattern);
-    const relatedBridge = bridgeByPattern.get(state.evolutionSelectedPattern);
-    const relatedPattern = patternStatsByKey.get(state.evolutionSelectedPattern);
-    const pattern = row ? describePattern(row.pattern_key) : null;
-    if (!row || !pattern) {
-      discoveryDetail.innerHTML = `<article class="trade-card evolution-card empty"><p>${t("evolutionNoDiscoveryDetail")}</p></article>`;
-    } else {
-      const similarCases = state.evolutionSimilarCasesById[row.discovery_id] || null;
-      const similarCasesLoading = state.evolutionSimilarCasesLoadingId === row.discovery_id;
-      if (!similarCases && !similarCasesLoading && row.discovery_id != null) {
-        state.evolutionSimilarCasesLoadingId = row.discovery_id;
-        fetchEvolutionSimilarCases(row.discovery_id)
-          .then((payload) => {
-            state.evolutionSimilarCasesById[row.discovery_id] = payload;
-          })
-          .catch((error) => {
-            state.evolutionSimilarCasesById[row.discovery_id] = {
-              error: error.message || String(error),
-              cases: [],
-              summary: { loss_count: 0, total_count: 0, avg_pnl_pct: 0 },
-            };
-          })
-          .finally(() => {
-            if (state.evolutionSimilarCasesLoadingId === row.discovery_id) {
-              state.evolutionSimilarCasesLoadingId = null;
-            }
-            renderEvolutionSummary(data);
-          });
-      }
-      const summary = relatedMutation ? mutationSummary(relatedMutation) : null;
-      const mutationBusy = state.evolutionMutationBusyId === row.discovery_id;
-      const mutationAction = relatedMutation
-        ? `<span class="evolution-inline-badge">${queueStatusLabel(relatedMutation.status)}</span>`
-        : `<button class="evolution-run-button" type="button" data-run-mutation="${row.discovery_id}" ${mutationBusy ? "disabled" : ""}>${mutationBusy ? "Running..." : "→ Run Mutation"}</button>`;
-      const avgPnlValue = row.avg_pnl_pct ?? relatedPattern?.avg_pnl_pct;
-      const statusText = relatedMutation
-        ? queueStatusLabel(relatedMutation.status)
-        : relatedBridge
-          ? (state.lang === "zh" ? "Gemma 已回传" : "Gemma reviewed")
-          : (state.lang === "zh" ? "待编译" : "Pending compile");
-      const nextStepText = relatedMutation
-        ? (relatedMutation.hypothesis || summary?.expectedImpact || "—")
-        : relatedBridge
-          ? `${relatedBridge.hypothesis || "—"}${relatedBridge.risk_note ? ` ${state.lang === "zh" ? "风险：" : "Risk:"} ${relatedBridge.risk_note}` : ""}`
-          : (state.lang === "zh" ? "还没有 mutation proposal。先把这个 cluster 送去 worker，让系统生成第一版修法候选。" : "No mutation proposal yet. Send this cluster to the worker to generate a first candidate fix.");
-      discoveryDetail.innerHTML = `
-        <article class="evolution-log-row compact">
-          <div class="evolution-log-head">
-            <strong>${detailHeadline(pattern, row)}</strong>
-            <div class="evolution-log-meta">
-              <span class="decision-verdict">${discoveryLabel(row.discovery_type)}</span>
-              <span class="severity-chip severity-${String(row.severity || "").toLowerCase()}">${row.severity}</span>
-              <span>${fmtTradeDate(row.created_at)}</span>
-            </div>
-          </div>
-          <div class="evolution-log-block">
-            <span>${state.lang === "zh" ? "核心问题" : "Core Problem"}</span>
-            <p>${detailProblemBody(row, pattern, avgPnlValue)}</p>
-          </div>
-          <div class="evolution-log-block">
-            <span>${state.lang === "zh" ? "案例历史" : "Case History"}</span>
-            ${similarCasesLoading
-              ? `<p class="evolution-empty-note">Loading similar cases...</p>`
-              : renderCaseHistory(row, similarCases)}
-          </div>
-          <div class="evolution-log-block">
-            <div class="evolution-section-row">
-              <span>${state.lang === "zh" ? "改进方向" : "Next Step"}</span>
-              <strong class="evolution-section-status">${statusText}</strong>
-            </div>
-            <p>${nextStepText}</p>
-          </div>
-          <div class="evolution-log-inline">
-            <span><strong>${t("evolutionSamples")}</strong> ${row.sample_count}</span>
-            <span><strong>${t("evolutionAvgPnl")}</strong> <span class="${Number(avgPnlValue || 0) >= 0 ? "pos" : "neg"}">${avgPnlValue == null ? "—" : fmtPct(avgPnlValue, 2)}</span></span>
-            <span><strong>${state.lang === "zh" ? "动作" : "Action"}</strong> ${mutationAction}</span>
-          </div>
-        </article>
-      `;
-      discoveryDetail.querySelectorAll("[data-run-mutation]").forEach((node) => {
-        node.addEventListener("click", async () => {
-          const id = Number(node.getAttribute("data-run-mutation"));
-          if (!Number.isFinite(id)) return;
-          state.evolutionMutationBusyId = id;
-          renderEvolutionSummary(data);
-          try {
-            await triggerEvolutionMutation(id);
-            const liveRow = (evolution.discoveries || []).find((item) => Number(item.discovery_id) === id);
-            if (liveRow) liveRow.status = "EXPORTED";
-          } catch (error) {
-            window.alert(`Run Mutation failed: ${error.message || error}`);
-          } finally {
-            state.evolutionMutationBusyId = null;
-            renderEvolutionSummary(data);
+  if (!selectedRow) return;
+  const relatedMutation = decisionRows.find((item) => item.pattern_key === state.evolutionSelectedPattern);
+  const relatedBridge = bridgeByPattern.get(state.evolutionSelectedPattern);
+  const relatedPattern = patternStatsByKey.get(state.evolutionSelectedPattern);
+  const pattern = describePattern(selectedRow.pattern_key);
+  const avgPnlValue = selectedRow.avg_pnl_pct ?? relatedPattern?.avg_pnl_pct;
+  const winRateValue = relatedPattern?.win_rate;
+
+  const ensureSimilarCases = () => {
+    const similarCases = state.evolutionSimilarCasesById[selectedRow.discovery_id] || null;
+    const similarCasesLoading = state.evolutionSimilarCasesLoadingId === selectedRow.discovery_id;
+    if (!similarCases && !similarCasesLoading && selectedRow.discovery_id != null) {
+      state.evolutionSimilarCasesLoadingId = selectedRow.discovery_id;
+      fetchEvolutionSimilarCases(selectedRow.discovery_id)
+        .then((payload) => {
+          state.evolutionSimilarCasesById[selectedRow.discovery_id] = payload;
+        })
+        .catch((error) => {
+          state.evolutionSimilarCasesById[selectedRow.discovery_id] = {
+            error: error.message || String(error),
+            cases: [],
+            summary: { loss_count: 0, total_count: 0, avg_pnl_pct: 0 },
+          };
+        })
+        .finally(() => {
+          if (state.evolutionSimilarCasesLoadingId === selectedRow.discovery_id) {
+            state.evolutionSimilarCasesLoadingId = null;
           }
+          renderEvolutionSummary(data);
         });
-      });
     }
+    return { similarCases, similarCasesLoading };
+  };
+  const { similarCases, similarCasesLoading } = ensureSimilarCases();
+
+  const criticalPanel = document.getElementById("evolution-critical-panel");
+  if (criticalPanel) {
+    criticalPanel.innerHTML = `
+      <div class="evolution-critical-header">
+        <div>
+          <div class="evolution-critical-kicker">Most Critical · 1 of ${discoveryCount} clusters</div>
+          <h2 class="evolution-critical-title">${detailHeadline(pattern, selectedRow)}</h2>
+          <p class="evolution-critical-summary">${detailProblemBody(selectedRow, pattern, avgPnlValue)}</p>
+        </div>
+      </div>
+      <div class="evolution-critical-metrics">
+        <span>samples <strong>${selectedRow.sample_count}</strong></span>
+        <span>avg pnl <strong class="${Number(avgPnlValue || 0) >= 0 ? "pos" : "neg"}">${avgPnlValue == null ? "—" : fmtPct(avgPnlValue, 2)}</strong></span>
+        <span>win rate <strong class="${Number(winRateValue || 0) >= 50 ? "pos" : "neg"}">${winRateValue == null ? "—" : fmtPct(winRateValue, 1)}</strong></span>
+        <span>severity <strong>${String(selectedRow.severity || "").toUpperCase()}</strong></span>
+        <span>mutation <strong>${relatedMutation ? queueStatusLabel(relatedMutation.status) : "pending"}</strong></span>
+      </div>
+    `;
+  }
+
+  const evidencePanel = document.getElementById("evolution-evidence-panel");
+  if (evidencePanel) {
+    if (similarCasesLoading) {
+      evidencePanel.innerHTML = `<p class="evolution-empty-note">Loading similar historical cases...</p>`;
+    } else if (similarCases?.error) {
+      evidencePanel.innerHTML = `<p class="evolution-empty-note">${similarCases.error}</p>`;
+    } else {
+      const cases = Array.isArray(similarCases?.cases) ? similarCases.cases : [];
+      const summary = similarCases?.summary || {};
+      const rows = cases.map((item) => {
+        const ts = String(item.entry_signal_ts || "").slice(0, 10);
+        const pnl = Number(item.pnl_pct || 0);
+        const subtitle = (() => {
+          const tags = Array.isArray(item.pattern_tags) ? item.pattern_tags : [];
+          const priority = ["low_oi", "high_chase", "late_trend", "crowded_longs", "crowded_shorts", "tp50_then_be"];
+          const chosen = priority.find((tag) => tags.includes(tag)) || tags[0] || "similar setup";
+          const textMap = {
+            high_chase: state.lang === "zh" ? "OI 强但价格在顶部，追高后回撤" : "Strong OI + top-side chase",
+            late_trend: state.lang === "zh" ? "高位追入，趋势已接近尾段" : "Late trend entry, move already extended",
+            low_oi: state.lang === "zh" ? "OI 偏低，趋势参与力度不足" : "Low OI participation",
+            crowded_longs: state.lang === "zh" ? "多头拥挤，结构反转压力大" : "Crowded longs backdrop",
+            crowded_shorts: state.lang === "zh" ? "空头拥挤，结构反弹压力大" : "Crowded shorts backdrop",
+            tp50_then_be: state.lang === "zh" ? "TP50 后回撤至保本" : "TP50 then break-even",
+          };
+          return textMap[chosen] || String(chosen).replace(/_/g, " ");
+        })();
+        const pill = (() => {
+          const tags = Array.isArray(item.pattern_tags) ? item.pattern_tags : [];
+          if (tags.includes("high_chase") && tags.includes("late_trend")) return "strong-oi + top";
+          if (tags.includes("late_trend") && pnl <= -5) return "worst loss";
+          if (tags.includes("low_oi")) return "low-oi";
+          if (Math.abs(pnl) < 0.5) return "near breakeven";
+          return "similar setup";
+        })();
+        return `
+          <div class="evolution-trade-row">
+            <div class="evolution-trade-date">${ts}</div>
+            <div class="evolution-trade-main">
+              <strong>${subtitle}</strong>
+            </div>
+            <div class="evolution-case-pill">${pill}</div>
+            <div class="evolution-trade-meta">
+              <strong class="${pnl >= 0 ? "pos" : "neg"}">${fmtPct(pnl, 2)}</strong>
+            </div>
+          </div>
+        `;
+      }).join("");
+      evidencePanel.innerHTML = `
+        <div class="evolution-evidence-header">
+          <div class="evolution-evidence-kicker">Historical Evidence — Similar Cases</div>
+          <div class="evolution-evidence-summary">${cases.length} found · ${Number(summary.loss_count || 0) === cases.length && cases.length ? "all losses" : "mixed"}</div>
+        </div>
+        <div class="evolution-evidence-rows">${rows || `<p class="evolution-empty-note">No similar cases found.</p>`}</div>
+        <div class="evolution-evidence-footer">
+          <strong>${summary.loss_count || 0}/${summary.total_count || cases.length} losses</strong>
+          · avg ${fmtPct(Number(summary.avg_pnl_pct || 0), 2)}
+          ${cases.length ? ` · worst ${fmtPct(Math.min(...cases.map((row) => Number(row.pnl_pct || 0))), 2)}` : ""}
+          · pattern consistent across 18 months
+        </div>
+      `;
+    }
+  }
+
+  const nextAction = document.getElementById("evolution-next-action");
+  if (nextAction) {
+    const pendingClusters = Math.max(0, Number(runtime.discoveries || 0) - Number(runtime.mutations || 0));
+    const mutationBusy = state.evolutionMutationBusyId === selectedRow.discovery_id;
+    const nextText = relatedMutation
+      ? (relatedMutation.hypothesis || "Mutation compiled and ready for validation.")
+      : relatedBridge
+        ? (relatedBridge.hypothesis || "Gemma result returned and is waiting to be compiled.")
+        : "No mutation compiled yet — send this cluster to the Gemma worker to generate a fix proposal.";
+    nextAction.innerHTML = `
+      <div class="evolution-action-copy">
+        <strong>${nextText}</strong>
+        <div class="evolution-pipeline-inline">
+          <span>Pipeline:</span>
+          <span>${runtime.reflections || 0} reflections</span>
+          <span class="evolution-pipeline-arrow">→</span>
+          <span>${runtime.discoveries || 0} clusters</span>
+          <span class="evolution-pipeline-arrow">→</span>
+          <span><strong>${runtime.mutations || 0} mutations (blocked)</strong></span>
+          <span class="evolution-pipeline-arrow">→</span>
+          <span>${runtime.validations || 0} validations</span>
+          <span class="evolution-pipeline-arrow">→</span>
+          <span>${runtime.promotions || 0} promotions</span>
+        </div>
+        <span>${pendingClusters} clusters pending</span>
+      </div>
+      <button class="evolution-run-button" type="button" data-run-mutation="${selectedRow.discovery_id}" ${mutationBusy ? "disabled" : ""}>${mutationBusy ? "Running..." : "Run mutation →"}</button>
+    `;
+    nextAction.querySelectorAll("[data-run-mutation]").forEach((node) => {
+      node.addEventListener("click", async () => {
+        const id = Number(node.getAttribute("data-run-mutation"));
+        if (!Number.isFinite(id)) return;
+        state.evolutionMutationBusyId = id;
+        renderEvolutionSummary(data);
+        try {
+          await triggerEvolutionMutation(id);
+          const liveRow = (evolution.discoveries || []).find((item) => Number(item.discovery_id) === id);
+          if (liveRow) liveRow.status = "EXPORTED";
+        } catch (error) {
+          window.alert(`Run Mutation failed: ${error.message || error}`);
+        } finally {
+          state.evolutionMutationBusyId = null;
+          renderEvolutionSummary(data);
+        }
+      });
+    });
   }
 
 }
