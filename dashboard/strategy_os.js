@@ -50,6 +50,8 @@ const state = {
   },
   evolutionSelectedPattern: null,
   evolutionMutationBusyId: null,
+  evolutionSimilarCasesById: {},
+  evolutionSimilarCasesLoadingId: null,
 };
 
 const I18N = {
@@ -440,6 +442,17 @@ async function triggerEvolutionMutation(discoveryId) {
   if (!response.ok) {
     const detail = await response.text();
     throw new Error(detail || `export failed (${response.status})`);
+  }
+  return response.json();
+}
+
+async function fetchEvolutionSimilarCases(discoveryId) {
+  const response = await fetch(`${EVOLUTION_API_BASE}/similar-cases?discovery_id=${encodeURIComponent(discoveryId)}`, {
+    cache: "no-store",
+  });
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(detail || `similar-cases failed (${response.status})`);
   }
   return response.json();
 }
@@ -1336,14 +1349,12 @@ function renderEvolutionSummary(data) {
     if (el) el.innerHTML = html;
   };
   setText("evolution-section-title", t("evolutionSectionTitle"));
-  setText("evolution-runtime-title", t("evolutionRuntimeTitle"));
-  setText("evolution-baseline-title", t("evolutionBaselineTitle"));
-  setText("evolution-pattern-title", t("evolutionPatternTitle"));
-  setText("evolution-decision-title", t("evolutionDecisionTitle"));
-  setText("evolution-bridge-title", t("evolutionBridgeTitle"));
-  setText("evolution-pipeline-title", t("evolutionPipelineTitle"));
-  setText("evolution-discoveries-title", t("evolutionDiscoveriesTitle"));
-  setText("evolution-vp-title", t("evolutionVpTitle"));
+  setText("evolution-section-title", "Evolution");
+  setText("evolution-runtime-title", "System");
+  setText("evolution-decision-title", "Mutations");
+  setText("evolution-bridge-title", "Outcome");
+  setText("evolution-discoveries-title", "Pending Problems");
+  setText("evolution-vp-title", "Validation / Promotion");
   const baseline = evolution.baseline || {};
   const full = baseline.full_backtest || {};
   const oos = baseline.walk_forward_oos || {};
@@ -1365,6 +1376,28 @@ function renderEvolutionSummary(data) {
     long: "long",
     short: "short",
   }[tag] || tag.replace(/_/g, " "));
+  const majorIssuePhrase = (tags, discoveryType) => {
+    if (state.lang === "zh") {
+      if (tags.includes("high_chase")) return "高位追入";
+      if (tags.includes("low_chase")) return "低位追空";
+      if (tags.includes("late_trend")) return "入场太晚";
+      if (tags.includes("low_oi")) return "OI 支撑弱";
+      if (tags.includes("crowded_longs")) return "多头过拥挤";
+      if (tags.includes("crowded_shorts")) return "空头过拥挤";
+      if (discoveryType === "high_variance") return "结果分布太散";
+      if (discoveryType === "positive_edge") return "边际优势待确认";
+      return "结构异常";
+    }
+    if (tags.includes("high_chase")) return "chasing highs";
+    if (tags.includes("low_chase")) return "chasing lows";
+    if (tags.includes("late_trend")) return "late entry";
+    if (tags.includes("low_oi")) return "weak OI support";
+    if (tags.includes("crowded_longs")) return "crowded longs";
+    if (tags.includes("crowded_shorts")) return "crowded shorts";
+    if (discoveryType === "high_variance") return "unstable outcomes";
+    if (discoveryType === "positive_edge") return "edge under review";
+    return "structural issue";
+  };
   const parsePatternKey = (patternKey) => {
     const [assetRaw, rawTags = ""] = String(patternKey || "").split(":");
     const tags = rawTags.split(".").filter(Boolean);
@@ -1376,6 +1409,9 @@ function renderEvolutionSummary(data) {
   const describePattern = (patternKey) => {
     const { asset, tags } = parsePatternKey(patternKey);
     const side = tags.includes("long") ? "longs" : tags.includes("short") ? "shorts" : "entries";
+    const sideHuman = state.lang === "zh"
+      ? (tags.includes("long") ? "趋势多单" : tags.includes("short") ? "趋势空单" : "交易簇")
+      : (tags.includes("long") ? "trend longs" : tags.includes("short") ? "trend shorts" : "entries");
     const setup = tags.includes("tiered_entry") ? "tiered setup" : tags.includes("core_entry") ? "core setup" : "mixed setup";
     const issueTags = tags.filter((tag) => ["high_chase", "low_chase", "late_trend", "low_oi", "crowded_longs", "crowded_shorts", "signal_exit_loss", "tp50_then_be"].includes(tag));
     const issue = issueTags.length ? issueTags.map(humanTag).join(" + ") : "generic cluster";
@@ -1383,10 +1419,12 @@ function renderEvolutionSummary(data) {
     return {
       asset,
       title: `${asset} ${style} ${side}`,
+      sideHuman,
       issue,
       note: `${setup}${issueTags.length ? `, pattern = ${issue}` : ""}`,
       setup,
       style,
+      tags,
     };
   };
   const detailIssueLabel = (pattern, discovery) => {
@@ -1402,12 +1440,11 @@ function renderEvolutionSummary(data) {
     return pattern.issue || "cluster";
   };
   const detailHeadline = (pattern, discovery) => {
-    const issue = detailIssueLabel(pattern, discovery);
+    const issue = majorIssuePhrase(pattern.tags || [], discovery?.discovery_type);
     if (state.lang === "zh") {
-      const side = pattern.title.includes("long") ? "趋势多单" : pattern.title.includes("short") ? "趋势空单" : "交易簇";
-      return `${pattern.asset} ${side} — ${issue}`;
+      return `${pattern.asset} ${pattern.sideHuman} — ${issue}`;
     }
-    return `${pattern.asset} ${pattern.title.replace(`${pattern.asset} `, "")} — ${issue}`;
+    return `${pattern.asset} ${pattern.sideHuman} — ${issue}`;
   };
   const detailProblemBody = (row, pattern, avgPnlValue) => {
     const sampleCount = Number(row.sample_count || 0);
@@ -1441,9 +1478,9 @@ function renderEvolutionSummary(data) {
     return `${asset} · ${tags.map(humanTag).join(" · ")}`;
   };
   const discoveryLabel = (value) => ({
-    loss_cluster: "Losing cluster",
-    high_variance: "Unstable cluster",
-    positive_edge: "Positive edge",
+    loss_cluster: "LOSING CLUSTER",
+    high_variance: "UNSTABLE CLUSTER",
+    positive_edge: "POSITIVE EDGE",
   }[value] || value);
   const mutationLabel = (value) => ({
     new_veto: "Add a local veto",
@@ -1567,6 +1604,52 @@ function renderEvolutionSummary(data) {
       `;
     }).join("");
   };
+  const renderSimilarCasesList = (payload) => {
+    if (!payload) return `<p class="evolution-empty-note">No similar cases loaded yet.</p>`;
+    if (payload.error) return `<p class="evolution-empty-note">${payload.error}</p>`;
+    const cases = Array.isArray(payload.cases) ? payload.cases : [];
+    if (!cases.length) return `<p class="evolution-empty-note">No similar historical cases found.</p>`;
+    const rows = cases.map((item) => {
+      const side = Number(item.direction || 0) > 0 ? "LONG" : Number(item.direction || 0) < 0 ? "SHORT" : "FLAT";
+      const pnl = Number(item.pnl_pct || 0);
+      const pnlClass = pnl >= 0 ? "pos" : "neg";
+      const tags = Array.isArray(item.pattern_tags) ? item.pattern_tags.join(" · ") : "";
+      const ts = String(item.entry_signal_ts || "").slice(0, 10);
+      return `
+        <div class="evolution-trade-row evolution-similar-row">
+          <div class="evolution-trade-main">
+            <strong>${prettyAsset(item.symbol)} ${side} ${ts ? `· ${ts}` : ""}</strong>
+            <span>${tags}</span>
+          </div>
+          <div class="evolution-trade-meta">
+            <span>${String(item.outcome || "").toUpperCase()}</span>
+            <strong class="${pnlClass}">${fmtPct(pnl, 2)}</strong>
+          </div>
+        </div>
+      `;
+    }).join("");
+    const summary = payload.summary || {};
+    const lossCount = Number(summary.loss_count || 0);
+    const totalCount = Number(summary.total_count || cases.length);
+    const avgPnl = Number(summary.avg_pnl_pct || 0);
+    return `
+      <div class="evolution-trade-list">${rows}</div>
+      <p class="evolution-similar-summary">${lossCount}/${totalCount} similar cases were losses · avg ${fmtPct(avgPnl, 2)}.</p>
+    `;
+  };
+  const renderCaseHistory = (row, payload) => `
+    <div class="evolution-case-history">
+      <div class="evolution-case-section">
+        <div class="evolution-case-label">${state.lang === "zh" ? "相似历史案例" : "Similar Historical Cases"}</div>
+        ${renderSimilarCasesList(payload)}
+      </div>
+      <div class="evolution-case-divider"></div>
+      <div class="evolution-case-section">
+        <div class="evolution-case-label">${state.lang === "zh" ? "典型案例" : "Observed Examples"}</div>
+        <div class="evolution-trade-list">${renderExampleTradesList(row)}</div>
+      </div>
+    </div>
+  `;
   const mutationSummary = (row) => {
     const pattern = describePattern(row.pattern_key);
     const discovery = discoveriesByPattern.get(row.pattern_key);
@@ -1623,16 +1706,34 @@ function renderEvolutionSummary(data) {
     return "Grapes Baseline";
   };
   const discoveryCount = Number(evolution.runtime?.discoveries || 0);
-  const validationCount = Number(evolution.runtime?.validations || 0);
-  const promotionCount = Number(evolution.runtime?.promotions || 0);
   const runtime = evolution.runtime || {};
   const bridgeRows = (evolution.bridge_results || []).slice(0, 20);
   const decisionRows = (evolution.mutations || []).slice(0, 6);
-  const patternRows = (evolution.pattern_stats || []).slice(0, 8);
   const discoveryRows = (evolution.discoveries || []).slice(0, 12);
-  const validationRows = (evolution.validations || []).slice(0, 4);
-  const promotionRows = (evolution.promotions || []).slice(0, 4);
   const patternStatsByKey = new Map((evolution.pattern_stats || []).map((row) => [row.pattern_key, row]));
+  const bridgeByPattern = new Map(
+    (evolution.bridge_results || [])
+      .filter((row) => row.pattern_key)
+      .map((row) => [row.pattern_key, row]),
+  );
+  const discoveryGroupCounts = new Map();
+  const discoveryOrdinalByPattern = new Map();
+  discoveryRows.forEach((row) => {
+    const pattern = describePattern(row.pattern_key);
+    const groupKey = `${pattern.asset}|${pattern.sideHuman}`;
+    const next = (discoveryGroupCounts.get(groupKey) || 0) + 1;
+    discoveryGroupCounts.set(groupKey, next);
+    discoveryOrdinalByPattern.set(row.pattern_key, next);
+  });
+  const discoveryDisplayTitle = (row) => {
+    const pattern = describePattern(row.pattern_key);
+    const issue = majorIssuePhrase(pattern.tags || [], row.discovery_type);
+    const groupKey = `${pattern.asset}|${pattern.sideHuman}`;
+    const groupCount = discoveryGroupCounts.get(groupKey) || 0;
+    const ordinal = discoveryOrdinalByPattern.get(row.pattern_key) || 1;
+    const suffix = groupCount > 1 ? ` #${ordinal}` : "";
+    return `${pattern.asset} ${pattern.sideHuman}${suffix} — ${issue}`;
+  };
 
   const statusBar = document.getElementById("evolution-status-bar");
   if (statusBar) {
@@ -1640,8 +1741,6 @@ function renderEvolutionSummary(data) {
       { label: "Version", value: compactBaselineName(), positive: true },
       { label: "PF", value: fmtNum(full.profit_factor || 0, 2), positive: Number(full.profit_factor || 0) >= 1 },
       { label: "Sharpe", value: fmtNum(full.sharpe || 0, 2), positive: Number(full.sharpe || 0) >= 1 },
-      { label: "Reflections", value: `${runtime.reflections || 0}`, positive: Number(runtime.reflections || 0) > 0 },
-      { label: "Clusters", value: `${discoveryCount}`, positive: discoveryCount > 0 },
       { label: "DB", value: runtime.db_exists ? "Online" : "Offline", positive: Boolean(runtime.db_exists) },
     ];
     statusBar.innerHTML = items.map((item) => `
@@ -1698,7 +1797,7 @@ function renderEvolutionSummary(data) {
     `;
     nextAction.querySelectorAll("[data-run-cycle]").forEach((node) => {
       node.addEventListener("click", () => {
-        window.alert("Run Mutation Cycle is not wired yet. Current dashboard action still supports per-cluster Run Mutation.");
+        window.alert("Run Mutation Cycle is not wired yet. Use the selected problem panel and run one mutation at a time.");
       });
     });
   }
@@ -1716,8 +1815,8 @@ function renderEvolutionSummary(data) {
       return `
         <button class="evolution-inbox-row ${selected ? "is-selected" : ""}" type="button" data-pattern-key="${row.pattern_key}">
           <div class="evolution-inbox-main">
-            <strong>${pattern.title}</strong>
-            <span>${pattern.issue}</span>
+            <strong>${discoveryDisplayTitle(row)}</strong>
+            <span>${discoveryWhy(row)}</span>
           </div>
           <div class="evolution-inbox-metrics">
             <span class="severity-chip severity-${String(row.severity || "").toLowerCase()}">${row.severity}</span>
@@ -1739,11 +1838,34 @@ function renderEvolutionSummary(data) {
   if (discoveryDetail) {
     const row = discoveryRows.find((item) => item.pattern_key === state.evolutionSelectedPattern);
     const relatedMutation = decisionRows.find((item) => item.pattern_key === state.evolutionSelectedPattern);
+    const relatedBridge = bridgeByPattern.get(state.evolutionSelectedPattern);
     const relatedPattern = patternStatsByKey.get(state.evolutionSelectedPattern);
     const pattern = row ? describePattern(row.pattern_key) : null;
     if (!row || !pattern) {
       discoveryDetail.innerHTML = `<article class="trade-card evolution-card empty"><p>${t("evolutionNoDiscoveryDetail")}</p></article>`;
     } else {
+      const similarCases = state.evolutionSimilarCasesById[row.discovery_id] || null;
+      const similarCasesLoading = state.evolutionSimilarCasesLoadingId === row.discovery_id;
+      if (!similarCases && !similarCasesLoading && row.discovery_id != null) {
+        state.evolutionSimilarCasesLoadingId = row.discovery_id;
+        fetchEvolutionSimilarCases(row.discovery_id)
+          .then((payload) => {
+            state.evolutionSimilarCasesById[row.discovery_id] = payload;
+          })
+          .catch((error) => {
+            state.evolutionSimilarCasesById[row.discovery_id] = {
+              error: error.message || String(error),
+              cases: [],
+              summary: { loss_count: 0, total_count: 0, avg_pnl_pct: 0 },
+            };
+          })
+          .finally(() => {
+            if (state.evolutionSimilarCasesLoadingId === row.discovery_id) {
+              state.evolutionSimilarCasesLoadingId = null;
+            }
+            renderEvolutionSummary(data);
+          });
+      }
       const summary = relatedMutation ? mutationSummary(relatedMutation) : null;
       const mutationBusy = state.evolutionMutationBusyId === row.discovery_id;
       const mutationAction = relatedMutation
@@ -1752,10 +1874,14 @@ function renderEvolutionSummary(data) {
       const avgPnlValue = row.avg_pnl_pct ?? relatedPattern?.avg_pnl_pct;
       const statusText = relatedMutation
         ? queueStatusLabel(relatedMutation.status)
-        : (state.lang === "zh" ? "待编译" : "Pending compile");
+        : relatedBridge
+          ? (state.lang === "zh" ? "Gemma 已回传" : "Gemma reviewed")
+          : (state.lang === "zh" ? "待编译" : "Pending compile");
       const nextStepText = relatedMutation
         ? (relatedMutation.hypothesis || summary?.expectedImpact || "—")
-        : (state.lang === "zh" ? "还没有 mutation proposal。" : "No mutation proposal yet.");
+        : relatedBridge
+          ? `${relatedBridge.hypothesis || "—"}${relatedBridge.risk_note ? ` ${state.lang === "zh" ? "风险：" : "Risk:"} ${relatedBridge.risk_note}` : ""}`
+          : (state.lang === "zh" ? "还没有 mutation proposal。先把这个 cluster 送去 worker，让系统生成第一版修法候选。" : "No mutation proposal yet. Send this cluster to the worker to generate a first candidate fix.");
       discoveryDetail.innerHTML = `
         <article class="evolution-log-row compact">
           <div class="evolution-log-head">
@@ -1766,15 +1892,15 @@ function renderEvolutionSummary(data) {
               <span>${fmtTradeDate(row.created_at)}</span>
             </div>
           </div>
-          <div class="evolution-log-grid">
-            <div><span>${t("evolutionSamples")}</span><strong>${row.sample_count}</strong></div>
-            <div><span>${t("evolutionAvgPnl")}</span><strong class="${Number(avgPnlValue || 0) >= 0 ? "pos" : "neg"}">${avgPnlValue == null ? "—" : fmtPct(avgPnlValue, 2)}</strong></div>
-            <div><span>${t("status")}</span><strong>${queueStatusLabel(row.status)}</strong></div>
-            <div><span>${t("evolutionPatternKey")}</span><strong class="evolution-pattern-key">${compactPatternKey(row.pattern_key)}</strong></div>
-          </div>
           <div class="evolution-log-block">
             <span>${state.lang === "zh" ? "核心问题" : "Core Problem"}</span>
             <p>${detailProblemBody(row, pattern, avgPnlValue)}</p>
+          </div>
+          <div class="evolution-log-block">
+            <span>${state.lang === "zh" ? "案例历史" : "Case History"}</span>
+            ${similarCasesLoading
+              ? `<p class="evolution-empty-note">Loading similar cases...</p>`
+              : renderCaseHistory(row, similarCases)}
           </div>
           <div class="evolution-log-block">
             <div class="evolution-section-row">
@@ -1784,11 +1910,9 @@ function renderEvolutionSummary(data) {
             <p>${nextStepText}</p>
           </div>
           <div class="evolution-log-inline">
+            <span><strong>${t("evolutionSamples")}</strong> ${row.sample_count}</span>
+            <span><strong>${t("evolutionAvgPnl")}</strong> <span class="${Number(avgPnlValue || 0) >= 0 ? "pos" : "neg"}">${avgPnlValue == null ? "—" : fmtPct(avgPnlValue, 2)}</span></span>
             <span><strong>${state.lang === "zh" ? "动作" : "Action"}</strong> ${mutationAction}</span>
-          </div>
-          <div class="evolution-log-block">
-            <span>${state.lang === "zh" ? "典型案例" : t("evolutionExampleTrades")}</span>
-            <div class="evolution-trade-list">${renderExampleTradesList(row)}</div>
           </div>
         </article>
       `;
@@ -1813,131 +1937,6 @@ function renderEvolutionSummary(data) {
     }
   }
 
-  const patternTarget = document.getElementById("evolution-pattern-stats");
-  if (patternTarget) {
-    patternTarget.innerHTML = patternRows.length ? `
-      <div class="evolution-mini-table">
-        <div class="evolution-mini-table-head">
-          <span>${t("evolutionPatternKey")}</span>
-          <span>N</span>
-          <span>WR</span>
-          <span>${t("avgPnl")}</span>
-        </div>
-        ${patternRows.map((row) => `
-          <div class="evolution-mini-row">
-            <div>
-              <strong>${describePattern(row.pattern_key).title}</strong>
-              <span>${describePattern(row.pattern_key).issue}</span>
-            </div>
-            <strong>${row.sample_count}</strong>
-            <strong class="${Number(row.win_rate || 0) >= 50 ? "pos" : "neg"}">${fmtPct(row.win_rate || 0, 1)}</strong>
-            <strong class="${Number(row.avg_pnl_pct ?? 0) >= 0 ? "pos" : "neg"}">${row.avg_pnl_pct == null ? "—" : fmtPct(row.avg_pnl_pct, 2)}</strong>
-          </div>
-        `).join("")}
-      </div>
-    ` : `<article class="trade-card evolution-card empty"><p>${t("evolutionNoPatternStats")}</p></article>`;
-  }
-
-  const decisionCards = document.getElementById("evolution-decision-cards");
-  if (decisionCards) {
-    decisionCards.innerHTML = decisionRows.length ? decisionRows.map((row) => {
-      const summary = mutationSummary(row);
-      return `
-      <article class="evolution-log-row decision-row">
-        <div class="evolution-log-head">
-          <strong>${summary.problem}</strong>
-          <div class="evolution-log-meta">
-            <span class="decision-verdict">${summary.verdict}</span>
-            <span>${fmtTradeDate(row.updated_at)}</span>
-          </div>
-        </div>
-        <div class="evolution-log-grid">
-          <div><span>${t("evolutionScope")}</span><strong>${row.target_scope || "—"}</strong></div>
-          <div><span>${t("evolutionAction")}</span><strong>${mutationLabel(row.mutation_type)}</strong></div>
-          <div><span>${t("evolutionMode")}</span><strong>${deploymentLabel(row.deployment_mode)}</strong></div>
-          <div><span>${t("status")}</span><strong>${queueStatusLabel(row.status)}</strong></div>
-        </div>
-        <div class="evolution-log-block">
-          <span>${t("evolutionWhy")}</span>
-          <p>${summary.whyLine}</p>
-        </div>
-        <div class="evolution-log-inline">
-          <span><strong>${t("evolutionExpected")}</strong> ${summary.expectedImpact}</span>
-          <span class="mono"><strong>${t("evolutionExampleTrades")}</strong> ${terminalExamples(row)}</span>
-        </div>
-      </article>
-    `; }).join("") : `<article class="trade-card evolution-card empty"><p>${t("evolutionNoDecisionCards")}</p></article>`;
-  }
-
-  const bridgeTarget = document.getElementById("evolution-bridge-results");
-  if (bridgeTarget) {
-    bridgeTarget.innerHTML = bridgeRows.length ? bridgeRows.map((row) => {
-      const pattern = row.pattern_key ? describePattern(row.pattern_key) : null;
-      const title = row.title || (pattern ? pattern.title : row.problem_id);
-      const providerModel = [row.provider, row.model].filter(Boolean).join(" · ") || "—";
-      const changeType = row.proposed_change_type || row.compiler_hint || "—";
-      return `
-      <article class="evolution-log-row compact">
-        <div class="evolution-log-head">
-          <strong>${title}</strong>
-          <div class="evolution-log-meta">
-            <span>${row.status || "completed"}</span>
-            <span>${fmtTradeDate(row.completed_at || row.imported_at)}</span>
-          </div>
-        </div>
-        <div class="evolution-log-grid">
-          <div><span>${t("evolutionScope")}</span><strong>${pattern ? pattern.title : (row.pattern_key || "—")}</strong></div>
-          <div><span>${t("evolutionAction")}</span><strong>${mutationLabel(changeType)}</strong></div>
-          <div><span>${t("evolutionProviderModel")}</span><strong>${providerModel}</strong></div>
-          <div><span>${t("status")}</span><strong>${row.problem_id}</strong></div>
-        </div>
-        <div class="evolution-log-block">
-          <span>${t("evolutionHypothesis")}</span>
-          <p>${row.hypothesis || "—"}</p>
-        </div>
-        <div class="evolution-log-block">
-          <span>${t("evolutionRiskNote")}</span>
-          <p>${row.risk_note || row.why_flagged || "—"}</p>
-        </div>
-      </article>
-    `;
-    }).join("") : `<article class="trade-card evolution-card empty"><p>${t("evolutionNoBridgeResults")}</p></article>`;
-  }
-
-  const vpTarget = document.getElementById("evolution-validation-promotion");
-  if (vpTarget) {
-    const vHtml = validationRows.length ? validationRows.map((row) => `
-      <article class="evolution-log-row compact">
-        <div class="evolution-log-head">
-          <strong>Validation · ${row.proposal_id}</strong>
-          <div class="evolution-log-meta"><span>${fmtTradeDate(row.created_at)}</span></div>
-        </div>
-        <div class="evolution-log-grid">
-          <div><span>${t("status")}</span><strong>${validationStatusLabel(row.status)}</strong></div>
-          <div><span>${t("evolutionAccepted")}</span><strong class="${row.accepted ? "pos" : "neg"}">${row.accepted ? t("yes") : t("no")}</strong></div>
-          <div><span>${t("evolutionOverfit")}</span><strong>${row.overfit_risk}</strong></div>
-          <div><span>${t("evolutionStage")}</span><strong>${t("evolutionVpTitle").split(" / ")[0] || "Validation"}</strong></div>
-        </div>
-        <div class="evolution-log-block"><span>${t("evolutionDecision")}</span><p>${validationSummary(row)}</p></div>
-      </article>
-    `).join("") : "";
-    const pHtml = promotionRows.length ? promotionRows.map((row) => `
-      <article class="evolution-log-row compact">
-        <div class="evolution-log-head">
-          <strong>Promotion · ${row.proposal_id}</strong>
-          <div class="evolution-log-meta"><span>${fmtTradeDate(row.created_at)}</span></div>
-        </div>
-        <div class="evolution-log-grid">
-          <div><span>${t("evolutionStage")}</span><strong>${row.target_stage}</strong></div>
-          <div><span>${t("evolutionAccepted")}</span><strong class="${row.approved ? "pos" : "neg"}">${row.approved ? t("yes") : t("no")}</strong></div>
-          <div><span>${t("reason")}</span><strong>${row.reason}</strong></div>
-          <div><span>${t("evolutionMode")}</span><strong>${row.approved ? deploymentLabel("SHADOW") : t("holdMode")}</strong></div>
-        </div>
-        <div class="evolution-log-block"><span>${t("evolutionDecision")}</span><p>${promotionSummary(row)}</p></div>
-      </article>
-    `).join("") : "";
-    vpTarget.innerHTML = (vHtml || pHtml) ? `${vHtml}${pHtml}` : `<article class="trade-card evolution-card empty"><p>No validation or promotion records yet.</p></article>`;
-  }
 }
 
 function tradePeriodValue(trade, scope) {

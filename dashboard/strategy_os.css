@@ -1376,7 +1376,7 @@ select {
 
 .evolution-workbench-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.65fr) minmax(320px, 0.85fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
   border-left: 1px solid var(--line);
   border-right: 1px solid var(--line);
@@ -1384,17 +1384,19 @@ select {
 }
 
 .evolution-status-bar {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
 
 .evolution-status-item {
-  display: grid;
-  gap: 6px;
-  padding: 12px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
   border-right: 1px solid rgba(154, 201, 177, 0.08);
 }
 
@@ -1411,14 +1413,14 @@ select {
 }
 
 .evolution-status-item strong {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.2;
   letter-spacing: -0.03em;
 }
 
 .evolution-inbox-shell {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  grid-template-columns: minmax(300px, 0.72fr) minmax(0, 1.28fr);
   gap: 0;
   min-height: 420px;
   border-top: 1px solid var(--line);
@@ -1786,6 +1788,10 @@ select {
   gap: 14px;
 }
 
+.evolution-pipeline-panel {
+  margin-top: 14px;
+}
+
 .evolution-decision-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1929,8 +1935,9 @@ select {
 }
 
 .evolution-log-inline {
-  display: grid;
-  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
   margin-top: 14px;
   color: var(--muted);
   font-size: 13px;
@@ -1953,6 +1960,29 @@ select {
   display: grid;
   gap: 8px;
   margin-top: 8px;
+}
+
+.evolution-case-history {
+  display: grid;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.evolution-case-section {
+  display: grid;
+  gap: 6px;
+}
+
+.evolution-case-label {
+  color: var(--muted);
+  font: 11px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.evolution-case-divider {
+  height: 1px;
+  background: rgba(154, 201, 177, 0.08);
 }
 
 .evolution-trade-row {
@@ -1985,6 +2015,26 @@ select {
 .evolution-trade-meta {
   justify-items: end;
   text-align: right;
+}
+
+.evolution-similar-row .evolution-trade-main span {
+  max-width: 420px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.evolution-similar-summary {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.evolution-similar-summary {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .evolution-trade-meta strong {
