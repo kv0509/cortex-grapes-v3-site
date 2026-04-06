@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-06 04:04:40",
-    "data_as_of": "2026-04-06 00:00:00",
+    "updated_at": "2026-04-06 08:05:09",
+    "data_as_of": "2026-04-06 04:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -52482,10 +52482,10 @@
           "symbol": "BTCUSDT",
           "direction": "LONG",
           "entry_price": 69092.4,
-          "current_price": 69092.4,
-          "current_pnl_pct": 0.0,
+          "current_price": 69089.7,
+          "current_pnl_pct": -0.0,
           "entry_ts": "2026-04-06 00:00",
-          "hold_hours": 0.0,
+          "hold_hours": 4.0,
           "remaining_size": 0.014473,
           "original_size": 0.014473,
           "partial_taken": false,
