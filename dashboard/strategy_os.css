@@ -105,8 +105,8 @@ select {
 
 .brand-mark {
   display: block;
-  width: 44px;
-  height: 44px;
+  width: 62px;
+  height: 62px;
   flex: 0 0 auto;
 }
 
@@ -3009,8 +3009,8 @@ select {
   }
 
   .brand-mark {
-    width: 24px;
-    height: 24px;
+    width: 34px;
+    height: 34px;
   }
 
   .brand-wordmark {
@@ -3398,8 +3398,8 @@ select {
   }
 
   .brand-mark {
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
   }
 
   .brand-wordmark strong {
