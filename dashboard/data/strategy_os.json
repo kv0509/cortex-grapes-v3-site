@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-08 04:02:54",
-    "data_as_of": "2026-04-08 00:00:00",
+    "updated_at": "2026-04-08 08:05:36",
+    "data_as_of": "2026-04-08 04:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -49032,47 +49032,47 @@
         "synthetic_base_equity_usd": 6000.0
       },
       "portfolio": {
-        "net_pnl_usd": 7369.12,
-        "gross_pnl_usd": 7369.12,
-        "profit_factor": 2.05,
+        "net_pnl_usd": 7359.99,
+        "gross_pnl_usd": 7359.99,
+        "profit_factor": 2.04,
         "trades": 288,
         "winners": 177,
         "winners_pct": 61.5,
         "losers": 111,
         "losers_pct": 38.5,
-        "avg_win_usd": 81.44,
+        "avg_win_usd": 81.39,
         "avg_loss_usd": -63.48,
         "long_trades": 165,
-        "long_net_usd": 2556.04,
+        "long_net_usd": 2546.91,
         "long_wr_pct": 57.6,
         "short_trades": 123,
         "short_net_usd": 4813.08,
         "short_wr_pct": 66.7,
         "max_win_streak": 11,
         "max_loss_streak": 7,
-        "total_return_pct_on_base": 122.82,
+        "total_return_pct_on_base": 122.67,
         "win_rate_pct": 61.5,
-        "max_dd_pct": -5.11,
-        "final_equity": 13369.12,
-        "sharpe": 2.217,
+        "max_dd_pct": -5.2,
+        "final_equity": 13359.99,
+        "sharpe": 2.214,
         "interpretation": [
           "当前网站 Citrus 基线已切到 balanced_hybrid_v1。",
           "BTC 使用更快 TP / trailing，ETH 使用 anti-chase + short_relax，SOL 保持保守 low-DD sleeve。",
-          "在统一 6000U 基准资金下，组合 PF 为 2.05，胜率为 61.46%。"
+          "在统一 6000U 基准资金下，组合 PF 为 2.04，胜率为 61.46%。"
         ]
       },
       "assets": [
         {
           "asset": "BTC",
-          "total_return_pct": 53.63,
-          "sharpe": 3.466,
+          "total_return_pct": 53.48,
+          "sharpe": 3.459,
           "max_drawdown_pct": -4.38,
           "profit_factor": 2.02,
           "trades": 155,
           "win_rate_pct": 63.9,
           "avg_hold_bars": 16.8,
-          "avg_pnl_usd_20": 20.76,
-          "total_pnl_usd_20": 3217.98
+          "avg_pnl_usd_20": 20.7,
+          "total_pnl_usd_20": 3208.85
         },
         {
           "asset": "ETH",
@@ -50253,8 +50253,8 @@
           "equity": 13289.17
         },
         {
-          "ts": "2026-04-07 20:00:00",
-          "equity": 13369.12
+          "ts": "2026-04-08 00:00:00",
+          "equity": 13359.99
         }
       ],
       "asset_curves": {
@@ -50880,8 +50880,8 @@
             "pnl": 3138.03
           },
           {
-            "ts": "2026-04-07 20:00:00",
-            "pnl": 3217.98
+            "ts": "2026-04-08 00:00:00",
+            "pnl": 3208.85
           }
         ],
         "ETH": [
@@ -51951,8 +51951,8 @@
           "trade_count": 2,
           "wins": 1,
           "losses": 1,
-          "net_pnl": 60.22,
-          "return_pct": 0.45
+          "net_pnl": 51.09,
+          "return_pct": 0.38
         }
       ],
       "monthly_heatmap": [
@@ -52486,8 +52486,8 @@
               "trade_count": 2,
               "wins": 1,
               "losses": 1,
-              "net_pnl": 60.22,
-              "return_pct": 0.45
+              "net_pnl": 51.09,
+              "return_pct": 0.38
             }
           ]
         }
@@ -52522,9 +52522,9 @@
             "regime_proxy": "TRANSITION",
             "trades": 232,
             "win_rate_pct": 59.91,
-            "total_pnl_usd": 6298.55,
-            "avg_pnl_usd": 27.15,
-            "profit_factor": 2.14
+            "total_pnl_usd": 6289.42,
+            "avg_pnl_usd": 27.11,
+            "profit_factor": 2.13
           }
         ]
       },
@@ -52534,10 +52534,10 @@
           "symbol": "BTCUSDT",
           "direction": "LONG",
           "entry_price": 69092.4,
-          "current_price": 71259.6,
-          "current_pnl_pct": 3.14,
+          "current_price": 71612.0,
+          "current_pnl_pct": 3.65,
           "entry_ts": "2026-04-06 00:00",
-          "hold_hours": 48.0,
+          "hold_hours": 52.0,
           "remaining_size": 0.007237,
           "original_size": 0.014473,
           "partial_taken": true,
@@ -55710,26 +55710,26 @@
           "asset": "BTC",
           "direction": "LONG",
           "entry_ts": "2026-04-06 00:00",
-          "exit_ts": "2026-04-07 20:00",
-          "hold_hours": 44.0,
+          "exit_ts": "2026-04-08 00:00",
+          "hold_hours": 48.0,
           "entry_price": 69092.4,
-          "exit_price": 71890.2,
-          "net_pnl_usd": 79.95,
-          "roi_pct_on_margin": 399.75
+          "exit_price": 71259.6,
+          "net_pnl_usd": 70.82,
+          "roi_pct_on_margin": 354.1
         }
       ],
       "execution_views": {
         "backtest": {
           "summary": {
-            "final_equity": 13369.12,
-            "net_pnl_usd": 7369.12,
-            "total_return_pct": 122.82,
-            "profit_factor": 2.05,
+            "final_equity": 13359.99,
+            "net_pnl_usd": 7359.99,
+            "total_return_pct": 122.67,
+            "profit_factor": 2.04,
             "trades": 288,
             "win_rate_pct": 61.5,
-            "avg_win_usd": 81.44,
+            "avg_win_usd": 81.39,
             "avg_loss_usd": -63.48,
-            "sharpe": 2.217,
+            "sharpe": 2.214,
             "max_dd_pct": -6.39
           },
           "portfolio_curve": [
@@ -56886,8 +56886,8 @@
               "equity": 13289.17
             },
             {
-              "ts": "2026-04-07 20:00:00",
-              "equity": 13369.12
+              "ts": "2026-04-08 00:00:00",
+              "equity": 13359.99
             }
           ],
           "asset_curves": {
@@ -57513,8 +57513,8 @@
                 "pnl": 3138.03
               },
               {
-                "ts": "2026-04-07 20:00:00",
-                "pnl": 3217.98
+                "ts": "2026-04-08 00:00:00",
+                "pnl": 3208.85
               }
             ],
             "SOL": [
@@ -58584,8 +58584,8 @@
               "trade_count": 2,
               "wins": 1,
               "losses": 1,
-              "net_pnl": 60.22,
-              "return_pct": 0.45
+              "net_pnl": 51.09,
+              "return_pct": 0.38
             }
           ],
           "monthly_heatmap": [
@@ -59119,8 +59119,8 @@
                   "trade_count": 2,
                   "wins": 1,
                   "losses": 1,
-                  "net_pnl": 60.22,
-                  "return_pct": 0.45
+                  "net_pnl": 51.09,
+                  "return_pct": 0.38
                 }
               ]
             }
@@ -59155,9 +59155,9 @@
                 "regime_proxy": "TRANSITION",
                 "trades": 232,
                 "win_rate_pct": 59.91,
-                "total_pnl_usd": 6298.55,
-                "avg_pnl_usd": 27.15,
-                "profit_factor": 2.14
+                "total_pnl_usd": 6289.42,
+                "avg_pnl_usd": 27.11,
+                "profit_factor": 2.13
               }
             ]
           },
@@ -62323,12 +62323,12 @@
               "asset": "BTC",
               "direction": "LONG",
               "entry_ts": "2026-04-06 00:00",
-              "exit_ts": "2026-04-07 20:00",
-              "hold_hours": 44.0,
+              "exit_ts": "2026-04-08 00:00",
+              "hold_hours": 48.0,
               "entry_price": 69092.4,
-              "exit_price": 71890.2,
-              "net_pnl_usd": 79.95,
-              "roi_pct_on_margin": 399.75
+              "exit_price": 71259.6,
+              "net_pnl_usd": 70.82,
+              "roi_pct_on_margin": 354.1
             }
           ]
         },
@@ -62691,8 +62691,8 @@
           "asset": "BTC",
           "direction": "LONG",
           "entry_time": "2026-04-06 00:00:00",
-          "exit_time": "2026-04-07 20:00:00",
-          "scaled_net_pnl_usd": 79.95
+          "exit_time": "2026-04-08 00:00:00",
+          "scaled_net_pnl_usd": 70.82
         },
         {
           "asset": "ETH",
@@ -98081,17 +98081,17 @@
     {
       "label": "ROI / 总回报",
       "grapes": "+607.17%",
-      "citrus": "+122.82%"
+      "citrus": "+122.67%"
     },
     {
       "label": "Sharpe",
       "grapes": "2.25",
-      "citrus": "2.22"
+      "citrus": "2.21"
     },
     {
       "label": "Max DD",
       "grapes": "-6.54%",
-      "citrus": "-5.11%"
+      "citrus": "-5.20%"
     },
     {
       "label": "Trades",
