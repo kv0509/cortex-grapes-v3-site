@@ -26,6 +26,7 @@
           <button class="switch-tab" data-view="citrus" type="button">🍊 Citrus</button>
           <button class="switch-tab" data-view="equity" type="button">📈 Equity</button>
           <button class="switch-tab" data-view="evolution" type="button">🧬 Evolution</button>
+          <button class="switch-tab" data-view="observability" type="button">Observability</button>
         </nav>
         <div class="site-controls">
           <div class="lang-switch" id="lang-switch">
@@ -298,12 +299,66 @@
             <section id="evolution-next-action" class="evolution-focus-panel evolution-action-panel"></section>
           </section>
         </section>
+
+        <section class="view-panel strategy-view observability-view" data-panel="observability">
+          <section class="overview-main-grid observability-main-grid">
+            <section class="overview-chart-surface observability-command-surface">
+              <div class="section-head minimal">
+                <p class="eyebrow">Block Drift Distribution</p>
+                <div class="chart-legend">
+                  <span class="legend-item"><i style="background:#d5a441"></i> Sample Gated</span>
+                </div>
+              </div>
+              <div id="observability-drift-summary" class="observability-drift-summary"></div>
+              <div id="observability-drift-table" class="observability-table compact"></div>
+            </section>
+
+            <aside class="overview-summary-panel observability-summary-panel">
+              <section class="rail-section summary">
+                <div class="rail-title">System State</div>
+                <div id="observability-status-strip" class="observability-status-strip"></div>
+              </section>
+              <section class="rail-section">
+                <div class="rail-title">Funding Diagnostics</div>
+                <div id="observability-funding-table" class="observability-table rail-table-mode"></div>
+              </section>
+              <section class="rail-section">
+                <div class="rail-title">Monte Carlo Baseline</div>
+                <div id="observability-monte-carlo" class="observability-kpi-stack"></div>
+              </section>
+            </aside>
+          </section>
+
+          <section class="overview-secondary-grid observability-secondary-grid">
+            <article class="strategy-terminal-panel observability-terminal">
+              <div class="strategy-terminal-head">
+                <div>
+                  <div class="strategy-terminal-name">Block Event Explorer</div>
+                  <div class="strategy-terminal-role">Latest live signal_block_events</div>
+                </div>
+                <span class="observability-terminal-pill">Live DB</span>
+              </div>
+              <div id="observability-block-events" class="observability-event-list"></div>
+            </article>
+
+            <article class="strategy-terminal-panel observability-terminal">
+              <div class="strategy-terminal-head">
+                <div>
+                  <div class="strategy-terminal-name">Research Timeline</div>
+                  <div class="strategy-terminal-role">Strategy and system memory</div>
+                </div>
+                <span class="observability-terminal-pill">Memory</span>
+              </div>
+              <div id="observability-memory-timeline" class="observability-timeline"></div>
+            </article>
+          </section>
+        </section>
       </main>
 
       <footer class="site-footer">
         <span>Copyright &copy; 2026 NTS Alpha Labs. All rights reserved.</span>
       </footer>
     </div>
-    <script src="./strategy_os.js?v=20260330-livews"></script>
+    <script src="./strategy_os.js?v=20260410-observability"></script>
   </body>
 </html>

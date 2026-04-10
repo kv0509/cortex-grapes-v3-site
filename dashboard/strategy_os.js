@@ -1,4 +1,4 @@
-const DATA_URL = "./data/strategy_os.json";
+const DATA_URL = "./data/strategy_os.json?v=20260410-observability-fit";
 const EVOLUTION_API_BASE = "http://127.0.0.1:8000/api/v1/evolution";
 
 const COLORS = {
@@ -214,6 +214,7 @@ const I18N = {
     evolutionWaitingBody: "The engine is finding more patterns than it is validating. That is expected. Discovery is cheap, promotion is not.",
     evolutionBottleneckBody: "The hard part is not finding bad shapes. The hard part is turning similar-looking problems into different, credible fixes.",
     reason: "Reason",
+    observabilityName: "Observability",
     holdMode: "Hold",
     yes: "YES",
     no: "NO",
@@ -823,6 +824,7 @@ function applyLanguage() {
   setText('.switch-tab[data-view="grapes"]', state.lang === "zh" ? "🍇 Grapes" : "🍇 Grapes");
   setText('.switch-tab[data-view="citrus"]', state.lang === "zh" ? "🍊 Citrus" : "🍊 Citrus");
   setText('.switch-tab[data-view="equity"]', state.lang === "zh" ? "📈 Equity" : "📈 Equity");
+  setText('.switch-tab[data-view="observability"]', state.lang === "zh" ? "观测层" : "Observability");
   setText('[data-panel="all"] .overview-chart-surface .eyebrow', t("combinedLivePnl"));
   setText('[data-panel="grapes"] .panel-head .eyebrow', t("strategyDetail"));
   setText('[data-panel="grapes"] .panel-head h3', t("grapesName"));
@@ -1996,6 +1998,150 @@ function renderEvolutionSummary(data) {
     });
   }
 
+}
+
+function renderObservability(data) {
+  const observability = data?.strategies?.observability;
+  if (!observability) return;
+  const funding = observability.funding || {};
+  const drift = observability.block_drift || {};
+  const driftSummary = drift.summary || {};
+  const verdict = String(driftSummary.verdict || "PENDING");
+  const verdictClass = verdict.includes("DRIFT") ? "neg" : verdict.includes("INSUFFICIENT") ? "warn" : "pos";
+
+  const statusStrip = document.getElementById("observability-status-strip");
+  if (statusStrip) {
+    statusStrip.innerHTML = `
+      <div><span>block drift</span><strong class="${verdictClass}">${verdict.replace(/_/g, " ")}</strong></div>
+      <div><span>live sample</span><strong>${driftSummary.live_events ?? 0}/${driftSummary.min_live_events ?? 20}</strong></div>
+    `;
+  }
+
+  const fundingTarget = document.getElementById("observability-funding-table");
+  const fundingRows = funding.latest || [];
+  if (fundingTarget) {
+    fundingTarget.innerHTML = fundingRows.length ? `
+      <div class="observability-funding-head">
+        <span>Asset</span><span>Funding</span><span>Z</span><span>FXOI</span>
+      </div>
+      ${fundingRows.map((row) => {
+        const z = Number(row.z_funding || 0);
+        const fx = Number(row.funding_x_oi || 0);
+        return `
+          <div class="observability-funding-row">
+            <strong>${row.asset || row.symbol || "—"}</strong>
+            <span>${Number(row.funding_rate || 0).toFixed(8)}</span>
+            <span class="${z >= 1 ? "warn" : z <= -1 ? "pos" : ""}">${fmtNum(z, 3)}</span>
+            <span class="${fx >= 1 ? "warn" : ""}">${fmtNum(fx, 3)}</span>
+          </div>
+        `;
+      }).join("")}
+    ` : `<p class="observability-empty">Funding rows will appear after the live model writes the new columns.</p>`;
+  }
+
+  const driftSummaryTarget = document.getElementById("observability-drift-summary");
+  if (driftSummaryTarget) {
+    driftSummaryTarget.innerHTML = `
+      <div class="observability-kpi ${verdictClass}">
+        <span>Verdict</span>
+        <strong>${verdict.replace(/_/g, " ")}</strong>
+      </div>
+      <div class="observability-kpi">
+        <span>JS</span>
+        <strong>${fmtNum(driftSummary.js_divergence || 0, 4)}</strong>
+      </div>
+      <div class="observability-kpi">
+        <span>Baseline</span>
+        <strong>${driftSummary.baseline_events || 0}</strong>
+      </div>
+    `;
+  }
+
+  const driftTable = document.getElementById("observability-drift-table");
+  const driftRows = drift.drift_rows || [];
+  if (driftTable) {
+    driftTable.innerHTML = driftRows.length ? `
+      <div class="observability-table-head">
+        <span>Gate</span><span>Asset</span><span>Side</span><span>Base</span><span>Live</span><span>Ratio</span>
+      </div>
+      ${driftRows.slice(0, 10).map((row) => {
+        const ratio = Number(row.share_ratio || 0);
+        const side = Number(row.direction || 0) > 0 ? "LONG" : Number(row.direction || 0) < 0 ? "SHORT" : "FLAT";
+        const asset = String(row.symbol || "—").replace("USDT", "");
+        return `
+          <div class="observability-table-row ${row.drift_flag ? "flagged" : ""}">
+            <strong>${String(row.block_type || "").replace(/_/g, " ")}</strong>
+            <span>${asset}</span>
+            <span class="${side === "LONG" ? "pos" : side === "SHORT" ? "neg" : ""}">${side}</span>
+            <span>${fmtNum(Number(row.share_baseline || 0) * 100, 1)}%</span>
+            <span>${fmtNum(Number(row.share_live || 0) * 100, 1)}%</span>
+            <span>${Number.isFinite(ratio) ? `${fmtNum(ratio, 2)}x` : "new"}</span>
+          </div>
+        `;
+      }).join("")}
+    ` : `<p class="observability-empty">No drift rows yet.</p>`;
+  }
+
+  const blockEvents = document.getElementById("observability-block-events");
+  const events = drift.recent_events || [];
+  const gateTone = (gate) => {
+    const text = String(gate || "");
+    if (text.includes("range")) return "range";
+    if (text.includes("sync")) return "sync";
+    if (text.includes("fib")) return "fib";
+    if (text.includes("extension")) return "extension";
+    if (text.includes("weak")) return "weak";
+    return "neutral";
+  };
+  if (blockEvents) {
+    blockEvents.innerHTML = events.length ? events.slice(0, 30).map((event) => {
+      const sideClass = event.side === "LONG" ? "pos" : event.side === "SHORT" ? "neg" : "";
+      const f = event.funding_observability || {};
+      const gate = String(event.block_type || "").replace(/_/g, " ");
+      return `
+        <article class="observability-event ${gateTone(event.block_type)}">
+          <div class="observability-event-main">
+            <div class="observability-event-line">
+              <span>${event.timestamp || "—"}</span>
+              <strong>${event.asset || event.symbol}</strong>
+              <em class="${sideClass}">${event.side}</em>
+              <b>${gate}</b>
+            </div>
+          </div>
+          <div class="observability-event-metrics">
+            <span>ZF <strong>${f.z_funding == null ? "—" : fmtNum(f.z_funding, 2)}</strong></span>
+            <span>FXOI <strong>${f.funding_x_oi == null ? "—" : fmtNum(f.funding_x_oi, 2)}</strong></span>
+          </div>
+        </article>
+      `;
+    }).join("") : `<p class="observability-empty">No live block events yet.</p>`;
+  }
+
+  const mcTarget = document.getElementById("observability-monte-carlo");
+  const bootstrap = observability.monte_carlo?.bootstrap || {};
+  const reshuffle = observability.monte_carlo?.reshuffle || {};
+  const signedClass = (value) => Number(value || 0) >= 0 ? "pos" : "neg";
+  if (mcTarget) {
+    mcTarget.innerHTML = `
+      <div><span>Median final return</span><strong class="${signedClass(bootstrap.median_final_return_pct)}">${fmtPct(bootstrap.median_final_return_pct || 0, 1)}</strong></div>
+      <div><span>Bootstrap median DD</span><strong class="${signedClass(bootstrap.median_max_drawdown_pct)}">${fmtPct(bootstrap.median_max_drawdown_pct || 0, 1)}</strong></div>
+      <div><span>Reshuffle median DD</span><strong class="${signedClass(reshuffle.median_max_drawdown_pct)}">${fmtPct(reshuffle.median_max_drawdown_pct || 0, 1)}</strong></div>
+      <div><span>Worst 5% DD</span><strong class="${signedClass(reshuffle.worst_5pct_maxdd_pct)}">${fmtPct(reshuffle.worst_5pct_maxdd_pct || 0, 1)}</strong></div>
+    `;
+  }
+
+  const timeline = document.getElementById("observability-memory-timeline");
+  const timelineRows = observability.memory_timeline || [];
+  if (timeline) {
+    timeline.innerHTML = timelineRows.length ? timelineRows.map((row) => `
+      <article class="${String(row.source || "").toLowerCase()}">
+        <div class="observability-timeline-line">
+          <span>${row.source}</span>
+          <strong>${row.title}</strong>
+        </div>
+      </article>
+    `).join("") : `<p class="observability-empty">No memory entries found.</p>`;
+  }
 }
 
 function tradePeriodValue(trade, scope) {
@@ -3436,6 +3582,7 @@ function render(data) {
   renderEquitySummary(data);
   renderEquityRegime(data);
   renderEvolutionSummary(data);
+  renderObservability(data);
   const grapesLens = getStrategyLensData("grapes");
   const citrusLens = getStrategyLensData("citrus");
   const equityLens = getStrategyLensData("equity");
