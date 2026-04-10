@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-10 08:05:16",
+    "updated_at": "2026-04-10 16:07:14",
     "data_as_of": "2026-04-10 15:12:01",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
@@ -52534,15 +52534,15 @@
           "symbol": "BTCUSDT",
           "direction": "LONG",
           "entry_price": 72055.9,
-          "current_price": 71461.2,
-          "current_pnl_pct": -0.83,
+          "current_price": 72421.0,
+          "current_pnl_pct": 0.51,
           "entry_ts": "2026-04-09 16:00",
-          "hold_hours": 12.0,
+          "hold_hours": 20.0,
           "remaining_size": 0.013878,
           "original_size": 0.013878,
           "partial_taken": false,
           "breakeven_armed": false,
-          "peak_pnl_pct": 0.0,
+          "peak_pnl_pct": 0.51,
           "entry_liq_imbalance": 1.6,
           "entry_z_price": 1.824,
           "capital": 9999.5
@@ -98109,32 +98109,32 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "",
-            "funding_rate": 0.0,
-            "z_funding": 0.0,
-            "dz_funding": 0.0,
-            "funding_x_oi": 0.0,
-            "source": "pending_db_migration_or_no_live_rows"
+            "timestamp": "2026-04-10 12:00",
+            "funding_rate": 2.458e-05,
+            "z_funding": -0.195,
+            "dz_funding": -0.023,
+            "funding_x_oi": 0.147,
+            "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "",
-            "funding_rate": 0.0,
-            "z_funding": 0.0,
-            "dz_funding": 0.0,
-            "funding_x_oi": 0.0,
-            "source": "pending_db_migration_or_no_live_rows"
+            "timestamp": "2026-04-10 12:00",
+            "funding_rate": 2.83e-06,
+            "z_funding": -0.433,
+            "dz_funding": -0.011,
+            "funding_x_oi": -0.419,
+            "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "",
-            "funding_rate": 0.0,
-            "z_funding": 0.0,
-            "dz_funding": 0.0,
-            "funding_x_oi": 0.0,
-            "source": "pending_db_migration_or_no_live_rows"
+            "timestamp": "2026-04-10 12:00",
+            "funding_rate": 1e-06,
+            "z_funding": 0.162,
+            "dz_funding": 0.014,
+            "funding_x_oi": 0.129,
+            "source": "historical_strict_asof"
           }
         ],
         "activation_rule": "Review only after 2-4 weeks of live data and at least one meaningful funding-spike regime."

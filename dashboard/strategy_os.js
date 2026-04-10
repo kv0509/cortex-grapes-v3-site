@@ -549,6 +549,11 @@ function fmtSignedCompactUsd(v, d = 0) {
   return `${sign}$${Math.abs(n).toFixed(d)}`;
 }
 
+function fmtFundingRate(value) {
+  const n = Number(value || 0);
+  return `${(n * 100).toFixed(4)}%`;
+}
+
 function normalizeSymbol(symbol) {
   return String(symbol || "").trim().toUpperCase();
 }
@@ -2030,9 +2035,9 @@ function renderObservability(data) {
         return `
           <div class="observability-funding-row">
             <strong>${row.asset || row.symbol || "—"}</strong>
-            <span>${Number(row.funding_rate || 0).toFixed(8)}</span>
-            <span class="${z >= 1 ? "warn" : z <= -1 ? "pos" : ""}">${fmtNum(z, 3)}</span>
-            <span class="${fx >= 1 ? "warn" : ""}">${fmtNum(fx, 3)}</span>
+            <span>${fmtFundingRate(row.funding_rate || 0)}</span>
+            <span class="${z >= 1 ? "warn" : z <= -1 ? "pos" : ""}">${fmtNum(z, 2)}</span>
+            <span class="${fx >= 1 ? "warn" : ""}">${fmtNum(fx, 2)}</span>
           </div>
         `;
       }).join("")}
