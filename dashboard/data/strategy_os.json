@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-11 12:06:02",
-    "data_as_of": "2026-04-11 08:00:00",
+    "updated_at": "2026-04-11 16:06:10",
+    "data_as_of": "2026-04-11 12:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -52534,10 +52534,10 @@
           "symbol": "BTCUSDT",
           "direction": "LONG",
           "entry_price": 72055.9,
-          "current_price": 72868.2,
-          "current_pnl_pct": 1.13,
+          "current_price": 72817.3,
+          "current_pnl_pct": 1.06,
           "entry_ts": "2026-04-09 16:00",
-          "hold_hours": 40.0,
+          "hold_hours": 44.0,
           "remaining_size": 0.013878,
           "original_size": 0.013878,
           "partial_taken": false,
@@ -98109,31 +98109,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-11 08:00",
+            "timestamp": "2026-04-11 12:00",
             "funding_rate": -6.083e-05,
-            "z_funding": -2.14,
-            "dz_funding": 0.523,
-            "funding_x_oi": -0.221,
+            "z_funding": -1.978,
+            "dz_funding": 0.162,
+            "funding_x_oi": 0.25,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-11 08:00",
+            "timestamp": "2026-04-11 12:00",
             "funding_rate": -7.635e-05,
-            "z_funding": -2.052,
-            "dz_funding": -0.077,
-            "funding_x_oi": 0.505,
+            "z_funding": -1.904,
+            "dz_funding": 0.147,
+            "funding_x_oi": -0.331,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-11 08:00",
+            "timestamp": "2026-04-11 12:00",
             "funding_rate": -1.872e-05,
-            "z_funding": -0.226,
-            "dz_funding": -0.748,
-            "funding_x_oi": -0.233,
+            "z_funding": -0.233,
+            "dz_funding": -0.007,
+            "funding_x_oi": -0.053,
             "source": "historical_strict_asof"
           }
         ],
