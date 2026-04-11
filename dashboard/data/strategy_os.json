@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-10 16:07:14",
-    "data_as_of": "2026-04-10 15:12:01",
+    "updated_at": "2026-04-11 04:05:38",
+    "data_as_of": "2026-04-11 00:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -52534,15 +52534,15 @@
           "symbol": "BTCUSDT",
           "direction": "LONG",
           "entry_price": 72055.9,
-          "current_price": 72421.0,
-          "current_pnl_pct": 0.51,
+          "current_price": 72835.1,
+          "current_pnl_pct": 1.08,
           "entry_ts": "2026-04-09 16:00",
-          "hold_hours": 20.0,
+          "hold_hours": 32.0,
           "remaining_size": 0.013878,
           "original_size": 0.013878,
           "partial_taken": false,
           "breakeven_armed": false,
-          "peak_pnl_pct": 0.51,
+          "peak_pnl_pct": 1.57,
           "entry_liq_imbalance": 1.6,
           "entry_z_price": 1.824,
           "capital": 9999.5
@@ -98109,31 +98109,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-10 12:00",
-            "funding_rate": 2.458e-05,
-            "z_funding": -0.195,
-            "dz_funding": -0.023,
-            "funding_x_oi": 0.147,
+            "timestamp": "2026-04-11 00:00",
+            "funding_rate": -7.225e-05,
+            "z_funding": -3.031,
+            "dz_funding": -1.281,
+            "funding_x_oi": -0.825,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-10 12:00",
-            "funding_rate": 2.83e-06,
-            "z_funding": -0.433,
-            "dz_funding": -0.011,
-            "funding_x_oi": -0.419,
+            "timestamp": "2026-04-11 00:00",
+            "funding_rate": -6.627e-05,
+            "z_funding": -2.138,
+            "dz_funding": -1.51,
+            "funding_x_oi": 1.069,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-10 12:00",
-            "funding_rate": 1e-06,
-            "z_funding": 0.162,
-            "dz_funding": 0.014,
-            "funding_x_oi": 0.129,
+            "timestamp": "2026-04-11 00:00",
+            "funding_rate": 4.33e-05,
+            "z_funding": 0.553,
+            "dz_funding": -0.506,
+            "funding_x_oi": -0.076,
             "source": "historical_strict_asof"
           }
         ],
@@ -98369,6 +98369,57 @@
           }
         ],
         "recent_events": [
+          {
+            "symbol": "SOLUSDT",
+            "asset": "SOL",
+            "timestamp": "2026-04-10 16:00",
+            "block_type": "btc_sync_blocked",
+            "direction": 1,
+            "side": "LONG",
+            "reason": "LONG follower blocked because BTC same-bar sync gate triggered",
+            "funding_observability": {
+              "dz_funding": 0.9482890273329185,
+              "funding_observation_source": "historical_strict_asof",
+              "funding_rate": 8.338e-05,
+              "funding_x_oi": 0.5474958262103875,
+              "z_funding": 1.1102684358728279
+            },
+            "updated_at": "2026-04-11 04:01"
+          },
+          {
+            "symbol": "ETHUSDT",
+            "asset": "ETH",
+            "timestamp": "2026-04-10 16:00",
+            "block_type": "btc_sync_blocked",
+            "direction": 1,
+            "side": "LONG",
+            "reason": "LONG follower blocked because BTC same-bar sync gate triggered",
+            "funding_observability": {
+              "dz_funding": -0.19894240002504837,
+              "funding_observation_source": "historical_strict_asof",
+              "funding_rate": -4.48e-06,
+              "funding_x_oi": -0.9889665758709926,
+              "z_funding": -0.6322800795699526
+            },
+            "updated_at": "2026-04-11 04:01"
+          },
+          {
+            "symbol": "BTCUSDT",
+            "asset": "BTC",
+            "timestamp": "2026-04-10 16:00",
+            "block_type": "trend_extension_blocked",
+            "direction": 1,
+            "side": "LONG",
+            "reason": "LONG extension 5.54% exceeded 5.00% cap above Vegas",
+            "funding_observability": {
+              "dz_funding": -1.6822224283140648,
+              "funding_observation_source": "historical_strict_asof",
+              "funding_rate": -2.187e-05,
+              "funding_x_oi": -5.701031015613785,
+              "z_funding": -1.8774709411459436
+            },
+            "updated_at": "2026-04-11 04:01"
+          },
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
