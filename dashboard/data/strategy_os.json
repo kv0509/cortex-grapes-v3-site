@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-11 08:05:45",
-    "data_as_of": "2026-04-11 04:00:00",
+    "updated_at": "2026-04-11 12:06:02",
+    "data_as_of": "2026-04-11 08:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -52534,10 +52534,10 @@
           "symbol": "BTCUSDT",
           "direction": "LONG",
           "entry_price": 72055.9,
-          "current_price": 72707.7,
-          "current_pnl_pct": 0.9,
+          "current_price": 72868.2,
+          "current_pnl_pct": 1.13,
           "entry_ts": "2026-04-09 16:00",
-          "hold_hours": 36.0,
+          "hold_hours": 40.0,
           "remaining_size": 0.013878,
           "original_size": 0.013878,
           "partial_taken": false,
@@ -98109,31 +98109,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-11 04:00",
-            "funding_rate": -7.225e-05,
-            "z_funding": -2.663,
-            "dz_funding": 0.367,
-            "funding_x_oi": 1.582,
+            "timestamp": "2026-04-11 08:00",
+            "funding_rate": -6.083e-05,
+            "z_funding": -2.14,
+            "dz_funding": 0.523,
+            "funding_x_oi": -0.221,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-11 04:00",
-            "funding_rate": -6.627e-05,
-            "z_funding": -1.975,
-            "dz_funding": 0.164,
-            "funding_x_oi": 0.454,
+            "timestamp": "2026-04-11 08:00",
+            "funding_rate": -7.635e-05,
+            "z_funding": -2.052,
+            "dz_funding": -0.077,
+            "funding_x_oi": 0.505,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-11 04:00",
-            "funding_rate": 4.33e-05,
-            "z_funding": 0.521,
-            "dz_funding": -0.031,
-            "funding_x_oi": -0.094,
+            "timestamp": "2026-04-11 08:00",
+            "funding_rate": -1.872e-05,
+            "z_funding": -0.226,
+            "dz_funding": -0.748,
+            "funding_x_oi": -0.233,
             "source": "historical_strict_asof"
           }
         ],
@@ -98370,6 +98370,23 @@
         ],
         "recent_events": [
           {
+            "symbol": "BTCUSDT",
+            "asset": "BTC",
+            "timestamp": "2026-04-11 08:00",
+            "block_type": "range_structure_blocked",
+            "direction": 1,
+            "side": "LONG",
+            "reason": "LONG blocked because BTC was entering near a local range high above Vegas",
+            "funding_observability": {
+              "dz_funding": 0.5232452829341665,
+              "funding_observation_source": "historical_strict_asof",
+              "funding_rate": -6.083e-05,
+              "funding_x_oi": -0.220926131663897,
+              "z_funding": -2.140167094686983
+            },
+            "updated_at": "2026-04-11 20:00"
+          },
+          {
             "symbol": "SOLUSDT",
             "asset": "SOL",
             "timestamp": "2026-04-10 16:00",
@@ -98512,6 +98529,30 @@
       },
       "memory_timeline": [
         {
+          "source": "system",
+          "title": "2026-04-11 - Upgraded the Intraday Copilot memory layer from a single note to a rolling note window. `intraday_copilot_memory.json` now stor",
+          "summary": "Upgraded the Intraday Copilot memory layer from a single note to a rolling note window. `intraday_copilot_memory.json` now stores `notes[]` plus `max_notes`, and each saved note includes trigger results and raw 1bar/24h/48h deltas. The compressed state now als",
+          "date": "2026-04-11"
+        },
+        {
+          "source": "strategy",
+          "title": "2026-04-11 - Upgraded the Grapes AI Position Monitor prompt stack to a continuity-first operator note.",
+          "summary": "Upgraded the Grapes AI Position Monitor prompt stack to a continuity-first operator note.",
+          "date": "2026-04-11"
+        },
+        {
+          "source": "system",
+          "title": "2026-04-11 - Reworked `backend/Live_Intraday_Copilot/Grapes_Intraday_Copilot.py` to remove the old hard-coded `过去3天 / 48小时 / 24小时` narrative",
+          "summary": "Reworked `backend/Live_Intraday_Copilot/Grapes_Intraday_Copilot.py` to remove the old hard-coded `过去3天 / 48小时 / 24小时` narrative skeleton from the active render path. The copilot now builds a compressed state with `price_oi_state`, `lead_asset`, `weak_asset`, `",
+          "date": "2026-04-11"
+        },
+        {
+          "source": "system",
+          "title": "2026-04-11 - Reworked `Live/services/Grapes_AI_Position_Monitor.py` from a one-shot structure recap into a continuity-aware monitor layer. A",
+          "summary": "Reworked `Live/services/Grapes_AI_Position_Monitor.py` from a one-shot structure recap into a continuity-aware monitor layer. Added:",
+          "date": "2026-04-11"
+        },
+        {
           "source": "strategy",
           "title": "2026-04-10 - Grapes single-gate counterfactual suite",
           "summary": "Added a second-layer gate study after the forward-return attribution pass. New script: `scripts/run_grapes_gate_counterfactual_suite.py` Purpose: test whether suspicious gate-attribution leakage survives full trade-lifecycle replay. This is stricter than forwa",
@@ -98546,30 +98587,6 @@
           "title": "2026-04-10 - Grapes BE enhancement PDR research gate",
           "summary": "Read and converted the BE Enhancement PDR into a first research experiment. New script: `scripts/run_grapes_be_enhancement_research.py` The script does not change production behavior. It replays the current official Grapes V3.3.1 production baseline and writes",
           "date": "2026-04-10"
-        },
-        {
-          "source": "system",
-          "title": "2026-04-10 - Added observability-only funding-rate logging to `Live/services/Grapes_Model_v1.py`. The live Binance fetcher now aligns fundin",
-          "summary": "Added observability-only funding-rate logging to `Live/services/Grapes_Model_v1.py`. The live Binance fetcher now aligns funding to each 4H bar using the latest funding timestamp strictly before bar close, computes `Z_Funding`, `dZ_Funding`, and `Funding_x_OI`",
-          "date": "2026-04-10"
-        },
-        {
-          "source": "system",
-          "title": "2026-04-10 - Added an Observability tab to the Strategy OS localhost dashboard and aligned it to the existing Overview page pattern: primary",
-          "summary": "Added an Observability tab to the Strategy OS localhost dashboard and aligned it to the existing Overview page pattern: primary monitoring surface, right summary rail, and compact secondary terminal panels. Removed the hero-style copy so the tab behaves like a",
-          "date": "2026-04-10"
-        },
-        {
-          "source": "system",
-          "title": "2026-04-10 - Added `scripts/run_grapes_block_distribution_drift_audit.py` plus the frozen baseline CSV `Reports/backtest/signal_block_events",
-          "summary": "Added `scripts/run_grapes_block_distribution_drift_audit.py` plus the frozen baseline CSV `Reports/backtest/signal_block_events_baseline.csv`. The script reads live `signal_block_events`, compares rolling live block distribution with the backtest baseline, wri",
-          "date": "2026-04-10"
-        },
-        {
-          "source": "strategy",
-          "title": "2026-04-09 TimesFM Filter Research (Grapes / Citrus Recent Replay)",
-          "summary": "Change: Added recent-replay TimesFM research around the existing 4H systems without changing PPO weights, core thresholds, live execution logic, or production configs. The new research scripts test TimesFM only as an external entry veto layer. Implemented scri",
-          "date": "2026-04-09"
         }
       ],
       "monte_carlo": {
