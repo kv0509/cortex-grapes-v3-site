@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-12 16:05:50",
-    "data_as_of": "2026-04-12 12:00:00",
+    "updated_at": "2026-04-12 20:02:15",
+    "data_as_of": "2026-04-12 16:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -52528,26 +52528,7 @@
           }
         ]
       },
-      "active_positions": [
-        {
-          "asset": "BTC",
-          "symbol": "BTCUSDT",
-          "direction": "LONG",
-          "entry_price": 72055.9,
-          "current_price": 70856.2,
-          "current_pnl_pct": -1.66,
-          "entry_ts": "2026-04-09 16:00",
-          "hold_hours": 68.0,
-          "remaining_size": 0.013878,
-          "original_size": 0.013878,
-          "partial_taken": false,
-          "breakeven_armed": false,
-          "peak_pnl_pct": 2.19,
-          "entry_liq_imbalance": 1.6,
-          "entry_z_price": 1.824,
-          "capital": 9999.5
-        }
-      ],
+      "active_positions": [],
       "all_trades": [
         {
           "asset": "BTC",
@@ -62334,15 +62315,15 @@
         },
         "live": {
           "summary": {
-            "final_equity": 6049.09,
-            "net_pnl_usd": 49.09,
-            "total_return_pct": 0.82,
-            "profit_factor": 1.11,
-            "trades": 13,
-            "win_rate_pct": 53.8,
+            "final_equity": 6020.32,
+            "net_pnl_usd": 20.32,
+            "total_return_pct": 0.34,
+            "profit_factor": 1.04,
+            "trades": 14,
+            "win_rate_pct": 50.0,
             "avg_win_usd": 68.75,
-            "avg_loss_usd": -72.03,
-            "sharpe": 2.282,
+            "avg_loss_usd": -65.85,
+            "sharpe": 2.082,
             "max_dd_pct": -6.1
           },
           "portfolio_curve": [
@@ -62401,6 +62382,10 @@
             {
               "ts": "2026-04-09 12:00:00",
               "equity": 6049.09
+            },
+            {
+              "ts": "2026-04-12 16:00:00",
+              "equity": 6020.32
             }
           ],
           "asset_curves": {
@@ -62428,6 +62413,10 @@
               {
                 "ts": "2026-04-09 12:00:00",
                 "pnl": 235.04
+              },
+              {
+                "ts": "2026-04-12 16:00:00",
+                "pnl": 206.28
               }
             ],
             "ETH": [
@@ -62480,8 +62469,8 @@
             "losing_months": 1,
             "best_month": {
               "label": "2026-04",
-              "pnl_usd": 50.85,
-              "return_pct": 0.85
+              "pnl_usd": 22.09,
+              "return_pct": 0.37
             },
             "worst_month": {
               "label": "2026-03",
@@ -62504,11 +62493,11 @@
               "label": "2026-04",
               "year": 2026,
               "month": 4,
-              "trade_count": 2,
+              "trade_count": 3,
               "wins": 1,
-              "losses": 1,
-              "net_pnl": 50.85,
-              "return_pct": 0.85
+              "losses": 2,
+              "net_pnl": 22.09,
+              "return_pct": 0.37
             }
           ],
           "monthly_heatmap": [
@@ -62529,11 +62518,11 @@
                   "label": "2026-04",
                   "year": 2026,
                   "month": 4,
-                  "trade_count": 2,
+                  "trade_count": 3,
                   "wins": 1,
-                  "losses": 1,
-                  "net_pnl": 50.85,
-                  "return_pct": 0.85
+                  "losses": 2,
+                  "net_pnl": 22.09,
+                  "return_pct": 0.37
                 }
               ]
             }
@@ -62550,11 +62539,11 @@
               },
               {
                 "regime_proxy": "TRANSITION",
-                "trades": 11,
-                "win_rate_pct": 54.55,
-                "total_pnl_usd": 77.05,
-                "avg_pnl_usd": 7.0,
-                "profit_factor": 1.21
+                "trades": 12,
+                "win_rate_pct": 50.0,
+                "total_pnl_usd": 48.28,
+                "avg_pnl_usd": 4.02,
+                "profit_factor": 1.12
               }
             ]
           },
@@ -62701,6 +62690,17 @@
               "exit_price": 72108.0,
               "net_pnl_usd": 83.1,
               "roi_pct_on_margin": 415.49
+            },
+            {
+              "asset": "BTC",
+              "direction": "LONG",
+              "entry_ts": "2026-04-09 16:00",
+              "exit_ts": "2026-04-12 16:00",
+              "hold_hours": 72.0,
+              "entry_price": 72055.9,
+              "exit_price": 71055.2,
+              "net_pnl_usd": -28.76,
+              "roi_pct_on_margin": -143.81
             }
           ]
         }
@@ -98109,31 +98109,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-12 12:00",
-            "funding_rate": -3.69e-05,
-            "z_funding": -0.837,
-            "dz_funding": 0.036,
-            "funding_x_oi": 0.247,
+            "timestamp": "2026-04-12 16:00",
+            "funding_rate": -3.35e-06,
+            "z_funding": -0.11,
+            "dz_funding": 0.727,
+            "funding_x_oi": 0.241,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-12 12:00",
-            "funding_rate": -3.576e-05,
-            "z_funding": -0.948,
-            "dz_funding": -0.008,
-            "funding_x_oi": 0.76,
+            "timestamp": "2026-04-12 16:00",
+            "funding_rate": -5.477e-05,
+            "z_funding": -1.278,
+            "dz_funding": -0.329,
+            "funding_x_oi": 0.652,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-12 12:00",
-            "funding_rate": -0.00011509,
-            "z_funding": -1.476,
-            "dz_funding": 0.032,
-            "funding_x_oi": -0.901,
+            "timestamp": "2026-04-12 16:00",
+            "funding_rate": -6.761e-05,
+            "z_funding": -0.891,
+            "dz_funding": 0.585,
+            "funding_x_oi": -0.24,
             "source": "historical_strict_asof"
           }
         ],
