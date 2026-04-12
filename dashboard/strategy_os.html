@@ -27,6 +27,7 @@
           <button class="switch-tab" data-view="equity" type="button">📈 Equity</button>
           <button class="switch-tab" data-view="evolution" type="button">🧬 Evolution</button>
           <button class="switch-tab" data-view="observability" type="button">Observability</button>
+          <button class="switch-tab" data-view="liquidity" type="button">Liquidity</button>
         </nav>
         <div class="site-controls">
           <div class="lang-switch" id="lang-switch">
@@ -353,12 +354,45 @@
             </article>
           </section>
         </section>
+
+        <section class="view-panel strategy-view liquidity-view" data-panel="liquidity">
+          <section class="liquidity-solo-surface">
+              <div class="liquidity-toolbar">
+                <button id="liquidity-export-btn" class="liquidity-export-btn" type="button">Copy Image</button>
+              </div>
+              <div class="liquidity-chart-stack-wrap">
+              <div class="liquidity-chart-stack">
+                <div class="liquidity-chart-shell">
+                  <div class="liquidity-chart-head">
+                    <span class="eyebrow">BTC Price Structure</span>
+                  </div>
+                  <div id="liquidity-price-canvas" class="liquidity-chart-host liquidity-chart-host-primary"></div>
+                </div>
+                <div class="liquidity-chart-shell">
+                  <div class="liquidity-chart-head">
+                    <span class="eyebrow" id="liquidity-local-title">BTC Local Liquidity</span>
+                  </div>
+                  <div id="liquidity-local-canvas" class="liquidity-chart-host liquidity-chart-host-secondary"></div>
+                </div>
+                <div class="liquidity-chart-shell">
+                  <div class="liquidity-chart-head">
+                    <span class="eyebrow">3-Coin Overall Liquidity</span>
+                  </div>
+                  <div id="liquidity-overall-canvas" class="liquidity-chart-host liquidity-chart-host-secondary"></div>
+                </div>
+              </div>
+              <div id="liquidity-interaction-layer" class="liquidity-interaction-layer"></div>
+              </div>
+          </section>
+        </section>
       </main>
 
       <footer class="site-footer">
         <span>Copyright &copy; 2026 NTS Alpha Labs. All rights reserved.</span>
       </footer>
     </div>
-    <script src="./strategy_os.js?v=20260410-observability"></script>
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="./strategy_os.js?v=20260412-liquidity-lightweight"></script>
   </body>
 </html>

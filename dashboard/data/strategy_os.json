@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-12 04:06:42",
-    "data_as_of": "2026-04-12 00:00:00",
+    "updated_at": "2026-04-12 08:05:22",
+    "data_as_of": "2026-04-12 04:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -52534,10 +52534,10 @@
           "symbol": "BTCUSDT",
           "direction": "LONG",
           "entry_price": 72055.9,
-          "current_price": 71563.6,
-          "current_pnl_pct": -0.68,
+          "current_price": 71628.1,
+          "current_pnl_pct": -0.59,
           "entry_ts": "2026-04-09 16:00",
-          "hold_hours": 56.0,
+          "hold_hours": 60.0,
           "remaining_size": 0.013878,
           "original_size": 0.013878,
           "partial_taken": false,
@@ -98109,31 +98109,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-12 00:00",
+            "timestamp": "2026-04-12 04:00",
             "funding_rate": -8.108e-05,
-            "z_funding": -1.98,
-            "dz_funding": -0.141,
-            "funding_x_oi": -0.155,
+            "z_funding": -1.838,
+            "dz_funding": 0.143,
+            "funding_x_oi": 3.931,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-12 00:00",
+            "timestamp": "2026-04-12 04:00",
             "funding_rate": 8.271e-05,
-            "z_funding": 1.611,
-            "dz_funding": 2.454,
-            "funding_x_oi": -0.756,
+            "z_funding": 1.522,
+            "dz_funding": -0.089,
+            "funding_x_oi": -2.416,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-12 00:00",
+            "timestamp": "2026-04-12 04:00",
             "funding_rate": 0.0001,
-            "z_funding": 1.124,
-            "dz_funding": 1.297,
-            "funding_x_oi": 1.302,
+            "z_funding": 1.07,
+            "dz_funding": -0.054,
+            "funding_x_oi": -1.581,
             "source": "historical_strict_asof"
           }
         ],
@@ -98581,6 +98581,12 @@
       "memory_timeline": [
         {
           "source": "system",
+          "title": "2026-04-12 - Reworked the Strategy OS Liquidity tab away from the earlier OI/price proxy and onto Citrus-native liquidity fields. Added `scr",
+          "summary": "Reworked the Strategy OS Liquidity tab away from the earlier OI/price proxy and onto Citrus-native liquidity fields. Added `scripts/build_strategy_os_liquidity_data.py` to export `dashboard/data/citrus_liquidity_data.json` from `citrus/Data/features_citrus_{BT",
+          "date": "2026-04-12"
+        },
+        {
+          "source": "system",
           "title": "2026-04-11 - Upgraded the Intraday Copilot memory layer from a single note to a rolling note window. `intraday_copilot_memory.json` now stor",
           "summary": "Upgraded the Intraday Copilot memory layer from a single note to a rolling note window. `intraday_copilot_memory.json` now stores `notes[]` plus `max_notes`, and each saved note includes trigger results and raw 1bar/24h/48h deltas. The compressed state now als",
           "date": "2026-04-11"
@@ -98631,12 +98637,6 @@
           "source": "strategy",
           "title": "2026-04-10 - Grapes block distribution drift audit phase 2",
           "summary": "Added a standalone observability script: `scripts/run_grapes_block_distribution_drift_audit.py` Purpose: compare live `signal_block_events` distribution against a frozen backtest baseline. detect whether production gates are drifting by block reason, symbol, a",
-          "date": "2026-04-10"
-        },
-        {
-          "source": "strategy",
-          "title": "2026-04-10 - Grapes BE enhancement PDR research gate",
-          "summary": "Read and converted the BE Enhancement PDR into a first research experiment. New script: `scripts/run_grapes_be_enhancement_research.py` The script does not change production behavior. It replays the current official Grapes V3.3.1 production baseline and writes",
           "date": "2026-04-10"
         }
       ],

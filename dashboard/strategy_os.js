@@ -1,4 +1,6 @@
 const DATA_URL = "./data/strategy_os.json?v=20260410-observability-fit";
+const DASHBOARD_DATA_URL = "./data/dashboard_data.json?v=20260412-liquidity-tab";
+const CITRUS_LIQUIDITY_DATA_URL = "./data/citrus_liquidity_data.json?v=20260412-liq-bias";
 const EVOLUTION_API_BASE = "http://127.0.0.1:8000/api/v1/evolution";
 
 const COLORS = {
@@ -52,6 +54,8 @@ const state = {
   evolutionMutationBusyId: null,
   evolutionSimilarCasesById: {},
   evolutionSimilarCasesLoadingId: null,
+  liquidityData: null,
+  liquidityCharts: null,
 };
 
 const I18N = {
@@ -473,6 +477,311 @@ function resizeCanvas(canvas) {
   return { ctx, width: rect.width, height: rect.height };
 }
 
+function dedupeSeriesByTs(rows = []) {
+  const map = new Map();
+  (rows || []).forEach((row) => {
+    if (row && row.ts) map.set(row.ts, row);
+  });
+  return Array.from(map.values()).sort((a, b) => parseTimestamp(a.ts) - parseTimestamp(b.ts));
+}
+
+function clamp(value, low, high) {
+  return Math.max(low, Math.min(high, value));
+}
+
+function computeLiquidityState(priceRaw, liqRaw) {
+  if (!priceRaw?.assets || !liqRaw?.assets) return null;
+  const weights = { BTC: 0.6, ETH: 0.25, SOL: 0.15 };
+  const assets = {};
+  const overallMap = new Map();
+
+  Object.entries(liqRaw.assets).forEach(([asset, payload]) => {
+    const pricePayload = priceRaw.assets?.[asset] || {};
+    const candles = dedupeSeriesByTs(pricePayload.candles || []);
+    const liqRows = dedupeSeriesByTs((payload.rows || []).map((row) => ({ ...row, ts: row.ts })));
+    const local = liqRows.map((row) => {
+      const zAbove = Number(row.z_liq_above || 0);
+      const zBelow = Number(row.z_liq_below || 0);
+      const imbalance = Number(row.liq_imbalance || 0);
+      const supportSurplus = zBelow - zAbove;
+      const imbalanceFlip = -imbalance;
+      const score = clamp(((0.55 * supportSurplus) + (0.45 * imbalanceFlip)) / 2.6, -1, 1);
+      const entry = {
+        ts: row.ts,
+        value: score,
+        zAbove,
+        zBelow,
+        imbalance,
+      };
+      overallMap.set(row.ts, (overallMap.get(row.ts) || 0) + score * (weights[asset] || 0));
+      return entry;
+    });
+    const lastPriceRow = liqRows[liqRows.length - 1] || {};
+    const lastPriceCandle = candles[candles.length - 1] || {};
+    const lastLocal = local[local.length - 1] || {};
+    const lastScore = Number(lastLocal.value || 0);
+    assets[asset] = {
+      asset,
+      symbol: payload.symbol,
+      candles,
+      local,
+      lastPrice: Number(lastPriceRow.close || lastPriceCandle.close || 0),
+      zLiqAbove: Number(lastLocal.zAbove || 0),
+      zLiqBelow: Number(lastLocal.zBelow || 0),
+      liqImbalance: Number(lastLocal.imbalance || 0),
+      localScore: lastScore,
+      regime: lastScore >= 0.35 ? "Bid support dominant" : lastScore <= -0.35 ? "Ask overhead dominant" : "Balanced",
+    };
+  });
+
+  const overall = Array.from(overallMap.entries())
+    .map(([ts, value]) => ({ ts, value: clamp(value, -1, 1) }))
+    .sort((a, b) => parseTimestamp(a.ts) - parseTimestamp(b.ts));
+
+  return { assets, overall };
+}
+
+function toChartTime(ts) {
+  const epochMs = parseTimestamp(ts);
+  if (!Number.isFinite(epochMs) || epochMs <= 0) return null;
+  return Math.floor(epochMs / 1000);
+}
+
+function buildLiquidityPriceSeries(assetData) {
+  return (assetData?.candles || [])
+    .map((row) => {
+      const time = toChartTime(row.ts);
+      if (!time) return null;
+      return {
+        time,
+        open: Number(row.open || row.close || 0),
+        high: Number(row.high || row.close || 0),
+        low: Number(row.low || row.close || 0),
+        close: Number(row.close || 0),
+        ema144: Number(row.ema144 || 0),
+        ema169: Number(row.ema169 || 0),
+      };
+    })
+    .filter(Boolean);
+}
+
+function buildLiquidityHistogramSeries(rows = []) {
+  return rows
+    .map((row) => {
+      const time = toChartTime(row.ts);
+      if (!time) return null;
+      const value = Number(row.value || 0);
+      return {
+        time,
+        value,
+        color: value >= 0.35 ? COLORS.green : value <= -0.35 ? COLORS.red : "rgba(185,193,203,0.65)",
+      };
+    })
+    .filter(Boolean);
+}
+
+function ensureLiquidityCharts() {
+  const LW = window.LightweightCharts;
+  if (!LW) return null;
+  if (state.liquidityCharts) return state.liquidityCharts;
+
+  const priceContainer = document.getElementById("liquidity-price-canvas");
+  const localContainer = document.getElementById("liquidity-local-canvas");
+  const overallContainer = document.getElementById("liquidity-overall-canvas");
+  const interactionLayer = document.getElementById("liquidity-interaction-layer");
+  if (!priceContainer || !localContainer || !overallContainer || !interactionLayer) return null;
+  if (!priceContainer.clientWidth || !localContainer.clientWidth || !overallContainer.clientWidth) return null;
+
+  const baseOptions = {
+    layout: { background: { color: "#080f0d" }, textColor: COLORS.muted, fontFamily: "IBM Plex Mono, monospace" },
+    grid: { vertLines: { color: COLORS.grid }, horzLines: { color: COLORS.grid } },
+    rightPriceScale: { borderColor: COLORS.border, minimumWidth: 72 },
+    timeScale: { borderColor: COLORS.border, timeVisible: true, secondsVisible: false, fixLeftEdge: true, fixRightEdge: true, rightOffset: 2 },
+    crosshair: { mode: 0 },
+    handleScroll: { mouseWheel: false, pressedMouseMove: false, horzTouchDrag: false, vertTouchDrag: false },
+    handleScale: { axisPressedMouseMove: false, mouseWheel: false, pinch: false },
+  };
+
+  const addSeriesCompat = (chart, typeName, options) => {
+    if (typeof chart.addSeries === "function" && LW[typeName]) {
+      return chart.addSeries(LW[typeName], options);
+    }
+    if (typeName === "CandlestickSeries" && typeof chart.addCandlestickSeries === "function") {
+      return chart.addCandlestickSeries(options);
+    }
+    if (typeName === "LineSeries" && typeof chart.addLineSeries === "function") {
+      return chart.addLineSeries(options);
+    }
+    if (typeName === "HistogramSeries" && typeof chart.addHistogramSeries === "function") {
+      return chart.addHistogramSeries(options);
+    }
+    throw new Error(`Unsupported lightweight-charts series API for ${typeName}`);
+  };
+
+  const priceChart = LW.createChart(priceContainer, {
+    ...baseOptions,
+    width: priceContainer.clientWidth,
+    height: priceContainer.clientHeight,
+    timeScale: {
+      ...baseOptions.timeScale,
+      visible: false,
+    },
+  });
+  const localChart = LW.createChart(localContainer, {
+    ...baseOptions,
+    width: localContainer.clientWidth,
+    height: localContainer.clientHeight,
+    timeScale: {
+      ...baseOptions.timeScale,
+      visible: false,
+    },
+  });
+  const overallChart = LW.createChart(overallContainer, {
+    ...baseOptions,
+    width: overallContainer.clientWidth,
+    height: overallContainer.clientHeight,
+  });
+
+  const priceSeries = addSeriesCompat(priceChart, "CandlestickSeries", {
+    upColor: COLORS.green,
+    downColor: COLORS.red,
+    wickUpColor: COLORS.green,
+    wickDownColor: COLORS.red,
+    borderVisible: false,
+  });
+  const ema144Series = addSeriesCompat(priceChart, "LineSeries", { color: COLORS.amber, lineWidth: 2, priceLineVisible: false, lastValueVisible: false });
+  const ema169Series = addSeriesCompat(priceChart, "LineSeries", { color: COLORS.blue, lineWidth: 2, priceLineVisible: false, lastValueVisible: false });
+  const localSeries = addSeriesCompat(localChart, "HistogramSeries", { priceLineVisible: false, lastValueVisible: false, base: 0 });
+  const overallSeries = addSeriesCompat(overallChart, "HistogramSeries", { priceLineVisible: false, lastValueVisible: false, base: 0 });
+
+  [localChart, overallChart].forEach((chart) => {
+    chart.priceScale("right").applyOptions({
+      autoScale: true,
+      scaleMargins: { top: 0.12, bottom: 0.12 },
+      minimumWidth: 72,
+    });
+  });
+
+  const applyMasterRange = (range) => {
+    if (!range) return;
+    state.liquidityCharts.masterRange = { from: range.from, to: range.to };
+    priceChart.timeScale().setVisibleLogicalRange(range);
+    localChart.timeScale().setVisibleLogicalRange(range);
+    overallChart.timeScale().setVisibleLogicalRange(range);
+  };
+
+  const interactionState = {
+    dragging: false,
+    lastX: 0,
+    startRange: null,
+  };
+
+  const beginDrag = (clientX) => {
+    interactionState.dragging = true;
+    interactionState.lastX = clientX;
+    interactionState.startRange = state.liquidityCharts.masterRange || priceChart.timeScale().getVisibleLogicalRange();
+    interactionLayer.classList.add("is-dragging");
+  };
+
+  const handlePointerMove = (event) => {
+    if (!interactionState.dragging) return;
+    const current = interactionState.startRange;
+    if (!current) return;
+    const width = Math.max(1, interactionLayer.clientWidth);
+    const barsPerPixel = (current.to - current.from) / width;
+    const deltaX = event.clientX - interactionState.lastX;
+    const shift = deltaX * barsPerPixel;
+    applyMasterRange({
+      from: current.from - shift,
+      to: current.to - shift,
+    });
+  };
+
+  const handleMouseMove = (event) => {
+    handlePointerMove(event);
+  };
+
+  const endDrag = (event) => {
+    if (!interactionState.dragging) return;
+    interactionState.dragging = false;
+    interactionState.startRange = null;
+    interactionLayer.classList.remove("is-dragging");
+    window.removeEventListener("pointermove", handlePointerMove);
+    window.removeEventListener("pointerup", endDrag);
+    window.removeEventListener("pointercancel", endDrag);
+    window.removeEventListener("mousemove", handleMouseMove);
+    window.removeEventListener("mouseup", endDrag);
+    if (typeof event?.pointerId === "number") {
+      try { interactionLayer.releasePointerCapture(event.pointerId); } catch (_) {}
+    }
+  };
+
+  interactionLayer.addEventListener("pointerdown", (event) => {
+    event.preventDefault();
+    beginDrag(event.clientX);
+    interactionLayer.classList.add("is-dragging");
+    interactionLayer.setPointerCapture(event.pointerId);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", endDrag);
+    window.addEventListener("pointercancel", endDrag);
+  });
+
+  interactionLayer.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+    beginDrag(event.clientX);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", endDrag);
+  });
+
+  interactionLayer.addEventListener("wheel", (event) => {
+    event.preventDefault();
+    const current = state.liquidityCharts.masterRange || priceChart.timeScale().getVisibleLogicalRange();
+    if (!current) return;
+    const width = Math.max(1, interactionLayer.clientWidth);
+    const pointerRatio = clamp(event.offsetX / width, 0, 1);
+    const span = Math.max(8, current.to - current.from);
+    const zoomFactor = event.deltaY > 0 ? 1.12 : 0.88;
+    const nextSpan = Math.max(12, Math.min(6000, span * zoomFactor));
+    const anchor = current.from + span * pointerRatio;
+    applyMasterRange({
+      from: anchor - nextSpan * pointerRatio,
+      to: anchor + nextSpan * (1 - pointerRatio),
+    });
+  }, { passive: false });
+
+  const resizeAll = () => {
+    if (!priceContainer.clientWidth || !localContainer.clientWidth || !overallContainer.clientWidth) return;
+    priceChart.applyOptions({ width: priceContainer.clientWidth, height: priceContainer.clientHeight });
+    localChart.applyOptions({ width: localContainer.clientWidth, height: localContainer.clientHeight });
+    overallChart.applyOptions({ width: overallContainer.clientWidth, height: overallContainer.clientHeight });
+  };
+  window.addEventListener("resize", resizeAll);
+  let resizeObserver = null;
+  if (typeof ResizeObserver === "function") {
+    resizeObserver = new ResizeObserver(() => resizeAll());
+    resizeObserver.observe(priceContainer);
+    resizeObserver.observe(localContainer);
+    resizeObserver.observe(overallContainer);
+  }
+
+  state.liquidityCharts = {
+    priceChart,
+    localChart,
+    overallChart,
+    priceSeries,
+    ema144Series,
+    ema169Series,
+    localSeries,
+    overallSeries,
+    resizeAll,
+    hasFitted: false,
+    resizeObserver,
+    applyMasterRange,
+    masterRange: null,
+  };
+  return state.liquidityCharts;
+}
+
 function fmtUsd(v) { return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(Number(v || 0)); }
 function fmtPct(v, d = 2) { const n = Number(v || 0); return `${n >= 0 ? "+" : ""}${n.toFixed(d)}%`; }
 function fmtNum(v, d = 2) { return Number(v || 0).toFixed(d); }
@@ -773,8 +1082,19 @@ function setActiveView(view) {
   document.querySelectorAll(".view-panel").forEach((panel) => panel.classList.toggle("is-active", panel.dataset.panel === view));
   const hero = document.getElementById("master-board-hero");
   if (hero) hero.style.display = view === "all" ? "grid" : "none";
-  if (state.data) {
+  if (state.data || state.liquidityData) {
     requestAnimationFrame(() => renderCharts(state.data));
+    requestAnimationFrame(() => renderLiquidity());
+    if (view === "liquidity") {
+      requestAnimationFrame(() => {
+        state.liquidityCharts?.resizeAll?.();
+        renderLiquidity();
+      });
+      window.setTimeout(() => {
+        state.liquidityCharts?.resizeAll?.();
+        renderLiquidity();
+      }, 80);
+    }
   }
 }
 
@@ -830,6 +1150,7 @@ function applyLanguage() {
   setText('.switch-tab[data-view="citrus"]', state.lang === "zh" ? "🍊 Citrus" : "🍊 Citrus");
   setText('.switch-tab[data-view="equity"]', state.lang === "zh" ? "📈 Equity" : "📈 Equity");
   setText('.switch-tab[data-view="observability"]', state.lang === "zh" ? "观测层" : "Observability");
+  setText('.switch-tab[data-view="liquidity"]', state.lang === "zh" ? "流动性" : "Liquidity");
   setText('[data-panel="all"] .overview-chart-surface .eyebrow', t("combinedLivePnl"));
   setText('[data-panel="grapes"] .panel-head .eyebrow', t("strategyDetail"));
   setText('[data-panel="grapes"] .panel-head h3', t("grapesName"));
@@ -2146,6 +2467,96 @@ function renderObservability(data) {
         </div>
       </article>
     `).join("") : `<p class="observability-empty">No memory entries found.</p>`;
+  }
+}
+
+function renderLiquidity() {
+  const liquidity = state.liquidityData;
+  if (!liquidity?.assets) return;
+  const panel = document.querySelector('.view-panel[data-panel="liquidity"]');
+  if (!panel?.classList.contains("is-active")) return;
+  const assetKey = "BTC";
+  const assetData = liquidity.assets[assetKey];
+  const overallSeries = liquidity.overall || [];
+  const localTitle = document.getElementById("liquidity-local-title");
+  if (localTitle) localTitle.textContent = "BTC Local Liquidity";
+
+  const charts = ensureLiquidityCharts();
+  if (!charts) return;
+
+  const priceSeries = buildLiquidityPriceSeries(assetData);
+  const ema144 = priceSeries.map((row) => ({ time: row.time, value: row.ema144 }));
+  const ema169 = priceSeries.map((row) => ({ time: row.time, value: row.ema169 }));
+  charts.priceSeries.setData(priceSeries.map(({ time, open, high, low, close }) => ({ time, open, high, low, close })));
+  charts.ema144Series.setData(ema144);
+  charts.ema169Series.setData(ema169);
+  charts.localSeries.setData(buildLiquidityHistogramSeries(assetData.local));
+  charts.overallSeries.setData(buildLiquidityHistogramSeries(overallSeries));
+  if (!charts.hasFitted) {
+    const visibleBars = 90;
+    const total = priceSeries.length;
+    const from = Math.max(0, total - visibleBars);
+    const to = total + 2;
+    charts.applyMasterRange({ from, to });
+    charts.hasFitted = true;
+  }
+}
+
+async function exportLiquiditySurface() {
+  const wrap = document.querySelector(".liquidity-chart-stack-wrap");
+  const button = document.getElementById("liquidity-export-btn");
+  if (!wrap || !window.html2canvas) return;
+
+  const restoreZ = wrap.querySelector("#liquidity-interaction-layer");
+  const previousText = button?.textContent || "";
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Exporting...";
+  }
+  if (restoreZ) restoreZ.style.display = "none";
+
+  try {
+    const canvas = await window.html2canvas(wrap, {
+      backgroundColor: "#000000",
+      scale: 2,
+      useCORS: true,
+    });
+
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+    if (!blob) throw new Error("png_export_failed");
+
+    let copied = false;
+    if (navigator.clipboard && window.ClipboardItem) {
+      try {
+        await navigator.clipboard.write([new window.ClipboardItem({ "image/png": blob })]);
+        copied = true;
+      } catch (_) {}
+    }
+
+    if (!copied) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `liquidity-surface-${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    if (button) button.textContent = copied ? "Copied" : "Downloaded";
+    window.setTimeout(() => {
+      if (button) button.textContent = previousText || "Copy Image";
+    }, 1200);
+  } catch (error) {
+    console.warn("liquidity export failed", error);
+    if (button) button.textContent = "Export Failed";
+    window.setTimeout(() => {
+      if (button) button.textContent = previousText || "Copy Image";
+    }, 1200);
+  } finally {
+    if (restoreZ) restoreZ.style.display = "";
+    if (button) button.disabled = false;
   }
 }
 
@@ -3506,6 +3917,12 @@ function bindSwitches() {
   document.querySelectorAll(".switch-tab").forEach((btn) => {
     btn.addEventListener("click", () => setActiveView(btn.dataset.view));
   });
+  const exportBtn = document.getElementById("liquidity-export-btn");
+  if (exportBtn) {
+    exportBtn.addEventListener("click", () => {
+      exportLiquiditySurface().catch((err) => console.warn("liquidity export error", err));
+    });
+  }
 }
 
 function bindLanguageSwitch() {
@@ -3588,6 +4005,7 @@ function render(data) {
   renderEquityRegime(data);
   renderEvolutionSummary(data);
   renderObservability(data);
+  renderLiquidity();
   const grapesLens = getStrategyLensData("grapes");
   const citrusLens = getStrategyLensData("citrus");
   const equityLens = getStrategyLensData("equity");
@@ -3728,9 +4146,16 @@ function connectLivePriceSocket() {
 }
 
 async function init() {
-  const res = await fetch(DATA_URL, { cache: "no-store" });
+  const [res, dashboardRes, citrusLiquidityRes] = await Promise.all([
+    fetch(DATA_URL, { cache: "no-store" }),
+    fetch(DASHBOARD_DATA_URL, { cache: "no-store" }),
+    fetch(CITRUS_LIQUIDITY_DATA_URL, { cache: "no-store" }),
+  ]);
   const raw = await res.json();
+  const dashboardRaw = await dashboardRes.json();
+  const citrusLiquidityRaw = await citrusLiquidityRes.json();
   state.data = raw;
+  state.liquidityData = computeLiquidityState(dashboardRaw, citrusLiquidityRaw);
   state.lastUpdatedAt = raw.meta.updated_at;
   Object.keys(state.lenses).forEach((strategyKey) => {
     if (state.lenses[strategyKey] === "extended") state.lenses[strategyKey] = "backtest";
@@ -3748,14 +4173,23 @@ async function init() {
 }
 
 async function refreshDataSilently() {
-  const url = `${DATA_URL}?t=${Date.now()}`;
-  const res = await fetch(url, { cache: "no-store" });
+  const token = Date.now();
+  const [res, dashboardRes, citrusLiquidityRes] = await Promise.all([
+    fetch(`${DATA_URL}?t=${token}`, { cache: "no-store" }),
+    fetch(`${DASHBOARD_DATA_URL}?t=${token}`, { cache: "no-store" }),
+    fetch(`${CITRUS_LIQUIDITY_DATA_URL}?t=${token}`, { cache: "no-store" }),
+  ]);
   const raw = await res.json();
+  const dashboardRaw = await dashboardRes.json();
+  const citrusLiquidityRaw = await citrusLiquidityRes.json();
+  state.liquidityData = computeLiquidityState(dashboardRaw, citrusLiquidityRaw);
   if (!state.lastUpdatedAt || raw.meta.updated_at !== state.lastUpdatedAt) {
     state.data = raw;
     state.lastUpdatedAt = raw.meta.updated_at;
     render(raw);
     connectLivePriceSocket();
+  } else {
+    renderLiquidity();
   }
 }
 
