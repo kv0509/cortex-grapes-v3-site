@@ -505,7 +505,7 @@ function computeLiquidityState(priceRaw, liqRaw) {
       const imbalance = Number(row.liq_imbalance || 0);
       const supportSurplus = zBelow - zAbove;
       const imbalanceFlip = -imbalance;
-      const score = clamp(((0.55 * supportSurplus) + (0.45 * imbalanceFlip)) / 2.6, -1, 1);
+      const score = ((0.55 * supportSurplus) + (0.45 * imbalanceFlip)) / 2.6;
       const entry = {
         ts: row.ts,
         value: score,
@@ -535,7 +535,7 @@ function computeLiquidityState(priceRaw, liqRaw) {
   });
 
   const overall = Array.from(overallMap.entries())
-    .map(([ts, value]) => ({ ts, value: clamp(value, -1, 1) }))
+    .map(([ts, value]) => ({ ts, value }))
     .sort((a, b) => parseTimestamp(a.ts) - parseTimestamp(b.ts));
 
   return { assets, overall };
