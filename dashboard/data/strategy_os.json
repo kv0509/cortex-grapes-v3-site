@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-13 16:05:40",
-    "data_as_of": "2026-04-13 12:00:00",
+    "updated_at": "2026-04-13 20:05:51",
+    "data_as_of": "2026-04-13 16:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -98109,31 +98109,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-13 12:00",
-            "funding_rate": -1.83e-06,
-            "z_funding": 0.031,
-            "dz_funding": 0.003,
-            "funding_x_oi": 0.016,
+            "timestamp": "2026-04-13 16:00",
+            "funding_rate": -5.409e-05,
+            "z_funding": -1.108,
+            "dz_funding": -1.139,
+            "funding_x_oi": -1.221,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-13 12:00",
-            "funding_rate": 3.028e-05,
-            "z_funding": 0.572,
-            "dz_funding": -0.007,
-            "funding_x_oi": 0.06,
+            "timestamp": "2026-04-13 16:00",
+            "funding_rate": 3.014e-05,
+            "z_funding": 0.537,
+            "dz_funding": -0.035,
+            "funding_x_oi": -0.122,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-13 12:00",
-            "funding_rate": -9.36e-06,
-            "z_funding": -0.177,
-            "dz_funding": -0.003,
-            "funding_x_oi": -0.21,
+            "timestamp": "2026-04-13 16:00",
+            "funding_rate": 0.0001,
+            "z_funding": 1.057,
+            "dz_funding": 1.234,
+            "funding_x_oi": -0.316,
             "source": "historical_strict_asof"
           }
         ],
@@ -98369,6 +98369,23 @@
           }
         ],
         "recent_events": [
+          {
+            "symbol": "BTCUSDT",
+            "asset": "BTC",
+            "timestamp": "2026-04-13 16:00",
+            "block_type": "range_structure_blocked",
+            "direction": 1,
+            "side": "LONG",
+            "reason": "LONG blocked because BTC was entering near a local range high above Vegas",
+            "funding_observability": {
+              "dz_funding": -1.139289926499583,
+              "funding_observation_source": "historical_strict_asof",
+              "funding_rate": -5.409e-05,
+              "funding_x_oi": -1.2211455395922644,
+              "z_funding": -1.1080371777821576
+            },
+            "updated_at": "2026-04-14 04:01"
+          },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
