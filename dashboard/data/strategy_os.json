@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-13 08:09:57",
+    "updated_at": "2026-04-13 10:06:08",
     "data_as_of": "2026-04-13 04:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
@@ -21,7 +21,7 @@
         "total_return_pct": 607.17,
         "annualized_return_pct": 58.21,
         "max_drawdown_pct": -6.54,
-        "sharpe": 2.247,
+        "sharpe": 2.239,
         "profit_factor": 3.17,
         "trade_count": 226,
         "win_rate_pct": 66.37,
@@ -97146,16 +97146,16 @@
           "avg_pnl_usd": 161.1946099746221,
           "max_dd_usd": -3123.1970315768267,
           "profit_factor": 3.166763418717369,
-          "sharpe": 2.2466286532851467
+          "sharpe": 2.2388661375083485
         },
         "walk_forward_oos": {
           "folds": 23,
           "oos_trades": 213,
-          "oos_pnl_usd": 31363.90806477557,
+          "oos_pnl_usd": 31363.908064775573,
           "win_rate_pct": 64.7887323943662,
           "profit_factor": 2.9438828443646687,
-          "avg_fold_sharpe": 2.5471310081701715,
-          "worst_fold_sharpe": -0.3816438417500632,
+          "avg_fold_sharpe": 1.6435730145827934,
+          "worst_fold_sharpe": -0.2467178065077719,
           "positive_fold_sharpe_pct": 91.30434782608695,
           "positive_fold_pnl_pct": 91.30434782608695
         },
@@ -98581,6 +98581,24 @@
       "memory_timeline": [
         {
           "source": "system",
+          "title": "2026-04-13 - Hardened the Strategy OS website build/publish path. `scripts/build_strategy_os_data.py` now fail-closes on stale source state ",
+          "summary": "Hardened the Strategy OS website build/publish path. `scripts/build_strategy_os_data.py` now fail-closes on stale source state by checking:",
+          "date": "2026-04-13"
+        },
+        {
+          "source": "system",
+          "title": "2026-04-13 - Added two observability-only fixes for Grapes state drift visibility. `Live/services/Grapes_Model_v1.py` now runs a startup con",
+          "summary": "Added two observability-only fixes for Grapes state drift visibility. `Live/services/Grapes_Model_v1.py` now runs a startup consistency audit between `active_positions` and `trade_lifecycle` and sends a metrics Telegram alert if the two model-side ledgers disa",
+          "date": "2026-04-13"
+        },
+        {
+          "source": "system",
+          "title": "2026-04-13",
+          "summary": "Added observability-only quantity drift detection to the V2 executor reconciliation path. New behavior: if exchange direction already matches target direction, but exchange quantity deviates materially from `target_qty`, the executor now records a `QTY_MISMATC",
+          "date": "2026-04-13"
+        },
+        {
+          "source": "system",
           "title": "2026-04-12 - Reworked the Strategy OS Liquidity tab away from the earlier OI/price proxy and onto Citrus-native liquidity fields. Added `scr",
           "summary": "Reworked the Strategy OS Liquidity tab away from the earlier OI/price proxy and onto Citrus-native liquidity fields. Added `scripts/build_strategy_os_liquidity_data.py` to export `dashboard/data/citrus_liquidity_data.json` from `citrus/Data/features_citrus_{BT",
           "date": "2026-04-12"
@@ -98620,24 +98638,6 @@
           "title": "2026-04-10 - Grapes gate review WF/OOS with MaxDD focus",
           "summary": "Ran WF/OOS review for the two counterfactual candidates that looked worth checking after full lifecycle replay: `no_near_touch_zls_guard` `no_oi_core_gate` New script: `scripts/run_grapes_gate_review_wf_oos.py` Output pack: `Reports/experiments/grapes_gate_rev",
           "date": "2026-04-10"
-        },
-        {
-          "source": "strategy",
-          "title": "2026-04-10 - Grapes gate attribution audit first pass",
-          "summary": "Added a first-pass Grapes gate attribution audit for the official V3.3.1 production baseline. New script: `scripts/run_grapes_gate_attribution_audit.py` Scope: BTC / ETH / SOL 4H current official production version `btc_eth_high_chase_eth_bucket_sol052_no_hype",
-          "date": "2026-04-10"
-        },
-        {
-          "source": "strategy",
-          "title": "2026-04-10 - Grapes funding-rate observability phase 1",
-          "summary": "Added funding-rate observability to the Grapes live model path with the same discipline as the BE research gate: observable first no production gate no PPO input-vector change no threshold or execution behavior change Funding alignment rule: for each 4H bar, t",
-          "date": "2026-04-10"
-        },
-        {
-          "source": "strategy",
-          "title": "2026-04-10 - Grapes block distribution drift audit phase 2",
-          "summary": "Added a standalone observability script: `scripts/run_grapes_block_distribution_drift_audit.py` Purpose: compare live `signal_block_events` distribution against a frozen backtest baseline. detect whether production gates are drifting by block reason, symbol, a",
-          "date": "2026-04-10"
         }
       ],
       "monte_carlo": {
@@ -98669,7 +98669,7 @@
     },
     {
       "label": "Sharpe",
-      "grapes": "2.25",
+      "grapes": "2.24",
       "citrus": "2.21"
     },
     {
