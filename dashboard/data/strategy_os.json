@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-13 00:05:11",
-    "data_as_of": "2026-04-12 20:00:00",
+    "updated_at": "2026-04-13 04:04:16",
+    "data_as_of": "2026-04-13 00:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -98109,31 +98109,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-12 20:00",
-            "funding_rate": -3.35e-06,
-            "z_funding": -0.073,
-            "dz_funding": 0.037,
-            "funding_x_oi": 0.021,
+            "timestamp": "2026-04-13 00:00",
+            "funding_rate": -2.34e-06,
+            "z_funding": -0.02,
+            "dz_funding": 0.053,
+            "funding_x_oi": 0.012,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-12 20:00",
-            "funding_rate": -5.477e-05,
-            "z_funding": -1.215,
-            "dz_funding": 0.063,
-            "funding_x_oi": 0.924,
+            "timestamp": "2026-04-13 00:00",
+            "funding_rate": -9.86e-06,
+            "z_funding": -0.281,
+            "dz_funding": 0.934,
+            "funding_x_oi": 0.312,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-12 20:00",
-            "funding_rate": -6.761e-05,
-            "z_funding": -0.867,
-            "dz_funding": 0.024,
-            "funding_x_oi": -0.208,
+            "timestamp": "2026-04-13 00:00",
+            "funding_rate": 3.827e-05,
+            "z_funding": 0.373,
+            "dz_funding": 1.24,
+            "funding_x_oi": -0.59,
             "source": "historical_strict_asof"
           }
         ],
