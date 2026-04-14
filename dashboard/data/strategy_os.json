@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-13 20:05:51",
-    "data_as_of": "2026-04-13 16:00:00",
+    "updated_at": "2026-04-14 00:06:00",
+    "data_as_of": "2026-04-13 20:00:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -43038,7 +43038,25 @@
           "roi_pct_on_margin": 23.6
         }
       ],
-      "active_positions": [],
+      "active_positions": [
+        {
+          "asset": "ETH",
+          "symbol": "ETHUSDT",
+          "direction": "LONG",
+          "entry_price": 2373.73,
+          "current_price": 2368.8,
+          "current_pnl_pct": -0.21,
+          "entry_ts": "2026-04-14 00:02",
+          "signal_ts": "2026-04-13 20:00",
+          "hold_hours": -4.0,
+          "position_size": 1.0,
+          "peak_pnl_pct": 0.0,
+          "realized_pnl_pct": 0.0,
+          "tiered": false,
+          "hard_tp_done": false,
+          "breakeven_armed": false
+        }
+      ],
       "execution_views": {
         "backtest": {
           "summary": {
@@ -52528,7 +52546,26 @@
           }
         ]
       },
-      "active_positions": [],
+      "active_positions": [
+        {
+          "asset": "BTC",
+          "symbol": "BTCUSDT",
+          "direction": "LONG",
+          "entry_price": 74385.0,
+          "current_price": 74385.0,
+          "current_pnl_pct": 0.0,
+          "entry_ts": "2026-04-13 20:00",
+          "hold_hours": 0.0,
+          "remaining_size": 0.013444,
+          "original_size": 0.013444,
+          "partial_taken": false,
+          "breakeven_armed": false,
+          "peak_pnl_pct": 0.0,
+          "entry_liq_imbalance": 1.481,
+          "entry_z_price": 2.116,
+          "capital": 9999.5
+        }
+      ],
       "all_trades": [
         {
           "asset": "BTC",
@@ -98109,31 +98146,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-13 16:00",
+            "timestamp": "2026-04-13 20:00",
             "funding_rate": -5.409e-05,
-            "z_funding": -1.108,
-            "dz_funding": -1.139,
-            "funding_x_oi": -1.221,
+            "z_funding": -1.063,
+            "dz_funding": 0.045,
+            "funding_x_oi": 0.932,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-13 16:00",
+            "timestamp": "2026-04-13 20:00",
             "funding_rate": 3.014e-05,
-            "z_funding": 0.537,
-            "dz_funding": -0.035,
-            "funding_x_oi": -0.122,
+            "z_funding": 0.504,
+            "dz_funding": -0.032,
+            "funding_x_oi": -0.158,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-13 16:00",
+            "timestamp": "2026-04-13 20:00",
             "funding_rate": 0.0001,
-            "z_funding": 1.057,
-            "dz_funding": 1.234,
-            "funding_x_oi": -0.316,
+            "z_funding": 1.008,
+            "dz_funding": -0.049,
+            "funding_x_oi": 0.391,
             "source": "historical_strict_asof"
           }
         ],
