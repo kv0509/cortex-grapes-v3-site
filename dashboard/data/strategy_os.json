@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-15 14:04:58",
-    "data_as_of": "2026-04-15 14:04:58",
+    "updated_at": "2026-04-16 04:09:19",
+    "data_as_of": "2026-04-16 12:09:18",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -42938,25 +42938,7 @@
           "roi_pct_on_margin": 15.98
         }
       ],
-      "active_positions": [
-        {
-          "asset": "ETH",
-          "symbol": "ETHUSDT",
-          "direction": "LONG",
-          "entry_price": 2373.73,
-          "current_price": 2336.2,
-          "current_pnl_pct": -1.58,
-          "entry_ts": "2026-04-14 00:02",
-          "signal_ts": "2026-04-13 20:00",
-          "hold_hours": 32.0,
-          "position_size": 1.0,
-          "peak_pnl_pct": 0.0,
-          "realized_pnl_pct": 0.0,
-          "tiered": false,
-          "hard_tp_done": false,
-          "breakeven_armed": false
-        }
-      ],
+      "active_positions": [],
       "execution_views": {
         "backtest": {
           "summary": {
@@ -48453,16 +48435,16 @@
         },
         "live": {
           "summary": {
-            "final_equity": 5692.89,
-            "net_pnl_usd": -307.11,
-            "total_return_pct": -5.12,
-            "profit_factor": 0.59,
-            "trades": 13,
-            "win_rate_pct": 53.8,
+            "final_equity": 5678.43,
+            "net_pnl_usd": -321.57,
+            "total_return_pct": -5.36,
+            "profit_factor": 0.58,
+            "trades": 14,
+            "win_rate_pct": 50.0,
             "avg_win_usd": 63.39,
-            "avg_loss_usd": -125.15,
-            "sharpe": -4.382,
-            "max_dd_pct": -11.59
+            "avg_loss_usd": -109.33,
+            "sharpe": -5.029,
+            "max_dd_pct": -11.81
           },
           "portfolio_curve": [
             {
@@ -48520,6 +48502,10 @@
             {
               "ts": "2026-04-03 08:00:00",
               "equity": 5692.89
+            },
+            {
+              "ts": "2026-04-15 20:00:00",
+              "equity": 5678.43
             }
           ],
           "asset_curves": {
@@ -48547,6 +48533,10 @@
               {
                 "ts": "2026-04-03 08:00:00",
                 "pnl": -191.79
+              },
+              {
+                "ts": "2026-04-15 20:00:00",
+                "pnl": -206.25
               }
             ],
             "SOL": [
@@ -48599,8 +48589,8 @@
             "losing_months": 2,
             "best_month": {
               "label": "2026-04",
-              "pnl_usd": -65.49,
-              "return_pct": -1.14
+              "pnl_usd": -79.95,
+              "return_pct": -1.39
             },
             "worst_month": {
               "label": "2026-03",
@@ -48623,11 +48613,11 @@
               "label": "2026-04",
               "year": 2026,
               "month": 4,
-              "trade_count": 1,
+              "trade_count": 2,
               "wins": 0,
-              "losses": 1,
-              "net_pnl": -65.49,
-              "return_pct": -1.14
+              "losses": 2,
+              "net_pnl": -79.95,
+              "return_pct": -1.39
             }
           ],
           "monthly_heatmap": [
@@ -48648,11 +48638,11 @@
                   "label": "2026-04",
                   "year": 2026,
                   "month": 4,
-                  "trade_count": 1,
+                  "trade_count": 2,
                   "wins": 0,
-                  "losses": 1,
-                  "net_pnl": -65.49,
-                  "return_pct": -1.14
+                  "losses": 2,
+                  "net_pnl": -79.95,
+                  "return_pct": -1.39
                 }
               ]
             }
@@ -48669,11 +48659,11 @@
               },
               {
                 "regime_proxy": "TRANSITION",
-                "trades": 9,
-                "win_rate_pct": 44.44,
-                "total_pnl_usd": -232.36,
-                "avg_pnl_usd": -25.82,
-                "profit_factor": 0.61
+                "trades": 10,
+                "win_rate_pct": 40.0,
+                "total_pnl_usd": -246.83,
+                "avg_pnl_usd": -24.68,
+                "profit_factor": 0.59
               }
             ]
           },
@@ -48833,6 +48823,18 @@
               "exit_price": 2061.67,
               "net_pnl_usd": -65.49,
               "roi_pct_on_margin": -327.43
+            },
+            {
+              "asset": "ETH",
+              "direction": "LONG",
+              "type": "Trend",
+              "entry_ts": "2026-04-13 20:00",
+              "exit_ts": "2026-04-15 20:00",
+              "hold_hours": 48.0,
+              "entry_price": 2373.73,
+              "exit_price": 2356.56,
+              "net_pnl_usd": -14.47,
+              "roi_pct_on_margin": -72.33
             }
           ]
         }
@@ -52352,10 +52354,10 @@
           "symbol": "BTCUSDT",
           "direction": "LONG",
           "entry_price": 74385.0,
-          "current_price": 74155.1,
-          "current_pnl_pct": -0.31,
+          "current_price": 74851.9,
+          "current_pnl_pct": 0.63,
           "entry_ts": "2026-04-13 20:00",
-          "hold_hours": 36.0,
+          "hold_hours": 52.0,
           "remaining_size": 0.013444,
           "original_size": 0.013444,
           "partial_taken": false,
@@ -96972,7 +96974,7 @@
     "evolution": {
       "name": "Grapes Evolution",
       "status": "LIVE MONITOR",
-      "report_date": "2026-04-03 04:51:25",
+      "report_date": "2026-04-15 20:00:00",
       "baseline": {
         "version": "btc_eth_high_chase_eth_bucket_sol052_no_hype",
         "display_name": "BTC+ETH High-Chase + ETH Bucket + SOL 0.52/0.50 (No HYPE)",
@@ -97019,13 +97021,13 @@
       "runtime": {
         "db_path": "Live/services/db/grapes_evolution.db",
         "db_exists": true,
-        "reflections": 233,
+        "reflections": 234,
         "pattern_stats": 99,
         "discoveries": 22,
         "mutations": 0,
         "validations": 0,
         "promotions": 0,
-        "last_activity_at": "2026-04-03 04:51:25"
+        "last_activity_at": "2026-04-15 20:00:00"
       },
       "discoveries": [
         {
@@ -97639,6 +97641,37 @@
       ],
       "pattern_stats": [
         {
+          "pattern_key": "ethusdt:signal_exit_loss.trend_follow.core_entry.long",
+          "symbol": "ETHUSDT",
+          "sample_count": 2,
+          "win_rate": 0.0,
+          "avg_pnl_pct": -0.038,
+          "last_outcome": "loss",
+          "last_seen_ts": "2026-04-15 20:00:00",
+          "example_trades": [
+            {
+              "trade_id": "ETHUSDT|2026-04-13 20:00:00|1|0",
+              "symbol": "ETHUSDT",
+              "direction": 1,
+              "entry_signal_ts": "2026-04-13 20:00:00",
+              "close_signal_ts": "2026-04-15 20:00:00",
+              "pnl_pct": -0.0072,
+              "close_reason": "signal_exit",
+              "source": "backtest"
+            },
+            {
+              "trade_id": "live::ETHUSDT|2026-03-17T04:03:20.150890|1|0",
+              "symbol": "ETHUSDT",
+              "direction": 1,
+              "entry_signal_ts": "2026-03-17 04:03:20",
+              "close_signal_ts": "2026-03-19 08:00:00",
+              "pnl_pct": -0.0691,
+              "close_reason": "signal_exit",
+              "source": "live"
+            }
+          ]
+        },
+        {
           "pattern_key": "btcusdt:high_chase.signal_exit_loss.trend_follow.core_entry",
           "symbol": "BTCUSDT",
           "sample_count": 1,
@@ -97758,27 +97791,6 @@
               "entry_signal_ts": "2026-03-17 16:00:00",
               "close_signal_ts": "2026-03-20 04:00:00",
               "pnl_pct": -0.0558,
-              "close_reason": "signal_exit",
-              "source": "live"
-            }
-          ]
-        },
-        {
-          "pattern_key": "ethusdt:signal_exit_loss.trend_follow.core_entry.long",
-          "symbol": "ETHUSDT",
-          "sample_count": 1,
-          "win_rate": 0.0,
-          "avg_pnl_pct": -0.069,
-          "last_outcome": "loss",
-          "last_seen_ts": "2026-03-19 08:00:00",
-          "example_trades": [
-            {
-              "trade_id": "live::ETHUSDT|2026-03-17T04:03:20.150890|1|0",
-              "symbol": "ETHUSDT",
-              "direction": 1,
-              "entry_signal_ts": "2026-03-17 04:03:20",
-              "close_signal_ts": "2026-03-19 08:00:00",
-              "pnl_pct": -0.0691,
               "close_reason": "signal_exit",
               "source": "live"
             }
@@ -97935,7 +97947,7 @@
     "observability": {
       "name": "Observability",
       "status": "PASSIVE MONITOR",
-      "report_date": "2026-04-15 14:04:58",
+      "report_date": "2026-04-16 12:09:18",
       "mode": "observability_only",
       "funding": {
         "phase": "Phase 1",
@@ -97946,31 +97958,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-15 08:00",
-            "funding_rate": -5.085e-05,
-            "z_funding": -0.603,
-            "dz_funding": 1.045,
-            "funding_x_oi": 0.399,
+            "timestamp": "2026-04-16 00:00",
+            "funding_rate": -3.418e-05,
+            "z_funding": -0.001,
+            "dz_funding": 0.984,
+            "funding_x_oi": -0.0,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-15 08:00",
-            "funding_rate": 1.648e-05,
-            "z_funding": 0.12,
-            "dz_funding": -0.004,
-            "funding_x_oi": 0.023,
+            "timestamp": "2026-04-16 00:00",
+            "funding_rate": -1.717e-05,
+            "z_funding": -0.513,
+            "dz_funding": -0.407,
+            "funding_x_oi": -0.037,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-15 08:00",
-            "funding_rate": -9.128e-05,
-            "z_funding": -1.87,
-            "dz_funding": -1.339,
-            "funding_x_oi": -2.609,
+            "timestamp": "2026-04-16 00:00",
+            "funding_rate": 0.0001,
+            "z_funding": 1.1,
+            "dz_funding": 1.766,
+            "funding_x_oi": 0.17,
             "source": "historical_strict_asof"
           }
         ],
@@ -97978,8 +97990,26 @@
       },
       "block_drift": {
         "phase": "Phase 2",
-        "status": "sample_gated",
-        "summary": {},
+        "status": "active",
+        "summary": {
+          "baseline_csv": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/backtest/signal_block_events_baseline.csv",
+          "baseline_events": 884,
+          "deviation_high": 2.0,
+          "deviation_low": 0.5,
+          "drift_rows": 7,
+          "generated_at": "2026-04-16 12:09:18",
+          "js_divergence": 0.1380826685882086,
+          "js_threshold": 0.1,
+          "live_db": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Live/db/grapes_model_v1.db",
+          "live_events": 22,
+          "live_max_timestamp": "2026-04-15 16:00:00",
+          "live_since": "2026-03-19 12:09:18",
+          "live_window_days": 28,
+          "min_live_events": 20,
+          "mode": "observability_only",
+          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260416_120918",
+          "verdict": "DRIFT_DETECTED_REVIEW_REQUIRED"
+        },
         "baseline_distribution": [
           {
             "block_type": "trend_extension_blocked",
@@ -98042,9 +98072,183 @@
             "count": 3
           }
         ],
-        "live_distribution": [],
-        "drift_rows": [],
+        "live_distribution": [
+          {
+            "block_type": "trend_extension_blocked",
+            "symbol": "BTCUSDT",
+            "direction": 1,
+            "count": 7,
+            "share": 0.3181818181818182
+          },
+          {
+            "block_type": "range_structure_blocked",
+            "symbol": "BTCUSDT",
+            "direction": 1,
+            "count": 6,
+            "share": 0.2727272727272727
+          },
+          {
+            "block_type": "btc_sync_blocked",
+            "symbol": "ETHUSDT",
+            "direction": 1,
+            "count": 5,
+            "share": 0.2272727272727272
+          },
+          {
+            "block_type": "btc_sync_blocked",
+            "symbol": "SOLUSDT",
+            "direction": 1,
+            "count": 3,
+            "share": 0.1363636363636363
+          },
+          {
+            "block_type": "fib_high_chase_blocked",
+            "symbol": "ETHUSDT",
+            "direction": 1,
+            "count": 1,
+            "share": 0.0454545454545454
+          }
+        ],
+        "drift_rows": [
+          {
+            "block_type": "range_structure_blocked",
+            "symbol": "BTCUSDT",
+            "direction": 1,
+            "count_baseline": 34,
+            "share_baseline": 0.0384615384615384,
+            "count_live": 6,
+            "share_live": 0.2727272727272727,
+            "share_delta": 0.2342657342657342,
+            "share_ratio": 7.09090909090909,
+            "drift_flag": true
+          },
+          {
+            "block_type": "fib_high_chase_blocked",
+            "symbol": "ETHUSDT",
+            "direction": 1,
+            "count_baseline": 105,
+            "share_baseline": 0.1187782805429864,
+            "count_live": 1,
+            "share_live": 0.0454545454545454,
+            "share_delta": -0.0733237350884409,
+            "share_ratio": 0.3826839826839827,
+            "drift_flag": true
+          },
+          {
+            "block_type": "fib_high_chase_blocked",
+            "symbol": "BTCUSDT",
+            "direction": 1,
+            "count_baseline": 84,
+            "share_baseline": 0.0950226244343891,
+            "count_live": 0,
+            "share_live": 0.0,
+            "share_delta": -0.0950226244343891,
+            "share_ratio": 0.0,
+            "drift_flag": true
+          },
+          {
+            "block_type": "trend_extension_blocked",
+            "symbol": "ETHUSDT",
+            "direction": -1,
+            "count_baseline": 56,
+            "share_baseline": 0.0633484162895927,
+            "count_live": 0,
+            "share_live": 0.0,
+            "share_delta": -0.0633484162895927,
+            "share_ratio": 0.0,
+            "drift_flag": true
+          },
+          {
+            "block_type": "weak_ls_bucket_veto",
+            "symbol": "ETHUSDT",
+            "direction": 1,
+            "count_baseline": 23,
+            "share_baseline": 0.0260180995475113,
+            "count_live": 0,
+            "share_live": 0.0,
+            "share_delta": -0.0260180995475113,
+            "share_ratio": 0.0,
+            "drift_flag": true
+          },
+          {
+            "block_type": "trend_extension_blocked",
+            "symbol": "BTCUSDT",
+            "direction": -1,
+            "count_baseline": 19,
+            "share_baseline": 0.0214932126696832,
+            "count_live": 0,
+            "share_live": 0.0,
+            "share_delta": -0.0214932126696832,
+            "share_ratio": 0.0,
+            "drift_flag": true
+          },
+          {
+            "block_type": "btc_sync_blocked",
+            "symbol": "SOLUSDT",
+            "direction": -1,
+            "count_baseline": 3,
+            "share_baseline": 0.003393665158371,
+            "count_live": 0,
+            "share_live": 0.0,
+            "share_delta": -0.003393665158371,
+            "share_ratio": 0.0,
+            "drift_flag": true
+          },
+          {
+            "block_type": "trend_extension_blocked",
+            "symbol": "BTCUSDT",
+            "direction": 1,
+            "count_baseline": 320,
+            "share_baseline": 0.3619909502262443,
+            "count_live": 7,
+            "share_live": 0.3181818181818182,
+            "share_delta": -0.0438091320444261,
+            "share_ratio": 0.8789772727272728,
+            "drift_flag": false
+          },
+          {
+            "block_type": "btc_sync_blocked",
+            "symbol": "ETHUSDT",
+            "direction": 1,
+            "count_baseline": 115,
+            "share_baseline": 0.1300904977375565,
+            "count_live": 5,
+            "share_live": 0.2272727272727272,
+            "share_delta": 0.0971822295351707,
+            "share_ratio": 1.7470355731225296,
+            "drift_flag": false
+          },
+          {
+            "block_type": "btc_sync_blocked",
+            "symbol": "SOLUSDT",
+            "direction": 1,
+            "count_baseline": 125,
+            "share_baseline": 0.1414027149321267,
+            "count_live": 3,
+            "share_live": 0.1363636363636363,
+            "share_delta": -0.0050390785684903,
+            "share_ratio": 0.9643636363636364,
+            "drift_flag": false
+          }
+        ],
         "recent_events": [
+          {
+            "symbol": "BTCUSDT",
+            "asset": "BTC",
+            "timestamp": "2026-04-15 16:00",
+            "block_type": "trend_extension_blocked",
+            "direction": 1,
+            "side": "LONG",
+            "reason": "LONG extension 6.25% exceeded 5.00% cap above Vegas",
+            "funding_observability": {
+              "dz_funding": -0.46940289245975575,
+              "funding_observation_source": "historical_strict_asof",
+              "funding_rate": -7.151e-05,
+              "funding_x_oi": 0.11613308097270819,
+              "z_funding": -1.0343198723198856
+            },
+            "updated_at": "2026-04-16 04:01"
+          },
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
@@ -98359,8 +98563,38 @@
       "memory_timeline": [
         {
           "source": "system",
+          "title": "2026-04-16 - Updated Strategy OS navigation and view-state handling:",
+          "summary": "Updated Strategy OS navigation and view-state handling:",
+          "date": "2026-04-16"
+        },
+        {
+          "source": "system",
+          "title": "2026-04-16 - Hardened `scripts/run_grapes_downstream_cron.sh` Strategy OS step to keep Liquidity tab auto-refresh alive when official artifa",
+          "summary": "Hardened `scripts/run_grapes_downstream_cron.sh` Strategy OS step to keep Liquidity tab auto-refresh alive when official artifact freshness gate blocks full Strategy OS rebuild.",
+          "date": "2026-04-16"
+        },
+        {
+          "source": "system",
+          "title": "2026-04-16 - Fixed Observability Block Drift panel showing `PENDING / No drift rows yet` despite live block events.",
+          "summary": "Fixed Observability Block Drift panel showing `PENDING / No drift rows yet` despite live block events.",
+          "date": "2026-04-16"
+        },
+        {
+          "source": "system",
+          "title": "2026-04-16 - Extended downstream Strategy OS fallback for live trade visibility.",
+          "summary": "Extended downstream Strategy OS fallback for live trade visibility.",
+          "date": "2026-04-16"
+        },
+        {
+          "source": "system",
           "title": "2026-04-15 - Hardened localhost dashboard startup so Strategy OS liquidity no longer stays stale when launching via `scripts/run_frontend_da",
           "summary": "Hardened localhost dashboard startup so Strategy OS liquidity no longer stays stale when launching via `scripts/run_frontend_dashboard.sh`.",
+          "date": "2026-04-15"
+        },
+        {
+          "source": "system",
+          "title": "2026-04-15 - Fixed Strategy OS localhost \"price frozen while liquidity updates\" regression after scripts-folder reorg.",
+          "summary": "Fixed Strategy OS localhost \"price frozen while liquidity updates\" regression after scripts-folder reorg.",
           "date": "2026-04-15"
         },
         {
@@ -98385,36 +98619,6 @@
           "source": "system",
           "title": "2026-04-14 - Fixed a second-order Grapes V2 reconciliation bug where `QTY_MISMATCH` symbols could starve future entries. `reconcile_symbol()",
           "summary": "Fixed a second-order Grapes V2 reconciliation bug where `QTY_MISMATCH` symbols could starve future entries. `reconcile_symbol()` now returns `qty_mismatch_detected` to the cycle loop, and `set_last_seen_target_directions()` now excludes only those mismatch sym",
-          "date": "2026-04-14"
-        },
-        {
-          "source": "system",
-          "title": "2026-04-14 - Fixed a Grapes V2 entry-consumption bug in `Live/v2/Grapes_BingX_Executor_V2.py`. `last_seen_target_direction` is no longer upd",
-          "summary": "Fixed a Grapes V2 entry-consumption bug in `Live/v2/Grapes_BingX_Executor_V2.py`. `last_seen_target_direction` is no longer updated in `dry-run`, `shadow`, or `SYSTEM_BLOCKED / not running` paths. It now advances only on the real execution path, with an explic",
-          "date": "2026-04-14"
-        },
-        {
-          "source": "system",
-          "title": "2026-04-14 - Closed a production parity gap between backtest and live for OI gating. `Live/services/Grapes_Model_v1.py` now reads `z_oi_gate",
-          "summary": "Closed a production parity gap between backtest and live for OI gating. `Live/services/Grapes_Model_v1.py` now reads `z_oi_gate` from the shared production config and applies it in core entry gating (`debug['z_oi'] < z_oi_gate` => reject core entry), matching ",
-          "date": "2026-04-14"
-        },
-        {
-          "source": "system",
-          "title": "2026-04-14 - Added soft handling for `QTY_MISMATCH` in `Live/v2/Grapes_BingX_Executor_V2.py`. When same-direction quantity drift is detected",
-          "summary": "Added soft handling for `QTY_MISMATCH` in `Live/v2/Grapes_BingX_Executor_V2.py`. When same-direction quantity drift is detected, the executor now:",
-          "date": "2026-04-14"
-        },
-        {
-          "source": "system",
-          "title": "2026-04-14 - Added pre-recovery lifecycle forensics in `Live/services/Grapes_Model_v1.py`. Startup consistency audit mismatches between `act",
-          "summary": "Added pre-recovery lifecycle forensics in `Live/services/Grapes_Model_v1.py`. Startup consistency audit mismatches between `active_positions` and `trade_lifecycle` are now snapshotted into a new `trade_lifecycle_audit_snapshots` table before recovery calls `up",
-          "date": "2026-04-14"
-        },
-        {
-          "source": "system",
-          "title": "2026-04-14",
-          "summary": "Formalized a dedicated official baseline area under: `official/scripts/` `official/results/` Moved official scripts out of the mixed `scripts/` pool: `official/scripts/run_grapes_official_baseline_rebuild.py` `official/scripts/build_production_baseline_manifes",
           "date": "2026-04-14"
         }
       ],

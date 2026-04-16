@@ -1076,16 +1076,22 @@ function buildOverviewTradeRows(strategyKey, data) {
 }
 
 function setActiveView(view) {
-  state.view = view;
-  localStorage.setItem("strategy_os_view", view);
-  document.querySelectorAll(".switch-tab").forEach((btn) => btn.classList.toggle("active", btn.dataset.view === view));
-  document.querySelectorAll(".view-panel").forEach((panel) => panel.classList.toggle("is-active", panel.dataset.panel === view));
+  const availableViews = new Set(
+    Array.from(document.querySelectorAll(".switch-tab"))
+      .map((btn) => btn.dataset.view)
+      .filter(Boolean)
+  );
+  const normalizedView = availableViews.has(view) ? view : "all";
+  state.view = normalizedView;
+  localStorage.setItem("strategy_os_view", normalizedView);
+  document.querySelectorAll(".switch-tab").forEach((btn) => btn.classList.toggle("active", btn.dataset.view === normalizedView));
+  document.querySelectorAll(".view-panel").forEach((panel) => panel.classList.toggle("is-active", panel.dataset.panel === normalizedView));
   const hero = document.getElementById("master-board-hero");
-  if (hero) hero.style.display = view === "all" ? "grid" : "none";
+  if (hero) hero.style.display = normalizedView === "all" ? "grid" : "none";
   if (state.data || state.liquidityData) {
     requestAnimationFrame(() => renderCharts(state.data));
     requestAnimationFrame(() => renderLiquidity());
-    if (view === "liquidity") {
+    if (normalizedView === "liquidity") {
       requestAnimationFrame(() => {
         state.liquidityCharts?.resizeAll?.();
         renderLiquidity();
