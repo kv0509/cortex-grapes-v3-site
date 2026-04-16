@@ -18,6 +18,8 @@ const COLORS = {
 const LIVE_FIXED_NOTIONAL_USD = 2000;
 const STRATEGY_KEYS = ["grapes", "citrus", "equity"];
 const OVERVIEW_STRATEGY_KEYS = ["grapes", "citrus"];
+const LIQUIDITY_ASSETS = ["BTC", "ETH", "SOL"];
+const LIQUIDITY_ASSET_LABELS = { BTC: "BTC", ETH: "ETH", SOL: "SOL" };
 const STRATEGY_META = {
   grapes: { label: "Grapes", display: "🍇 Grapes", role: "Live Trend Engine", overviewColor: "#8d6bff", strategyColor: COLORS.green },
   citrus: { label: "Citrus", display: "🍊 Citrus", role: "Live Adaptive Engine", overviewColor: "#ffb03b", strategyColor: COLORS.green },
@@ -56,6 +58,9 @@ const state = {
   evolutionSimilarCasesLoadingId: null,
   liquidityData: null,
   liquidityCharts: null,
+  liquidityAsset: LIQUIDITY_ASSETS.includes(localStorage.getItem("strategy_os_liquidity_asset") || "")
+    ? localStorage.getItem("strategy_os_liquidity_asset")
+    : "BTC",
 };
 
 const I18N = {
@@ -1104,6 +1109,33 @@ function setActiveView(view) {
   }
 }
 
+function normalizeLiquidityAsset(asset) {
+  const key = String(asset || "").toUpperCase();
+  return LIQUIDITY_ASSETS.includes(key) ? key : "BTC";
+}
+
+function renderLiquidityAssetSwitch() {
+  const activeAsset = normalizeLiquidityAsset(state.liquidityAsset);
+  document.querySelectorAll(".liquidity-asset-tab").forEach((btn) => {
+    const tabAsset = normalizeLiquidityAsset(btn.dataset.liquidityAsset);
+    const expectedLabel = LIQUIDITY_ASSET_LABELS[tabAsset] || tabAsset;
+    if (btn.textContent !== expectedLabel) btn.textContent = expectedLabel;
+    btn.classList.toggle("active", btn.dataset.liquidityAsset === activeAsset);
+  });
+}
+
+function setLiquidityAsset(asset) {
+  const nextAsset = normalizeLiquidityAsset(asset);
+  if (state.liquidityAsset === nextAsset) {
+    renderLiquidityAssetSwitch();
+    return;
+  }
+  state.liquidityAsset = nextAsset;
+  localStorage.setItem("strategy_os_liquidity_asset", nextAsset);
+  renderLiquidityAssetSwitch();
+  renderLiquidity();
+}
+
 function getStrategyLensData(strategyKey) {
   const strategy = state.data?.strategies?.[strategyKey];
   if (!strategy) return null;
@@ -1195,10 +1227,11 @@ function applyLanguage() {
     select.options[1].text = t("yearly");
     select.options[2].text = t("all");
   });
-  document.querySelectorAll(".subview-tab").forEach((btn) => {
+  document.querySelectorAll(".subview-tab[data-strategy][data-lens]").forEach((btn) => {
     btn.textContent = t(btn.dataset.lens);
     btn.classList.toggle("active", state.lenses[btn.dataset.strategy] === btn.dataset.lens);
   });
+  renderLiquidityAssetSwitch();
 }
 
 function renderHero(data) {
@@ -2481,11 +2514,15 @@ function renderLiquidity() {
   if (!liquidity?.assets) return;
   const panel = document.querySelector('.view-panel[data-panel="liquidity"]');
   if (!panel?.classList.contains("is-active")) return;
-  const assetKey = "BTC";
+  const assetKey = normalizeLiquidityAsset(state.liquidityAsset);
   const assetData = liquidity.assets[assetKey];
+  if (!assetData) return;
   const overallSeries = liquidity.overall || [];
+  const priceTitle = document.getElementById("liquidity-price-title");
   const localTitle = document.getElementById("liquidity-local-title");
-  if (localTitle) localTitle.textContent = "BTC Local Liquidity";
+  if (priceTitle) priceTitle.textContent = `${assetKey} Price Structure`;
+  if (localTitle) localTitle.textContent = `${assetKey} Local Liquidity`;
+  renderLiquidityAssetSwitch();
 
   const charts = ensureLiquidityCharts();
   if (!charts) return;
@@ -3923,12 +3960,16 @@ function bindSwitches() {
   document.querySelectorAll(".switch-tab").forEach((btn) => {
     btn.addEventListener("click", () => setActiveView(btn.dataset.view));
   });
+  document.querySelectorAll(".liquidity-asset-tab").forEach((btn) => {
+    btn.addEventListener("click", () => setLiquidityAsset(btn.dataset.liquidityAsset));
+  });
   const exportBtn = document.getElementById("liquidity-export-btn");
   if (exportBtn) {
     exportBtn.addEventListener("click", () => {
       exportLiquiditySurface().catch((err) => console.warn("liquidity export error", err));
     });
   }
+  renderLiquidityAssetSwitch();
 }
 
 function bindLanguageSwitch() {
@@ -3979,7 +4020,7 @@ function bindTradeFilters() {
 }
 
 function bindLensSwitches() {
-  document.querySelectorAll(".subview-tab").forEach((btn) => {
+  document.querySelectorAll(".subview-tab[data-strategy][data-lens]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const { strategy, lens } = btn.dataset;
       state.lenses[strategy] = lens === "extended" ? "backtest" : lens;

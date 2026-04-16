@@ -357,13 +357,18 @@
         <section class="view-panel strategy-view liquidity-view" data-panel="liquidity">
           <section class="liquidity-solo-surface">
               <div class="liquidity-toolbar">
+                <div class="subview-switch liquidity-asset-switch" role="tablist" aria-label="Liquidity asset switch">
+                  <button class="subview-tab liquidity-asset-tab active" data-liquidity-asset="BTC" type="button">BTC</button>
+                  <button class="subview-tab liquidity-asset-tab" data-liquidity-asset="ETH" type="button">ETH</button>
+                  <button class="subview-tab liquidity-asset-tab" data-liquidity-asset="SOL" type="button">SOL</button>
+                </div>
                 <button id="liquidity-export-btn" class="liquidity-export-btn" type="button">Copy Image</button>
               </div>
               <div class="liquidity-chart-stack-wrap">
               <div class="liquidity-chart-stack">
                 <div class="liquidity-chart-shell">
                   <div class="liquidity-chart-head">
-                    <span class="eyebrow">BTC Price Structure</span>
+                    <span class="eyebrow" id="liquidity-price-title">BTC Price Structure</span>
                   </div>
                   <div id="liquidity-price-canvas" class="liquidity-chart-host liquidity-chart-host-primary"></div>
                 </div>
