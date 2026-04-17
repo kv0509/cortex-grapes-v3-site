@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-16 20:06:30",
-    "data_as_of": "2026-04-17 04:06:29",
+    "updated_at": "2026-04-17 00:10:24",
+    "data_as_of": "2026-04-17 08:10:22",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -42944,11 +42944,11 @@
           "symbol": "SOLUSDT",
           "direction": "LONG",
           "entry_price": 89.98,
-          "current_price": 90.07,
-          "current_pnl_pct": 0.1,
+          "current_price": 89.03,
+          "current_pnl_pct": -1.06,
           "entry_ts": "2026-04-16 20:03",
           "signal_ts": "2026-04-16 16:00",
-          "hold_hours": -4.1,
+          "hold_hours": -0.1,
           "position_size": 1.0,
           "peak_pnl_pct": 0.0,
           "realized_pnl_pct": 0.0,
@@ -52366,26 +52366,7 @@
           }
         ]
       },
-      "active_positions": [
-        {
-          "asset": "BTC",
-          "symbol": "BTCUSDT",
-          "direction": "LONG",
-          "entry_price": 74385.0,
-          "current_price": 75309.4,
-          "current_pnl_pct": 1.24,
-          "entry_ts": "2026-04-13 20:00",
-          "hold_hours": 68.0,
-          "remaining_size": 0.013444,
-          "original_size": 0.013444,
-          "partial_taken": false,
-          "breakeven_armed": false,
-          "peak_pnl_pct": 1.24,
-          "entry_liq_imbalance": 1.481,
-          "entry_z_price": 2.116,
-          "capital": 9999.5
-        }
-      ],
+      "active_positions": [],
       "all_trades": [
         {
           "asset": "BTC",
@@ -62172,15 +62153,15 @@
         },
         "live": {
           "summary": {
-            "final_equity": 6020.32,
-            "net_pnl_usd": 20.32,
-            "total_return_pct": 0.34,
-            "profit_factor": 1.04,
-            "trades": 14,
-            "win_rate_pct": 50.0,
-            "avg_win_usd": 68.75,
+            "final_equity": 6038.72,
+            "net_pnl_usd": 38.72,
+            "total_return_pct": 0.65,
+            "profit_factor": 1.08,
+            "trades": 15,
+            "win_rate_pct": 53.3,
+            "avg_win_usd": 62.46,
             "avg_loss_usd": -65.85,
-            "sharpe": 2.082,
+            "sharpe": 2.24,
             "max_dd_pct": -6.1
           },
           "portfolio_curve": [
@@ -62243,6 +62224,10 @@
             {
               "ts": "2026-04-12 16:00:00",
               "equity": 6020.32
+            },
+            {
+              "ts": "2026-04-16 20:00:00",
+              "equity": 6038.72
             }
           ],
           "asset_curves": {
@@ -62274,6 +62259,10 @@
               {
                 "ts": "2026-04-12 16:00:00",
                 "pnl": 206.28
+              },
+              {
+                "ts": "2026-04-16 20:00:00",
+                "pnl": 224.67
               }
             ],
             "ETH": [
@@ -62326,8 +62315,8 @@
             "losing_months": 1,
             "best_month": {
               "label": "2026-04",
-              "pnl_usd": 22.09,
-              "return_pct": 0.37
+              "pnl_usd": 40.49,
+              "return_pct": 0.67
             },
             "worst_month": {
               "label": "2026-03",
@@ -62350,11 +62339,11 @@
               "label": "2026-04",
               "year": 2026,
               "month": 4,
-              "trade_count": 3,
-              "wins": 1,
+              "trade_count": 4,
+              "wins": 2,
               "losses": 2,
-              "net_pnl": 22.09,
-              "return_pct": 0.37
+              "net_pnl": 40.49,
+              "return_pct": 0.67
             }
           ],
           "monthly_heatmap": [
@@ -62375,11 +62364,11 @@
                   "label": "2026-04",
                   "year": 2026,
                   "month": 4,
-                  "trade_count": 3,
-                  "wins": 1,
+                  "trade_count": 4,
+                  "wins": 2,
                   "losses": 2,
-                  "net_pnl": 22.09,
-                  "return_pct": 0.37
+                  "net_pnl": 40.49,
+                  "return_pct": 0.67
                 }
               ]
             }
@@ -62396,11 +62385,11 @@
               },
               {
                 "regime_proxy": "TRANSITION",
-                "trades": 12,
-                "win_rate_pct": 50.0,
-                "total_pnl_usd": 48.28,
-                "avg_pnl_usd": 4.02,
-                "profit_factor": 1.12
+                "trades": 13,
+                "win_rate_pct": 53.85,
+                "total_pnl_usd": 66.68,
+                "avg_pnl_usd": 5.13,
+                "profit_factor": 1.17
               }
             ]
           },
@@ -62558,6 +62547,17 @@
               "exit_price": 71055.2,
               "net_pnl_usd": -28.76,
               "roi_pct_on_margin": -143.81
+            },
+            {
+              "asset": "BTC",
+              "direction": "LONG",
+              "entry_ts": "2026-04-13 20:00",
+              "exit_ts": "2026-04-16 20:00",
+              "hold_hours": 72.0,
+              "entry_price": 74385.0,
+              "exit_price": 75106.8,
+              "net_pnl_usd": 18.4,
+              "roi_pct_on_margin": 91.99
             }
           ]
         }
@@ -97965,7 +97965,7 @@
     "observability": {
       "name": "Observability",
       "status": "PASSIVE MONITOR",
-      "report_date": "2026-04-17 04:06:29",
+      "report_date": "2026-04-17 08:10:22",
       "mode": "observability_only",
       "funding": {
         "phase": "Phase 1",
@@ -97976,31 +97976,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-16 16:00",
+            "timestamp": "2026-04-16 20:00",
             "funding_rate": -2.225e-05,
-            "z_funding": 0.442,
-            "dz_funding": 0.202,
-            "funding_x_oi": -0.525,
+            "z_funding": 0.469,
+            "dz_funding": 0.027,
+            "funding_x_oi": 0.06,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-16 16:00",
+            "timestamp": "2026-04-16 20:00",
             "funding_rate": -3.792e-05,
-            "z_funding": -0.807,
-            "dz_funding": 0.301,
-            "funding_x_oi": 1.359,
+            "z_funding": -0.776,
+            "dz_funding": 0.031,
+            "funding_x_oi": 1.471,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-16 16:00",
+            "timestamp": "2026-04-16 20:00",
             "funding_rate": 7.305e-05,
-            "z_funding": 0.601,
-            "dz_funding": -0.367,
-            "funding_x_oi": 0.888,
+            "z_funding": 0.615,
+            "dz_funding": 0.014,
+            "funding_x_oi": 2.608,
             "source": "historical_strict_asof"
           }
         ],
@@ -98015,17 +98015,17 @@
           "deviation_high": 2.0,
           "deviation_low": 0.5,
           "drift_rows": 7,
-          "generated_at": "2026-04-17 04:06:29",
+          "generated_at": "2026-04-17 08:10:22",
           "js_divergence": 0.1380826685882086,
           "js_threshold": 0.1,
           "live_db": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Live/db/grapes_model_v1.db",
           "live_events": 22,
           "live_max_timestamp": "2026-04-15 16:00:00",
-          "live_since": "2026-03-20 04:06:29",
+          "live_since": "2026-03-20 08:10:22",
           "live_window_days": 28,
           "min_live_events": 20,
           "mode": "observability_only",
-          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260417_040629",
+          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260417_081022",
           "verdict": "DRIFT_DETECTED_REVIEW_REQUIRED"
         },
         "baseline_distribution": [
