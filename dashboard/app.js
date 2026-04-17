@@ -1482,15 +1482,22 @@ class DashboardApp {
 }
 
 async function main() {
+  const warning = document.getElementById("warning-strip");
   try {
+    warning.textContent = "Loading dashboard data...";
+    warning.classList.add("visible");
+
     const response = await fetch(DATA_URL);
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
-    const payload = await response.json();
+
+    const rawText = await response.text();
+    const payload = JSON.parse(rawText);
     new DashboardApp(payload);
+    warning.textContent = "";
+    warning.classList.remove("visible");
   } catch (error) {
-    const warning = document.getElementById("warning-strip");
     warning.textContent = `Failed to load dashboard data: ${error.message}`;
     warning.classList.add("visible");
   }
