@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI SuperGrapes Replay Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+    <div class="ambient ambient-c"></div>
+
+    <div class="app-shell">
+      <main class="workspace">
+        <section class="chart-shell">
+          <div class="floating-panel floating-brand">
+            <div class="brand-copy">
+              <p class="eyebrow">AI SuperGrapes</p>
+              <div class="hero-line">
+                <h1>Signal Atlas</h1>
+                <span class="hero-badge">Canvas Workspace</span>
+              </div>
+              <h2 id="chart-title">Loading...</h2>
+              <p class="subcopy">
+                A price-first workspace for reading structure, thresholds, entries, exits, BE, and cash state without
+                crushing the chart.
+              </p>
+            </div>
+
+            <div class="meta-strip">
+              <span class="meta-chip" id="range-label">--</span>
+              <span class="meta-chip wide" id="coverage-label">--</span>
+            </div>
+          </div>
+
+          <div class="floating-panel floating-toolbar">
+            <section class="toolbar-group">
+              <div class="section-head compact">
+                <span class="section-label">Markets</span>
+              </div>
+              <div class="segmented" id="asset-tabs"></div>
+            </section>
+
+            <section class="toolbar-group">
+              <div class="section-head compact">
+                <span class="section-label">Layers</span>
+              </div>
+              <div class="pill-row" id="overlay-controls">
+                <button class="pill active" data-control="backtest">Backtest</button>
+                <button class="pill active" data-control="replay">Replay</button>
+                <button class="pill active" data-control="ema">Vegas 144/169</button>
+              </div>
+            </section>
+          </div>
+
+          <div class="floating-panel floating-hud">
+            <div class="warning-strip" id="warning-strip"></div>
+            <div class="chart-hud" id="chart-hud"></div>
+            <div class="chart-guide" id="chart-guide"></div>
+          </div>
+
+          <section class="floating-panel floating-summary">
+            <div class="section-head compact">
+              <span class="section-label">Snapshot</span>
+            </div>
+            <div class="summary-grid" id="summary-grid"></div>
+          </section>
+
+          <aside class="inspector-shell">
+            <div class="inspector-header">
+              <div>
+                <p class="eyebrow">Inspector</p>
+                <h3>Selected Context</h3>
+              </div>
+              <div class="segmented inspector-tabs" id="inspector-tabs">
+                <button class="active" data-tab="snapshot">Snapshot</button>
+                <button data-tab="trade">Trade</button>
+                <button data-tab="diagnostics">Diagnostics</button>
+              </div>
+            </div>
+
+            <div class="inspector-pane active" data-pane="snapshot">
+              <section class="inspector-card">
+                <div class="panel-head">
+                  <p class="card-kicker">Cursor</p>
+                  <h3>Selected Candle</h3>
+                </div>
+                <div class="metric-list" id="cursor-metrics"></div>
+              </section>
+
+              <section class="inspector-card">
+                <div class="panel-head">
+                  <p class="card-kicker">State</p>
+                  <h3>Position Framework</h3>
+                </div>
+                <div class="state-list" id="state-metrics"></div>
+              </section>
+            </div>
+
+            <div class="inspector-pane" data-pane="trade">
+              <section class="inspector-card tall">
+                <div class="panel-head">
+                  <p class="card-kicker">Trade Context</p>
+                  <h3>Selected Trade</h3>
+                </div>
+                <div class="event-list" id="event-list"></div>
+              </section>
+            </div>
+
+            <div class="inspector-pane" data-pane="diagnostics">
+              <section class="inspector-card">
+                <div class="panel-head">
+                  <p class="card-kicker">Diagnostics</p>
+                  <h3>Coverage And Inputs</h3>
+                </div>
+                <div class="metric-list" id="coverage-metrics"></div>
+              </section>
+            </div>
+          </aside>
+
+          <div class="canvas-frame">
+            <canvas id="chart-canvas"></canvas>
+          </div>
+
+          <section class="overview-shell">
+            <div class="overview-head">
+              <div>
+                <p class="card-kicker">Navigator</p>
+                <h3>Range Window</h3>
+              </div>
+              <span>Drag this rail to shift the visible window.</span>
+            </div>
+            <canvas id="overview-canvas"></canvas>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
