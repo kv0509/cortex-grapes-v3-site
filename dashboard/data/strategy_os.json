@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-18 16:04:51",
-    "data_as_of": "2026-04-19 00:04:50",
+    "updated_at": "2026-04-18 20:06:15",
+    "data_as_of": "2026-04-19 04:06:14",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -42938,25 +42938,7 @@
           "roi_pct_on_margin": -59.92
         }
       ],
-      "active_positions": [
-        {
-          "asset": "SOL",
-          "symbol": "SOLUSDT",
-          "direction": "LONG",
-          "entry_price": 89.98,
-          "current_price": 86.7,
-          "current_pnl_pct": -3.65,
-          "entry_ts": "2026-04-16 20:03",
-          "signal_ts": "2026-04-16 16:00",
-          "hold_hours": 39.9,
-          "position_size": 1.0,
-          "peak_pnl_pct": 0.0,
-          "realized_pnl_pct": 0.0,
-          "tiered": false,
-          "hard_tp_done": false,
-          "breakeven_armed": false
-        }
-      ],
+      "active_positions": [],
       "execution_views": {
         "backtest": {
           "summary": {
@@ -48453,16 +48435,16 @@
         },
         "live": {
           "summary": {
-            "final_equity": 5678.43,
-            "net_pnl_usd": -321.57,
-            "total_return_pct": -5.36,
-            "profit_factor": 0.58,
-            "trades": 14,
-            "win_rate_pct": 50.0,
+            "final_equity": 5589.52,
+            "net_pnl_usd": -410.48,
+            "total_return_pct": -6.84,
+            "profit_factor": 0.52,
+            "trades": 15,
+            "win_rate_pct": 46.7,
             "avg_win_usd": 63.39,
-            "avg_loss_usd": -109.33,
-            "sharpe": -5.029,
-            "max_dd_pct": -11.81
+            "avg_loss_usd": -106.78,
+            "sharpe": -15.499,
+            "max_dd_pct": -13.19
           },
           "portfolio_curve": [
             {
@@ -48524,6 +48506,10 @@
             {
               "ts": "2026-04-15 20:00:00",
               "equity": 5678.43
+            },
+            {
+              "ts": "2026-04-18 16:00:00",
+              "equity": 5589.52
             }
           ],
           "asset_curves": {
@@ -48577,6 +48563,10 @@
               {
                 "ts": "2026-03-25 16:00:00",
                 "pnl": 74.26
+              },
+              {
+                "ts": "2026-04-18 16:00:00",
+                "pnl": -14.64
               }
             ],
             "BTC": [
@@ -48607,8 +48597,8 @@
             "losing_months": 2,
             "best_month": {
               "label": "2026-04",
-              "pnl_usd": -79.95,
-              "return_pct": -1.39
+              "pnl_usd": -168.86,
+              "return_pct": -2.93
             },
             "worst_month": {
               "label": "2026-03",
@@ -48631,11 +48621,11 @@
               "label": "2026-04",
               "year": 2026,
               "month": 4,
-              "trade_count": 2,
+              "trade_count": 3,
               "wins": 0,
-              "losses": 2,
-              "net_pnl": -79.95,
-              "return_pct": -1.39
+              "losses": 3,
+              "net_pnl": -168.86,
+              "return_pct": -2.93
             }
           ],
           "monthly_heatmap": [
@@ -48656,11 +48646,11 @@
                   "label": "2026-04",
                   "year": 2026,
                   "month": 4,
-                  "trade_count": 2,
+                  "trade_count": 3,
                   "wins": 0,
-                  "losses": 2,
-                  "net_pnl": -79.95,
-                  "return_pct": -1.39
+                  "losses": 3,
+                  "net_pnl": -168.86,
+                  "return_pct": -2.93
                 }
               ]
             }
@@ -48677,11 +48667,11 @@
               },
               {
                 "regime_proxy": "TRANSITION",
-                "trades": 10,
-                "win_rate_pct": 40.0,
-                "total_pnl_usd": -246.83,
-                "avg_pnl_usd": -24.68,
-                "profit_factor": 0.59
+                "trades": 11,
+                "win_rate_pct": 36.36,
+                "total_pnl_usd": -335.73,
+                "avg_pnl_usd": -30.52,
+                "profit_factor": 0.52
               }
             ]
           },
@@ -48853,6 +48843,18 @@
               "exit_price": 2356.56,
               "net_pnl_usd": -14.47,
               "roi_pct_on_margin": -72.33
+            },
+            {
+              "asset": "SOL",
+              "direction": "LONG",
+              "type": "Trend",
+              "entry_ts": "2026-04-16 16:00",
+              "exit_ts": "2026-04-18 16:00",
+              "hold_hours": 48.0,
+              "entry_price": 89.98,
+              "exit_price": 85.98,
+              "net_pnl_usd": -88.91,
+              "roi_pct_on_margin": -444.54
             }
           ]
         }
@@ -62708,7 +62710,7 @@
     "equity": {
       "name": "Cortex Equity",
       "status": "RESEARCH / DATA OFFLINE",
-      "report_date": "2026-04-18 16:04:51",
+      "report_date": "2026-04-18 20:06:15",
       "source": "Zex/Reports/experiments/equity_true_walk_forward_suite",
       "normalization": {
         "synthetic_base_equity_usd": 6000.0,
@@ -62760,14 +62762,14 @@
       ],
       "portfolio_curve": [
         {
-          "ts": "2026-04-18 16:04:51",
+          "ts": "2026-04-18 20:06:15",
           "equity": 6000.0
         }
       ],
       "asset_curves": {
         "US500": [
           {
-            "ts": "2026-04-18 16:04:51",
+            "ts": "2026-04-18 20:06:15",
             "pnl": 0.0
           }
         ]
@@ -62808,14 +62810,14 @@
           },
           "portfolio_curve": [
             {
-              "ts": "2026-04-18 16:04:51",
+              "ts": "2026-04-18 20:06:15",
               "equity": 6000.0
             }
           ],
           "asset_curves": {
             "US500": [
               {
-                "ts": "2026-04-18 16:04:51",
+                "ts": "2026-04-18 20:06:15",
                 "pnl": 0.0
               }
             ]
@@ -62855,14 +62857,14 @@
           },
           "portfolio_curve": [
             {
-              "ts": "2026-04-18 16:04:51",
+              "ts": "2026-04-18 20:06:15",
               "equity": 6000.0
             }
           ],
           "asset_curves": {
             "US500": [
               {
-                "ts": "2026-04-18 16:04:51",
+                "ts": "2026-04-18 20:06:15",
                 "pnl": 0.0
               }
             ]
@@ -62893,7 +62895,7 @@
     "evolution": {
       "name": "Grapes Evolution",
       "status": "LIVE MONITOR",
-      "report_date": "2026-04-15 20:00:00",
+      "report_date": "2026-04-18 16:00:00",
       "baseline": {
         "version": "btc_eth_high_chase_eth_bucket_sol052_no_hype",
         "display_name": "BTC+ETH High-Chase + ETH Bucket + SOL 0.52/0.50 (No HYPE)",
@@ -62940,13 +62942,13 @@
       "runtime": {
         "db_path": "Live/services/db/grapes_evolution.db",
         "db_exists": true,
-        "reflections": 234,
-        "pattern_stats": 99,
+        "reflections": 235,
+        "pattern_stats": 100,
         "discoveries": 22,
         "mutations": 0,
         "validations": 0,
         "promotions": 0,
-        "last_activity_at": "2026-04-15 20:00:00"
+        "last_activity_at": "2026-04-18 16:00:00"
       },
       "discoveries": [
         {
@@ -63560,6 +63562,27 @@
       ],
       "pattern_stats": [
         {
+          "pattern_key": "solusdt:signal_exit_loss.trend_follow.core_entry.long",
+          "symbol": "SOLUSDT",
+          "sample_count": 1,
+          "win_rate": 0.0,
+          "avg_pnl_pct": -0.044,
+          "last_outcome": "loss",
+          "last_seen_ts": "2026-04-18 16:00:00",
+          "example_trades": [
+            {
+              "trade_id": "SOLUSDT|2026-04-16 16:00:00|1|0",
+              "symbol": "SOLUSDT",
+              "direction": 1,
+              "entry_signal_ts": "2026-04-16 16:00:00",
+              "close_signal_ts": "2026-04-18 16:00:00",
+              "pnl_pct": -0.0445,
+              "close_reason": "signal_exit",
+              "source": "backtest"
+            }
+          ]
+        },
+        {
           "pattern_key": "ethusdt:signal_exit_loss.trend_follow.core_entry.long",
           "symbol": "ETHUSDT",
           "sample_count": 2,
@@ -63839,34 +63862,13 @@
               "source": "backtest"
             }
           ]
-        },
-        {
-          "pattern_key": "ethusdt:crowded_shorts.tp50_then_be.trend_follow.tiered_entry",
-          "symbol": "ETHUSDT",
-          "sample_count": 1,
-          "win_rate": 100.0,
-          "avg_pnl_pct": 7.23,
-          "last_outcome": "win",
-          "last_seen_ts": "2026-01-30 04:00:00",
-          "example_trades": [
-            {
-              "trade_id": "backtest::ETH::2026-01-28 04:00:00::219",
-              "symbol": "ETHUSDT",
-              "direction": -1,
-              "entry_signal_ts": "2026-01-28 04:00:00",
-              "close_signal_ts": "2026-01-30 04:00:00",
-              "pnl_pct": 7.2305,
-              "close_reason": "probability_exit",
-              "source": "backtest"
-            }
-          ]
         }
       ]
     },
     "observability": {
       "name": "Observability",
       "status": "PASSIVE MONITOR",
-      "report_date": "2026-04-19 00:04:50",
+      "report_date": "2026-04-19 04:06:14",
       "mode": "observability_only",
       "funding": {
         "phase": "Phase 1",
@@ -63877,31 +63879,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-18 12:00",
-            "funding_rate": -7.082e-05,
-            "z_funding": -0.799,
-            "dz_funding": 0.003,
-            "funding_x_oi": 1.198,
+            "timestamp": "2026-04-18 16:00",
+            "funding_rate": -4.586e-05,
+            "z_funding": -0.214,
+            "dz_funding": 0.585,
+            "funding_x_oi": 0.141,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-18 12:00",
-            "funding_rate": -1.075e-05,
-            "z_funding": -0.479,
-            "dz_funding": -0.017,
-            "funding_x_oi": 0.749,
+            "timestamp": "2026-04-18 16:00",
+            "funding_rate": -0.00015064,
+            "z_funding": -3.134,
+            "dz_funding": -2.655,
+            "funding_x_oi": 0.765,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-18 12:00",
-            "funding_rate": -8.193e-05,
-            "z_funding": -1.503,
-            "dz_funding": 0.064,
-            "funding_x_oi": 1.248,
+            "timestamp": "2026-04-18 16:00",
+            "funding_rate": -7.993e-05,
+            "z_funding": -1.395,
+            "dz_funding": 0.108,
+            "funding_x_oi": 0.092,
             "source": "historical_strict_asof"
           }
         ],
@@ -63916,17 +63918,17 @@
           "deviation_high": 2.0,
           "deviation_low": 0.5,
           "drift_rows": 7,
-          "generated_at": "2026-04-19 00:04:50",
+          "generated_at": "2026-04-19 04:06:14",
           "js_divergence": 0.13207304282108906,
           "js_threshold": 0.1,
           "live_db": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Live/db/grapes_model_v1.db",
           "live_events": 25,
           "live_max_timestamp": "2026-04-17 12:00:00",
-          "live_since": "2026-03-22 00:04:50",
+          "live_since": "2026-03-22 04:06:14",
           "live_window_days": 28,
           "min_live_events": 20,
           "mode": "observability_only",
-          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260419_000450",
+          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260419_040614",
           "verdict": "DRIFT_DETECTED_REVIEW_REQUIRED"
         },
         "baseline_distribution": [
