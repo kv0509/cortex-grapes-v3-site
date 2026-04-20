@@ -1470,11 +1470,17 @@ function renderBoardCards(targetId, rows) {
 function renderSnapshotCards(strategyKey, strategyLabel, viewData) {
   const target = document.getElementById(`${strategyKey}-snapshot-cards`);
   const note = document.getElementById(`${strategyKey}-lens-note`);
+  const strategy = state.data?.strategies?.[strategyKey] || {};
   if (!target || !viewData) return;
   const lens = (state.lenses[strategyKey] === "extended" ? "backtest" : state.lenses[strategyKey]) || "backtest";
   const s = lens === "live" ? getStrategyLiveSummary(strategyKey) : (viewData.summary || {});
   const breakdown = lens === "live" ? getStrategyLiveBreakdown(strategyKey) : null;
-  if (note) note.textContent = "";
+  if (note) {
+    const cutoff = strategy?.live_baseline?.cutoff_ts || "";
+    note.textContent = lens === "live" && cutoff
+      ? (state.lang === "zh" ? `当前 live 口径仅保留 baseline 锁定后交易: ${cutoff}` : `Live lens uses post-baseline trades only: ${cutoff}`)
+      : "";
+  }
   target.innerHTML = `
     <article class="snapshot-card">
       <div class="snapshot-head">
