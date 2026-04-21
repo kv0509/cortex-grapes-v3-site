@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-21 08:03:33",
-    "data_as_of": "2026-04-21 16:03:31",
+    "updated_at": "2026-04-21 12:06:01",
+    "data_as_of": "2026-04-21 20:06:00",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -62030,7 +62030,7 @@
     "equity": {
       "name": "Cortex Equity",
       "status": "RESEARCH / DATA OFFLINE",
-      "report_date": "2026-04-21 08:03:33",
+      "report_date": "2026-04-21 12:06:01",
       "source": "Zex/Reports/experiments/equity_true_walk_forward_suite",
       "normalization": {
         "synthetic_base_equity_usd": 6000.0,
@@ -62082,14 +62082,14 @@
       ],
       "portfolio_curve": [
         {
-          "ts": "2026-04-21 08:03:33",
+          "ts": "2026-04-21 12:06:01",
           "equity": 6000.0
         }
       ],
       "asset_curves": {
         "US500": [
           {
-            "ts": "2026-04-21 08:03:33",
+            "ts": "2026-04-21 12:06:01",
             "pnl": 0.0
           }
         ]
@@ -62130,14 +62130,14 @@
           },
           "portfolio_curve": [
             {
-              "ts": "2026-04-21 08:03:33",
+              "ts": "2026-04-21 12:06:01",
               "equity": 6000.0
             }
           ],
           "asset_curves": {
             "US500": [
               {
-                "ts": "2026-04-21 08:03:33",
+                "ts": "2026-04-21 12:06:01",
                 "pnl": 0.0
               }
             ]
@@ -62177,14 +62177,14 @@
           },
           "portfolio_curve": [
             {
-              "ts": "2026-04-21 08:03:33",
+              "ts": "2026-04-21 12:06:01",
               "equity": 6000.0
             }
           ],
           "asset_curves": {
             "US500": [
               {
-                "ts": "2026-04-21 08:03:33",
+                "ts": "2026-04-21 12:06:01",
                 "pnl": 0.0
               }
             ]
@@ -63188,7 +63188,7 @@
     "observability": {
       "name": "Observability",
       "status": "PASSIVE MONITOR",
-      "report_date": "2026-04-21 16:03:31",
+      "report_date": "2026-04-21 20:06:00",
       "mode": "observability_only",
       "funding": {
         "phase": "Phase 1",
@@ -63199,31 +63199,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-21 04:00",
-            "funding_rate": -7.937e-05,
-            "z_funding": -0.655,
-            "dz_funding": 0.036,
-            "funding_x_oi": -0.091,
+            "timestamp": "2026-04-21 08:00",
+            "funding_rate": -5.824e-05,
+            "z_funding": -0.109,
+            "dz_funding": 0.547,
+            "funding_x_oi": -0.052,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-21 04:00",
-            "funding_rate": -4.382e-05,
-            "z_funding": -0.14,
-            "dz_funding": 0.045,
-            "funding_x_oi": -0.013,
+            "timestamp": "2026-04-21 08:00",
+            "funding_rate": -3.72e-05,
+            "z_funding": -0.013,
+            "dz_funding": 0.127,
+            "funding_x_oi": -0.005,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-21 04:00",
-            "funding_rate": 8.917e-05,
-            "z_funding": 1.185,
-            "dz_funding": 0.009,
-            "funding_x_oi": -0.012,
+            "timestamp": "2026-04-21 08:00",
+            "funding_rate": 2.729e-05,
+            "z_funding": 0.372,
+            "dz_funding": -0.813,
+            "funding_x_oi": 0.188,
             "source": "historical_strict_asof"
           }
         ],
@@ -63238,17 +63238,17 @@
           "deviation_high": 2.0,
           "deviation_low": 0.5,
           "drift_rows": 7,
-          "generated_at": "2026-04-21 16:03:31",
+          "generated_at": "2026-04-21 20:06:00",
           "js_divergence": 0.13207304282108906,
           "js_threshold": 0.1,
           "live_db": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Live/db/grapes_model_v1.db",
           "live_events": 25,
           "live_max_timestamp": "2026-04-17 12:00:00",
-          "live_since": "2026-03-24 16:03:31",
+          "live_since": "2026-03-24 20:06:00",
           "live_window_days": 28,
           "min_live_events": 20,
           "mode": "observability_only",
-          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260421_160331",
+          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260421_200600",
           "verdict": "DRIFT_DETECTED_REVIEW_REQUIRED"
         },
         "baseline_distribution": [
@@ -63855,6 +63855,12 @@
       "memory_timeline": [
         {
           "source": "system",
+          "title": "2026-04-21 - Added a first standalone dealer-inventory indicator pipeline for chain-visible exchange inventory stress.",
+          "summary": "Added a first standalone dealer-inventory indicator pipeline for chain-visible exchange inventory stress.",
+          "date": "2026-04-21"
+        },
+        {
+          "source": "system",
           "title": "2026-04-20",
           "summary": "Added a post-baseline live research cleanup path for cross-system parity work without touching production source DBs. new script: `grapes/scripts/analysis/build_post_baseline_research_db.py` it reads the official frozen baseline manifests for Grapes and Citrus",
           "date": "2026-04-20"
@@ -63905,12 +63911,6 @@
           "source": "system",
           "title": "2026-04-14 - Verified the three Grapes fixes with minimal runtime tests:",
           "summary": "Verified the three Grapes fixes with minimal runtime tests:",
-          "date": "2026-04-14"
-        },
-        {
-          "source": "system",
-          "title": "2026-04-14 - Reorganized `Reports/experiments` by ownership to separate outputs by system responsibility:",
-          "summary": "Reorganized `Reports/experiments` by ownership to separate outputs by system responsibility:",
           "date": "2026-04-14"
         }
       ],
