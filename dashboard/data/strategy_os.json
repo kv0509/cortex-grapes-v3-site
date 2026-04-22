@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-22 08:07:44",
-    "data_as_of": "2026-04-22 16:07:42",
+    "updated_at": "2026-04-22 12:08:22",
+    "data_as_of": "2026-04-22 20:08:18",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -52064,15 +52064,15 @@
           "symbol": "BTCUSDT",
           "direction": "LONG",
           "entry_price": 77979.8,
-          "current_price": 77979.8,
-          "current_pnl_pct": 0.0,
+          "current_price": 78263.2,
+          "current_pnl_pct": 0.36,
           "entry_ts": "2026-04-22 04:00",
-          "hold_hours": 0.0,
+          "hold_hours": 4.0,
           "remaining_size": 0.012824,
           "original_size": 0.012824,
           "partial_taken": false,
           "breakeven_armed": false,
-          "peak_pnl_pct": 0.0,
+          "peak_pnl_pct": 0.36,
           "entry_liq_imbalance": 1.563,
           "entry_z_price": 2.403,
           "capital": 9999.5
@@ -52082,15 +52082,15 @@
           "symbol": "SOLUSDT",
           "direction": "LONG",
           "entry_price": 88.04,
-          "current_price": 88.04,
-          "current_pnl_pct": 0.0,
+          "current_price": 88.29,
+          "current_pnl_pct": 0.28,
           "entry_ts": "2026-04-22 04:00",
-          "hold_hours": 0.0,
+          "hold_hours": 4.0,
           "remaining_size": 11.358473,
           "original_size": 11.358473,
           "partial_taken": false,
           "breakeven_armed": false,
-          "peak_pnl_pct": 0.0,
+          "peak_pnl_pct": 0.28,
           "entry_liq_imbalance": 2.758,
           "entry_z_price": 1.135,
           "capital": 9999.5
@@ -62067,7 +62067,7 @@
     "equity": {
       "name": "Cortex Equity",
       "status": "RESEARCH / DATA OFFLINE",
-      "report_date": "2026-04-22 08:07:44",
+      "report_date": "2026-04-22 12:08:22",
       "source": "Zex/Reports/experiments/equity_true_walk_forward_suite",
       "normalization": {
         "synthetic_base_equity_usd": 6000.0,
@@ -62119,14 +62119,14 @@
       ],
       "portfolio_curve": [
         {
-          "ts": "2026-04-22 08:07:44",
+          "ts": "2026-04-22 12:08:22",
           "equity": 6000.0
         }
       ],
       "asset_curves": {
         "US500": [
           {
-            "ts": "2026-04-22 08:07:44",
+            "ts": "2026-04-22 12:08:22",
             "pnl": 0.0
           }
         ]
@@ -62167,14 +62167,14 @@
           },
           "portfolio_curve": [
             {
-              "ts": "2026-04-22 08:07:44",
+              "ts": "2026-04-22 12:08:22",
               "equity": 6000.0
             }
           ],
           "asset_curves": {
             "US500": [
               {
-                "ts": "2026-04-22 08:07:44",
+                "ts": "2026-04-22 12:08:22",
                 "pnl": 0.0
               }
             ]
@@ -62214,14 +62214,14 @@
           },
           "portfolio_curve": [
             {
-              "ts": "2026-04-22 08:07:44",
+              "ts": "2026-04-22 12:08:22",
               "equity": 6000.0
             }
           ],
           "asset_curves": {
             "US500": [
               {
-                "ts": "2026-04-22 08:07:44",
+                "ts": "2026-04-22 12:08:22",
                 "pnl": 0.0
               }
             ]
@@ -63225,7 +63225,7 @@
     "observability": {
       "name": "Observability",
       "status": "PASSIVE MONITOR",
-      "report_date": "2026-04-22 16:07:42",
+      "report_date": "2026-04-22 20:08:18",
       "mode": "observability_only",
       "funding": {
         "phase": "Phase 1",
@@ -63236,31 +63236,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-22 04:00",
-            "funding_rate": -2.237e-05,
-            "z_funding": 0.723,
-            "dz_funding": -0.024,
-            "funding_x_oi": 1.373,
+            "timestamp": "2026-04-22 08:00",
+            "funding_rate": 3.56e-05,
+            "z_funding": 2.046,
+            "dz_funding": 1.323,
+            "funding_x_oi": 1.141,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-22 04:00",
-            "funding_rate": -2.128e-05,
-            "z_funding": 0.35,
-            "dz_funding": 0.019,
-            "funding_x_oi": 0.489,
+            "timestamp": "2026-04-22 08:00",
+            "funding_rate": 0.0001,
+            "z_funding": 2.155,
+            "dz_funding": 1.805,
+            "funding_x_oi": 1.582,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-22 04:00",
-            "funding_rate": 6.371e-05,
-            "z_funding": 0.842,
-            "dz_funding": -0.043,
-            "funding_x_oi": 0.857,
+            "timestamp": "2026-04-22 08:00",
+            "funding_rate": 0.0001,
+            "z_funding": 1.304,
+            "dz_funding": 0.462,
+            "funding_x_oi": -1.135,
             "source": "historical_strict_asof"
           }
         ],
@@ -63275,17 +63275,17 @@
           "deviation_high": 2.0,
           "deviation_low": 0.5,
           "drift_rows": 7,
-          "generated_at": "2026-04-22 16:07:42",
-          "js_divergence": 0.12933438278889425,
+          "generated_at": "2026-04-22 20:08:18",
+          "js_divergence": 0.12912909255373467,
           "js_threshold": 0.1,
           "live_db": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Live/db/grapes_model_v1.db",
-          "live_events": 26,
-          "live_max_timestamp": "2026-04-22 00:00:00",
-          "live_since": "2026-03-25 16:07:42",
+          "live_events": 28,
+          "live_max_timestamp": "2026-04-22 08:00:00",
+          "live_since": "2026-03-25 20:08:18",
           "live_window_days": 28,
           "min_live_events": 20,
           "mode": "observability_only",
-          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260422_160742",
+          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260422_200818",
           "verdict": "DRIFT_DETECTED_REVIEW_REQUIRED"
         },
         "baseline_distribution": [
@@ -63355,36 +63355,36 @@
             "block_type": "trend_extension_blocked",
             "symbol": "BTCUSDT",
             "direction": 1,
-            "count": 10,
-            "share": 0.3846153846153846
+            "count": 11,
+            "share": 0.3928571428571428
           },
           {
             "block_type": "btc_sync_blocked",
             "symbol": "ETHUSDT",
             "direction": 1,
-            "count": 6,
-            "share": 0.2307692307692307
+            "count": 7,
+            "share": 0.25
           },
           {
             "block_type": "range_structure_blocked",
             "symbol": "BTCUSDT",
             "direction": 1,
             "count": 6,
-            "share": 0.2307692307692307
+            "share": 0.2142857142857142
           },
           {
             "block_type": "btc_sync_blocked",
             "symbol": "SOLUSDT",
             "direction": 1,
             "count": 3,
-            "share": 0.1153846153846153
+            "share": 0.1071428571428571
           },
           {
             "block_type": "fib_high_chase_blocked",
             "symbol": "ETHUSDT",
             "direction": 1,
             "count": 1,
-            "share": 0.0384615384615384
+            "share": 0.0357142857142857
           }
         ],
         "drift_rows": [
@@ -63395,9 +63395,9 @@
             "count_baseline": 34,
             "share_baseline": 0.0384615384615384,
             "count_live": 6,
-            "share_live": 0.2307692307692307,
-            "share_delta": 0.1923076923076923,
-            "share_ratio": 6.0,
+            "share_live": 0.2142857142857142,
+            "share_delta": 0.1758241758241758,
+            "share_ratio": 5.571428571428571,
             "drift_flag": true
           },
           {
@@ -63407,9 +63407,9 @@
             "count_baseline": 105,
             "share_baseline": 0.1187782805429864,
             "count_live": 1,
-            "share_live": 0.0384615384615384,
-            "share_delta": -0.0803167420814479,
-            "share_ratio": 0.3238095238095238,
+            "share_live": 0.0357142857142857,
+            "share_delta": -0.0830639948287007,
+            "share_ratio": 0.3006802721088435,
             "drift_flag": true
           },
           {
@@ -63478,10 +63478,10 @@
             "direction": 1,
             "count_baseline": 320,
             "share_baseline": 0.3619909502262443,
-            "count_live": 10,
-            "share_live": 0.3846153846153846,
-            "share_delta": 0.0226244343891403,
-            "share_ratio": 1.0625,
+            "count_live": 11,
+            "share_live": 0.3928571428571428,
+            "share_delta": 0.0308661926308985,
+            "share_ratio": 1.0852678571428571,
             "drift_flag": false
           },
           {
@@ -63490,10 +63490,10 @@
             "direction": 1,
             "count_baseline": 115,
             "share_baseline": 0.1300904977375565,
-            "count_live": 6,
-            "share_live": 0.2307692307692307,
-            "share_delta": 0.1006787330316742,
-            "share_ratio": 1.7739130434782608,
+            "count_live": 7,
+            "share_live": 0.25,
+            "share_delta": 0.1199095022624434,
+            "share_ratio": 1.9217391304347824,
             "drift_flag": false
           },
           {
@@ -63503,13 +63503,47 @@
             "count_baseline": 125,
             "share_baseline": 0.1414027149321267,
             "count_live": 3,
-            "share_live": 0.1153846153846153,
-            "share_delta": -0.0260180995475113,
-            "share_ratio": 0.8160000000000001,
+            "share_live": 0.1071428571428571,
+            "share_delta": -0.0342598577892695,
+            "share_ratio": 0.7577142857142857,
             "drift_flag": false
           }
         ],
         "recent_events": [
+          {
+            "symbol": "ETHUSDT",
+            "asset": "ETH",
+            "timestamp": "2026-04-22 08:00",
+            "block_type": "btc_sync_blocked",
+            "direction": 1,
+            "side": "LONG",
+            "reason": "LONG follower blocked because BTC same-bar sync gate triggered",
+            "funding_observability": {
+              "dz_funding": 1.804888837082132,
+              "funding_observation_source": "historical_strict_asof",
+              "funding_rate": 0.0001,
+              "funding_x_oi": 1.581812818138995,
+              "z_funding": 2.1547610738780456
+            },
+            "updated_at": "2026-04-22 20:01"
+          },
+          {
+            "symbol": "BTCUSDT",
+            "asset": "BTC",
+            "timestamp": "2026-04-22 08:00",
+            "block_type": "trend_extension_blocked",
+            "direction": 1,
+            "side": "LONG",
+            "reason": "LONG extension 7.51% exceeded 5.00% cap above Vegas",
+            "funding_observability": {
+              "dz_funding": 1.3229806218575706,
+              "funding_observation_source": "historical_strict_asof",
+              "funding_rate": 3.56e-05,
+              "funding_x_oi": 1.1410595327798971,
+              "z_funding": 2.046038151408998
+            },
+            "updated_at": "2026-04-22 20:01"
+          },
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
