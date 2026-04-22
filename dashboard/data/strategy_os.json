@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-22 00:04:19",
-    "data_as_of": "2026-04-22 08:04:18",
+    "updated_at": "2026-04-22 04:08:23",
+    "data_as_of": "2026-04-22 12:08:22",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -62030,7 +62030,7 @@
     "equity": {
       "name": "Cortex Equity",
       "status": "RESEARCH / DATA OFFLINE",
-      "report_date": "2026-04-22 00:04:19",
+      "report_date": "2026-04-22 04:08:23",
       "source": "Zex/Reports/experiments/equity_true_walk_forward_suite",
       "normalization": {
         "synthetic_base_equity_usd": 6000.0,
@@ -62082,14 +62082,14 @@
       ],
       "portfolio_curve": [
         {
-          "ts": "2026-04-22 00:04:19",
+          "ts": "2026-04-22 04:08:23",
           "equity": 6000.0
         }
       ],
       "asset_curves": {
         "US500": [
           {
-            "ts": "2026-04-22 00:04:19",
+            "ts": "2026-04-22 04:08:23",
             "pnl": 0.0
           }
         ]
@@ -62130,14 +62130,14 @@
           },
           "portfolio_curve": [
             {
-              "ts": "2026-04-22 00:04:19",
+              "ts": "2026-04-22 04:08:23",
               "equity": 6000.0
             }
           ],
           "asset_curves": {
             "US500": [
               {
-                "ts": "2026-04-22 00:04:19",
+                "ts": "2026-04-22 04:08:23",
                 "pnl": 0.0
               }
             ]
@@ -62177,14 +62177,14 @@
           },
           "portfolio_curve": [
             {
-              "ts": "2026-04-22 00:04:19",
+              "ts": "2026-04-22 04:08:23",
               "equity": 6000.0
             }
           ],
           "asset_curves": {
             "US500": [
               {
-                "ts": "2026-04-22 00:04:19",
+                "ts": "2026-04-22 04:08:23",
                 "pnl": 0.0
               }
             ]
@@ -63188,7 +63188,7 @@
     "observability": {
       "name": "Observability",
       "status": "PASSIVE MONITOR",
-      "report_date": "2026-04-22 08:04:18",
+      "report_date": "2026-04-22 12:08:22",
       "mode": "observability_only",
       "funding": {
         "phase": "Phase 1",
@@ -63199,31 +63199,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-21 20:00",
-            "funding_rate": -4.242e-05,
-            "z_funding": 0.242,
-            "dz_funding": -0.03,
-            "funding_x_oi": -0.245,
+            "timestamp": "2026-04-22 00:00",
+            "funding_rate": -2.237e-05,
+            "z_funding": 0.747,
+            "dz_funding": 0.504,
+            "funding_x_oi": -0.328,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-21 20:00",
-            "funding_rate": -3.676e-05,
-            "z_funding": 0.066,
-            "dz_funding": 0.022,
-            "funding_x_oi": -0.005,
+            "timestamp": "2026-04-22 00:00",
+            "funding_rate": -2.128e-05,
+            "z_funding": 0.331,
+            "dz_funding": 0.265,
+            "funding_x_oi": 0.063,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-21 20:00",
-            "funding_rate": -7.3e-07,
-            "z_funding": 0.008,
-            "dz_funding": 0.001,
-            "funding_x_oi": -0.001,
+            "timestamp": "2026-04-22 00:00",
+            "funding_rate": 6.371e-05,
+            "z_funding": 0.885,
+            "dz_funding": 0.877,
+            "funding_x_oi": 0.126,
             "source": "historical_strict_asof"
           }
         ],
@@ -63238,17 +63238,17 @@
           "deviation_high": 2.0,
           "deviation_low": 0.5,
           "drift_rows": 7,
-          "generated_at": "2026-04-22 08:04:18",
-          "js_divergence": 0.13207304282108906,
+          "generated_at": "2026-04-22 12:08:22",
+          "js_divergence": 0.12933438278889425,
           "js_threshold": 0.1,
           "live_db": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Live/db/grapes_model_v1.db",
-          "live_events": 25,
-          "live_max_timestamp": "2026-04-17 12:00:00",
-          "live_since": "2026-03-25 08:04:18",
+          "live_events": 26,
+          "live_max_timestamp": "2026-04-22 00:00:00",
+          "live_since": "2026-03-25 12:08:22",
           "live_window_days": 28,
           "min_live_events": 20,
           "mode": "observability_only",
-          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260422_080418",
+          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260422_120822",
           "verdict": "DRIFT_DETECTED_REVIEW_REQUIRED"
         },
         "baseline_distribution": [
@@ -63318,36 +63318,36 @@
             "block_type": "trend_extension_blocked",
             "symbol": "BTCUSDT",
             "direction": 1,
-            "count": 9,
-            "share": 0.36
+            "count": 10,
+            "share": 0.3846153846153846
           },
           {
             "block_type": "btc_sync_blocked",
             "symbol": "ETHUSDT",
             "direction": 1,
             "count": 6,
-            "share": 0.24
+            "share": 0.2307692307692307
           },
           {
             "block_type": "range_structure_blocked",
             "symbol": "BTCUSDT",
             "direction": 1,
             "count": 6,
-            "share": 0.24
+            "share": 0.2307692307692307
           },
           {
             "block_type": "btc_sync_blocked",
             "symbol": "SOLUSDT",
             "direction": 1,
             "count": 3,
-            "share": 0.12
+            "share": 0.1153846153846153
           },
           {
             "block_type": "fib_high_chase_blocked",
             "symbol": "ETHUSDT",
             "direction": 1,
             "count": 1,
-            "share": 0.04
+            "share": 0.0384615384615384
           }
         ],
         "drift_rows": [
@@ -63358,9 +63358,9 @@
             "count_baseline": 34,
             "share_baseline": 0.0384615384615384,
             "count_live": 6,
-            "share_live": 0.24,
-            "share_delta": 0.2015384615384615,
-            "share_ratio": 6.239999999999999,
+            "share_live": 0.2307692307692307,
+            "share_delta": 0.1923076923076923,
+            "share_ratio": 6.0,
             "drift_flag": true
           },
           {
@@ -63370,9 +63370,9 @@
             "count_baseline": 105,
             "share_baseline": 0.1187782805429864,
             "count_live": 1,
-            "share_live": 0.04,
-            "share_delta": -0.0787782805429864,
-            "share_ratio": 0.3367619047619047,
+            "share_live": 0.0384615384615384,
+            "share_delta": -0.0803167420814479,
+            "share_ratio": 0.3238095238095238,
             "drift_flag": true
           },
           {
@@ -63441,10 +63441,10 @@
             "direction": 1,
             "count_baseline": 320,
             "share_baseline": 0.3619909502262443,
-            "count_live": 9,
-            "share_live": 0.36,
-            "share_delta": -0.0019909502262443,
-            "share_ratio": 0.9945,
+            "count_live": 10,
+            "share_live": 0.3846153846153846,
+            "share_delta": 0.0226244343891403,
+            "share_ratio": 1.0625,
             "drift_flag": false
           },
           {
@@ -63454,9 +63454,9 @@
             "count_baseline": 115,
             "share_baseline": 0.1300904977375565,
             "count_live": 6,
-            "share_live": 0.24,
-            "share_delta": 0.1099095022624434,
-            "share_ratio": 1.8448695652173912,
+            "share_live": 0.2307692307692307,
+            "share_delta": 0.1006787330316742,
+            "share_ratio": 1.7739130434782608,
             "drift_flag": false
           },
           {
@@ -63466,13 +63466,30 @@
             "count_baseline": 125,
             "share_baseline": 0.1414027149321267,
             "count_live": 3,
-            "share_live": 0.12,
-            "share_delta": -0.0214027149321267,
-            "share_ratio": 0.84864,
+            "share_live": 0.1153846153846153,
+            "share_delta": -0.0260180995475113,
+            "share_ratio": 0.8160000000000001,
             "drift_flag": false
           }
         ],
         "recent_events": [
+          {
+            "symbol": "BTCUSDT",
+            "asset": "BTC",
+            "timestamp": "2026-04-22 00:00",
+            "block_type": "trend_extension_blocked",
+            "direction": 1,
+            "side": "LONG",
+            "reason": "LONG extension 6.67% exceeded 5.00% cap above Vegas",
+            "funding_observability": {
+              "dz_funding": 0.5043142893198491,
+              "funding_observation_source": "historical_strict_asof",
+              "funding_rate": -2.237e-05,
+              "funding_x_oi": -0.3281442151072223,
+              "z_funding": 0.7467139094920631
+            },
+            "updated_at": "2026-04-22 12:03"
+          },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
