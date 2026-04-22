@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "NTS Alpha Lab",
-    "updated_at": "2026-04-22 04:08:23",
-    "data_as_of": "2026-04-22 12:08:22",
+    "updated_at": "2026-04-22 08:07:44",
+    "data_as_of": "2026-04-22 16:07:42",
     "sources": {
       "grapes": "dashboard/data/joint_backtest_overview.json",
       "citrus": "citrus/Reports/experiments/confirmed_alpha_suite/balanced_hybrid_v1",
@@ -52058,7 +52058,44 @@
           }
         ]
       },
-      "active_positions": [],
+      "active_positions": [
+        {
+          "asset": "BTC",
+          "symbol": "BTCUSDT",
+          "direction": "LONG",
+          "entry_price": 77979.8,
+          "current_price": 77979.8,
+          "current_pnl_pct": 0.0,
+          "entry_ts": "2026-04-22 04:00",
+          "hold_hours": 0.0,
+          "remaining_size": 0.012824,
+          "original_size": 0.012824,
+          "partial_taken": false,
+          "breakeven_armed": false,
+          "peak_pnl_pct": 0.0,
+          "entry_liq_imbalance": 1.563,
+          "entry_z_price": 2.403,
+          "capital": 9999.5
+        },
+        {
+          "asset": "SOL",
+          "symbol": "SOLUSDT",
+          "direction": "LONG",
+          "entry_price": 88.04,
+          "current_price": 88.04,
+          "current_pnl_pct": 0.0,
+          "entry_ts": "2026-04-22 04:00",
+          "hold_hours": 0.0,
+          "remaining_size": 11.358473,
+          "original_size": 11.358473,
+          "partial_taken": false,
+          "breakeven_armed": false,
+          "peak_pnl_pct": 0.0,
+          "entry_liq_imbalance": 2.758,
+          "entry_z_price": 1.135,
+          "capital": 9999.5
+        }
+      ],
       "all_trades": [
         {
           "asset": "BTC",
@@ -62030,7 +62067,7 @@
     "equity": {
       "name": "Cortex Equity",
       "status": "RESEARCH / DATA OFFLINE",
-      "report_date": "2026-04-22 04:08:23",
+      "report_date": "2026-04-22 08:07:44",
       "source": "Zex/Reports/experiments/equity_true_walk_forward_suite",
       "normalization": {
         "synthetic_base_equity_usd": 6000.0,
@@ -62082,14 +62119,14 @@
       ],
       "portfolio_curve": [
         {
-          "ts": "2026-04-22 04:08:23",
+          "ts": "2026-04-22 08:07:44",
           "equity": 6000.0
         }
       ],
       "asset_curves": {
         "US500": [
           {
-            "ts": "2026-04-22 04:08:23",
+            "ts": "2026-04-22 08:07:44",
             "pnl": 0.0
           }
         ]
@@ -62130,14 +62167,14 @@
           },
           "portfolio_curve": [
             {
-              "ts": "2026-04-22 04:08:23",
+              "ts": "2026-04-22 08:07:44",
               "equity": 6000.0
             }
           ],
           "asset_curves": {
             "US500": [
               {
-                "ts": "2026-04-22 04:08:23",
+                "ts": "2026-04-22 08:07:44",
                 "pnl": 0.0
               }
             ]
@@ -62177,14 +62214,14 @@
           },
           "portfolio_curve": [
             {
-              "ts": "2026-04-22 04:08:23",
+              "ts": "2026-04-22 08:07:44",
               "equity": 6000.0
             }
           ],
           "asset_curves": {
             "US500": [
               {
-                "ts": "2026-04-22 04:08:23",
+                "ts": "2026-04-22 08:07:44",
                 "pnl": 0.0
               }
             ]
@@ -63188,7 +63225,7 @@
     "observability": {
       "name": "Observability",
       "status": "PASSIVE MONITOR",
-      "report_date": "2026-04-22 12:08:22",
+      "report_date": "2026-04-22 16:07:42",
       "mode": "observability_only",
       "funding": {
         "phase": "Phase 1",
@@ -63199,31 +63236,31 @@
           {
             "symbol": "BTCUSDT",
             "asset": "BTC",
-            "timestamp": "2026-04-22 00:00",
+            "timestamp": "2026-04-22 04:00",
             "funding_rate": -2.237e-05,
-            "z_funding": 0.747,
-            "dz_funding": 0.504,
-            "funding_x_oi": -0.328,
+            "z_funding": 0.723,
+            "dz_funding": -0.024,
+            "funding_x_oi": 1.373,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "ETHUSDT",
             "asset": "ETH",
-            "timestamp": "2026-04-22 00:00",
+            "timestamp": "2026-04-22 04:00",
             "funding_rate": -2.128e-05,
-            "z_funding": 0.331,
-            "dz_funding": 0.265,
-            "funding_x_oi": 0.063,
+            "z_funding": 0.35,
+            "dz_funding": 0.019,
+            "funding_x_oi": 0.489,
             "source": "historical_strict_asof"
           },
           {
             "symbol": "SOLUSDT",
             "asset": "SOL",
-            "timestamp": "2026-04-22 00:00",
+            "timestamp": "2026-04-22 04:00",
             "funding_rate": 6.371e-05,
-            "z_funding": 0.885,
-            "dz_funding": 0.877,
-            "funding_x_oi": 0.126,
+            "z_funding": 0.842,
+            "dz_funding": -0.043,
+            "funding_x_oi": 0.857,
             "source": "historical_strict_asof"
           }
         ],
@@ -63238,17 +63275,17 @@
           "deviation_high": 2.0,
           "deviation_low": 0.5,
           "drift_rows": 7,
-          "generated_at": "2026-04-22 12:08:22",
+          "generated_at": "2026-04-22 16:07:42",
           "js_divergence": 0.12933438278889425,
           "js_threshold": 0.1,
           "live_db": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Live/db/grapes_model_v1.db",
           "live_events": 26,
           "live_max_timestamp": "2026-04-22 00:00:00",
-          "live_since": "2026-03-25 12:08:22",
+          "live_since": "2026-03-25 16:07:42",
           "live_window_days": 28,
           "min_live_events": 20,
           "mode": "observability_only",
-          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260422_120822",
+          "output_dir": "/Users/lamkevin/Documents/Alphas_finetune/NTS Alpha Labs/grapes/Reports/experiments/grapes/grapes_block_distribution_drift_audit_20260422_160742",
           "verdict": "DRIFT_DETECTED_REVIEW_REQUIRED"
         },
         "baseline_distribution": [
