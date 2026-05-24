@@ -1395,6 +1395,28 @@ h2 {
     padding-top: 20px;
   }
 
+  .quality-page .quality-layout,
+  .quality-page .chart-pair section:first-child,
+  .quality-page .cycle-grid {
+    display: none;
+  }
+
+  .quality-page .chart-pair {
+    display: block;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .quality-page .cycle-chart-block {
+    margin-top: 20px;
+    padding-top: 18px;
+  }
+
+  .quality-page .slide-head {
+    margin-bottom: 22px;
+  }
+
   .chart-stage {
     min-width: 0;
   }
@@ -1409,11 +1431,11 @@ h2 {
   }
 
   .small-chart {
-    height: 230px;
+    height: 210px;
   }
 
   .cycle-canvas {
-    height: 330px;
+    height: 270px;
   }
 
   .monthly-heatmap {
