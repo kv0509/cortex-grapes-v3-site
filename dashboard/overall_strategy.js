@@ -560,6 +560,41 @@ function drawMarketCycleChart() {
   const { ctx, width, height } = setupCanvas(canvas);
   const data = annualReturns();
   ctx.clearRect(0, 0, width, height);
+  if (width < 520) {
+    const pad = { l: 12, r: 12, t: 12, b: 12 };
+    const x = pad.l;
+    const y = pad.t;
+    const w = width - pad.l - pad.r;
+    const rowH = Math.min(52, (height - pad.t - pad.b) / data.length);
+    data.forEach((row, index) => {
+      const regime = MARKET_REGIMES[row.year] || { type: "mixed", en: "Mixed", zh: "震荡" };
+      const yy = y + index * rowH;
+      const color = REGIME_COLORS[regime.type] || COLORS.teal;
+      ctx.fillStyle = index % 2 === 0 ? "rgba(17, 25, 22, .025)" : "rgba(17, 25, 22, .045)";
+      ctx.fillRect(x, yy, w, rowH - 8);
+
+      ctx.fillStyle = COLORS.ink;
+      ctx.font = "800 15px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.fillText(row.year === "2026" ? "2026 YTD" : row.year, x + 12, yy + 30);
+
+      const pillX = x + 118;
+      const pillW = Math.min(112, Math.max(78, w - 200));
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.roundRect(pillX, yy + 10, pillW, 25, 999);
+      ctx.fill();
+      ctx.fillStyle = "#fff";
+      ctx.font = currentLang === "zh" ? "800 11px -apple-system, BlinkMacSystemFont, sans-serif" : "800 10px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.fillText(regime[currentLang], pillX + 12, yy + 27);
+
+      ctx.fillStyle = color;
+      ctx.font = "800 13px ui-monospace, Menlo, monospace";
+      ctx.textAlign = "right";
+      ctx.fillText(fmtPct(row.return_pct, 1), x + w - 10, yy + 28);
+      ctx.textAlign = "left";
+    });
+    return;
+  }
   const pad = { l: 34, r: 28, t: 24, b: 28 };
   const x = pad.l;
   const y = pad.t;
