@@ -1342,6 +1342,14 @@ h2 {
     font-size: clamp(62px, 20vw, 88px);
   }
 
+  .cover-page .narrative-list {
+    display: none;
+  }
+
+  .cover-page .cover-metrics {
+    margin-top: 22px;
+  }
+
   .kpi-grid {
     grid-template-columns: 1fr;
   }
@@ -1395,6 +1403,60 @@ h2 {
     padding-top: 20px;
   }
 
+  .performance-page .proof-grid,
+  .performance-page .takeaway-grid {
+    display: none;
+  }
+
+  .performance-page .hero-slide {
+    gap: 20px;
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .performance-page .kpi-grid {
+    margin-top: 20px;
+    padding-top: 16px;
+    gap: 12px;
+  }
+
+  .performance-page .kpi-card:not(:first-child) {
+    display: none;
+  }
+
+  .benchmark-page .benchmark-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .benchmark-page .benchmark-summary article {
+    padding: 16px;
+  }
+
+  .benchmark-page .benchmark-summary span {
+    font-size: 12px;
+  }
+
+  .benchmark-page .benchmark-summary strong {
+    font-size: 30px;
+  }
+
+  .benchmark-page .annual-roi-table {
+    display: none;
+  }
+
+  .benchmark-page .benchmark-layout {
+    gap: 22px;
+  }
+
+  .strategy-page .strategy-card-grid,
+  .strategy-page .slide-copy {
+    display: none;
+  }
+
+  .strategy-page .side-chart {
+    background: transparent;
+  }
+
   .quality-page .quality-layout,
   .quality-page .chart-pair section:first-child,
   .quality-page .cycle-grid {
@@ -1417,17 +1479,42 @@ h2 {
     margin-bottom: 22px;
   }
 
+  .mix-page .mix-copy {
+    display: none;
+  }
+
+  .mix-page .mix-layout {
+    display: block;
+  }
+
+  .market-page .market-note {
+    display: none;
+  }
+
+  .market-page .market-grid article {
+    padding: 18px;
+  }
+
+  .market-page .market-grid strong {
+    font-size: 21px;
+  }
+
+  .market-page .market-grid span {
+    margin-top: 12px;
+    font-size: 14px;
+  }
+
   .chart-stage {
     min-width: 0;
   }
 
   .equity-chart {
-    height: 260px;
+    height: 230px;
   }
 
   .benchmark-canvas,
   .side-canvas {
-    height: 330px;
+    height: 300px;
   }
 
   .small-chart {
