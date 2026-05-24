@@ -1,0 +1,38 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lychee engine icon">
+  <defs>
+    <linearGradient id="bg" x1="36" y1="18" x2="220" y2="238" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="58" y1="42" x2="198" y2="214" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#e11d48" stop-opacity="1"/>
+      <stop offset=".55" stop-color="#e11d48" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#e11d48" stop-opacity=".28"/>
+    </linearGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000000" flood-opacity=".48"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="0 0 0 0 0.1 0 0 0 0 1 0 0 0 0 0.55 0 0 0 .35 0"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="54" fill="url(#bg)"/>
+  <rect x="17" y="17" width="222" height="222" rx="53" stroke="white" stroke-opacity=".08" stroke-width="2"/>
+  <path d="M58 202C88 222 168 222 198 202" stroke="#e11d48" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="128" cy="128" r="82" fill="#e11d48" opacity=".055"/>
+  <g filter="url(#shadow)">
+    
+<circle cx="128" cy="134" r="69" fill="url(#accent)"/>
+<g fill="white" opacity=".16">
+  <circle cx="96" cy="93" r="3"/><circle cx="124" cy="82" r="3"/><circle cx="157" cy="94" r="3"/>
+  <circle cx="82" cy="127" r="3"/><circle cx="173" cy="128" r="3"/><circle cx="102" cy="174" r="3"/><circle cx="151" cy="181" r="3"/>
+</g>
+<path d="M100 92C122 108 153 109 181 96C177 143 158 179 126 202C96 176 83 139 100 92Z" fill="#fff1f2" opacity=".96"/>
+<path d="M124 103C134 137 130 169 116 193" stroke="#be123c" stroke-opacity=".22" stroke-width="5" stroke-linecap="round"/>
+<path d="M102 93C122 106 151 107 176 98" stroke="white" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>
+
+  </g>
+</svg>

@@ -1,0 +1,36 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Peach engine icon">
+  <defs>
+    <linearGradient id="bg" x1="36" y1="18" x2="220" y2="238" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="58" y1="42" x2="198" y2="214" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fb7185" stop-opacity="1"/>
+      <stop offset=".55" stop-color="#fb7185" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#fb7185" stop-opacity=".28"/>
+    </linearGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000000" flood-opacity=".48"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="0 0 0 0 0.1 0 0 0 0 1 0 0 0 0 0.55 0 0 0 .35 0"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="54" fill="url(#bg)"/>
+  <rect x="17" y="17" width="222" height="222" rx="53" stroke="white" stroke-opacity=".08" stroke-width="2"/>
+  <path d="M58 202C88 222 168 222 198 202" stroke="#fb7185" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="128" cy="128" r="82" fill="#fb7185" opacity=".055"/>
+  <g filter="url(#shadow)">
+    
+<path d="M139 69C153 45 177 43 198 56C186 81 163 87 139 69Z" fill="#22c55e"/><path d="M139 69C160 63 177 58 198 56" stroke="#dcfce7" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/>
+<path d="M127 57C134 74 137 91 136 106" stroke="#84cc16" stroke-width="8" stroke-linecap="round"/>
+<path d="M128 210C91 210 64 182 64 141C64 98 90 67 121 67C136 67 147 75 154 88C162 75 173 67 187 67C190 67 193 67 196 68C182 68 171 78 165 92C154 118 157 160 178 190C166 202 148 210 128 210Z" fill="url(#accent)"/>
+<path d="M128 210C91 210 64 182 64 141C64 98 90 67 121 67C136 67 147 75 154 88" stroke="#fecdd3" stroke-opacity=".22" stroke-width="4"/>
+<path d="M139 91C126 122 129 164 149 196" stroke="#9f1239" stroke-opacity=".34" stroke-width="5" stroke-linecap="round"/>
+<path d="M93 103C102 88 114 82 128 82" stroke="white" stroke-opacity=".25" stroke-width="9" stroke-linecap="round"/>
+
+  </g>
+</svg>

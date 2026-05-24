@@ -1,0 +1,3517 @@
+{
+  "meta": {
+    "title": "NTS Overall Strategy Run",
+    "updated_at": "2026-05-24 06:20:26 UTC",
+    "source": "Research/five_strategy_unified_portfolio_sim_lychee_hold1_20260508",
+    "scenario": "no_lychee_25_25_25_25_0_gross_1x",
+    "note": "Validated combo is a shared-capital portfolio simulation. 8-engine headline average is standalone breadth, not an 8-engine merged portfolio backtest.",
+    "normalization_note": "Equity curve is normalized to a 100,000 USD starting capital for investor readability."
+  },
+  "portfolio": {
+    "initial_equity": 100000.0,
+    "ending_equity": 342790.24,
+    "validated_combo_return_pct": 242.79,
+    "independent_combo_return_pct": 53.97,
+    "annual_return_pct": 33.23,
+    "sharpe": 1.544,
+    "sortino": 1.262,
+    "max_drawdown_pct": -14.07,
+    "filled_trades": 1065,
+    "max_open_positions": 10,
+    "max_gross_exposure_pct": 69.0,
+    "mean_gross_exposure_pct": 8.77,
+    "oos_sharpe": 4.294,
+    "oos_max_drawdown_pct": -2.73,
+    "strategy_pnl_total_usd": 242790.24
+  },
+  "scenario_comparison": [
+    {
+      "scenario": "equal_20_gross_1x",
+      "return_pct": 175.2,
+      "sharpe": 1.57,
+      "max_drawdown_pct": -11.44,
+      "filled_trades": 1139,
+      "max_gross_exposure_pct": 65.31
+    },
+    {
+      "scenario": "governed_30_25_10_10_25_gross_1x",
+      "return_pct": 173.89,
+      "sharpe": 1.208,
+      "max_drawdown_pct": -16.51,
+      "filled_trades": 1139,
+      "max_gross_exposure_pct": 64.95
+    },
+    {
+      "scenario": "equal_20_gross_0_5x",
+      "return_pct": 66.2,
+      "sharpe": 1.553,
+      "max_drawdown_pct": -5.91,
+      "filled_trades": 1139,
+      "max_gross_exposure_pct": 32.74
+    },
+    {
+      "scenario": "governed_30_25_10_10_25_gross_0_5x",
+      "return_pct": 65.78,
+      "sharpe": 1.181,
+      "max_drawdown_pct": -8.28,
+      "filled_trades": 1139,
+      "max_gross_exposure_pct": 32.57
+    },
+    {
+      "scenario": "equal_20_no_cross_symbol_overlap_gross_1x",
+      "return_pct": 108.05,
+      "sharpe": 1.199,
+      "max_drawdown_pct": -10.89,
+      "filled_trades": 768,
+      "max_gross_exposure_pct": 33.86
+    },
+    {
+      "scenario": "governed_no_cross_symbol_overlap_gross_1x",
+      "return_pct": 122.23,
+      "sharpe": 0.997,
+      "max_drawdown_pct": -16.51,
+      "filled_trades": 768,
+      "max_gross_exposure_pct": 41.6
+    },
+    {
+      "scenario": "balanced_core_20_25_15_15_25_gross_1x",
+      "return_pct": 164.33,
+      "sharpe": 1.361,
+      "max_drawdown_pct": -12.76,
+      "filled_trades": 1139,
+      "max_gross_exposure_pct": 62.28
+    },
+    {
+      "scenario": "low_grapes_15_30_15_15_25_gross_1x",
+      "return_pct": 161.71,
+      "sharpe": 1.278,
+      "max_drawdown_pct": -14.22,
+      "filled_trades": 1139,
+      "max_gross_exposure_pct": 58.98
+    },
+    {
+      "scenario": "no_lychee_25_25_25_25_0_gross_1x",
+      "return_pct": 242.79,
+      "sharpe": 1.544,
+      "max_drawdown_pct": -14.07,
+      "filled_trades": 1065,
+      "max_gross_exposure_pct": 69.0
+    },
+    {
+      "scenario": "core_only_grapes_citrus_50_50_gross_1x",
+      "return_pct": 288.65,
+      "sharpe": 0.986,
+      "max_drawdown_pct": -27.13,
+      "filled_trades": 395,
+      "max_gross_exposure_pct": 84.22
+    }
+  ],
+  "equity_curve": [
+    {
+      "dt": "2022-01-16 20:00:00+00:00",
+      "date": "2022-01-16",
+      "equity": 100000.0,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.27,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-01-21 04:00:00+00:00",
+      "date": "2022-01-21",
+      "equity": 99500.63,
+      "drawdown_pct": -0.5,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-01-25 12:00:00+00:00",
+      "date": "2022-01-25",
+      "equity": 99678.69,
+      "drawdown_pct": -0.32,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-01-29 20:00:00+00:00",
+      "date": "2022-01-29",
+      "equity": 99678.69,
+      "drawdown_pct": -0.32,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-02-03 04:00:00+00:00",
+      "date": "2022-02-03",
+      "equity": 97553.23,
+      "drawdown_pct": -2.45,
+      "gross_exposure_pct": 8.51,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-02-07 12:00:00+00:00",
+      "date": "2022-02-07",
+      "equity": 100072.07,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.24,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-02-11 20:00:00+00:00",
+      "date": "2022-02-11",
+      "equity": 100349.48,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-02-16 04:00:00+00:00",
+      "date": "2022-02-16",
+      "equity": 99427.57,
+      "drawdown_pct": -0.92,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-02-20 12:00:00+00:00",
+      "date": "2022-02-20",
+      "equity": 98534.55,
+      "drawdown_pct": -1.81,
+      "gross_exposure_pct": 8.22,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-02-24 20:00:00+00:00",
+      "date": "2022-02-24",
+      "equity": 100161.23,
+      "drawdown_pct": -0.19,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-03-01 04:00:00+00:00",
+      "date": "2022-03-01",
+      "equity": 100161.23,
+      "drawdown_pct": -0.19,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-03-05 12:00:00+00:00",
+      "date": "2022-03-05",
+      "equity": 89365.7,
+      "drawdown_pct": -10.95,
+      "gross_exposure_pct": 26.53,
+      "open_positions": 3
+    },
+    {
+      "dt": "2022-03-09 20:00:00+00:00",
+      "date": "2022-03-09",
+      "equity": 98471.01,
+      "drawdown_pct": -1.87,
+      "gross_exposure_pct": 8.58,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-03-14 04:00:00+00:00",
+      "date": "2022-03-14",
+      "equity": 101939.96,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-03-18 12:00:00+00:00",
+      "date": "2022-03-18",
+      "equity": 106181.67,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 16.36,
+      "open_positions": 2
+    },
+    {
+      "dt": "2022-03-22 20:00:00+00:00",
+      "date": "2022-03-22",
+      "equity": 94228.6,
+      "drawdown_pct": -11.26,
+      "gross_exposure_pct": 9.08,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-03-27 04:00:00+00:00",
+      "date": "2022-03-27",
+      "equity": 104395.37,
+      "drawdown_pct": -1.68,
+      "gross_exposure_pct": 18.57,
+      "open_positions": 2
+    },
+    {
+      "dt": "2022-03-31 12:00:00+00:00",
+      "date": "2022-03-31",
+      "equity": 104370.31,
+      "drawdown_pct": -1.71,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-04-04 20:00:00+00:00",
+      "date": "2022-04-04",
+      "equity": 104370.31,
+      "drawdown_pct": -1.71,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-04-09 04:00:00+00:00",
+      "date": "2022-04-09",
+      "equity": 105777.04,
+      "drawdown_pct": -0.38,
+      "gross_exposure_pct": 8.22,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-04-13 12:00:00+00:00",
+      "date": "2022-04-13",
+      "equity": 102847.58,
+      "drawdown_pct": -3.14,
+      "gross_exposure_pct": 8.46,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-04-17 20:00:00+00:00",
+      "date": "2022-04-17",
+      "equity": 104299.62,
+      "drawdown_pct": -1.77,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-04-22 04:00:00+00:00",
+      "date": "2022-04-22",
+      "equity": 103199.13,
+      "drawdown_pct": -2.81,
+      "gross_exposure_pct": 18.21,
+      "open_positions": 2
+    },
+    {
+      "dt": "2022-04-26 12:00:00+00:00",
+      "date": "2022-04-26",
+      "equity": 103952.07,
+      "drawdown_pct": -2.1,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-04-30 20:00:00+00:00",
+      "date": "2022-04-30",
+      "equity": 103952.07,
+      "drawdown_pct": -2.1,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-05-05 04:00:00+00:00",
+      "date": "2022-05-05",
+      "equity": 97823.41,
+      "drawdown_pct": -7.87,
+      "gross_exposure_pct": 27.6,
+      "open_positions": 3
+    },
+    {
+      "dt": "2022-05-09 12:00:00+00:00",
+      "date": "2022-05-09",
+      "equity": 103415.1,
+      "drawdown_pct": -2.61,
+      "gross_exposure_pct": 8.31,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-05-13 20:00:00+00:00",
+      "date": "2022-05-13",
+      "equity": 106883.21,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-05-18 04:00:00+00:00",
+      "date": "2022-05-18",
+      "equity": 106883.21,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-05-22 12:00:00+00:00",
+      "date": "2022-05-22",
+      "equity": 101444.86,
+      "drawdown_pct": -5.09,
+      "gross_exposure_pct": 8.78,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-05-26 20:00:00+00:00",
+      "date": "2022-05-26",
+      "equity": 106899.48,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-05-31 04:00:00+00:00",
+      "date": "2022-05-31",
+      "equity": 106899.48,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-06-04 12:00:00+00:00",
+      "date": "2022-06-04",
+      "equity": 101675.96,
+      "drawdown_pct": -4.89,
+      "gross_exposure_pct": 8.76,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-06-08 20:00:00+00:00",
+      "date": "2022-06-08",
+      "equity": 106880.3,
+      "drawdown_pct": -0.02,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-06-13 04:00:00+00:00",
+      "date": "2022-06-13",
+      "equity": 106880.3,
+      "drawdown_pct": -0.02,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-06-17 12:00:00+00:00",
+      "date": "2022-06-17",
+      "equity": 107091.61,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.74,
+      "open_positions": 2
+    },
+    {
+      "dt": "2022-06-21 20:00:00+00:00",
+      "date": "2022-06-21",
+      "equity": 112682.87,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 13.43,
+      "open_positions": 3
+    },
+    {
+      "dt": "2022-06-26 04:00:00+00:00",
+      "date": "2022-06-26",
+      "equity": 114299.87,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-06-30 12:00:00+00:00",
+      "date": "2022-06-30",
+      "equity": 114299.87,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-07-04 20:00:00+00:00",
+      "date": "2022-07-04",
+      "equity": 114299.87,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-07-09 04:00:00+00:00",
+      "date": "2022-07-09",
+      "equity": 114299.87,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-07-13 12:00:00+00:00",
+      "date": "2022-07-13",
+      "equity": 114542.88,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.38,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-07-17 20:00:00+00:00",
+      "date": "2022-07-17",
+      "equity": 115059.57,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.37,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-07-22 04:00:00+00:00",
+      "date": "2022-07-22",
+      "equity": 115592.21,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-07-26 12:00:00+00:00",
+      "date": "2022-07-26",
+      "equity": 115592.21,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-07-30 20:00:00+00:00",
+      "date": "2022-07-30",
+      "equity": 116194.33,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-08-04 04:00:00+00:00",
+      "date": "2022-08-04",
+      "equity": 116194.33,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-08-08 12:00:00+00:00",
+      "date": "2022-08-08",
+      "equity": 116194.33,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-08-12 20:00:00+00:00",
+      "date": "2022-08-12",
+      "equity": 116194.33,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-08-17 04:00:00+00:00",
+      "date": "2022-08-17",
+      "equity": 115982.94,
+      "drawdown_pct": -0.18,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-08-21 12:00:00+00:00",
+      "date": "2022-08-21",
+      "equity": 116669.19,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-08-25 20:00:00+00:00",
+      "date": "2022-08-25",
+      "equity": 116669.19,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-08-30 04:00:00+00:00",
+      "date": "2022-08-30",
+      "equity": 116669.19,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-09-03 12:00:00+00:00",
+      "date": "2022-09-03",
+      "equity": 116669.19,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-09-07 20:00:00+00:00",
+      "date": "2022-09-07",
+      "equity": 116669.19,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-09-12 04:00:00+00:00",
+      "date": "2022-09-12",
+      "equity": 116645.18,
+      "drawdown_pct": -0.02,
+      "gross_exposure_pct": 8.34,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-09-16 12:00:00+00:00",
+      "date": "2022-09-16",
+      "equity": 117051.79,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.39,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-09-20 20:00:00+00:00",
+      "date": "2022-09-20",
+      "equity": 118203.05,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-09-25 04:00:00+00:00",
+      "date": "2022-09-25",
+      "equity": 118203.05,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-09-29 12:00:00+00:00",
+      "date": "2022-09-29",
+      "equity": 117922.82,
+      "drawdown_pct": -0.24,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-10-03 20:00:00+00:00",
+      "date": "2022-10-03",
+      "equity": 118010.66,
+      "drawdown_pct": -0.16,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-10-08 04:00:00+00:00",
+      "date": "2022-10-08",
+      "equity": 117584.3,
+      "drawdown_pct": -0.52,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-10-12 12:00:00+00:00",
+      "date": "2022-10-12",
+      "equity": 116423.09,
+      "drawdown_pct": -1.51,
+      "gross_exposure_pct": 8.42,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-10-16 20:00:00+00:00",
+      "date": "2022-10-16",
+      "equity": 117743.33,
+      "drawdown_pct": -0.39,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-10-21 04:00:00+00:00",
+      "date": "2022-10-21",
+      "equity": 117123.7,
+      "drawdown_pct": -0.91,
+      "gross_exposure_pct": 16.79,
+      "open_positions": 2
+    },
+    {
+      "dt": "2022-10-25 12:00:00+00:00",
+      "date": "2022-10-25",
+      "equity": 117612.0,
+      "drawdown_pct": -0.5,
+      "gross_exposure_pct": 16.39,
+      "open_positions": 2
+    },
+    {
+      "dt": "2022-10-29 20:00:00+00:00",
+      "date": "2022-10-29",
+      "equity": 119499.88,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.32,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-11-03 04:00:00+00:00",
+      "date": "2022-11-03",
+      "equity": 119106.61,
+      "drawdown_pct": -0.33,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-11-07 12:00:00+00:00",
+      "date": "2022-11-07",
+      "equity": 116923.96,
+      "drawdown_pct": -2.16,
+      "gross_exposure_pct": 18.73,
+      "open_positions": 2
+    },
+    {
+      "dt": "2022-11-11 20:00:00+00:00",
+      "date": "2022-11-11",
+      "equity": 121173.35,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-11-16 04:00:00+00:00",
+      "date": "2022-11-16",
+      "equity": 121173.35,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-11-20 12:00:00+00:00",
+      "date": "2022-11-20",
+      "equity": 121173.35,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-11-24 20:00:00+00:00",
+      "date": "2022-11-24",
+      "equity": 121173.35,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-11-29 04:00:00+00:00",
+      "date": "2022-11-29",
+      "equity": 121173.35,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-12-03 12:00:00+00:00",
+      "date": "2022-12-03",
+      "equity": 118215.66,
+      "drawdown_pct": -2.44,
+      "gross_exposure_pct": 10.21,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-12-07 20:00:00+00:00",
+      "date": "2022-12-07",
+      "equity": 104943.29,
+      "drawdown_pct": -13.39,
+      "gross_exposure_pct": 8.08,
+      "open_positions": 1
+    },
+    {
+      "dt": "2022-12-12 04:00:00+00:00",
+      "date": "2022-12-12",
+      "equity": 121337.96,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-12-16 12:00:00+00:00",
+      "date": "2022-12-16",
+      "equity": 118852.29,
+      "drawdown_pct": -2.05,
+      "gross_exposure_pct": 17.0,
+      "open_positions": 2
+    },
+    {
+      "dt": "2022-12-20 20:00:00+00:00",
+      "date": "2022-12-20",
+      "equity": 121970.39,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2022-12-25 04:00:00+00:00",
+      "date": "2022-12-25",
+      "equity": 121929.72,
+      "drawdown_pct": -0.03,
+      "gross_exposure_pct": 16.25,
+      "open_positions": 2
+    },
+    {
+      "dt": "2022-12-29 12:00:00+00:00",
+      "date": "2022-12-29",
+      "equity": 121833.33,
+      "drawdown_pct": -0.11,
+      "gross_exposure_pct": 15.83,
+      "open_positions": 3
+    },
+    {
+      "dt": "2023-01-02 20:00:00+00:00",
+      "date": "2023-01-02",
+      "equity": 122095.12,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 2.49,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-01-07 04:00:00+00:00",
+      "date": "2023-01-07",
+      "equity": 122948.46,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 22.05,
+      "open_positions": 4
+    },
+    {
+      "dt": "2023-01-11 12:00:00+00:00",
+      "date": "2023-01-11",
+      "equity": 124835.12,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 29.61,
+      "open_positions": 4
+    },
+    {
+      "dt": "2023-01-15 20:00:00+00:00",
+      "date": "2023-01-15",
+      "equity": 127518.11,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-01-20 04:00:00+00:00",
+      "date": "2023-01-20",
+      "equity": 127422.72,
+      "drawdown_pct": -0.07,
+      "gross_exposure_pct": 6.25,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-01-24 12:00:00+00:00",
+      "date": "2023-01-24",
+      "equity": 127972.28,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-01-28 20:00:00+00:00",
+      "date": "2023-01-28",
+      "equity": 127972.28,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-02-02 04:00:00+00:00",
+      "date": "2023-02-02",
+      "equity": 127972.28,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-02-06 12:00:00+00:00",
+      "date": "2023-02-06",
+      "equity": 127927.71,
+      "drawdown_pct": -0.03,
+      "gross_exposure_pct": 6.25,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-02-10 20:00:00+00:00",
+      "date": "2023-02-10",
+      "equity": 127985.59,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-02-15 04:00:00+00:00",
+      "date": "2023-02-15",
+      "equity": 127985.59,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-02-19 12:00:00+00:00",
+      "date": "2023-02-19",
+      "equity": 128299.61,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 22.5,
+      "open_positions": 3
+    },
+    {
+      "dt": "2023-02-23 20:00:00+00:00",
+      "date": "2023-02-23",
+      "equity": 127884.17,
+      "drawdown_pct": -0.32,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-02-28 04:00:00+00:00",
+      "date": "2023-02-28",
+      "equity": 127884.17,
+      "drawdown_pct": -0.32,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-03-04 12:00:00+00:00",
+      "date": "2023-03-04",
+      "equity": 126830.22,
+      "drawdown_pct": -1.15,
+      "gross_exposure_pct": 22.97,
+      "open_positions": 3
+    },
+    {
+      "dt": "2023-03-08 20:00:00+00:00",
+      "date": "2023-03-08",
+      "equity": 127268.38,
+      "drawdown_pct": -0.8,
+      "gross_exposure_pct": 7.48,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-03-13 04:00:00+00:00",
+      "date": "2023-03-13",
+      "equity": 127069.18,
+      "drawdown_pct": -0.96,
+      "gross_exposure_pct": 29.51,
+      "open_positions": 4
+    },
+    {
+      "dt": "2023-03-17 12:00:00+00:00",
+      "date": "2023-03-17",
+      "equity": 130441.37,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 5.0,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-03-21 20:00:00+00:00",
+      "date": "2023-03-21",
+      "equity": 132231.09,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 6.17,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-03-26 04:00:00+00:00",
+      "date": "2023-03-26",
+      "equity": 131489.05,
+      "drawdown_pct": -0.56,
+      "gross_exposure_pct": 11.24,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-03-30 12:00:00+00:00",
+      "date": "2023-03-30",
+      "equity": 133081.18,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 30.48,
+      "open_positions": 5
+    },
+    {
+      "dt": "2023-04-03 20:00:00+00:00",
+      "date": "2023-04-03",
+      "equity": 132681.85,
+      "drawdown_pct": -0.3,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-04-08 04:00:00+00:00",
+      "date": "2023-04-08",
+      "equity": 132763.62,
+      "drawdown_pct": -0.24,
+      "gross_exposure_pct": 8.33,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-04-12 12:00:00+00:00",
+      "date": "2023-04-12",
+      "equity": 132676.97,
+      "drawdown_pct": -0.3,
+      "gross_exposure_pct": 20.03,
+      "open_positions": 3
+    },
+    {
+      "dt": "2023-04-16 20:00:00+00:00",
+      "date": "2023-04-16",
+      "equity": 135980.55,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-04-21 04:00:00+00:00",
+      "date": "2023-04-21",
+      "equity": 135980.55,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-04-25 12:00:00+00:00",
+      "date": "2023-04-25",
+      "equity": 136493.98,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 14.54,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-04-29 20:00:00+00:00",
+      "date": "2023-04-29",
+      "equity": 136510.92,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 47.86,
+      "open_positions": 8
+    },
+    {
+      "dt": "2023-05-04 04:00:00+00:00",
+      "date": "2023-05-04",
+      "equity": 134807.85,
+      "drawdown_pct": -1.25,
+      "gross_exposure_pct": 16.67,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-05-08 12:00:00+00:00",
+      "date": "2023-05-08",
+      "equity": 135171.48,
+      "drawdown_pct": -0.98,
+      "gross_exposure_pct": 8.33,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-05-12 20:00:00+00:00",
+      "date": "2023-05-12",
+      "equity": 135336.19,
+      "drawdown_pct": -0.86,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-05-17 04:00:00+00:00",
+      "date": "2023-05-17",
+      "equity": 135326.45,
+      "drawdown_pct": -0.87,
+      "gross_exposure_pct": 8.33,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-05-21 12:00:00+00:00",
+      "date": "2023-05-21",
+      "equity": 135856.73,
+      "drawdown_pct": -0.48,
+      "gross_exposure_pct": 17.41,
+      "open_positions": 3
+    },
+    {
+      "dt": "2023-05-25 20:00:00+00:00",
+      "date": "2023-05-25",
+      "equity": 136362.19,
+      "drawdown_pct": -0.11,
+      "gross_exposure_pct": 9.97,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-05-30 04:00:00+00:00",
+      "date": "2023-05-30",
+      "equity": 137116.79,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 38.23,
+      "open_positions": 6
+    },
+    {
+      "dt": "2023-06-03 12:00:00+00:00",
+      "date": "2023-06-03",
+      "equity": 136354.79,
+      "drawdown_pct": -0.56,
+      "gross_exposure_pct": 30.85,
+      "open_positions": 4
+    },
+    {
+      "dt": "2023-06-07 20:00:00+00:00",
+      "date": "2023-06-07",
+      "equity": 136390.23,
+      "drawdown_pct": -0.53,
+      "gross_exposure_pct": 41.14,
+      "open_positions": 5
+    },
+    {
+      "dt": "2023-06-12 04:00:00+00:00",
+      "date": "2023-06-12",
+      "equity": 136404.53,
+      "drawdown_pct": -0.52,
+      "gross_exposure_pct": 14.57,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-06-16 12:00:00+00:00",
+      "date": "2023-06-16",
+      "equity": 136359.41,
+      "drawdown_pct": -0.55,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-06-20 20:00:00+00:00",
+      "date": "2023-06-20",
+      "equity": 137787.31,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 20.67,
+      "open_positions": 3
+    },
+    {
+      "dt": "2023-06-25 04:00:00+00:00",
+      "date": "2023-06-25",
+      "equity": 139342.13,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 32.1,
+      "open_positions": 4
+    },
+    {
+      "dt": "2023-06-29 12:00:00+00:00",
+      "date": "2023-06-29",
+      "equity": 139854.92,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 5.0,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-07-03 20:00:00+00:00",
+      "date": "2023-07-03",
+      "equity": 140343.57,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-07-08 04:00:00+00:00",
+      "date": "2023-07-08",
+      "equity": 140790.35,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 25.16,
+      "open_positions": 3
+    },
+    {
+      "dt": "2023-07-12 12:00:00+00:00",
+      "date": "2023-07-12",
+      "equity": 140520.1,
+      "drawdown_pct": -0.19,
+      "gross_exposure_pct": 19.59,
+      "open_positions": 3
+    },
+    {
+      "dt": "2023-07-16 20:00:00+00:00",
+      "date": "2023-07-16",
+      "equity": 142276.69,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 1.25,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-07-21 04:00:00+00:00",
+      "date": "2023-07-21",
+      "equity": 142441.39,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 16.65,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-07-25 12:00:00+00:00",
+      "date": "2023-07-25",
+      "equity": 142399.18,
+      "drawdown_pct": -0.03,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-07-29 20:00:00+00:00",
+      "date": "2023-07-29",
+      "equity": 142399.18,
+      "drawdown_pct": -0.03,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-08-03 04:00:00+00:00",
+      "date": "2023-08-03",
+      "equity": 142936.34,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 18.27,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-08-07 12:00:00+00:00",
+      "date": "2023-08-07",
+      "equity": 143028.36,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.33,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-08-11 20:00:00+00:00",
+      "date": "2023-08-11",
+      "equity": 142771.73,
+      "drawdown_pct": -0.18,
+      "gross_exposure_pct": 7.0,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-08-16 04:00:00+00:00",
+      "date": "2023-08-16",
+      "equity": 142793.28,
+      "drawdown_pct": -0.16,
+      "gross_exposure_pct": 8.33,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-08-20 12:00:00+00:00",
+      "date": "2023-08-20",
+      "equity": 142905.32,
+      "drawdown_pct": -0.09,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-08-24 20:00:00+00:00",
+      "date": "2023-08-24",
+      "equity": 143061.68,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 11.24,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-08-29 04:00:00+00:00",
+      "date": "2023-08-29",
+      "equity": 142714.33,
+      "drawdown_pct": -0.24,
+      "gross_exposure_pct": 7.51,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-09-02 12:00:00+00:00",
+      "date": "2023-09-02",
+      "equity": 144611.28,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 9.92,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-09-06 20:00:00+00:00",
+      "date": "2023-09-06",
+      "equity": 144489.78,
+      "drawdown_pct": -0.08,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-09-11 04:00:00+00:00",
+      "date": "2023-09-11",
+      "equity": 144697.63,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 9.99,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-09-15 12:00:00+00:00",
+      "date": "2023-09-15",
+      "equity": 144808.75,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 13.36,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-09-19 20:00:00+00:00",
+      "date": "2023-09-19",
+      "equity": 145645.85,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 53.88,
+      "open_positions": 7
+    },
+    {
+      "dt": "2023-09-24 04:00:00+00:00",
+      "date": "2023-09-24",
+      "equity": 144607.25,
+      "drawdown_pct": -0.71,
+      "gross_exposure_pct": 15.85,
+      "open_positions": 3
+    },
+    {
+      "dt": "2023-09-28 12:00:00+00:00",
+      "date": "2023-09-28",
+      "equity": 144424.04,
+      "drawdown_pct": -0.84,
+      "gross_exposure_pct": 16.68,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-10-02 20:00:00+00:00",
+      "date": "2023-10-02",
+      "equity": 146124.5,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 18.1,
+      "open_positions": 3
+    },
+    {
+      "dt": "2023-10-07 04:00:00+00:00",
+      "date": "2023-10-07",
+      "equity": 146468.92,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-10-11 12:00:00+00:00",
+      "date": "2023-10-11",
+      "equity": 146491.88,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-10-15 20:00:00+00:00",
+      "date": "2023-10-15",
+      "equity": 146491.88,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-10-20 04:00:00+00:00",
+      "date": "2023-10-20",
+      "equity": 147396.58,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 32.78,
+      "open_positions": 4
+    },
+    {
+      "dt": "2023-10-24 12:00:00+00:00",
+      "date": "2023-10-24",
+      "equity": 152319.54,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 6.07,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-10-28 20:00:00+00:00",
+      "date": "2023-10-28",
+      "equity": 152536.69,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 6.24,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-11-02 04:00:00+00:00",
+      "date": "2023-11-02",
+      "equity": 153893.72,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 6.95,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-11-06 12:00:00+00:00",
+      "date": "2023-11-06",
+      "equity": 154695.07,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 15.73,
+      "open_positions": 3
+    },
+    {
+      "dt": "2023-11-10 20:00:00+00:00",
+      "date": "2023-11-10",
+      "equity": 157420.53,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 14.81,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-11-15 04:00:00+00:00",
+      "date": "2023-11-15",
+      "equity": 157312.52,
+      "drawdown_pct": -0.07,
+      "gross_exposure_pct": 16.23,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-11-19 12:00:00+00:00",
+      "date": "2023-11-19",
+      "equity": 157655.36,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-11-23 20:00:00+00:00",
+      "date": "2023-11-23",
+      "equity": 158603.91,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 17.96,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-11-28 04:00:00+00:00",
+      "date": "2023-11-28",
+      "equity": 158796.83,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-12-02 12:00:00+00:00",
+      "date": "2023-12-02",
+      "equity": 158796.83,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-12-06 20:00:00+00:00",
+      "date": "2023-12-06",
+      "equity": 159271.5,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-12-11 04:00:00+00:00",
+      "date": "2023-12-11",
+      "equity": 159271.5,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2023-12-15 12:00:00+00:00",
+      "date": "2023-12-15",
+      "equity": 159712.98,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 9.97,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-12-19 20:00:00+00:00",
+      "date": "2023-12-19",
+      "equity": 159253.79,
+      "drawdown_pct": -0.29,
+      "gross_exposure_pct": 16.73,
+      "open_positions": 2
+    },
+    {
+      "dt": "2023-12-24 04:00:00+00:00",
+      "date": "2023-12-24",
+      "equity": 161020.53,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 6.3,
+      "open_positions": 1
+    },
+    {
+      "dt": "2023-12-28 12:00:00+00:00",
+      "date": "2023-12-28",
+      "equity": 162800.99,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-01-01 20:00:00+00:00",
+      "date": "2024-01-01",
+      "equity": 163010.93,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.32,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-01-06 04:00:00+00:00",
+      "date": "2024-01-06",
+      "equity": 163106.76,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-01-10 12:00:00+00:00",
+      "date": "2024-01-10",
+      "equity": 165172.68,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 29.01,
+      "open_positions": 4
+    },
+    {
+      "dt": "2024-01-14 20:00:00+00:00",
+      "date": "2024-01-14",
+      "equity": 168269.14,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 16.65,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-01-19 04:00:00+00:00",
+      "date": "2024-01-19",
+      "equity": 168015.31,
+      "drawdown_pct": -0.15,
+      "gross_exposure_pct": 8.34,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-01-23 12:00:00+00:00",
+      "date": "2024-01-23",
+      "equity": 168536.6,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-01-27 20:00:00+00:00",
+      "date": "2024-01-27",
+      "equity": 168619.8,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.74,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-02-01 04:00:00+00:00",
+      "date": "2024-02-01",
+      "equity": 168852.71,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 18.0,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-02-05 12:00:00+00:00",
+      "date": "2024-02-05",
+      "equity": 168479.68,
+      "drawdown_pct": -0.22,
+      "gross_exposure_pct": 20.87,
+      "open_positions": 4
+    },
+    {
+      "dt": "2024-02-09 20:00:00+00:00",
+      "date": "2024-02-09",
+      "equity": 173049.88,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 57.3,
+      "open_positions": 9
+    },
+    {
+      "dt": "2024-02-14 04:00:00+00:00",
+      "date": "2024-02-14",
+      "equity": 175270.45,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 7.98,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-02-18 12:00:00+00:00",
+      "date": "2024-02-18",
+      "equity": 176265.61,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 6.25,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-02-22 20:00:00+00:00",
+      "date": "2024-02-22",
+      "equity": 176324.29,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-02-27 04:00:00+00:00",
+      "date": "2024-02-27",
+      "equity": 177018.98,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-03-02 12:00:00+00:00",
+      "date": "2024-03-02",
+      "equity": 178341.59,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-03-06 20:00:00+00:00",
+      "date": "2024-03-06",
+      "equity": 178194.79,
+      "drawdown_pct": -0.08,
+      "gross_exposure_pct": 1.25,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-03-11 04:00:00+00:00",
+      "date": "2024-03-11",
+      "equity": 179925.22,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 15.69,
+      "open_positions": 3
+    },
+    {
+      "dt": "2024-03-15 12:00:00+00:00",
+      "date": "2024-03-15",
+      "equity": 179434.26,
+      "drawdown_pct": -0.27,
+      "gross_exposure_pct": 12.02,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-03-19 20:00:00+00:00",
+      "date": "2024-03-19",
+      "equity": 179927.03,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-03-24 04:00:00+00:00",
+      "date": "2024-03-24",
+      "equity": 179837.81,
+      "drawdown_pct": -0.05,
+      "gross_exposure_pct": 14.59,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-03-28 12:00:00+00:00",
+      "date": "2024-03-28",
+      "equity": 180682.95,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 14.62,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-04-01 20:00:00+00:00",
+      "date": "2024-04-01",
+      "equity": 180462.4,
+      "drawdown_pct": -0.12,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-04-06 04:00:00+00:00",
+      "date": "2024-04-06",
+      "equity": 180462.4,
+      "drawdown_pct": -0.12,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-04-10 12:00:00+00:00",
+      "date": "2024-04-10",
+      "equity": 180695.88,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 6.25,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-04-14 20:00:00+00:00",
+      "date": "2024-04-14",
+      "equity": 181669.32,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-04-19 04:00:00+00:00",
+      "date": "2024-04-19",
+      "equity": 181669.32,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-04-23 12:00:00+00:00",
+      "date": "2024-04-23",
+      "equity": 181989.83,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 27.98,
+      "open_positions": 4
+    },
+    {
+      "dt": "2024-04-27 20:00:00+00:00",
+      "date": "2024-04-27",
+      "equity": 181797.3,
+      "drawdown_pct": -0.11,
+      "gross_exposure_pct": 6.26,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-05-02 04:00:00+00:00",
+      "date": "2024-05-02",
+      "equity": 183042.63,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-05-06 12:00:00+00:00",
+      "date": "2024-05-06",
+      "equity": 184315.31,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 4.99,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-05-10 20:00:00+00:00",
+      "date": "2024-05-10",
+      "equity": 183869.7,
+      "drawdown_pct": -0.24,
+      "gross_exposure_pct": 22.92,
+      "open_positions": 3
+    },
+    {
+      "dt": "2024-05-15 04:00:00+00:00",
+      "date": "2024-05-15",
+      "equity": 183126.75,
+      "drawdown_pct": -0.64,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-05-19 12:00:00+00:00",
+      "date": "2024-05-19",
+      "equity": 182686.03,
+      "drawdown_pct": -0.88,
+      "gross_exposure_pct": 58.16,
+      "open_positions": 8
+    },
+    {
+      "dt": "2024-05-23 20:00:00+00:00",
+      "date": "2024-05-23",
+      "equity": 191352.15,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-05-28 04:00:00+00:00",
+      "date": "2024-05-28",
+      "equity": 191352.15,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-06-01 12:00:00+00:00",
+      "date": "2024-06-01",
+      "equity": 191352.15,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-06-05 20:00:00+00:00",
+      "date": "2024-06-05",
+      "equity": 192048.96,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 18.2,
+      "open_positions": 3
+    },
+    {
+      "dt": "2024-06-10 04:00:00+00:00",
+      "date": "2024-06-10",
+      "equity": 191400.44,
+      "drawdown_pct": -0.34,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-06-14 12:00:00+00:00",
+      "date": "2024-06-14",
+      "equity": 191525.88,
+      "drawdown_pct": -0.27,
+      "gross_exposure_pct": 8.33,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-06-18 20:00:00+00:00",
+      "date": "2024-06-18",
+      "equity": 191448.7,
+      "drawdown_pct": -0.31,
+      "gross_exposure_pct": 8.34,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-06-23 04:00:00+00:00",
+      "date": "2024-06-23",
+      "equity": 191741.15,
+      "drawdown_pct": -0.16,
+      "gross_exposure_pct": 8.34,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-06-27 12:00:00+00:00",
+      "date": "2024-06-27",
+      "equity": 193012.43,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 2.5,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-07-01 20:00:00+00:00",
+      "date": "2024-07-01",
+      "equity": 192223.22,
+      "drawdown_pct": -0.41,
+      "gross_exposure_pct": 5.0,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-07-06 04:00:00+00:00",
+      "date": "2024-07-06",
+      "equity": 194519.77,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-07-10 12:00:00+00:00",
+      "date": "2024-07-10",
+      "equity": 194401.45,
+      "drawdown_pct": -0.06,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-07-14 20:00:00+00:00",
+      "date": "2024-07-14",
+      "equity": 194401.45,
+      "drawdown_pct": -0.06,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-07-19 04:00:00+00:00",
+      "date": "2024-07-19",
+      "equity": 194190.91,
+      "drawdown_pct": -0.17,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-07-23 12:00:00+00:00",
+      "date": "2024-07-23",
+      "equity": 194190.91,
+      "drawdown_pct": -0.17,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-07-27 20:00:00+00:00",
+      "date": "2024-07-27",
+      "equity": 194190.91,
+      "drawdown_pct": -0.17,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-08-01 04:00:00+00:00",
+      "date": "2024-08-01",
+      "equity": 193661.45,
+      "drawdown_pct": -0.44,
+      "gross_exposure_pct": 8.31,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-08-05 12:00:00+00:00",
+      "date": "2024-08-05",
+      "equity": 195049.41,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-08-09 20:00:00+00:00",
+      "date": "2024-08-09",
+      "equity": 195049.41,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-08-14 04:00:00+00:00",
+      "date": "2024-08-14",
+      "equity": 196074.46,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 16.25,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-08-18 12:00:00+00:00",
+      "date": "2024-08-18",
+      "equity": 196934.03,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 11.24,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-08-22 20:00:00+00:00",
+      "date": "2024-08-22",
+      "equity": 198024.1,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 14.59,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-08-27 04:00:00+00:00",
+      "date": "2024-08-27",
+      "equity": 199348.28,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.33,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-08-31 12:00:00+00:00",
+      "date": "2024-08-31",
+      "equity": 201811.31,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-09-04 20:00:00+00:00",
+      "date": "2024-09-04",
+      "equity": 201811.31,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-09-09 04:00:00+00:00",
+      "date": "2024-09-09",
+      "equity": 201811.31,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-09-13 12:00:00+00:00",
+      "date": "2024-09-13",
+      "equity": 201493.4,
+      "drawdown_pct": -0.16,
+      "gross_exposure_pct": 13.33,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-09-17 20:00:00+00:00",
+      "date": "2024-09-17",
+      "equity": 199889.55,
+      "drawdown_pct": -0.95,
+      "gross_exposure_pct": 9.6,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-09-22 04:00:00+00:00",
+      "date": "2024-09-22",
+      "equity": 205598.37,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 24.69,
+      "open_positions": 5
+    },
+    {
+      "dt": "2024-09-26 12:00:00+00:00",
+      "date": "2024-09-26",
+      "equity": 205822.29,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 22.06,
+      "open_positions": 3
+    },
+    {
+      "dt": "2024-09-30 20:00:00+00:00",
+      "date": "2024-09-30",
+      "equity": 206799.43,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 16.29,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-10-05 04:00:00+00:00",
+      "date": "2024-10-05",
+      "equity": 207291.74,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-10-09 12:00:00+00:00",
+      "date": "2024-10-09",
+      "equity": 207291.74,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-10-13 20:00:00+00:00",
+      "date": "2024-10-13",
+      "equity": 207157.86,
+      "drawdown_pct": -0.06,
+      "gross_exposure_pct": 24.59,
+      "open_positions": 3
+    },
+    {
+      "dt": "2024-10-18 04:00:00+00:00",
+      "date": "2024-10-18",
+      "equity": 207655.06,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 22.08,
+      "open_positions": 3
+    },
+    {
+      "dt": "2024-10-22 12:00:00+00:00",
+      "date": "2024-10-22",
+      "equity": 207547.84,
+      "drawdown_pct": -0.05,
+      "gross_exposure_pct": 6.25,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-10-26 20:00:00+00:00",
+      "date": "2024-10-26",
+      "equity": 207633.71,
+      "drawdown_pct": -0.01,
+      "gross_exposure_pct": 5.0,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-10-31 04:00:00+00:00",
+      "date": "2024-10-31",
+      "equity": 209400.93,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 16.28,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-11-04 12:00:00+00:00",
+      "date": "2024-11-04",
+      "equity": 208889.12,
+      "drawdown_pct": -0.24,
+      "gross_exposure_pct": 7.5,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-11-08 20:00:00+00:00",
+      "date": "2024-11-08",
+      "equity": 212322.0,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 15.3,
+      "open_positions": 2
+    },
+    {
+      "dt": "2024-11-13 04:00:00+00:00",
+      "date": "2024-11-13",
+      "equity": 213532.93,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-11-17 12:00:00+00:00",
+      "date": "2024-11-17",
+      "equity": 213532.93,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-11-21 20:00:00+00:00",
+      "date": "2024-11-21",
+      "equity": 217606.55,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 27.19,
+      "open_positions": 4
+    },
+    {
+      "dt": "2024-11-26 04:00:00+00:00",
+      "date": "2024-11-26",
+      "equity": 219266.25,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-11-30 12:00:00+00:00",
+      "date": "2024-11-30",
+      "equity": 220101.94,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 6.25,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-12-04 20:00:00+00:00",
+      "date": "2024-12-04",
+      "equity": 222502.67,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 22.53,
+      "open_positions": 3
+    },
+    {
+      "dt": "2024-12-09 04:00:00+00:00",
+      "date": "2024-12-09",
+      "equity": 222156.42,
+      "drawdown_pct": -0.16,
+      "gross_exposure_pct": 6.27,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-12-13 12:00:00+00:00",
+      "date": "2024-12-13",
+      "equity": 221338.39,
+      "drawdown_pct": -0.52,
+      "gross_exposure_pct": 8.36,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-12-17 20:00:00+00:00",
+      "date": "2024-12-17",
+      "equity": 221195.57,
+      "drawdown_pct": -0.59,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2024-12-22 04:00:00+00:00",
+      "date": "2024-12-22",
+      "equity": 223689.03,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.32,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-12-26 12:00:00+00:00",
+      "date": "2024-12-26",
+      "equity": 223597.77,
+      "drawdown_pct": -0.04,
+      "gross_exposure_pct": 8.35,
+      "open_positions": 1
+    },
+    {
+      "dt": "2024-12-30 20:00:00+00:00",
+      "date": "2024-12-30",
+      "equity": 223300.08,
+      "drawdown_pct": -0.17,
+      "gross_exposure_pct": 2.5,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-01-04 04:00:00+00:00",
+      "date": "2025-01-04",
+      "equity": 224500.13,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 24.52,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-01-08 12:00:00+00:00",
+      "date": "2025-01-08",
+      "equity": 226219.06,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-01-12 20:00:00+00:00",
+      "date": "2025-01-12",
+      "equity": 226876.44,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 7.48,
+      "open_positions": 2
+    },
+    {
+      "dt": "2025-01-17 04:00:00+00:00",
+      "date": "2025-01-17",
+      "equity": 233675.93,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 43.58,
+      "open_positions": 6
+    },
+    {
+      "dt": "2025-01-21 12:00:00+00:00",
+      "date": "2025-01-21",
+      "equity": 237567.18,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-01-25 20:00:00+00:00",
+      "date": "2025-01-25",
+      "equity": 237533.19,
+      "drawdown_pct": -0.01,
+      "gross_exposure_pct": 5.0,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-01-30 04:00:00+00:00",
+      "date": "2025-01-30",
+      "equity": 237543.36,
+      "drawdown_pct": -0.01,
+      "gross_exposure_pct": 5.0,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-02-03 12:00:00+00:00",
+      "date": "2025-02-03",
+      "equity": 238786.92,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-02-07 20:00:00+00:00",
+      "date": "2025-02-07",
+      "equity": 238616.75,
+      "drawdown_pct": -0.07,
+      "gross_exposure_pct": 6.25,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-02-12 04:00:00+00:00",
+      "date": "2025-02-12",
+      "equity": 240428.6,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 21.21,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-02-16 12:00:00+00:00",
+      "date": "2025-02-16",
+      "equity": 241171.42,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-02-20 20:00:00+00:00",
+      "date": "2025-02-20",
+      "equity": 241246.96,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 30.82,
+      "open_positions": 4
+    },
+    {
+      "dt": "2025-02-25 04:00:00+00:00",
+      "date": "2025-02-25",
+      "equity": 244276.06,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 16.04,
+      "open_positions": 2
+    },
+    {
+      "dt": "2025-03-01 12:00:00+00:00",
+      "date": "2025-03-01",
+      "equity": 243382.38,
+      "drawdown_pct": -0.37,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-03-05 20:00:00+00:00",
+      "date": "2025-03-05",
+      "equity": 242809.68,
+      "drawdown_pct": -0.6,
+      "gross_exposure_pct": 6.25,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-03-10 04:00:00+00:00",
+      "date": "2025-03-10",
+      "equity": 243466.28,
+      "drawdown_pct": -0.33,
+      "gross_exposure_pct": 8.33,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-03-14 12:00:00+00:00",
+      "date": "2025-03-14",
+      "equity": 244079.07,
+      "drawdown_pct": -0.08,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-03-18 20:00:00+00:00",
+      "date": "2025-03-18",
+      "equity": 245609.93,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-03-23 04:00:00+00:00",
+      "date": "2025-03-23",
+      "equity": 244012.14,
+      "drawdown_pct": -0.65,
+      "gross_exposure_pct": 16.3,
+      "open_positions": 2
+    },
+    {
+      "dt": "2025-03-27 12:00:00+00:00",
+      "date": "2025-03-27",
+      "equity": 245492.71,
+      "drawdown_pct": -0.05,
+      "gross_exposure_pct": 8.36,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-03-31 20:00:00+00:00",
+      "date": "2025-03-31",
+      "equity": 247450.1,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-04-05 04:00:00+00:00",
+      "date": "2025-04-05",
+      "equity": 246670.34,
+      "drawdown_pct": -0.32,
+      "gross_exposure_pct": 13.36,
+      "open_positions": 2
+    },
+    {
+      "dt": "2025-04-09 12:00:00+00:00",
+      "date": "2025-04-09",
+      "equity": 247399.54,
+      "drawdown_pct": -0.02,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-04-13 20:00:00+00:00",
+      "date": "2025-04-13",
+      "equity": 247798.66,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 6.26,
+      "open_positions": 2
+    },
+    {
+      "dt": "2025-04-18 04:00:00+00:00",
+      "date": "2025-04-18",
+      "equity": 247495.07,
+      "drawdown_pct": -0.12,
+      "gross_exposure_pct": 23.75,
+      "open_positions": 4
+    },
+    {
+      "dt": "2025-04-22 12:00:00+00:00",
+      "date": "2025-04-22",
+      "equity": 249304.49,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 25.56,
+      "open_positions": 4
+    },
+    {
+      "dt": "2025-04-26 20:00:00+00:00",
+      "date": "2025-04-26",
+      "equity": 251606.14,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 22.46,
+      "open_positions": 4
+    },
+    {
+      "dt": "2025-05-01 04:00:00+00:00",
+      "date": "2025-05-01",
+      "equity": 251184.53,
+      "drawdown_pct": -0.17,
+      "gross_exposure_pct": 5.0,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-05-05 12:00:00+00:00",
+      "date": "2025-05-05",
+      "equity": 250948.28,
+      "drawdown_pct": -0.26,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-05-09 20:00:00+00:00",
+      "date": "2025-05-09",
+      "equity": 265586.02,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 22.46,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-05-14 04:00:00+00:00",
+      "date": "2025-05-14",
+      "equity": 269374.96,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 7.35,
+      "open_positions": 2
+    },
+    {
+      "dt": "2025-05-18 12:00:00+00:00",
+      "date": "2025-05-18",
+      "equity": 268837.3,
+      "drawdown_pct": -0.2,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-05-22 20:00:00+00:00",
+      "date": "2025-05-22",
+      "equity": 270301.05,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.29,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-05-27 04:00:00+00:00",
+      "date": "2025-05-27",
+      "equity": 269935.57,
+      "drawdown_pct": -0.14,
+      "gross_exposure_pct": 2.5,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-05-31 12:00:00+00:00",
+      "date": "2025-05-31",
+      "equity": 269389.15,
+      "drawdown_pct": -0.34,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-06-04 20:00:00+00:00",
+      "date": "2025-06-04",
+      "equity": 269025.96,
+      "drawdown_pct": -0.47,
+      "gross_exposure_pct": 17.52,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-06-09 04:00:00+00:00",
+      "date": "2025-06-09",
+      "equity": 269087.12,
+      "drawdown_pct": -0.45,
+      "gross_exposure_pct": 14.57,
+      "open_positions": 2
+    },
+    {
+      "dt": "2025-06-13 12:00:00+00:00",
+      "date": "2025-06-13",
+      "equity": 269005.67,
+      "drawdown_pct": -0.48,
+      "gross_exposure_pct": 14.61,
+      "open_positions": 2
+    },
+    {
+      "dt": "2025-06-17 20:00:00+00:00",
+      "date": "2025-06-17",
+      "equity": 267678.54,
+      "drawdown_pct": -0.97,
+      "gross_exposure_pct": 8.34,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-06-22 04:00:00+00:00",
+      "date": "2025-06-22",
+      "equity": 269803.25,
+      "drawdown_pct": -0.18,
+      "gross_exposure_pct": 8.27,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-06-26 12:00:00+00:00",
+      "date": "2025-06-26",
+      "equity": 272121.28,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 15.75,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-06-30 20:00:00+00:00",
+      "date": "2025-06-30",
+      "equity": 272210.58,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 24.19,
+      "open_positions": 4
+    },
+    {
+      "dt": "2025-07-05 04:00:00+00:00",
+      "date": "2025-07-05",
+      "equity": 273275.49,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 17.42,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-07-09 12:00:00+00:00",
+      "date": "2025-07-09",
+      "equity": 275193.2,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 27.45,
+      "open_positions": 4
+    },
+    {
+      "dt": "2025-07-13 20:00:00+00:00",
+      "date": "2025-07-13",
+      "equity": 284955.11,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 26.87,
+      "open_positions": 4
+    },
+    {
+      "dt": "2025-07-18 04:00:00+00:00",
+      "date": "2025-07-18",
+      "equity": 286879.83,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 7.98,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-07-22 12:00:00+00:00",
+      "date": "2025-07-22",
+      "equity": 286734.72,
+      "drawdown_pct": -0.05,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-07-26 20:00:00+00:00",
+      "date": "2025-07-26",
+      "equity": 286858.05,
+      "drawdown_pct": -0.01,
+      "gross_exposure_pct": 8.0,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-07-31 04:00:00+00:00",
+      "date": "2025-07-31",
+      "equity": 287643.43,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-08-04 12:00:00+00:00",
+      "date": "2025-08-04",
+      "equity": 288267.92,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.32,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-08-08 20:00:00+00:00",
+      "date": "2025-08-08",
+      "equity": 290725.35,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 42.85,
+      "open_positions": 5
+    },
+    {
+      "dt": "2025-08-13 04:00:00+00:00",
+      "date": "2025-08-13",
+      "equity": 297869.09,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 21.18,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-08-17 12:00:00+00:00",
+      "date": "2025-08-17",
+      "equity": 298755.85,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 6.24,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-08-21 20:00:00+00:00",
+      "date": "2025-08-21",
+      "equity": 299062.36,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-08-26 04:00:00+00:00",
+      "date": "2025-08-26",
+      "equity": 301984.97,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 8.31,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-08-30 12:00:00+00:00",
+      "date": "2025-08-30",
+      "equity": 301676.2,
+      "drawdown_pct": -0.1,
+      "gross_exposure_pct": 2.5,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-09-03 20:00:00+00:00",
+      "date": "2025-09-03",
+      "equity": 302044.01,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 19.49,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-09-08 04:00:00+00:00",
+      "date": "2025-09-08",
+      "equity": 301108.94,
+      "drawdown_pct": -0.31,
+      "gross_exposure_pct": 6.25,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-09-12 12:00:00+00:00",
+      "date": "2025-09-12",
+      "equity": 304926.27,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 42.73,
+      "open_positions": 8
+    },
+    {
+      "dt": "2025-09-16 20:00:00+00:00",
+      "date": "2025-09-16",
+      "equity": 307648.94,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 24.99,
+      "open_positions": 4
+    },
+    {
+      "dt": "2025-09-21 04:00:00+00:00",
+      "date": "2025-09-21",
+      "equity": 309791.91,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 19.49,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-09-25 12:00:00+00:00",
+      "date": "2025-09-25",
+      "equity": 308140.95,
+      "drawdown_pct": -0.53,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-09-29 20:00:00+00:00",
+      "date": "2025-09-29",
+      "equity": 308254.97,
+      "drawdown_pct": -0.5,
+      "gross_exposure_pct": 8.33,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-10-04 04:00:00+00:00",
+      "date": "2025-10-04",
+      "equity": 312819.58,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 19.44,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-10-08 12:00:00+00:00",
+      "date": "2025-10-08",
+      "equity": 312884.38,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-10-12 20:00:00+00:00",
+      "date": "2025-10-12",
+      "equity": 312411.22,
+      "drawdown_pct": -0.15,
+      "gross_exposure_pct": 8.34,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-10-17 04:00:00+00:00",
+      "date": "2025-10-17",
+      "equity": 313277.6,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-10-21 12:00:00+00:00",
+      "date": "2025-10-21",
+      "equity": 313277.6,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-10-25 20:00:00+00:00",
+      "date": "2025-10-25",
+      "equity": 314726.04,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-10-30 04:00:00+00:00",
+      "date": "2025-10-30",
+      "equity": 314176.44,
+      "drawdown_pct": -0.17,
+      "gross_exposure_pct": 23.67,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-11-03 12:00:00+00:00",
+      "date": "2025-11-03",
+      "equity": 318390.68,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-11-07 20:00:00+00:00",
+      "date": "2025-11-07",
+      "equity": 318390.68,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-11-12 04:00:00+00:00",
+      "date": "2025-11-12",
+      "equity": 319916.4,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-11-16 12:00:00+00:00",
+      "date": "2025-11-16",
+      "equity": 319916.4,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-11-20 20:00:00+00:00",
+      "date": "2025-11-20",
+      "equity": 319916.4,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-11-25 04:00:00+00:00",
+      "date": "2025-11-25",
+      "equity": 319923.36,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 2.5,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-11-29 12:00:00+00:00",
+      "date": "2025-11-29",
+      "equity": 319584.49,
+      "drawdown_pct": -0.11,
+      "gross_exposure_pct": 15.01,
+      "open_positions": 2
+    },
+    {
+      "dt": "2025-12-03 20:00:00+00:00",
+      "date": "2025-12-03",
+      "equity": 323675.67,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-12-08 04:00:00+00:00",
+      "date": "2025-12-08",
+      "equity": 322588.21,
+      "drawdown_pct": -0.34,
+      "gross_exposure_pct": 6.26,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-12-12 12:00:00+00:00",
+      "date": "2025-12-12",
+      "equity": 325121.66,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 19.66,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-12-16 20:00:00+00:00",
+      "date": "2025-12-16",
+      "equity": 326560.32,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2025-12-21 04:00:00+00:00",
+      "date": "2025-12-21",
+      "equity": 326545.98,
+      "drawdown_pct": -0.0,
+      "gross_exposure_pct": 8.75,
+      "open_positions": 3
+    },
+    {
+      "dt": "2025-12-25 12:00:00+00:00",
+      "date": "2025-12-25",
+      "equity": 326753.24,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 1.25,
+      "open_positions": 1
+    },
+    {
+      "dt": "2025-12-29 20:00:00+00:00",
+      "date": "2025-12-29",
+      "equity": 325950.28,
+      "drawdown_pct": -0.25,
+      "gross_exposure_pct": 9.61,
+      "open_positions": 2
+    },
+    {
+      "dt": "2026-01-03 04:00:00+00:00",
+      "date": "2026-01-03",
+      "equity": 325615.88,
+      "drawdown_pct": -0.35,
+      "gross_exposure_pct": 19.58,
+      "open_positions": 3
+    },
+    {
+      "dt": "2026-01-07 12:00:00+00:00",
+      "date": "2026-01-07",
+      "equity": 334957.12,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2026-01-11 20:00:00+00:00",
+      "date": "2026-01-11",
+      "equity": 334841.86,
+      "drawdown_pct": -0.03,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2026-01-16 04:00:00+00:00",
+      "date": "2026-01-16",
+      "equity": 337405.98,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 16.18,
+      "open_positions": 2
+    },
+    {
+      "dt": "2026-01-20 12:00:00+00:00",
+      "date": "2026-01-20",
+      "equity": 336954.08,
+      "drawdown_pct": -0.13,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2026-01-24 20:00:00+00:00",
+      "date": "2026-01-24",
+      "equity": 336954.08,
+      "drawdown_pct": -0.13,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2026-01-29 04:00:00+00:00",
+      "date": "2026-01-29",
+      "equity": 337351.01,
+      "drawdown_pct": -0.02,
+      "gross_exposure_pct": 9.99,
+      "open_positions": 1
+    },
+    {
+      "dt": "2026-02-02 12:00:00+00:00",
+      "date": "2026-02-02",
+      "equity": 340039.39,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2026-02-06 20:00:00+00:00",
+      "date": "2026-02-06",
+      "equity": 340039.39,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2026-02-11 04:00:00+00:00",
+      "date": "2026-02-11",
+      "equity": 340039.39,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2026-02-15 12:00:00+00:00",
+      "date": "2026-02-15",
+      "equity": 339659.59,
+      "drawdown_pct": -0.11,
+      "gross_exposure_pct": 6.26,
+      "open_positions": 1
+    },
+    {
+      "dt": "2026-02-19 20:00:00+00:00",
+      "date": "2026-02-19",
+      "equity": 339473.52,
+      "drawdown_pct": -0.17,
+      "gross_exposure_pct": 6.24,
+      "open_positions": 1
+    },
+    {
+      "dt": "2026-02-24 04:00:00+00:00",
+      "date": "2026-02-24",
+      "equity": 340423.14,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 14.56,
+      "open_positions": 2
+    },
+    {
+      "dt": "2026-02-28 12:00:00+00:00",
+      "date": "2026-02-28",
+      "equity": 342038.68,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 16.23,
+      "open_positions": 2
+    },
+    {
+      "dt": "2026-03-04 20:00:00+00:00",
+      "date": "2026-03-04",
+      "equity": 344569.6,
+      "drawdown_pct": 0.0,
+      "gross_exposure_pct": 51.71,
+      "open_positions": 8
+    },
+    {
+      "dt": "2026-03-09 04:00:00+00:00",
+      "date": "2026-03-09",
+      "equity": 337655.09,
+      "drawdown_pct": -2.01,
+      "gross_exposure_pct": 6.26,
+      "open_positions": 1
+    },
+    {
+      "dt": "2026-03-13 12:00:00+00:00",
+      "date": "2026-03-13",
+      "equity": 339644.03,
+      "drawdown_pct": -1.43,
+      "gross_exposure_pct": 37.01,
+      "open_positions": 5
+    },
+    {
+      "dt": "2026-03-17 20:00:00+00:00",
+      "date": "2026-03-17",
+      "equity": 342175.2,
+      "drawdown_pct": -0.69,
+      "gross_exposure_pct": 30.82,
+      "open_positions": 6
+    },
+    {
+      "dt": "2026-03-22 04:00:00+00:00",
+      "date": "2026-03-22",
+      "equity": 339003.33,
+      "drawdown_pct": -1.62,
+      "gross_exposure_pct": 8.33,
+      "open_positions": 1
+    },
+    {
+      "dt": "2026-03-26 12:00:00+00:00",
+      "date": "2026-03-26",
+      "equity": 338212.6,
+      "drawdown_pct": -1.84,
+      "gross_exposure_pct": 8.33,
+      "open_positions": 1
+    },
+    {
+      "dt": "2026-03-30 20:00:00+00:00",
+      "date": "2026-03-30",
+      "equity": 340944.18,
+      "drawdown_pct": -1.05,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2026-04-04 04:00:00+00:00",
+      "date": "2026-04-04",
+      "equity": 340655.04,
+      "drawdown_pct": -1.14,
+      "gross_exposure_pct": 8.34,
+      "open_positions": 1
+    },
+    {
+      "dt": "2026-04-08 12:00:00+00:00",
+      "date": "2026-04-08",
+      "equity": 341412.16,
+      "drawdown_pct": -0.92,
+      "gross_exposure_pct": 15.82,
+      "open_positions": 2
+    },
+    {
+      "dt": "2026-04-12 20:00:00+00:00",
+      "date": "2026-04-12",
+      "equity": 343725.28,
+      "drawdown_pct": -0.25,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2026-04-17 04:00:00+00:00",
+      "date": "2026-04-17",
+      "equity": 343613.83,
+      "drawdown_pct": -0.28,
+      "gross_exposure_pct": 19.53,
+      "open_positions": 4
+    },
+    {
+      "dt": "2026-04-21 12:00:00+00:00",
+      "date": "2026-04-21",
+      "equity": 343978.88,
+      "drawdown_pct": -0.17,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2026-04-25 20:00:00+00:00",
+      "date": "2026-04-25",
+      "equity": 343755.52,
+      "drawdown_pct": -0.24,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    },
+    {
+      "dt": "2026-04-30 04:00:00+00:00",
+      "date": "2026-04-30",
+      "equity": 342637.66,
+      "drawdown_pct": -0.56,
+      "gross_exposure_pct": 16.39,
+      "open_positions": 2
+    },
+    {
+      "dt": "2026-05-03 00:00:00+00:00",
+      "date": "2026-05-03",
+      "equity": 342790.24,
+      "drawdown_pct": -0.52,
+      "gross_exposure_pct": 0.0,
+      "open_positions": 0
+    }
+  ],
+  "monthly_returns": [
+    {
+      "month": "2022-01",
+      "return_pct": -0.32,
+      "start_equity": 100790.28,
+      "end_equity": 100466.44
+    },
+    {
+      "month": "2022-02",
+      "return_pct": 0.48,
+      "start_equity": 100466.44,
+      "end_equity": 100952.79
+    },
+    {
+      "month": "2022-03",
+      "return_pct": 4.2,
+      "start_equity": 100952.79,
+      "end_equity": 105195.13
+    },
+    {
+      "month": "2022-04",
+      "return_pct": -0.4,
+      "start_equity": 105195.13,
+      "end_equity": 104773.59
+    },
+    {
+      "month": "2022-05",
+      "return_pct": 2.84,
+      "start_equity": 104773.59,
+      "end_equity": 107744.29
+    },
+    {
+      "month": "2022-06",
+      "return_pct": 6.92,
+      "start_equity": 107744.29,
+      "end_equity": 115203.17
+    },
+    {
+      "month": "2022-07",
+      "return_pct": 1.66,
+      "start_equity": 115203.17,
+      "end_equity": 117112.59
+    },
+    {
+      "month": "2022-08",
+      "return_pct": 0.41,
+      "start_equity": 117112.59,
+      "end_equity": 117591.21
+    },
+    {
+      "month": "2022-09",
+      "return_pct": -0.93,
+      "start_equity": 117591.21,
+      "end_equity": 116493.39
+    },
+    {
+      "month": "2022-10",
+      "return_pct": 3.39,
+      "start_equity": 116493.39,
+      "end_equity": 120444.26
+    },
+    {
+      "month": "2022-11",
+      "return_pct": 0.96,
+      "start_equity": 120444.26,
+      "end_equity": 121605.02
+    },
+    {
+      "month": "2022-12",
+      "return_pct": 0.97,
+      "start_equity": 121605.02,
+      "end_equity": 122787.88
+    },
+    {
+      "month": "2023-01",
+      "return_pct": 5.06,
+      "start_equity": 122772.07,
+      "end_equity": 128983.62
+    },
+    {
+      "month": "2023-02",
+      "return_pct": -0.07,
+      "start_equity": 128983.62,
+      "end_equity": 128894.82
+    },
+    {
+      "month": "2023-03",
+      "return_pct": 3.97,
+      "start_equity": 128894.82,
+      "end_equity": 134012.28
+    },
+    {
+      "month": "2023-04",
+      "return_pct": 2.29,
+      "start_equity": 133994.76,
+      "end_equity": 137066.35
+    },
+    {
+      "month": "2023-05",
+      "return_pct": 1.01,
+      "start_equity": 136250.89,
+      "end_equity": 137620.55
+    },
+    {
+      "month": "2023-06",
+      "return_pct": 2.77,
+      "start_equity": 137421.11,
+      "end_equity": 141224.8
+    },
+    {
+      "month": "2023-07",
+      "return_pct": 1.86,
+      "start_equity": 140902.91,
+      "end_equity": 143524.54
+    },
+    {
+      "month": "2023-08",
+      "return_pct": 1.75,
+      "start_equity": 143524.54,
+      "end_equity": 146036.32
+    },
+    {
+      "month": "2023-09",
+      "return_pct": 0.34,
+      "start_equity": 145703.71,
+      "end_equity": 146193.54
+    },
+    {
+      "month": "2023-10",
+      "return_pct": 5.18,
+      "start_equity": 146370.12,
+      "end_equity": 153956.63
+    },
+    {
+      "month": "2023-11",
+      "return_pct": 4.0,
+      "start_equity": 153896.17,
+      "end_equity": 160051.77
+    },
+    {
+      "month": "2023-12",
+      "return_pct": 2.52,
+      "start_equity": 160051.77,
+      "end_equity": 164087.58
+    },
+    {
+      "month": "2024-01",
+      "return_pct": 3.77,
+      "start_equity": 164087.58,
+      "end_equity": 170272.37
+    },
+    {
+      "month": "2024-02",
+      "return_pct": 5.3,
+      "start_equity": 170200.29,
+      "end_equity": 179215.29
+    },
+    {
+      "month": "2024-03",
+      "return_pct": 0.9,
+      "start_equity": 180270.55,
+      "end_equity": 181888.56
+    },
+    {
+      "month": "2024-04",
+      "return_pct": 1.18,
+      "start_equity": 181888.56,
+      "end_equity": 184036.17
+    },
+    {
+      "month": "2024-05",
+      "return_pct": 4.77,
+      "start_equity": 184082.85,
+      "end_equity": 192864.38
+    },
+    {
+      "month": "2024-06",
+      "return_pct": 0.52,
+      "start_equity": 192864.38,
+      "end_equity": 193874.65
+    },
+    {
+      "month": "2024-07",
+      "return_pct": 0.57,
+      "start_equity": 193765.86,
+      "end_equity": 194863.31
+    },
+    {
+      "month": "2024-08",
+      "return_pct": 4.24,
+      "start_equity": 195133.98,
+      "end_equity": 203406.19
+    },
+    {
+      "month": "2024-09",
+      "return_pct": 2.47,
+      "start_equity": 203406.19,
+      "end_equity": 208433.73
+    },
+    {
+      "month": "2024-10",
+      "return_pct": 0.84,
+      "start_equity": 208792.13,
+      "end_equity": 210537.87
+    },
+    {
+      "month": "2024-11",
+      "return_pct": 5.34,
+      "start_equity": 210537.87,
+      "end_equity": 221783.21
+    },
+    {
+      "month": "2024-12",
+      "return_pct": 1.1,
+      "start_equity": 221750.56,
+      "end_equity": 224197.98
+    },
+    {
+      "month": "2025-01",
+      "return_pct": 6.43,
+      "start_equity": 224388.38,
+      "end_equity": 238809.82
+    },
+    {
+      "month": "2025-02",
+      "return_pct": 2.73,
+      "start_equity": 238776.49,
+      "end_equity": 245305.79
+    },
+    {
+      "month": "2025-03",
+      "return_pct": 1.67,
+      "start_equity": 245305.79,
+      "end_equity": 249405.65
+    },
+    {
+      "month": "2025-04",
+      "return_pct": 1.46,
+      "start_equity": 249405.65,
+      "end_equity": 253056.01
+    },
+    {
+      "month": "2025-05",
+      "return_pct": 7.26,
+      "start_equity": 253137.51,
+      "end_equity": 271518.09
+    },
+    {
+      "month": "2025-06",
+      "return_pct": 1.05,
+      "start_equity": 271518.09,
+      "end_equity": 274361.81
+    },
+    {
+      "month": "2025-07",
+      "return_pct": 5.66,
+      "start_equity": 274383.06,
+      "end_equity": 289916.63
+    },
+    {
+      "month": "2025-08",
+      "return_pct": 4.93,
+      "start_equity": 289916.63,
+      "end_equity": 304214.62
+    },
+    {
+      "month": "2025-09",
+      "return_pct": 2.11,
+      "start_equity": 304214.62,
+      "end_equity": 310630.01
+    },
+    {
+      "month": "2025-10",
+      "return_pct": 3.3,
+      "start_equity": 310663.48,
+      "end_equity": 320906.87
+    },
+    {
+      "month": "2025-11",
+      "return_pct": 0.27,
+      "start_equity": 320906.87,
+      "end_equity": 321779.64
+    },
+    {
+      "month": "2025-12",
+      "return_pct": 2.44,
+      "start_equity": 320717.79,
+      "end_equity": 328553.44
+    },
+    {
+      "month": "2026-01",
+      "return_pct": 4.65,
+      "start_equity": 328405.56,
+      "end_equity": 343666.97
+    },
+    {
+      "month": "2026-02",
+      "return_pct": 0.15,
+      "start_equity": 343621.56,
+      "end_equity": 344123.14
+    },
+    {
+      "month": "2026-03",
+      "return_pct": -0.18,
+      "start_equity": 344257.93,
+      "end_equity": 343638.61
+    },
+    {
+      "month": "2026-04",
+      "return_pct": 0.48,
+      "start_equity": 343638.61,
+      "end_equity": 345284.92
+    },
+    {
+      "month": "2026-05",
+      "return_pct": -0.03,
+      "start_equity": 345596.11,
+      "end_equity": 345499.25
+    }
+  ],
+  "monthly_heatmap": {
+    "years": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "months": [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12"
+    ],
+    "matrix": [
+      [
+        -0.32,
+        0.48,
+        4.2,
+        -0.4,
+        2.84,
+        6.92,
+        1.66,
+        0.41,
+        -0.93,
+        3.39,
+        0.96,
+        0.97
+      ],
+      [
+        5.06,
+        -0.07,
+        3.97,
+        2.29,
+        1.01,
+        2.77,
+        1.86,
+        1.75,
+        0.34,
+        5.18,
+        4.0,
+        2.52
+      ],
+      [
+        3.77,
+        5.3,
+        0.9,
+        1.18,
+        4.77,
+        0.52,
+        0.57,
+        4.24,
+        2.47,
+        0.84,
+        5.34,
+        1.1
+      ],
+      [
+        6.43,
+        2.73,
+        1.67,
+        1.46,
+        7.26,
+        1.05,
+        5.66,
+        4.93,
+        2.11,
+        3.3,
+        0.27,
+        2.44
+      ],
+      [
+        4.65,
+        0.15,
+        -0.18,
+        0.48,
+        -0.03,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    ],
+    "min_value": -0.93,
+    "max_value": 7.26
+  },
+  "strategy_contribution": [
+    {
+      "strategy": "Grapes",
+      "trades": 156,
+      "pnl_usd": 71652.64,
+      "contribution_pct": 29.51,
+      "avg_notional_usd": 16611.73
+    },
+    {
+      "strategy": "Peach",
+      "trades": 335,
+      "pnl_usd": 65382.01,
+      "contribution_pct": 26.93,
+      "avg_notional_usd": 13272.5
+    },
+    {
+      "strategy": "Citrus",
+      "trades": 239,
+      "pnl_usd": 61667.74,
+      "contribution_pct": 25.4,
+      "avg_notional_usd": 16000.55
+    },
+    {
+      "strategy": "Pomelo",
+      "trades": 335,
+      "pnl_usd": 44087.85,
+      "contribution_pct": 18.16,
+      "avg_notional_usd": 11129.28
+    }
+  ],
+  "strategy_returns": [
+    {
+      "strategy": "Grapes",
+      "return_pct": 442.66,
+      "status": "Production",
+      "role": "Core return engine"
+    },
+    {
+      "strategy": "Watermelon",
+      "return_pct": 243.68,
+      "status": "Shadow candidate",
+      "role": "Tactical short / defense"
+    },
+    {
+      "strategy": "Peach",
+      "return_pct": 197.11,
+      "status": "Locked baseline",
+      "role": "Rebound engine"
+    },
+    {
+      "strategy": "Pomelo",
+      "return_pct": 154.74,
+      "status": "Official current",
+      "role": "Portfolio quality engine"
+    },
+    {
+      "strategy": "Citrus",
+      "return_pct": 132.85,
+      "status": "Production candidate",
+      "role": "Structured sidecar"
+    },
+    {
+      "strategy": "Lychee",
+      "return_pct": 122.97,
+      "status": "Shadow / research",
+      "role": "Cross-asset diversifier"
+    },
+    {
+      "strategy": "Kiwi",
+      "return_pct": 109.15,
+      "status": "Shadow live",
+      "role": "Squeeze expansion"
+    },
+    {
+      "strategy": "Mango",
+      "return_pct": 108.35,
+      "status": "Validated shadow",
+      "role": "Acceleration sidecar"
+    }
+  ],
+  "headline": {
+    "engine_count": 8,
+    "headline_average_return_pct": 188.94,
+    "standalone_return_sum_pct": 1511.51
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/dashboard/overall_strategy.html",
+      "permanent": false
+    }
+  ]
+}

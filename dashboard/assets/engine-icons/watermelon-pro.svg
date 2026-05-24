@@ -1,0 +1,37 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Watermelon engine icon">
+  <defs>
+    <linearGradient id="bg" x1="36" y1="18" x2="220" y2="238" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="58" y1="42" x2="198" y2="214" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22c55e" stop-opacity="1"/>
+      <stop offset=".55" stop-color="#22c55e" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#22c55e" stop-opacity=".28"/>
+    </linearGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000000" flood-opacity=".48"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="0 0 0 0 0.1 0 0 0 0 1 0 0 0 0 0.55 0 0 0 .35 0"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="54" fill="url(#bg)"/>
+  <rect x="17" y="17" width="222" height="222" rx="53" stroke="white" stroke-opacity=".08" stroke-width="2"/>
+  <path d="M58 202C88 222 168 222 198 202" stroke="#22c55e" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="128" cy="128" r="82" fill="#22c55e" opacity=".055"/>
+  <g filter="url(#shadow)">
+    
+<path d="M57 150C76 93 129 62 191 72C197 124 171 178 124 202C86 221 47 198 57 150Z" fill="url(#accent)"/>
+<path d="M95 131C123 116 160 117 194 134C187 162 168 185 139 200C111 214 86 201 82 176C79 157 83 142 95 131Z" fill="#f43f5e"/>
+<path d="M95 131C123 116 160 117 194 134" stroke="#dcfce7" stroke-width="9" stroke-linecap="round"/>
+<path d="M72 150C97 166 126 172 167 169" stroke="#052e16" stroke-opacity=".23" stroke-width="6" stroke-linecap="round"/>
+<g fill="#111827" opacity=".86">
+  <ellipse cx="126" cy="153" rx="4" ry="7"/><ellipse cx="154" cy="153" rx="4" ry="7"/><ellipse cx="140" cy="177" rx="4" ry="7"/>
+</g>
+
+  </g>
+</svg>

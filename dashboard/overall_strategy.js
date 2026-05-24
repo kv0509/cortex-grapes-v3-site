@@ -1,0 +1,1051 @@
+const DATA_URL = "./data/overall_strategy_run.json?v=20260524-product-13";
+const FD_BENCHMARK_RATE = 1.95;
+const FD_BENCHMARK_YEARS = 4;
+const SP500_BENCHMARK_RETURN = 56.1;
+const SP500_BENCHMARK_PERIOD = "Jan 2022-May 2026";
+const SP500_YEARLY_RETURNS = {
+  "2022": -19.4,
+  "2023": 24.2,
+  "2024": 23.3,
+  "2025": 16.4,
+  "2026": 6.8,
+};
+
+const COLORS = {
+  green: "#08784f",
+  teal: "#176f80",
+  amber: "#bd7a13",
+  red: "#b65349",
+  ink: "#101a16",
+  muted: "#62716b",
+  grid: "#e4e7de",
+  line: "#d8ddd3",
+  panel: "#fffdf8",
+  bg: "#f4f1e9",
+};
+
+let DATA = null;
+let currentLang = "en";
+
+const MARKET_REGIMES = {
+  "2022": { type: "bear", en: "Bear", zh: "熊市" },
+  "2023": { type: "mixed", en: "Mixed / recovery", zh: "震荡 / 修复" },
+  "2024": { type: "bull", en: "Bull", zh: "牛市" },
+  "2025": { type: "mixed", en: "Mixed / rotation", zh: "震荡 / 轮动" },
+  "2026": { type: "mixed", en: "Mixed YTD", zh: "震荡 YTD" },
+};
+
+const REGIME_COLORS = {
+  bull: "#08784f",
+  mixed: "#bd7a13",
+  bear: "#176f80",
+};
+
+const TEXT = {
+  en: {
+    asOf: "As of May 24, 2026",
+    downloadScreenshot: "Download Screenshot",
+    coverEyebrow: "Investor Overview",
+    coverTitle: "Diversified systematic crypto alpha portfolio.",
+    coverSubtitle: "NTS Alpha Labs is structured around a portfolio of eight return engines, with the objective of presenting crypto alpha through a clear, allocation-ready performance profile.",
+    coverNarrativeOne: "The performance case is based on breadth: several strategies contribute to the return profile, reducing reliance on a single market behavior.",
+    coverNarrativeTwo: "Crypto is the starting market, not the final boundary. The same product layer can be extended into other liquid markets as the system matures.",
+    portfolioRoi: "Portfolio ROI",
+    productEyebrow: "Company Product",
+    productTitle: "Systematic alpha products for allocation.",
+    productCopy: "NTS Alpha Labs presents a portfolio of strategy products rather than a single trading idea. The product layer is designed to make performance easier to understand: portfolio ROI, yearly ROI, monthly records, and strategy contribution are all shown in investor-readable format.",
+    productOneTitle: "Alpha Portfolio",
+    productOneCopy: "Combined view of multiple strategy products, positioned as the main allocation story.",
+    productTwoTitle: "Strategy Products",
+    productTwoCopy: "Eight individual strategy engines with separate roles and standalone ROI records.",
+    productThreeTitle: "Market Expansion",
+    productThreeCopy: "Crypto is the first proof point. The product layer can later extend into FX, indices, commodities, and other liquid markets.",
+    performanceEyebrow: "Performance",
+    performanceTitle: "NTS Alpha Labs Performance Snapshot",
+    performanceSubtitle: "2022-2026 overall ROI, yearly ROI, recent performance, strategy breadth, and monthly return behavior.",
+    cumulativeRoi: "Cumulative ROI",
+    returnCurve: "Return curve since inception",
+    monthly: "Monthly",
+    monthlyRoiRecord: "Monthly ROI record",
+    contribution: "Contribution",
+    portfolioContributionShare: "Portfolio contribution share",
+    eightStrategies: "8 Strategies",
+    latestStrategyRoi: "Latest strategy ROI",
+    takeawayOneTitle: "Clear headline metric",
+    takeawayOneCopy: "Cumulative ROI is supported by monthly observations and strategy-level return breadth.",
+    takeawayTwoTitle: "Diversified contribution",
+    takeawayTwoCopy: "Contribution is distributed across several engines, strengthening the portfolio presentation.",
+    takeawayThreeTitle: "Allocation-focused",
+    takeawayThreeCopy: "The visible materials focus on return quality, contribution, and portfolio structure.",
+    benchmarkEyebrow: "ROI Benchmark",
+    benchmarkTitle: "2022-2026 ROI compared with Malaysia FD benchmark.",
+    benchmarkCopy: "For a simple local reference point, this page compares NTS portfolio ROI with Malaysia fixed deposit rates and a same-period S&P 500 investment. The comparison is shown as a familiar return baseline, not as a like-for-like product comparison.",
+    benchmarkOverallLabel: "2022-2026 portfolio ROI",
+    benchmarkSp500Label: "S&P 500 same-period ROI",
+    benchmarkFdLabel: "4-year FD benchmark",
+    benchmarkMultipleLabel: "ROI multiple over S&P 500",
+    singleYearBenchmark: "Single-year ROI: NTS vs S&P 500 vs FD",
+    strategyEyebrow: "Strategy Portfolio",
+    strategyTitle: "Strategy breadth supports a more durable return profile.",
+    strategyCopy: "The strategy set is presented as a portfolio of return engines. Each engine has a defined role, a visible ROI record, and a place within the broader NTS Alpha Labs allocation profile.",
+    strategyRoiBreadth: "Strategy ROI breadth",
+    strategySideCopy: "The leading engines drive the headline return, while the broader set demonstrates that the portfolio is not dependent on a single return source.",
+    qualityEyebrow: "Return Quality",
+    qualityTitle: "Monthly return behavior supports the allocation case.",
+    qualityCopy: "The performance profile is strongest when the headline ROI is viewed together with monthly consistency, recent-period performance, and the number of observed monthly records.",
+    recentMonthlyProfile: "Recent monthly profile",
+    annualRoiView: "Annual ROI view",
+    marketCycleMap: "Annual market cycle map",
+    mixEyebrow: "Portfolio Mix",
+    mixTitle: "Contribution is concentrated, but not singular.",
+    mixCopyTitle: "Return sources",
+    mixCopy: "The portfolio is led by a small number of stronger engines, with the remaining strategies adding balance across different market conditions.",
+    mixBulletOne: "The largest contributor anchors the portfolio's headline ROI.",
+    mixBulletTwo: "Additional engines support the return profile when market leadership changes.",
+    mixBulletThree: "This gives investors a clearer view of how the portfolio is built to grow over time.",
+    marketEyebrow: "Market Context",
+    marketTitle: "Systematic allocation can extend beyond crypto.",
+    marketOneTitle: "Crypto as first proof",
+    marketOneCopy: "Digital assets give the portfolio an active, continuous market to build and show its first track record.",
+    marketTwoTitle: "Reusable product layer",
+    marketTwoCopy: "The same portfolio, reporting, and review structure can support more markets as the platform matures.",
+    marketThreeTitle: "Broader market roadmap",
+    marketThreeCopy: "The direction is to expand into other liquid markets, not stay limited to crypto only.",
+    cycleBullLabel: "Bull markets",
+    cycleBullTitle: "More opportunity to compound",
+    cycleBullCopy: "In stronger market years, the portfolio has more room to capture momentum and broader participation, so annual ROI can naturally look stronger.",
+    cycleBearLabel: "Bear markets",
+    cycleBearTitle: "A slower, more selective pace",
+    cycleBearCopy: "In quieter or more defensive years, return tends to be more selective. The goal is still to keep the yearly profile productive instead of forcing every month to look the same.",
+    cycleRangeLabel: "Mixed markets",
+    cycleRangeTitle: "Different engines take turns",
+    cycleRangeCopy: "Some years earn more and some years earn less. The value of the portfolio is that the return profile can come from different engines across different market moods.",
+    marketNote: "Crypto is the first market where the system has built visible proof. Over time, NTS Alpha Labs can extend the same product discipline into FX, indices, commodities, and other liquid markets where repeatable opportunities can be measured.",
+    closeEyebrow: "Investor Discussion",
+    closeTitle: "Positioning NTS Alpha Labs for allocation review.",
+    currentSnapshot: "Current snapshot",
+    closeCopy: "Portfolio ROI across the validated strategy set, with 8 active strategies and monthly records prepared for investor review.",
+    closeBulletOne: "Performance profile is already visible.",
+    closeBulletTwo: "Portfolio has multiple return sources.",
+    closeBulletThree: "Next discussion can focus on allocation size, reporting cadence, and investor terms.",
+    growthMultiple: "Growth multiple",
+    recentRoi: "Recent ROI",
+    positiveMonths: "Positive months",
+    cumulativeReturn: "Cumulative return",
+    latestPeriod: "Latest period",
+    compoundingProfile: "Compounding profile",
+    avgStrategyRoi: "Avg strategy ROI",
+    strategyReturnBreadth: "8-strategy return breadth",
+    monthlyRecords: "monthly records",
+    averageMonth: "Average month",
+    acrossRun: "Across the run",
+    bestMonth: "Best month",
+    fdShort: "FD",
+    fdLegend: "Malaysia FD",
+    ntsYearlyRoi: "NTS yearly ROI",
+    portfolioContribution: "Portfolio contribution",
+    contributionShare: "Contribution share",
+    sourceNote: "ROI percentages shown for simple comparison across the NTS strategy portfolio.",
+    strategies: "strategies",
+    monthlySamples: "monthly samples",
+    active: "active",
+    screenshotTitleOne: "NTS Alpha Labs",
+    screenshotTitleTwo: "Performance Snapshot",
+    screenshotSubtitle: "Diversified systematic crypto alpha portfolio.",
+    screenshotMonthly: "Monthly returns",
+    screenshotContribution: "Contribution",
+    screenshotStrategy: "8-strategy ROI",
+  },
+  zh: {
+    asOf: "更新日期：2026年5月24日",
+    downloadScreenshot: "下载截图",
+    coverEyebrow: "投资人简介",
+    coverTitle: "从 crypto 出发的系统化 alpha 组合。",
+    coverSubtitle: "NTS Alpha Labs 不是单一交易策略，而是一组可以组合展示的 alpha 产品。我们先从 crypto 市场做出结果，再把同样的系统能力扩展到更多市场。",
+    coverNarrativeOne: "这个项目的重点不是某一个策略跑得好，而是已经有多条策略能一起组成一个 portfolio return profile。",
+    coverNarrativeTwo: "Crypto 是我们的起点，不是终点。之后产品会继续扩展到其他流动性市场，让 NTS 变成更完整的系统化 alpha 平台。",
+    portfolioRoi: "组合 ROI",
+    productEyebrow: "公司产品",
+    productTitle: "面向 allocation 的系统化 alpha 产品。",
+    productCopy: "NTS Alpha Labs 要呈现的是一组 strategy products，而不是一个交易想法。投资人需要看到的是：整体 ROI、每年 ROI、每月记录，以及每个策略对组合的贡献。",
+    productOneTitle: "Alpha 组合",
+    productOneCopy: "把多条策略产品放在同一个组合里展示，让投资人先看到整体回报故事。",
+    productTwoTitle: "策略产品",
+    productTwoCopy: "八个独立策略产品，各自有不同角色，也有自己的 ROI 记录。",
+    productThreeTitle: "市场扩展",
+    productThreeCopy: "Crypto 是第一个 proof point。之后同一套产品层可以继续扩展到 FX、指数、商品和其他流动性市场。",
+    performanceEyebrow: "表现摘要",
+    performanceTitle: "NTS Alpha Labs 表现摘要",
+    performanceSubtitle: "展示 2022-2026 整体 ROI、单年 ROI、近期表现、策略覆盖度和月度回报记录。",
+    cumulativeRoi: "累计 ROI",
+    returnCurve: "成立以来的回报曲线",
+    monthly: "月度",
+    monthlyRoiRecord: "月度 ROI 记录",
+    contribution: "贡献",
+    portfolioContributionShare: "组合贡献占比",
+    eightStrategies: "8 个策略",
+    latestStrategyRoi: "各策略 ROI",
+    takeawayOneTitle: "核心数字清楚",
+    takeawayOneCopy: "累计 ROI 不是单独展示，而是配合月度记录和策略层面的回报广度一起看。",
+    takeawayTwoTitle: "贡献来源分散",
+    takeawayTwoCopy: "回报不是只靠一个引擎，多个策略都有贡献，portfolio presentation 会更完整。",
+    takeawayThreeTitle: "适合投资人阅读",
+    takeawayThreeCopy: "页面重点放在 ROI、年度表现、贡献和组合结构，方便进入 allocation discussion。",
+    benchmarkEyebrow: "ROI 对比",
+    benchmarkTitle: "2022-2026 ROI，对比马来西亚 FD 基准。",
+    benchmarkCopy: "为了让投资人有一个熟悉的参照，这里把 NTS portfolio ROI、Malaysia FD，以及同一时期投资 S&P 500 的回报放在一起看。这个对比是帮助理解回报差距，不代表三者是同一种产品。",
+    benchmarkOverallLabel: "2022-2026 组合 ROI",
+    benchmarkSp500Label: "S&P 500 同期 ROI",
+    benchmarkFdLabel: "4 年 FD 基准",
+    benchmarkMultipleLabel: "相对 S&P 500 的 ROI 倍数",
+    singleYearBenchmark: "单年 ROI：NTS vs S&P 500 vs FD",
+    strategyEyebrow: "策略组合",
+    strategyTitle: "多策略组合，让回报故事更稳。",
+    strategyCopy: "这里展示的不是单一策略，而是一组可以组合的 return engines。每个策略有自己的角色、ROI 记录，也在 NTS Alpha Labs 的整体 allocation profile 里承担不同贡献。",
+    strategyRoiBreadth: "策略 ROI 覆盖",
+    strategySideCopy: "领先策略负责拉高 headline return，其他策略则让组合看起来不是单点依赖。",
+    qualityEyebrow: "回报质量",
+    qualityTitle: "月度回报记录，让数据更有说服力。",
+    qualityCopy: "单看总 ROI 不够。把月度记录、近期表现和样本数量放在一起看，投资人会更容易理解这个组合的持续性。",
+    recentMonthlyProfile: "近期月度表现",
+    annualRoiView: "年度 ROI",
+    marketCycleMap: "年度市场环境图",
+    mixEyebrow: "组合结构",
+    mixTitle: "贡献有主次，但不是单点依赖。",
+    mixCopyTitle: "回报来源",
+    mixCopy: "组合由几个表现较强的策略带动整体 ROI，同时其他策略负责补足不同市场环境下的表现，让回报结构更平衡。",
+    mixBulletOne: "主要策略负责撑起组合的核心回报。",
+    mixBulletTwo: "其他策略在市场节奏改变时提供额外机会。",
+    mixBulletThree: "投资人看到的不是单一来源，而是一套可以持续扩展的组合结构。",
+    marketEyebrow: "市场路线",
+    marketTitle: "系统化能力不只适用于 crypto。",
+    marketOneTitle: "Crypto 是第一站",
+    marketOneCopy: "Digital assets 提供连续活跃的市场环境，让组合先建立可见 track record。",
+    marketTwoTitle: "产品层可以复用",
+    marketTwoCopy: "组合、报告和 review structure 不是只为 crypto 写死，后面可以支持更多市场。",
+    marketThreeTitle: "更宽的市场路线",
+    marketThreeCopy: "方向不是永远停留在 crypto，而是逐步扩展到其他流动性市场。",
+    cycleBullLabel: "牛市",
+    cycleBullTitle: "更容易放大回报",
+    cycleBullCopy: "市场强、行情活跃的年份，组合更容易参与趋势和市场热度，所以年度 ROI 自然会更好看。",
+    cycleBearLabel: "熊市",
+    cycleBearTitle: "节奏会更慢、更挑机会",
+    cycleBearCopy: "市场冷、偏防守的年份，不需要硬追每一个机会。回报会更挑机会，节奏自然会慢一点，但目标还是保持年度表现有产出。",
+    cycleRangeLabel: "震荡市",
+    cycleRangeTitle: "不同策略轮流贡献",
+    cycleRangeCopy: "有些年份会赚多一点，有些年份会赚少一点。组合的价值，是不同市场情绪下可以由不同策略轮流贡献。",
+    marketNote: "Crypto 是第一个已经跑出证明的市场。随着系统成熟，NTS Alpha Labs 可以把同一套产品纪律扩展到 FX、指数、商品和其他流动性市场。",
+    closeEyebrow: "投资人讨论",
+    closeTitle: "让 NTS Alpha Labs 进入 allocation review。",
+    currentSnapshot: "当前快照",
+    closeCopy: "这是已验证策略组合的 portfolio ROI，目前有 8 个 active strategies，并整理好月度记录，适合进入投资人 review。",
+    closeBulletOne: "Performance profile 已经可以看得见。",
+    closeBulletTwo: "组合有多个回报来源。",
+    closeBulletThree: "下一步可以讨论 allocation size、reporting cadence 和 investor terms。",
+    growthMultiple: "增长倍数",
+    recentRoi: "近期 ROI",
+    positiveMonths: "正回报月份",
+    cumulativeReturn: "累计回报",
+    latestPeriod: "近期区间",
+    compoundingProfile: "复利表现",
+    avgStrategyRoi: "平均策略 ROI",
+    strategyReturnBreadth: "8 个策略的回报广度",
+    monthlyRecords: "个月度样本",
+    averageMonth: "平均月度",
+    acrossRun: "整个周期",
+    bestMonth: "最佳月份",
+    fdShort: "FD",
+    fdLegend: "Malaysia FD",
+    ntsYearlyRoi: "NTS 单年 ROI",
+    portfolioContribution: "组合贡献",
+    contributionShare: "贡献占比",
+    sourceNote: "ROI 百分比用于简单展示 NTS strategy portfolio 的整体表现。",
+    strategies: "个策略",
+    monthlySamples: "个月度样本",
+    active: "运行中",
+    screenshotTitleOne: "NTS Alpha Labs",
+    screenshotTitleTwo: "表现摘要",
+    screenshotSubtitle: "从 crypto 出发的系统化 alpha 组合。",
+    screenshotMonthly: "月度回报",
+    screenshotContribution: "贡献占比",
+    screenshotStrategy: "8 个策略 ROI",
+  },
+};
+
+const STRATEGY_ICONS = {
+  grapes: "./assets/engine-icons/grapes-pro.svg",
+  citrus: "./assets/engine-icons/citrus-pro.svg",
+  pomelo: "./assets/engine-icons/pomelo-pro.svg",
+  peach: "./assets/engine-icons/peach-pro.svg",
+  lychee: "./assets/engine-icons/lychee-pro.svg",
+  watermelon: "./assets/engine-icons/watermelon-pro.svg",
+  mango: "./assets/engine-icons/mango-pro.svg",
+  kiwi: "./assets/engine-icons/kiwi-pro.svg",
+};
+
+const STRATEGY_COPY = {
+  en: {
+    grapes: "Core return engine",
+    watermelon: "Tactical defense",
+    peach: "Rebound capture",
+    pomelo: "Portfolio quality",
+    citrus: "Structured alpha",
+    lychee: "Cross-market breadth",
+    kiwi: "Expansion engine",
+    mango: "Acceleration strategy",
+  },
+  zh: {
+    grapes: "核心回报引擎",
+    watermelon: "防守型策略",
+    peach: "反弹捕捉",
+    pomelo: "组合质量",
+    citrus: "结构化 alpha",
+    lychee: "跨市场广度",
+    kiwi: "扩张型策略",
+    mango: "加速策略",
+  },
+};
+
+function t(key) {
+  return TEXT[currentLang][key] || TEXT.en[key] || key;
+}
+
+function applyLanguage() {
+  document.documentElement.lang = currentLang === "zh" ? "zh-Hans" : "en";
+  document.body.classList.toggle("zh-mode", currentLang === "zh");
+  document.querySelectorAll("[data-i18n]").forEach((node) => {
+    node.textContent = t(node.dataset.i18n);
+  });
+  document.querySelectorAll(".lang-btn").forEach((button) => {
+    button.classList.toggle("active", button.dataset.lang === currentLang);
+  });
+}
+
+function strategyIcon(name) {
+  return STRATEGY_ICONS[String(name || "").toLowerCase()] || "./assets/engine-icons/overview.svg";
+}
+
+function strategyRole(name) {
+  const fallback = currentLang === "zh" ? "组合策略" : "Portfolio strategy";
+  return STRATEGY_COPY[currentLang][String(name || "").toLowerCase()] || fallback;
+}
+
+function fmtPct(value, digits = 2) {
+  if (value == null || Number.isNaN(Number(value))) return "--";
+  return `${Number(value).toFixed(digits)}%`;
+}
+
+function fmtMoney(value) {
+  if (value == null || Number.isNaN(Number(value))) return "--";
+  return `$${Number(value).toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+}
+
+function fmtMultiple(returnPct) {
+  if (returnPct == null || Number.isNaN(Number(returnPct))) return "--";
+  return `${(1 + Number(returnPct) / 100).toFixed(2)}x`;
+}
+
+function monthlyStats() {
+  const months = DATA.monthly_returns.filter((row) => row.return_pct != null);
+  const positive = months.filter((row) => row.return_pct > 0);
+  const best = months.reduce((acc, row) => (row.return_pct > acc.return_pct ? row : acc), months[0]);
+  const avg = months.reduce((sum, row) => sum + row.return_pct, 0) / Math.max(1, months.length);
+  return {
+    positiveRate: (positive.length / Math.max(1, months.length)) * 100,
+    bestMonth: best,
+    avgMonthly: avg,
+    months: months.length,
+  };
+}
+
+function annualReturns() {
+  const byYear = new Map();
+  DATA.monthly_returns
+    .filter((row) => row.return_pct != null)
+    .forEach((row) => {
+      const year = row.month.slice(0, 4);
+      const values = byYear.get(year) || [];
+      values.push(row.return_pct);
+      byYear.set(year, values);
+    });
+  return Array.from(byYear.entries()).map(([year, values]) => ({
+    year,
+    return_pct: (values.reduce((acc, value) => acc * (1 + value / 100), 1) - 1) * 100,
+  }));
+}
+
+function fdBenchmarkReturn(years = FD_BENCHMARK_YEARS) {
+  return ((1 + FD_BENCHMARK_RATE / 100) ** years - 1) * 100;
+}
+
+function setupCanvas(canvas) {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.max(1, Math.round(rect.width * dpr));
+  canvas.height = Math.max(1, Math.round(rect.height * dpr));
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, width: rect.width, height: rect.height };
+}
+
+function drawAxes(ctx, x, y, w, h, yTicks = 4) {
+  ctx.strokeStyle = COLORS.grid;
+  ctx.lineWidth = 1;
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = "11px -apple-system, BlinkMacSystemFont, sans-serif";
+  for (let i = 0; i <= yTicks; i += 1) {
+    const yy = y + (h * i) / yTicks;
+    ctx.beginPath();
+    ctx.moveTo(x, yy);
+    ctx.lineTo(x + w, yy);
+    ctx.stroke();
+  }
+  ctx.strokeStyle = "#cbd2c6";
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x, y + h);
+  ctx.lineTo(x + w, y + h);
+  ctx.stroke();
+}
+
+function drawEquityChart() {
+  const canvas = document.getElementById("equity-chart");
+  const { ctx, width, height } = setupCanvas(canvas);
+  const data = DATA.equity_curve;
+  ctx.clearRect(0, 0, width, height);
+  const pad = { l: 62, r: 28, t: 18, b: 42 };
+  const x = pad.l;
+  const y = pad.t;
+  const w = width - pad.l - pad.r;
+  const h = height - pad.t - pad.b;
+  drawAxes(ctx, x, y, w, h);
+
+  const initial = data[0].equity;
+  const values = data.map((d) => ((d.equity / initial) - 1) * 100);
+  const min = Math.min(0, Math.min(...values) * 0.96);
+  const max = Math.max(...values) * 1.08;
+  const sx = (i) => x + (w * i) / Math.max(1, data.length - 1);
+  const sy = (v) => y + h - ((v - min) / (max - min)) * h;
+
+  const area = new Path2D();
+  data.forEach((d, i) => {
+    const xx = sx(i);
+    const yy = sy(values[i]);
+    if (i === 0) area.moveTo(xx, y + h);
+    area.lineTo(xx, yy);
+  });
+  area.lineTo(sx(data.length - 1), y + h);
+  area.closePath();
+  const gradient = ctx.createLinearGradient(0, y, 0, y + h);
+  gradient.addColorStop(0, "rgba(8, 120, 79, 0.24)");
+  gradient.addColorStop(1, "rgba(8, 120, 79, 0.02)");
+  ctx.fillStyle = gradient;
+  ctx.fill(area);
+
+  ctx.strokeStyle = COLORS.green;
+  ctx.lineWidth = 4;
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  data.forEach((d, i) => {
+    const xx = sx(i);
+    const yy = sy(values[i]);
+    if (i === 0) ctx.moveTo(xx, yy);
+    else ctx.lineTo(xx, yy);
+  });
+  ctx.stroke();
+
+  ctx.fillStyle = COLORS.green;
+  const last = data[data.length - 1];
+  const lastRoi = values[values.length - 1];
+  ctx.beginPath();
+  ctx.arc(sx(data.length - 1), sy(lastRoi), 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = "12px -apple-system, BlinkMacSystemFont, sans-serif";
+  ctx.fillText(fmtPct(max / 1.08, 0), 8, y + 6);
+  ctx.fillText("0%", 28, y + h);
+  ctx.font = "700 14px -apple-system, BlinkMacSystemFont, sans-serif";
+  ctx.fillStyle = COLORS.green;
+  ctx.fillText(fmtPct(DATA.portfolio.validated_combo_return_pct), sx(data.length - 1) - 88, sy(lastRoi) - 16);
+
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = "12px -apple-system, BlinkMacSystemFont, sans-serif";
+  ctx.fillText(data[0].date, x, y + h + 28);
+  ctx.textAlign = "right";
+  ctx.fillText(last.date, x + w, y + h + 28);
+  ctx.textAlign = "left";
+}
+
+function drawMonthlyProfileChart() {
+  const canvas = document.getElementById("monthly-profile-chart");
+  const { ctx, width, height } = setupCanvas(canvas);
+  const data = DATA.monthly_returns.filter((row) => row.return_pct != null).slice(-24);
+  ctx.clearRect(0, 0, width, height);
+  const pad = { l: 42, r: 18, t: 16, b: 34 };
+  const x = pad.l;
+  const y = pad.t;
+  const w = width - pad.l - pad.r;
+  const h = height - pad.t - pad.b;
+  drawAxes(ctx, x, y, w, h, 3);
+  const max = Math.max(1, ...data.map((d) => d.return_pct));
+  const min = Math.min(-1, ...data.map((d) => d.return_pct));
+  const zeroY = y + h - ((0 - min) / (max - min)) * h;
+  ctx.strokeStyle = "#cbd2c6";
+  ctx.beginPath();
+  ctx.moveTo(x, zeroY);
+  ctx.lineTo(x + w, zeroY);
+  ctx.stroke();
+  const barW = Math.max(4, (w / data.length) - 4);
+  data.forEach((row, i) => {
+    const value = row.return_pct;
+    const barH = Math.abs(value / (max - min)) * h;
+    const xx = x + i * (w / data.length) + 2;
+    const yy = value >= 0 ? zeroY - barH : zeroY;
+    ctx.fillStyle = value >= 0 ? COLORS.green : "rgba(189, 122, 19, 0.35)";
+    ctx.beginPath();
+    ctx.roundRect(xx, yy, barW, Math.max(2, barH), 4);
+    ctx.fill();
+  });
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = "12px -apple-system, BlinkMacSystemFont, sans-serif";
+  ctx.fillText(fmtPct(max, 0), 8, y + 8);
+  ctx.fillText("0%", 18, zeroY - 4);
+  ctx.fillText(data[0].month, x, y + h + 24);
+  ctx.textAlign = "right";
+  ctx.fillText(data[data.length - 1].month, x + w, y + h + 24);
+  ctx.textAlign = "left";
+}
+
+function drawAnnualRoiChart() {
+  const canvas = document.getElementById("annual-roi-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  const data = annualReturns();
+  ctx.clearRect(0, 0, width, height);
+  const pad = { l: 46, r: 18, t: 18, b: 34 };
+  const x = pad.l;
+  const y = pad.t;
+  const w = width - pad.l - pad.r;
+  const h = height - pad.t - pad.b;
+  drawAxes(ctx, x, y, w, h, 3);
+  const max = Math.max(...data.map((d) => d.return_pct), 1) * 1.18;
+  const barW = Math.max(22, w / data.length - 18);
+  data.forEach((row, index) => {
+    const regime = MARKET_REGIMES[row.year];
+    const xx = x + index * (w / data.length) + 8;
+    const barH = Math.max(2, (row.return_pct / max) * h);
+    const yy = y + h - barH;
+    ctx.fillStyle = regime ? REGIME_COLORS[regime.type] : index >= data.length - 2 ? COLORS.green : COLORS.teal;
+    ctx.beginPath();
+    ctx.roundRect(xx, yy, barW, barH, 7);
+    ctx.fill();
+    ctx.fillStyle = COLORS.muted;
+    ctx.font = "12px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.fillText(row.year, xx, y + h + 24);
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = "700 12px ui-monospace, Menlo, monospace";
+    ctx.fillText(fmtPct(row.return_pct, 0), xx, yy - 8);
+  });
+}
+
+function drawMarketCycleChart() {
+  const canvas = document.getElementById("market-cycle-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  const data = annualReturns();
+  ctx.clearRect(0, 0, width, height);
+  const pad = { l: 34, r: 28, t: 24, b: 28 };
+  const x = pad.l;
+  const y = pad.t;
+  const w = width - pad.l - pad.r;
+  const rowH = Math.min(58, (height - pad.t - pad.b) / data.length);
+  const max = Math.max(...data.map((row) => row.return_pct), 1);
+
+  data.forEach((row, index) => {
+    const regime = MARKET_REGIMES[row.year] || { type: "mixed", en: "Mixed", zh: "震荡" };
+    const yy = y + index * rowH;
+    const color = REGIME_COLORS[regime.type] || COLORS.teal;
+    const roiWidth = Math.max(6, (row.return_pct / max) * (w * 0.34));
+
+    ctx.fillStyle = index % 2 === 0 ? "rgba(17, 25, 22, .025)" : "rgba(17, 25, 22, .045)";
+    ctx.fillRect(x, yy, w, rowH - 8);
+
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = "800 16px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.fillText(row.year === "2026" ? "2026 YTD" : row.year, x + 14, yy + 32);
+
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(x + 126, yy + 13, 132, 25, 999);
+    ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.font = "800 12px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.fillText(regime[currentLang], x + 142, yy + 30);
+
+    const barX = x + 292;
+    ctx.fillStyle = "rgba(17, 25, 22, .08)";
+    ctx.beginPath();
+    ctx.roundRect(barX, yy + 18, w - 420, 14, 999);
+    ctx.fill();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(barX, yy + 18, roiWidth, 14, 999);
+    ctx.fill();
+
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = "800 14px ui-monospace, Menlo, monospace";
+    ctx.fillText(fmtPct(row.return_pct, 1), x + w - 92, yy + 31);
+  });
+}
+
+function drawAnnualFdChart() {
+  const canvas = document.getElementById("annual-fd-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  const data = annualReturns();
+  ctx.clearRect(0, 0, width, height);
+  const pad = { l: 54, r: 34, t: 36, b: 36 };
+  const x = pad.l;
+  const y = pad.t;
+  const w = width - pad.l - pad.r;
+  const h = height - pad.t - pad.b;
+  drawAxes(ctx, x, y, w, h, 4);
+  const legend = [
+    ["NTS", COLORS.green],
+    ["S&P 500", COLORS.teal],
+    ["FD", "rgba(104, 113, 109, .7)"],
+  ];
+  legend.forEach(([label, color], i) => {
+    const lx = x + i * 92;
+    ctx.fillStyle = color;
+    ctx.fillRect(lx, 8, 16, 4);
+    ctx.fillStyle = COLORS.muted;
+    ctx.font = "12px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.fillText(label, lx + 22, 12);
+  });
+  const values = data.flatMap((d) => [d.return_pct, SP500_YEARLY_RETURNS[d.year] ?? 0, FD_BENCHMARK_RATE]);
+  const max = Math.max(...values, 1) * 1.18;
+  const min = Math.min(...values, 0) * 1.18;
+  const range = max - min;
+  const zeroY = y + h - ((0 - min) / range) * h;
+  ctx.strokeStyle = "#bfc7bc";
+  ctx.beginPath();
+  ctx.moveTo(x, zeroY);
+  ctx.lineTo(x + w, zeroY);
+  ctx.stroke();
+  const groupW = w / data.length;
+  const barW = Math.max(11, groupW * 0.18);
+  const drawGroupedBar = (xx, value, color) => {
+    const barH = Math.max(2, Math.abs(value / range) * h);
+    const yy = value >= 0 ? zeroY - barH : zeroY;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(xx, yy, barW, barH, 5);
+    ctx.fill();
+    return { yy, barH };
+  };
+  data.forEach((row, index) => {
+    const baseX = x + index * groupW + groupW * 0.16;
+    const spValue = SP500_YEARLY_RETURNS[row.year] ?? 0;
+    const nts = drawGroupedBar(baseX, row.return_pct, index === data.length - 1 ? "rgba(6, 109, 73, .52)" : COLORS.green);
+    drawGroupedBar(baseX + barW + 5, spValue, COLORS.teal);
+    drawGroupedBar(baseX + (barW + 5) * 2, FD_BENCHMARK_RATE, "rgba(104, 113, 109, .5)");
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = "800 11px ui-monospace, Menlo, monospace";
+    ctx.fillText(fmtPct(row.return_pct, 0), baseX - 1, nts.yy - 8);
+    ctx.fillStyle = COLORS.teal;
+    ctx.font = "800 10px ui-monospace, Menlo, monospace";
+    const spLabelY = spValue >= 0 ? zeroY - Math.max(2, Math.abs(spValue / range) * h) - 8 : zeroY + Math.max(14, Math.abs(spValue / range) * h + 14);
+    ctx.fillText(fmtPct(spValue, 0), baseX + barW + 3, spLabelY);
+    ctx.fillStyle = COLORS.muted;
+    ctx.font = "12px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.fillText(row.year, baseX, y + h + 24);
+  });
+}
+
+function drawStrategyRoiChart() {
+  const canvas = document.getElementById("strategy-roi-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  const rows = DATA.strategy_returns.slice().sort((a, b) => b.return_pct - a.return_pct);
+  ctx.clearRect(0, 0, width, height);
+  const pad = { l: 94, r: 42, t: 16, b: 22 };
+  const x = pad.l;
+  const y = pad.t;
+  const w = width - pad.l - pad.r;
+  const rowH = (height - pad.t - pad.b) / rows.length;
+  const max = Math.max(...rows.map((row) => row.return_pct));
+  rows.forEach((row, index) => {
+    const yy = y + index * rowH + 7;
+    const barW = (row.return_pct / max) * w;
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = "700 13px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.fillText(row.strategy, 0, yy + 13);
+    ctx.fillStyle = "rgba(17, 25, 22, 0.08)";
+    ctx.beginPath();
+    ctx.roundRect(x, yy, w, 14, 999);
+    ctx.fill();
+    ctx.fillStyle = index < 2 ? COLORS.green : index < 4 ? COLORS.teal : COLORS.amber;
+    ctx.beginPath();
+    ctx.roundRect(x, yy, barW, 14, 999);
+    ctx.fill();
+    ctx.fillStyle = index < 4 ? COLORS.teal : COLORS.amber;
+    ctx.font = "700 12px ui-monospace, Menlo, monospace";
+    ctx.fillText(fmtPct(row.return_pct, 1), x + w + 8, yy + 13);
+  });
+}
+
+function renderKpis() {
+  const p = DATA.portfolio;
+  const h = DATA.headline;
+  const m = monthlyStats();
+  const cards = [
+    [t("portfolioRoi"), fmtPct(p.validated_combo_return_pct), t("cumulativeReturn"), "green"],
+    [t("recentRoi"), fmtPct(p.independent_combo_return_pct), t("latestPeriod"), "green"],
+    [t("growthMultiple"), fmtMultiple(p.validated_combo_return_pct), t("compoundingProfile"), "teal"],
+    [t("avgStrategyRoi"), fmtPct(h.headline_average_return_pct), t("strategyReturnBreadth"), "teal"],
+    [t("positiveMonths"), fmtPct(m.positiveRate, 0), `${m.months}${currentLang === "zh" ? t("monthlyRecords") : ` ${t("monthlyRecords")}`}`, "green"],
+  ];
+  document.getElementById("kpi-grid").innerHTML = cards
+    .map(([title, value, label, tone]) => `<article class="kpi-card ${tone}"><strong>${value}</strong><span>${title}<br>${label}</span></article>`)
+    .join("");
+}
+
+function renderRiskStats() {
+  const p = DATA.portfolio;
+  const m = monthlyStats();
+  const items = [
+    ["Annualized ROI", fmtPct(p.annual_return_pct)],
+    ["Avg monthly", fmtPct(m.avgMonthly)],
+    ["Best month", `${m.bestMonth.month} · ${fmtPct(m.bestMonth.return_pct)}`],
+    ["Strategies", `${DATA.headline.engine_count} active`],
+  ];
+  document.getElementById("risk-stats").innerHTML = items
+    .map(([label, value]) => `<div class="mini-stat"><strong>${value}</strong><span>${label}</span></div>`)
+    .join("");
+}
+
+function heatColor(value, min, max) {
+  if (value == null) return "#eceee7";
+  if (value >= 0) {
+    const t = Math.min(1, value / Math.max(1, max));
+    return `rgba(8, 120, 79, ${0.18 + t * 0.66})`;
+  }
+  const t = Math.min(1, Math.abs(value) / Math.max(1, Math.abs(min)));
+  return `rgba(182, 83, 73, ${0.18 + t * 0.62})`;
+}
+
+function renderHeatmap(id = "monthly-heatmap") {
+  const h = DATA.monthly_heatmap;
+  const monthLabels = ["", "J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+  let html = monthLabels.map((m) => `<div class="heat-label">${m}</div>`).join("");
+  h.years.forEach((year, rowIndex) => {
+    html += `<div class="heat-label">${year}</div>`;
+    h.months.forEach((month, colIndex) => {
+      const value = h.matrix[rowIndex][colIndex];
+      const cls = value == null ? "" : value >= 0 ? "positive" : "negative";
+      html += `<div class="heat-cell ${cls}" style="background:${heatColor(value, h.min_value, h.max_value)}" title="${year}-${month}: ${value ?? "--"}%">${value == null ? "" : value.toFixed(1)}</div>`;
+    });
+  });
+  document.getElementById(id).innerHTML = html;
+}
+
+function renderBars(id, rows, maxValue, valueKey, labelSuffix = "%", meta = null) {
+  document.getElementById(id).innerHTML = rows
+    .map((row, index) => {
+      const value = row[valueKey];
+      const width = Math.max(1, (value / maxValue) * 100);
+      const color = index < 2 ? COLORS.green : index < 4 ? COLORS.teal : COLORS.amber;
+      const sub = meta ? `<div class="bar-meta">${meta(row)}</div>` : "";
+      return `
+        <div class="bar-row">
+          <div class="bar-name"><img src="${strategyIcon(row.strategy)}" alt="" /> <span>${row.strategy}</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:${width}%;background:${color}"></div></div>
+          <div class="bar-value" style="color:${color}">${Number(value).toFixed(1)}${labelSuffix}</div>
+          ${sub}
+        </div>`;
+    })
+    .join("");
+}
+
+function renderCover() {
+  const p = DATA.portfolio;
+  const m = monthlyStats();
+  document.getElementById("cover-roi").textContent = fmtPct(p.validated_combo_return_pct);
+  document.getElementById("close-roi").textContent = fmtPct(p.validated_combo_return_pct);
+  document.getElementById("cover-metrics").innerHTML = [
+    [t("growthMultiple"), fmtMultiple(p.validated_combo_return_pct)],
+    [t("recentRoi"), fmtPct(p.independent_combo_return_pct)],
+    [t("positiveMonths"), fmtPct(m.positiveRate, 0)],
+  ].map(([label, value]) => `<div><strong>${value}</strong><span>${label}</span></div>`).join("");
+  renderIconStrip("cover-icon-strip");
+  renderIconStrip("mix-icons");
+}
+
+function renderIconStrip(id) {
+  const rows = DATA.strategy_returns;
+  document.getElementById(id).innerHTML = rows
+    .map((row) => `<img src="${strategyIcon(row.strategy)}" alt="${row.strategy}" title="${row.strategy}" />`)
+    .join("");
+}
+
+function renderStrategyCards() {
+  const rows = DATA.strategy_returns;
+  document.getElementById("strategy-card-grid").innerHTML = rows
+    .map((row, index) => `
+      <article class="strategy-card ${index < 3 ? "lead-card" : ""}">
+        <img src="${strategyIcon(row.strategy)}" alt="" />
+        <div>
+          <strong>${row.strategy}</strong>
+          <span>${strategyRole(row.strategy)}</span>
+        </div>
+        <em>${fmtPct(row.return_pct, 1)}</em>
+      </article>`)
+    .join("");
+}
+
+function renderQuality() {
+  const m = monthlyStats();
+  document.getElementById("quality-metrics").innerHTML = [
+    [t("positiveMonths"), fmtPct(m.positiveRate, 0), currentLang === "zh" ? `${m.months}${t("monthlyRecords")}` : `${m.months} ${t("monthlyRecords")}`],
+    [t("averageMonth"), fmtPct(m.avgMonthly), t("acrossRun")],
+    [t("bestMonth"), fmtPct(m.bestMonth.return_pct), m.bestMonth.month],
+    [t("recentRoi"), fmtPct(DATA.portfolio.independent_combo_return_pct), t("latestPeriod")],
+  ].map(([label, value, note]) => `<article><strong>${value}</strong><span>${label}</span><small>${note}</small></article>`).join("");
+}
+
+function renderBenchmark() {
+  const portfolioRoi = DATA.portfolio.validated_combo_return_pct;
+  const fdRoi = fdBenchmarkReturn();
+  document.getElementById("benchmark-overall-roi").textContent = fmtPct(portfolioRoi);
+  document.getElementById("benchmark-sp500-roi").textContent = fmtPct(SP500_BENCHMARK_RETURN);
+  document.getElementById("benchmark-fd-roi").textContent = fmtPct(fdRoi);
+  document.getElementById("benchmark-multiple").textContent = `${(portfolioRoi / SP500_BENCHMARK_RETURN).toFixed(1)}x`;
+  document.getElementById("annual-roi-table").innerHTML = annualReturns()
+    .map((row) => `
+      <div>
+        <span>${row.year}${row.year === "2026" ? " YTD" : ""}</span>
+        <strong>${fmtPct(row.return_pct)}</strong>
+        <em>S&P 500 ${fmtPct(SP500_YEARLY_RETURNS[row.year] ?? 0, 1)}</em>
+        <em>${t("fdShort")} ${fmtPct(FD_BENCHMARK_RATE, 2)}</em>
+      </div>`)
+    .join("");
+}
+
+function renderPage() {
+  applyLanguage();
+  document.getElementById("source-note").textContent = t("sourceNote");
+  document.getElementById("source-metrics").innerHTML = [
+    `${DATA.meta.updated_at}`,
+    currentLang === "zh" ? `${DATA.headline.engine_count}${t("strategies")}` : `${DATA.headline.engine_count} ${t("strategies")}`,
+    currentLang === "zh" ? `${DATA.monthly_returns.length}${t("monthlySamples")}` : `${DATA.monthly_returns.length} ${t("monthlySamples")}`,
+  ].map((x) => `<span>${x}</span>`).join("");
+
+  renderCover();
+  renderKpis();
+  renderHeatmap("monthly-heatmap");
+  renderHeatmap("quality-heatmap");
+  renderBars("contribution-bars", DATA.strategy_contribution, Math.max(...DATA.strategy_contribution.map((d) => d.contribution_pct)), "contribution_pct", "%", () => t("portfolioContribution"));
+  renderBars("strategy-ranking", DATA.strategy_returns, Math.max(...DATA.strategy_returns.map((d) => d.return_pct)), "return_pct", "%", (row) => `${strategyRole(row.strategy)}`);
+  renderBars("composition-bars", DATA.strategy_contribution, Math.max(...DATA.strategy_contribution.map((d) => d.contribution_pct)), "contribution_pct", "%", () => t("contributionShare"));
+  renderStrategyCards();
+  renderQuality();
+  renderBenchmark();
+  drawEquityChart();
+  drawMonthlyProfileChart();
+  drawAnnualRoiChart();
+  drawMarketCycleChart();
+  drawStrategyRoiChart();
+  drawAnnualFdChart();
+}
+
+function loadIcon(src) {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => resolve(null);
+    image.src = src;
+  });
+}
+
+async function downloadScreenshot() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1920;
+  canvas.height = 1080;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = COLORS.bg;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.strokeStyle = "rgba(17, 25, 22, 0.08)";
+  ctx.lineWidth = 1;
+  for (let gx = 72; gx < 1848; gx += 96) {
+    ctx.beginPath();
+    ctx.moveTo(gx, 34);
+    ctx.lineTo(gx, 1046);
+    ctx.stroke();
+  }
+  for (let gy = 70; gy < 1040; gy += 96) {
+    ctx.beginPath();
+    ctx.moveTo(72, gy);
+    ctx.lineTo(1848, gy);
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = COLORS.green;
+  ctx.beginPath();
+  ctx.arc(88, 60, 14, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = COLORS.panel;
+  ctx.font = "800 13px -apple-system, BlinkMacSystemFont, sans-serif";
+  ctx.fillText("N", 83, 65);
+  ctx.fillStyle = COLORS.green;
+  ctx.font = "800 14px ui-monospace, Menlo, monospace";
+  ctx.fillText("NTS ALPHA LABS", 114, 65);
+
+  ctx.strokeStyle = COLORS.line;
+  ctx.beginPath();
+  ctx.moveTo(72, 104);
+  ctx.lineTo(1848, 104);
+  ctx.stroke();
+
+  ctx.fillStyle = COLORS.ink;
+  ctx.font = "800 68px -apple-system, BlinkMacSystemFont, sans-serif";
+  ctx.fillText(t("screenshotTitleOne"), 72, 190);
+  ctx.fillText(t("screenshotTitleTwo"), 72, 258);
+  ctx.font = "24px -apple-system, BlinkMacSystemFont, sans-serif";
+  ctx.fillStyle = COLORS.muted;
+  ctx.fillText(t("screenshotSubtitle"), 72, 310);
+
+  const p = DATA.portfolio;
+  const m = monthlyStats();
+  const kpis = [
+    [t("portfolioRoi"), fmtPct(p.validated_combo_return_pct)],
+    [t("recentRoi"), fmtPct(p.independent_combo_return_pct)],
+    [t("growthMultiple"), fmtMultiple(p.validated_combo_return_pct)],
+    [t("avgStrategyRoi"), fmtPct(DATA.headline.headline_average_return_pct)],
+    [t("positiveMonths"), fmtPct(m.positiveRate, 0)],
+  ];
+  ctx.strokeStyle = COLORS.line;
+  ctx.beginPath();
+  ctx.moveTo(72, 360);
+  ctx.lineTo(620, 360);
+  ctx.stroke();
+
+  ctx.fillStyle = COLORS.green;
+  ctx.font = "800 118px -apple-system, BlinkMacSystemFont, sans-serif";
+  ctx.fillText(kpis[0][1], 72, 480);
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = "18px -apple-system, BlinkMacSystemFont, sans-serif";
+  ctx.fillText(t("portfolioRoi"), 72, 512);
+  ctx.fillText(t("cumulativeReturn"), 72, 536);
+
+  kpis.slice(1).forEach(([label, value], i) => {
+    const col = i % 2;
+    const row = Math.floor(i / 2);
+    const x = 72 + col * 300;
+    const y = 612 + row * 92;
+    ctx.fillStyle = i === 1 || i === 2 ? COLORS.teal : COLORS.green;
+    ctx.font = "800 42px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.fillText(value, x, y);
+    ctx.fillStyle = COLORS.muted;
+    ctx.font = "17px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.fillText(label, x, y + 28);
+  });
+
+  const sourceEquity = document.getElementById("equity-chart");
+  ctx.drawImage(sourceEquity, 790, 235, 960, 450);
+
+  ctx.fillStyle = COLORS.ink;
+  ctx.font = "700 28px -apple-system, BlinkMacSystemFont, sans-serif";
+  ctx.fillText(t("screenshotMonthly"), 72, 790);
+  ctx.fillText(t("screenshotContribution"), 650, 790);
+  ctx.fillText(t("screenshotStrategy"), 1160, 790);
+  drawExportHeatmap(ctx, 72, 825);
+  await drawExportBars(ctx, DATA.strategy_contribution, "contribution_pct", 650, 825, 270, 16, "%");
+  await drawExportBars(ctx, DATA.strategy_returns, "return_pct", 1160, 825, 390, 16, "%");
+
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = "16px -apple-system, BlinkMacSystemFont, sans-serif";
+  ctx.fillText(t("sourceNote"), 72, 1040);
+
+  const link = document.createElement("a");
+  link.href = canvas.toDataURL("image/png");
+  link.download = "nts-overall-strategy-run.png";
+  link.click();
+}
+
+async function drawExportBars(ctx, rows, key, x, y, w, rowH, suffix) {
+  const max = Math.max(...rows.map((d) => d[key]));
+  for (const [i, row] of rows.slice(0, 8).entries()) {
+    const yy = y + i * (rowH + 13);
+    const val = row[key];
+    const icon = await loadIcon(strategyIcon(row.strategy));
+    if (icon) {
+      ctx.drawImage(icon, x, yy - 3, 23, 23);
+    }
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = "17px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.fillText(row.strategy, x + 32, yy + 14);
+    ctx.fillStyle = "#e2e5dc";
+    ctx.beginPath();
+    ctx.roundRect(x + 150, yy, w, rowH, 8);
+    ctx.fill();
+    ctx.fillStyle = i < 2 ? COLORS.green : i < 4 ? COLORS.teal : COLORS.amber;
+    ctx.beginPath();
+    ctx.roundRect(x + 150, yy, Math.max(4, (val / max) * w), rowH, 8);
+    ctx.fill();
+    ctx.font = "700 16px ui-monospace, Menlo, monospace";
+    ctx.fillText(`${val.toFixed(1)}${suffix}`, x + 162 + w, yy + 14);
+  }
+}
+
+function drawExportHeatmap(ctx, x, y) {
+  const h = DATA.monthly_heatmap;
+  const months = ["", "J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+  const cell = 28;
+  const gap = 5;
+  ctx.font = "700 13px ui-monospace, Menlo, monospace";
+  months.forEach((m, i) => {
+    ctx.fillStyle = COLORS.muted;
+    ctx.fillText(m, x + i * (cell + gap) + 9, y);
+  });
+  h.years.forEach((year, rowIndex) => {
+    const yy = y + 18 + rowIndex * (cell + gap);
+    ctx.fillStyle = COLORS.muted;
+    ctx.fillText(String(year), x, yy + 19);
+    h.months.forEach((month, colIndex) => {
+      const value = h.matrix[rowIndex][colIndex];
+      const xx = x + 48 + colIndex * (cell + gap);
+      ctx.fillStyle = heatColor(value, h.min_value, h.max_value);
+      ctx.beginPath();
+      ctx.roundRect(xx, yy, cell, cell, 5);
+      ctx.fill();
+      if (value != null) {
+        ctx.fillStyle = value >= 0 ? "#063b28" : "#5a1f1a";
+        ctx.font = "700 11px ui-monospace, Menlo, monospace";
+        ctx.fillText(value.toFixed(0), xx + 7, yy + 18);
+      }
+    });
+  });
+}
+
+async function init() {
+  const response = await fetch(DATA_URL);
+  DATA = await response.json();
+  renderPage();
+  window.addEventListener("resize", renderPage);
+  document.querySelectorAll(".lang-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      currentLang = button.dataset.lang === "zh" ? "zh" : "en";
+      renderPage();
+    });
+  });
+  document.getElementById("download-screenshot")?.addEventListener("click", () => {
+    downloadScreenshot().catch((error) => console.error(error));
+  });
+}
+
+init().catch((error) => {
+  document.body.innerHTML = `<pre style="padding:24px;color:#b65349">${error.stack || error}</pre>`;
+});
