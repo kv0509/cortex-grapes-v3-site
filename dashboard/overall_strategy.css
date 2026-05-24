@@ -1070,6 +1070,10 @@ h2 {
   white-space: nowrap;
 }
 
+.mobile-slide-controls {
+  display: none;
+}
+
 .zh-mode .deck-subtitle,
 .zh-mode .slide-copy,
 .zh-mode .narrative-list,
@@ -1169,7 +1173,7 @@ h2 {
 
   .deck-shell {
     width: 100%;
-    padding: 0 12px 22px;
+    padding: 0 12px 86px;
   }
 
   .deck-topbar {
@@ -1219,10 +1223,79 @@ h2 {
   }
 
   .slide-page {
-    margin: 14px 0;
+    display: none;
+    min-height: calc(100svh - 116px);
+    margin: 14px 0 0;
     padding: 34px 22px 30px;
     border-radius: 0;
     box-shadow: 0 12px 34px rgba(17, 25, 22, .08);
+  }
+
+  .slide-page.is-active {
+    display: block;
+  }
+
+  .cover-page.is-active,
+  .performance-page.is-active,
+  .product-page.is-active,
+  .benchmark-page.is-active,
+  .strategy-page.is-active,
+  .quality-page.is-active,
+  .mix-page.is-active,
+  .market-page.is-active,
+  .close-page.is-active {
+    display: grid;
+  }
+
+  .performance-page.is-active,
+  .product-page.is-active,
+  .benchmark-page.is-active,
+  .strategy-page.is-active,
+  .quality-page.is-active,
+  .mix-page.is-active,
+  .market-page.is-active {
+    align-content: start;
+  }
+
+  .deck-footer {
+    display: none;
+  }
+
+  .mobile-slide-controls.is-visible {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: 76px 1fr 76px;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid rgba(17, 25, 22, .12);
+    background: rgba(255, 255, 255, .92);
+    box-shadow: 0 12px 34px rgba(17, 25, 22, .16);
+    backdrop-filter: blur(16px);
+  }
+
+  .mobile-slide-controls button {
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: #fff;
+    background: var(--ink);
+    font: 800 12px/1 var(--sans);
+  }
+
+  .mobile-slide-controls button:disabled {
+    color: var(--muted);
+    background: #eef0eb;
+  }
+
+  .mobile-slide-controls span {
+    color: var(--ink);
+    text-align: center;
+    font: 800 12px/1 var(--mono);
   }
 
   .slide-page::before {

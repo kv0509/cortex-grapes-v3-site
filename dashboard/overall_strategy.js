@@ -26,6 +26,7 @@ const COLORS = {
 
 let DATA = null;
 let currentLang = "en";
+let currentMobileSlide = 0;
 
 const MARKET_REGIMES = {
   "2022": { type: "bear", en: "Bear", zh: "熊市" },
@@ -155,6 +156,8 @@ const TEXT = {
     screenshotMonthly: "Monthly returns",
     screenshotContribution: "Contribution",
     screenshotStrategy: "8-strategy ROI",
+    mobilePrev: "Prev",
+    mobileNext: "Next",
   },
   zh: {
     asOf: "更新日期：2026年5月24日",
@@ -269,6 +272,8 @@ const TEXT = {
     screenshotMonthly: "月度回报",
     screenshotContribution: "贡献占比",
     screenshotStrategy: "8 个策略 ROI",
+    mobilePrev: "上一页",
+    mobileNext: "下一页",
   },
 };
 
@@ -858,6 +863,56 @@ function renderPage() {
   drawMarketCycleChart();
   drawStrategyRoiChart();
   drawAnnualFdChart();
+  updateMobileSlides(false);
+}
+
+function isMobileSlideMode() {
+  return window.matchMedia("(max-width: 720px)").matches;
+}
+
+function drawVisibleSlideCharts() {
+  const active = document.querySelector(".slide-page.is-active");
+  if (!active) return;
+  if (active.querySelector("#equity-chart")) drawEquityChart();
+  if (active.querySelector("#annual-fd-chart")) drawAnnualFdChart();
+  if (active.querySelector("#strategy-roi-chart")) drawStrategyRoiChart();
+  if (active.querySelector("#quality-heatmap")) renderHeatmap("quality-heatmap");
+  if (active.querySelector("#monthly-profile-chart")) drawMonthlyProfileChart();
+  if (active.querySelector("#annual-roi-chart")) drawAnnualRoiChart();
+  if (active.querySelector("#market-cycle-chart")) drawMarketCycleChart();
+}
+
+function updateMobileSlides(scrollTop = true) {
+  const slides = Array.from(document.querySelectorAll(".slide-page"));
+  const controls = document.querySelector(".mobile-slide-controls");
+  const count = document.getElementById("mobile-slide-count");
+  const prev = document.getElementById("mobile-prev");
+  const next = document.getElementById("mobile-next");
+  if (!slides.length || !controls || !count || !prev || !next) return;
+
+  if (!isMobileSlideMode()) {
+    slides.forEach((slide) => slide.classList.remove("is-active"));
+    controls.classList.remove("is-visible");
+    return;
+  }
+
+  currentMobileSlide = Math.min(Math.max(currentMobileSlide, 0), slides.length - 1);
+  slides.forEach((slide, index) => slide.classList.toggle("is-active", index === currentMobileSlide));
+  controls.classList.add("is-visible");
+  count.textContent = `${currentMobileSlide + 1} / ${slides.length}`;
+  prev.textContent = t("mobilePrev");
+  next.textContent = t("mobileNext");
+  prev.disabled = currentMobileSlide === 0;
+  next.disabled = currentMobileSlide === slides.length - 1;
+  drawVisibleSlideCharts();
+  if (scrollTop) window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function moveMobileSlide(direction) {
+  if (!isMobileSlideMode()) return;
+  const total = document.querySelectorAll(".slide-page").length;
+  currentMobileSlide = Math.min(Math.max(currentMobileSlide + direction, 0), total - 1);
+  updateMobileSlides(true);
 }
 
 function loadIcon(src) {
@@ -1034,7 +1089,10 @@ async function init() {
   const response = await fetch(DATA_URL);
   DATA = await response.json();
   renderPage();
-  window.addEventListener("resize", renderPage);
+  window.addEventListener("resize", () => {
+    renderPage();
+    updateMobileSlides(false);
+  });
   document.querySelectorAll(".lang-btn").forEach((button) => {
     button.addEventListener("click", () => {
       currentLang = button.dataset.lang === "zh" ? "zh" : "en";
@@ -1043,6 +1101,13 @@ async function init() {
   });
   document.getElementById("download-screenshot")?.addEventListener("click", () => {
     downloadScreenshot().catch((error) => console.error(error));
+  });
+  document.getElementById("mobile-prev")?.addEventListener("click", () => moveMobileSlide(-1));
+  document.getElementById("mobile-next")?.addEventListener("click", () => moveMobileSlide(1));
+  window.addEventListener("keydown", (event) => {
+    if (!isMobileSlideMode()) return;
+    if (event.key === "ArrowLeft") moveMobileSlide(-1);
+    if (event.key === "ArrowRight") moveMobileSlide(1);
   });
 }
 
