@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NTS Alpha Labs Investor Snapshot</title>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="stylesheet" href="./overall_strategy.css?v=20260525-validation-layer-1" />
+    <link rel="stylesheet" href="./overall_strategy.css?v=20260525-market-proof-1" />
   </head>
   <body>
     <main class="deck-shell fundraise-deck" id="overall-shell">
@@ -39,17 +39,107 @@
       <section class="slide-page problem-page fund-problem-page" data-slide="02">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="problemEyebrow">The Problem</p>
-          <h1 data-i18n="problemTitle">Why most systematic strategies fail.</h1>
+          <h1 data-i18n="problemTitle">The problem is not AI. It is unverified AI marketing.</h1>
         </div>
         <div class="problem-list fund-problem-list">
-          <article><span>×</span><div><strong data-i18n="problemOneTitle">Single-strategy dependence</strong><p data-i18n="problemOneCopy">One return source can look strong until the market regime changes.</p></div></article>
-          <article><span>×</span><div><strong data-i18n="problemTwoTitle">Regime fragility</strong><p data-i18n="problemTwoCopy">A strategy that only works in one market mood is difficult to allocate to with confidence.</p></div></article>
-          <article><span>×</span><div><strong data-i18n="problemThreeTitle">Lack of portfolio breadth</strong><p data-i18n="problemThreeCopy">Without multiple return engines, performance becomes too dependent on one behavior.</p></div></article>
-          <article><span>×</span><div><strong data-i18n="problemFourTitle">Inconsistent execution</strong><p data-i18n="problemFourCopy">A good idea still needs a repeatable process before it becomes an investable product.</p></div></article>
+          <article><span>×</span><div><strong data-i18n="problemOneTitle">AI label first</strong><p data-i18n="problemOneCopy">Many offers lead with the word AI before showing a real strategy process.</p></div></article>
+          <article><span>×</span><div><strong data-i18n="problemTwoTitle">Generic indicator core</strong><p data-i18n="problemTwoCopy">Under the surface, many systems are still basic Supertrend, MACD, RSI, and moving-average combinations.</p></div></article>
+          <article><span>×</span><div><strong data-i18n="problemThreeTitle">No serious backtest</strong><p data-i18n="problemThreeCopy">Without regime-tested evidence, a strategy is only a claim.</p></div></article>
+          <article><span>×</span><div><strong data-i18n="problemFourTitle">No execution proof</strong><p data-i18n="problemFourCopy">A signal that cannot survive lag, fees, execution, and review is not ready for allocation.</p></div></article>
         </div>
       </section>
 
-      <section class="slide-page validation-page" data-slide="03">
+      <section class="slide-page market-noise-page evidence-page" data-slide="03">
+        <div class="slide-head compact-head">
+          <p class="eyebrow" data-i18n="aiMarketEyebrow">Market Reality</p>
+          <h1 data-i18n="aiMarketTitle">Malaysia's AI trading market is noisy.</h1>
+          <p class="slide-copy" data-i18n="aiMarketCopy">The investor problem is simple: many products sound advanced, but the proof layer is thin. The gap between marketing language and validated process is where capital gets misled.</p>
+        </div>
+        <div class="evidence-layout">
+          <canvas id="market-noise-chart" class="chart evidence-canvas"></canvas>
+          <div class="evidence-points">
+            <article><strong data-i18n="aiMarketOneTitle">AI as packaging</strong><span data-i18n="aiMarketOneCopy">The story can sound intelligent even when the underlying trading logic is ordinary.</span></article>
+            <article><strong data-i18n="aiMarketTwoTitle">Screenshots over evidence</strong><span data-i18n="aiMarketTwoCopy">A few profitable trades are not the same as a tested investment process.</span></article>
+            <article><strong data-i18n="aiMarketThreeTitle">Low auditability</strong><span data-i18n="aiMarketThreeCopy">Investors rarely get clean backtest, monthly behavior, contribution, and execution review in one place.</span></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide-page indicator-page evidence-page" data-slide="04">
+        <div class="slide-head compact-head">
+          <p class="eyebrow" data-i18n="indicatorEyebrow">Generic Indicator Problem</p>
+          <h1 data-i18n="indicatorTitle">Supertrend, MACD and RSI are not a strategy by themselves.</h1>
+          <p class="slide-copy" data-i18n="indicatorCopy">Indicators can be useful inputs. But when they are simply stacked together and called AI, the result is usually reactive, crowded, and fragile across regimes.</p>
+        </div>
+        <div class="evidence-layout">
+          <canvas id="indicator-stack-chart" class="chart evidence-canvas"></canvas>
+          <div class="evidence-points">
+            <article><strong data-i18n="indicatorOneTitle">Easy to copy</strong><span data-i18n="indicatorOneCopy">Common indicators rarely create lasting differentiation on their own.</span></article>
+            <article><strong data-i18n="indicatorTwoTitle">Late by design</strong><span data-i18n="indicatorTwoCopy">Many indicator combinations only confirm after the move has already developed.</span></article>
+            <article><strong data-i18n="indicatorThreeTitle">Weak alone</strong><span data-i18n="indicatorThreeCopy">Without portfolio context and validation, indicator logic can look good in one market and poor in another.</span></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide-page backtest-gap-page evidence-page" data-slide="05">
+        <div class="slide-head compact-head">
+          <p class="eyebrow" data-i18n="backtestGapEyebrow">Proof Gap</p>
+          <h1 data-i18n="backtestGapTitle">No backtest, no allocation case.</h1>
+          <p class="slide-copy" data-i18n="backtestGapCopy">A fundable strategy needs more than a signal screenshot. It needs enough evidence for investors to understand repeatability, behavior across cycles, and whether the edge survives real trading assumptions.</p>
+        </div>
+        <div class="proof-layout">
+          <canvas id="backtest-gap-chart" class="chart proof-canvas"></canvas>
+          <div class="proof-callout">
+            <strong data-i18n="backtestGapCallout">Evidence should be layered.</strong>
+            <span data-i18n="backtestGapCalloutCopy">Backtest, annual ROI, monthly distribution, market regime review, contribution breadth, and reporting all need to point in the same direction.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide-page lag-page evidence-page" data-slide="06">
+        <div class="slide-head compact-head">
+          <p class="eyebrow" data-i18n="lagEyebrow">Signal Quality</p>
+          <h1 data-i18n="lagTitle">Lag kills edge before execution starts.</h1>
+          <p class="slide-copy" data-i18n="lagCopy">A late signal can still look correct on a chart, but the investable return is already reduced by entry delay, fees, slippage, and market crowding.</p>
+        </div>
+        <div class="proof-layout">
+          <canvas id="lag-chart" class="chart proof-canvas"></canvas>
+          <div class="proof-callout">
+            <strong data-i18n="lagCallout">The goal is not more signals.</strong>
+            <span data-i18n="lagCalloutCopy">The goal is better timing, better filtering, and fewer low-quality decisions reaching execution.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide-page validation-standard-page evidence-page" data-slide="07">
+        <div class="slide-head compact-head">
+          <p class="eyebrow" data-i18n="standardEyebrow">Validation Standard</p>
+          <h1 data-i18n="standardTitle">A serious strategy must prove the process.</h1>
+          <p class="slide-copy" data-i18n="standardCopy">For investor review, the question is not whether the system sounds intelligent. The question is whether the strategy has been tested, structured, monitored, and made explainable.</p>
+        </div>
+        <div class="standard-layout">
+          <canvas id="validation-standard-chart" class="chart standard-canvas"></canvas>
+          <div class="standard-grid">
+            <article><span>01</span><strong data-i18n="standardOne">Backtested record</strong></article>
+            <article><span>02</span><strong data-i18n="standardTwo">Regime review</strong></article>
+            <article><span>03</span><strong data-i18n="standardThree">Monthly behavior</strong></article>
+            <article><span>04</span><strong data-i18n="standardFour">Veto logic</strong></article>
+            <article><span>05</span><strong data-i18n="standardFive">Execution awareness</strong></article>
+            <article><span>06</span><strong data-i18n="standardSix">Investor reporting</strong></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide-page evidence-stack-page evidence-page" data-slide="08">
+        <div class="slide-head compact-head">
+          <p class="eyebrow" data-i18n="evidenceStackEyebrow">NTS Evidence Stack</p>
+          <h1 data-i18n="evidenceStackTitle">The pitch is built on evidence, not indicator names.</h1>
+          <p class="slide-copy" data-i18n="evidenceStackCopy">NTS Alpha Labs presents the strategy as a portfolio with visible ROI, annual context, monthly behavior, contribution breadth, and a decision layer that can be reviewed before capital is allocated.</p>
+        </div>
+        <canvas id="evidence-stack-chart" class="chart stack-canvas"></canvas>
+      </section>
+
+      <section class="slide-page validation-page" data-slide="09">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="validationEyebrow">Decision Quality</p>
           <h1 data-i18n="validationTitle">AI alone is not an edge. Validation is.</h1>
@@ -65,7 +155,7 @@
         </div>
       </section>
 
-      <section class="slide-page solution-page" data-slide="04">
+      <section class="slide-page solution-page" data-slide="10">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="solutionEyebrow">Our Solution</p>
           <h1 data-i18n="solutionTitle">One portfolio. Multiple independent return engines.</h1>
@@ -85,7 +175,7 @@
         </div>
       </section>
 
-      <section class="slide-page curve-page" data-slide="05">
+      <section class="slide-page curve-page" data-slide="11">
         <div class="panel-head">
           <div>
             <p class="eyebrow" data-i18n="performanceEyebrow">Performance</p>
@@ -99,7 +189,7 @@
         <canvas id="equity-chart" class="chart equity-chart full-curve"></canvas>
       </section>
 
-      <section class="slide-page benchmark-page" data-slide="06">
+      <section class="slide-page benchmark-page" data-slide="12">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="benchmarkEyebrow">ROI Benchmark</p>
           <h1 data-i18n="benchmarkTitle">Outperformance needs a reference point.</h1>
@@ -119,7 +209,7 @@
         </div>
       </section>
 
-      <section class="slide-page regime-page" data-slide="07">
+      <section class="slide-page regime-page" data-slide="13">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="regimeEyebrow">Market Regimes</p>
           <h1 data-i18n="regimeTitle">Annual ROI across market moods.</h1>
@@ -135,7 +225,7 @@
         </div>
       </section>
 
-      <section class="slide-page contribution-page" data-slide="08">
+      <section class="slide-page contribution-page" data-slide="14">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="contributionEyebrow">Portfolio Contribution</p>
           <h1 data-i18n="contributionTitle">Different engines. One portfolio.</h1>
@@ -152,7 +242,7 @@
         </div>
       </section>
 
-      <section class="slide-page monthly-page" data-slide="09">
+      <section class="slide-page monthly-page" data-slide="15">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="monthlyBehaviorEyebrow">Monthly Behavior</p>
           <h1 data-i18n="monthlyBehaviorTitle">Consistency matters.</h1>
@@ -171,7 +261,7 @@
         </div>
       </section>
 
-      <section class="slide-page risk-page" data-slide="10">
+      <section class="slide-page risk-page" data-slide="16">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="riskEyebrow">Risk Framework</p>
           <h1 data-i18n="riskTitle">Protect first. Compound second.</h1>
@@ -184,7 +274,7 @@
         </div>
       </section>
 
-      <section class="slide-page infra-page" data-slide="11">
+      <section class="slide-page infra-page" data-slide="17">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="infraEyebrow">Infrastructure</p>
           <h1 data-i18n="infraTitle">An operating system for systematic allocation.</h1>
@@ -199,7 +289,7 @@
         </div>
       </section>
 
-      <section class="slide-page reporting-page" data-slide="12">
+      <section class="slide-page reporting-page" data-slide="18">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="reportingEyebrow">Reporting Layer</p>
           <h1 data-i18n="reportingTitle">Transparency makes the portfolio investable.</h1>
@@ -220,7 +310,7 @@
         </div>
       </section>
 
-      <section class="slide-page expansion-page" data-slide="13">
+      <section class="slide-page expansion-page" data-slide="19">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="marketEyebrow">Expansion</p>
           <h1 data-i18n="marketTitle">The infrastructure is market-agnostic.</h1>
@@ -232,7 +322,7 @@
         </div>
       </section>
 
-      <section class="slide-page closing-page" data-slide="14">
+      <section class="slide-page closing-page" data-slide="20">
         <div class="closing-copy">
           <p class="eyebrow" data-i18n="closeEyebrow">Investor Discussion</p>
           <h1 data-i18n="closeTitle">Systematic by design. Disciplined in execution. Built for long-term compounding.</h1>
@@ -250,11 +340,11 @@
 
       <nav class="mobile-slide-controls" aria-label="Mobile presentation controls">
         <button id="mobile-prev" type="button">Prev</button>
-        <span id="mobile-slide-count">1 / 14</span>
+        <span id="mobile-slide-count">1 / 20</span>
         <button id="mobile-next" type="button">Next</button>
       </nav>
     </main>
 
-    <script src="./overall_strategy.js?v=20260525-validation-layer-1" type="module"></script>
+    <script src="./overall_strategy.js?v=20260525-market-proof-1" type="module"></script>
   </body>
 </html>

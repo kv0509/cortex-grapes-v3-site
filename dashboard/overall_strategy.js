@@ -76,15 +76,55 @@ const TEXT = {
     productThreeTitle: "Market Expansion",
     productThreeCopy: "Crypto is the first proof point. The product layer can later extend into FX, indices, commodities, and other liquid markets.",
     problemEyebrow: "The Problem",
-    problemTitle: "Why most AI trading claims fail.",
-    problemOneTitle: "Single-strategy dependence",
-    problemOneCopy: "One return source can look strong until the market regime changes.",
-    problemTwoTitle: "Signal lag",
-    problemTwoCopy: "Many systems react after the move has already become obvious.",
-    problemThreeTitle: "No validation layer",
-    problemThreeCopy: "A model output is not enough if the signal is not tested against market context and historical behavior.",
-    problemFourTitle: "No veto discipline",
-    problemFourCopy: "Without a filter before execution, weak signals can still become real positions.",
+    problemTitle: "The problem is not AI. It is unverified AI marketing.",
+    problemOneTitle: "AI label first",
+    problemOneCopy: "Many offers lead with the word AI before showing a real strategy process.",
+    problemTwoTitle: "Generic indicator core",
+    problemTwoCopy: "Under the surface, many systems are still basic Supertrend, MACD, RSI, and moving-average combinations.",
+    problemThreeTitle: "No serious backtest",
+    problemThreeCopy: "Without regime-tested evidence, a strategy is only a claim.",
+    problemFourTitle: "No execution proof",
+    problemFourCopy: "A signal that cannot survive lag, fees, execution, and review is not ready for allocation.",
+    aiMarketEyebrow: "Market Reality",
+    aiMarketTitle: "Malaysia's AI trading market is noisy.",
+    aiMarketCopy: "The investor problem is simple: many products sound advanced, but the proof layer is thin. The gap between marketing language and validated process is where capital gets misled.",
+    aiMarketOneTitle: "AI as packaging",
+    aiMarketOneCopy: "The story can sound intelligent even when the underlying trading logic is ordinary.",
+    aiMarketTwoTitle: "Screenshots over evidence",
+    aiMarketTwoCopy: "A few profitable trades are not the same as a tested investment process.",
+    aiMarketThreeTitle: "Low auditability",
+    aiMarketThreeCopy: "Investors rarely get clean backtest, monthly behavior, contribution, and execution review in one place.",
+    indicatorEyebrow: "Generic Indicator Problem",
+    indicatorTitle: "Supertrend, MACD and RSI are not a strategy by themselves.",
+    indicatorCopy: "Indicators can be useful inputs. But when they are simply stacked together and called AI, the result is usually reactive, crowded, and fragile across regimes.",
+    indicatorOneTitle: "Easy to copy",
+    indicatorOneCopy: "Common indicators rarely create lasting differentiation on their own.",
+    indicatorTwoTitle: "Late by design",
+    indicatorTwoCopy: "Many indicator combinations only confirm after the move has already developed.",
+    indicatorThreeTitle: "Weak alone",
+    indicatorThreeCopy: "Without portfolio context and validation, indicator logic can look good in one market and poor in another.",
+    backtestGapEyebrow: "Proof Gap",
+    backtestGapTitle: "No backtest, no allocation case.",
+    backtestGapCopy: "A fundable strategy needs more than a signal screenshot. It needs enough evidence for investors to understand repeatability, behavior across cycles, and whether the edge survives real trading assumptions.",
+    backtestGapCallout: "Evidence should be layered.",
+    backtestGapCalloutCopy: "Backtest, annual ROI, monthly distribution, market regime review, contribution breadth, and reporting all need to point in the same direction.",
+    lagEyebrow: "Signal Quality",
+    lagTitle: "Lag kills edge before execution starts.",
+    lagCopy: "A late signal can still look correct on a chart, but the investable return is already reduced by entry delay, fees, slippage, and market crowding.",
+    lagCallout: "The goal is not more signals.",
+    lagCalloutCopy: "The goal is better timing, better filtering, and fewer low-quality decisions reaching execution.",
+    standardEyebrow: "Validation Standard",
+    standardTitle: "A serious strategy must prove the process.",
+    standardCopy: "For investor review, the question is not whether the system sounds intelligent. The question is whether the strategy has been tested, structured, monitored, and made explainable.",
+    standardOne: "Backtested record",
+    standardTwo: "Regime review",
+    standardThree: "Monthly behavior",
+    standardFour: "Veto logic",
+    standardFive: "Execution awareness",
+    standardSix: "Investor reporting",
+    evidenceStackEyebrow: "NTS Evidence Stack",
+    evidenceStackTitle: "The pitch is built on evidence, not indicator names.",
+    evidenceStackCopy: "NTS Alpha Labs presents the strategy as a portfolio with visible ROI, annual context, monthly behavior, contribution breadth, and a decision layer that can be reviewed before capital is allocated.",
     validationEyebrow: "Decision Quality",
     validationTitle: "AI alone is not an edge. Validation is.",
     validationCopy: "Many so-called AI trading systems still depend on delayed signals, black-box rules, and weak verification. NTS adds a decision layer that reviews data, learns from regime behavior, and can veto low-quality setups before execution.",
@@ -265,15 +305,55 @@ const TEXT = {
     productThreeTitle: "市场扩展",
     productThreeCopy: "Crypto 是第一个 proof point。之后同一套产品层可以继续扩展到 FX、指数、商品和其他流动性市场。",
     problemEyebrow: "问题",
-    problemTitle: "为什么大多数 AI 交易很难真正交付。",
-    problemOneTitle: "依赖单一策略",
-    problemOneCopy: "单一回报来源在某些阶段很好看，但市场环境一变就容易失效。",
-    problemTwoTitle: "Signal lag",
-    problemTwoCopy: "很多系统是在行情已经走出来之后才反应，信号本身就慢了一拍。",
-    problemThreeTitle: "缺少验证层",
-    problemThreeCopy: "单纯模型输出不等于可以交易；信号必须经过市场环境和历史行为验证。",
-    problemFourTitle: "没有 veto 纪律",
-    problemFourCopy: "如果执行前没有过滤层，弱信号也会变成真实仓位。",
+    problemTitle: "问题不是 AI，而是没有验证的 AI marketing。",
+    problemOneTitle: "先卖 AI 名义",
+    problemOneCopy: "很多产品先强调 AI，但没有先展示真正的策略流程。",
+    problemTwoTitle: "底层只是普通指标",
+    problemTwoCopy: "很多系统拆开看，还是 Supertrend、MACD、RSI、均线这类基础组合。",
+    problemThreeTitle: "没有严肃回测",
+    problemThreeCopy: "没有跨市场环境验证，策略就只是一个 claim。",
+    problemFourTitle: "没有执行证明",
+    problemFourCopy: "如果信号扛不住延迟、费用、执行和 review，就还不适合拿来 allocation。",
+    aiMarketEyebrow: "市场现实",
+    aiMarketTitle: "Malaysia 的 AI trading 市场很吵。",
+    aiMarketCopy: "投资人真正面对的问题很简单：很多产品听起来很 advanced，但 proof layer 很薄。Marketing 语言和已验证流程之间的差距，就是 capital 容易被误导的地方。",
+    aiMarketOneTitle: "AI 只是包装",
+    aiMarketOneCopy: "故事可以听起来很聪明，但底层交易逻辑可能很普通。",
+    aiMarketTwoTitle: "截图多过证据",
+    aiMarketTwoCopy: "几张赚钱截图，不等于一个经过测试的投资流程。",
+    aiMarketThreeTitle: "可审计性低",
+    aiMarketThreeCopy: "投资人很少同时看到清楚的回测、月度行为、贡献来源和执行 review。",
+    indicatorEyebrow: "普通指标问题",
+    indicatorTitle: "Supertrend、MACD 和 RSI 本身不是策略。",
+    indicatorCopy: "指标可以是 input。但如果只是把几个指标叠起来再叫 AI，结果通常是反应慢、容易拥挤，并且跨市场环境很脆弱。",
+    indicatorOneTitle: "很容易复制",
+    indicatorOneCopy: "普通指标本身很难长期形成真正差异化。",
+    indicatorTwoTitle: "天生偏慢",
+    indicatorTwoCopy: "很多指标组合是在行情已经走出来之后才确认。",
+    indicatorThreeTitle: "单独看很弱",
+    indicatorThreeCopy: "没有组合 context 和验证，指标逻辑可能在一种市场好看，换一种市场就失效。",
+    backtestGapEyebrow: "证明缺口",
+    backtestGapTitle: "没有 backtest，就没有 allocation case。",
+    backtestGapCopy: "适合 fundraise 的策略不能只靠信号截图。它需要足够证据，让投资人理解重复性、跨周期表现，以及 edge 是否能经得起真实交易假设。",
+    backtestGapCallout: "证据必须是一层一层的。",
+    backtestGapCalloutCopy: "Backtest、年度 ROI、月度分布、市场周期 review、贡献广度和 reporting，方向都必须一致。",
+    lagEyebrow: "信号质量",
+    lagTitle: "Lag 会在执行前先吃掉 edge。",
+    lagCopy: "一个偏慢的信号，在图表上还是可以看起来正确，但真正可投资回报已经被进场延迟、费用、滑点和拥挤交易压低。",
+    lagCallout: "目标不是更多 signal。",
+    lagCalloutCopy: "目标是更好的时机、更好的过滤，以及更少低质量决策进入 execution。",
+    standardEyebrow: "验证标准",
+    standardTitle: "严肃策略必须证明 process。",
+    standardCopy: "投资人 review 时，重点不是系统听起来多智能，而是策略有没有被测试、结构化、监控，并且可以被解释。",
+    standardOne: "Backtested record",
+    standardTwo: "Regime review",
+    standardThree: "Monthly behavior",
+    standardFour: "Veto logic",
+    standardFive: "Execution awareness",
+    standardSix: "Investor reporting",
+    evidenceStackEyebrow: "NTS 证据层",
+    evidenceStackTitle: "我们讲的是证据，不是指标名字。",
+    evidenceStackCopy: "NTS Alpha Labs 用 portfolio 的方式呈现策略：可见 ROI、年度 context、月度行为、贡献广度，以及在 capital allocation 前可以 review 的决策层。",
     validationEyebrow: "决策质量",
     validationTitle: "AI 本身不是 edge，验证才是。",
     validationCopy: "市面上很多所谓 AI 交易，本质还是延迟信号、黑箱规则和薄弱验证。NTS 在执行前加入决策层：先读数据、理解市场状态，再用 veto 机制过滤低质量机会。",
@@ -571,6 +651,253 @@ function drawAxes(ctx, x, y, w, h, yTicks = 4) {
   ctx.lineTo(x, y + h);
   ctx.lineTo(x + w, y + h);
   ctx.stroke();
+}
+
+function drawMarketNoiseChart() {
+  const canvas = document.getElementById("market-noise-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const rows = [
+    { label: currentLang === "zh" ? "AI marketing" : "AI marketing", typical: 92, nts: 38 },
+    { label: currentLang === "zh" ? "Backtest 证据" : "Backtest evidence", typical: 22, nts: 88 },
+    { label: currentLang === "zh" ? "月度记录" : "Monthly record", typical: 18, nts: 84 },
+    { label: currentLang === "zh" ? "执行 review" : "Execution review", typical: 20, nts: 78 },
+  ];
+  const pad = { l: compact ? 118 : 180, r: 30, t: 34, b: 28 };
+  const x = pad.l;
+  const w = width - pad.l - pad.r;
+  const rowH = (height - pad.t - pad.b) / rows.length;
+  ctx.font = "800 11px ui-monospace, Menlo, monospace";
+  ctx.fillStyle = COLORS.muted;
+  ctx.fillText(currentLang === "zh" ? "普通 AI offer" : "Typical AI offer", x, 16);
+  ctx.fillText("NTS", x + w * .55, 16);
+  rows.forEach((row, index) => {
+    const yy = pad.t + index * rowH;
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = `${compact ? "700 12px" : "800 14px"} -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.fillText(row.label, 10, yy + rowH * .52);
+    const barH = compact ? 16 : 22;
+    const barY = yy + rowH * .32;
+    const half = w * .42;
+    ctx.fillStyle = "rgba(184, 137, 53, .16)";
+    ctx.beginPath();
+    ctx.roundRect(x, barY, half, barH, 10);
+    ctx.fill();
+    ctx.fillStyle = COLORS.amber;
+    ctx.beginPath();
+    ctx.roundRect(x, barY, half * row.typical / 100, barH, 10);
+    ctx.fill();
+    const ntsX = x + w * .55;
+    ctx.fillStyle = "rgba(6, 107, 79, .12)";
+    ctx.beginPath();
+    ctx.roundRect(ntsX, barY, half, barH, 10);
+    ctx.fill();
+    ctx.fillStyle = COLORS.green;
+    ctx.beginPath();
+    ctx.roundRect(ntsX, barY, half * row.nts / 100, barH, 10);
+    ctx.fill();
+  });
+}
+
+function drawIndicatorStackChart() {
+  const canvas = document.getElementById("indicator-stack-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const rows = [
+    { label: "Supertrend", lag: 74, validation: 28 },
+    { label: "MACD", lag: 68, validation: 24 },
+    { label: "RSI", lag: 58, validation: 30 },
+    { label: currentLang === "zh" ? "NTS portfolio" : "NTS portfolio", lag: 26, validation: 86 },
+  ];
+  const pad = { l: compact ? 104 : 168, r: 32, t: 32, b: 28 };
+  const w = width - pad.l - pad.r;
+  const rowH = (height - pad.t - pad.b) / rows.length;
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = "800 11px ui-monospace, Menlo, monospace";
+  ctx.fillText(currentLang === "zh" ? "滞后感" : "Lag", pad.l, 16);
+  ctx.fillText(currentLang === "zh" ? "验证强度" : "Validation", pad.l + w * .52, 16);
+  rows.forEach((row, index) => {
+    const yy = pad.t + index * rowH;
+    const barH = compact ? 16 : 22;
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = `${compact ? "800 12px" : "800 15px"} -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.fillText(row.label, 10, yy + rowH * .52);
+    const half = w * .4;
+    ctx.fillStyle = "rgba(184, 137, 53, .14)";
+    ctx.beginPath();
+    ctx.roundRect(pad.l, yy + rowH * .32, half, barH, 10);
+    ctx.fill();
+    ctx.fillStyle = row.label.includes("NTS") ? "rgba(184, 137, 53, .55)" : COLORS.amber;
+    ctx.beginPath();
+    ctx.roundRect(pad.l, yy + rowH * .32, half * row.lag / 100, barH, 10);
+    ctx.fill();
+    const vx = pad.l + w * .52;
+    ctx.fillStyle = "rgba(6, 107, 79, .12)";
+    ctx.beginPath();
+    ctx.roundRect(vx, yy + rowH * .32, half, barH, 10);
+    ctx.fill();
+    ctx.fillStyle = row.label.includes("NTS") ? COLORS.green : COLORS.teal;
+    ctx.beginPath();
+    ctx.roundRect(vx, yy + rowH * .32, half * row.validation / 100, barH, 10);
+    ctx.fill();
+  });
+}
+
+function drawBacktestGapChart() {
+  const canvas = document.getElementById("backtest-gap-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const steps = compact
+    ? currentLang === "zh"
+      ? ["截图", "参数", "回测", "周期", "月度", "报告"]
+      : ["Shot", "Set", "Test", "Reg", "Mth", "Rpt"]
+    : currentLang === "zh"
+      ? ["截图", "指标参数", "Backtest", "Regime", "月度", "Reporting"]
+      : ["Screenshots", "Settings", "Backtest", "Regime", "Monthly", "Reporting"];
+  const pad = { l: 26, r: 26, t: 48, b: compact ? 44 : 58 };
+  const w = width - pad.l - pad.r;
+  const h = height - pad.t - pad.b;
+  const stepW = w / steps.length;
+  steps.forEach((label, index) => {
+    const level = (index + 1) / steps.length;
+    const barH = h * level;
+    const x = pad.l + index * stepW + stepW * .16;
+    const y = pad.t + h - barH;
+    ctx.fillStyle = index < 2 ? "rgba(184, 137, 53, .76)" : index < 4 ? COLORS.teal : COLORS.green;
+    ctx.beginPath();
+    ctx.roundRect(x, y, stepW * .56, barH, 8);
+    ctx.fill();
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = "800 12px ui-monospace, Menlo, monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(`${Math.round(level * 100)}%`, x + stepW * .28, y - 8);
+    ctx.fillStyle = COLORS.muted;
+    ctx.font = `${compact ? "9px" : "12px"} -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.fillText(label, x + stepW * .28, pad.t + h + 24);
+  });
+  ctx.textAlign = "left";
+}
+
+function drawLagChart() {
+  const canvas = document.getElementById("lag-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const pad = { l: 42, r: 30, t: 28, b: 38 };
+  const x = pad.l;
+  const y = pad.t;
+  const w = width - pad.l - pad.r;
+  const h = height - pad.t - pad.b;
+  drawAxes(ctx, x, y, w, h, 3);
+  const points = Array.from({ length: 52 }, (_, i) => {
+    const t0 = i / 51;
+    return { x: x + t0 * w, y: y + h - (Math.pow(t0, 1.35) * .86 + Math.sin(t0 * 7) * .03) * h };
+  });
+  ctx.strokeStyle = COLORS.green;
+  ctx.lineWidth = 4;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  points.forEach((p, i) => { if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
+  ctx.stroke();
+  const reviewed = points[21];
+  const late = points[38];
+  [
+    { p: reviewed, c: COLORS.green, label: currentLang === "zh" ? "review point" : "review point" },
+    { p: late, c: COLORS.amber, label: currentLang === "zh" ? "late signal" : "late signal" },
+  ].forEach((item) => {
+    ctx.fillStyle = item.c;
+    ctx.beginPath();
+    ctx.arc(item.p.x, item.p.y, 7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = item.c;
+    ctx.font = "800 12px ui-monospace, Menlo, monospace";
+    ctx.fillText(item.label, Math.min(item.p.x + 10, width - 110), item.p.y - 12);
+  });
+}
+
+function drawValidationStandardChart() {
+  const canvas = document.getElementById("validation-standard-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const items = [
+    { label: currentLang === "zh" ? "Backtest" : "Backtest", value: 92 },
+    { label: currentLang === "zh" ? "Regime" : "Regime", value: 84 },
+    { label: currentLang === "zh" ? "Monthly" : "Monthly", value: 89 },
+    { label: currentLang === "zh" ? "Veto" : "Veto", value: 78 },
+    { label: currentLang === "zh" ? "Execution" : "Execution", value: 80 },
+    { label: currentLang === "zh" ? "Reporting" : "Reporting", value: 86 },
+  ];
+  const cx = width / 2;
+  const cy = height / 2 + (compact ? 4 : 12);
+  const r = Math.min(width, height) * (compact ? .29 : .32);
+  ctx.strokeStyle = COLORS.grid;
+  ctx.lineWidth = 1;
+  for (let ring = 1; ring <= 4; ring += 1) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r * ring / 4, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  ctx.beginPath();
+  items.forEach((item, index) => {
+    const angle = -Math.PI / 2 + index * Math.PI * 2 / items.length;
+    const rr = r * item.value / 100;
+    const px = cx + Math.cos(angle) * rr;
+    const py = cy + Math.sin(angle) * rr;
+    if (index === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  });
+  ctx.closePath();
+  ctx.fillStyle = "rgba(6, 107, 79, .18)";
+  ctx.fill();
+  ctx.strokeStyle = COLORS.green;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  items.forEach((item, index) => {
+    const angle = -Math.PI / 2 + index * Math.PI * 2 / items.length;
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = `800 ${compact ? 10 : 12}px -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.textAlign = Math.cos(angle) > .2 ? "left" : Math.cos(angle) < -.2 ? "right" : "center";
+    ctx.fillText(item.label, cx + Math.cos(angle) * (r + 18), cy + Math.sin(angle) * (r + 18));
+  });
+  ctx.textAlign = "left";
+}
+
+function drawEvidenceStackChart() {
+  const canvas = document.getElementById("evidence-stack-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const layers = currentLang === "zh"
+    ? ["Portfolio ROI", "年度 ROI", "月度分布", "贡献广度", "Decision layer", "Reporting"]
+    : ["Portfolio ROI", "Annual ROI", "Monthly distribution", "Contribution breadth", "Decision layer", "Reporting"];
+  const pad = { l: compact ? 24 : 46, r: compact ? 24 : 46, t: 26, b: 26 };
+  const gap = compact ? 8 : 14;
+  const layerH = (height - pad.t - pad.b - gap * (layers.length - 1)) / layers.length;
+  layers.forEach((label, index) => {
+    const inset = compact ? index * 4 : index * 12;
+    const x = pad.l + inset;
+    const y = pad.t + index * (layerH + gap);
+    const w = width - pad.l - pad.r - inset * 2;
+    ctx.fillStyle = index < 2 ? COLORS.green : index < 4 ? COLORS.teal : COLORS.amber;
+    ctx.globalAlpha = 1 - index * .08;
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, layerH, 4);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#fffaf0";
+    ctx.font = `850 ${compact ? 13 : 17}px -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.fillText(label, x + 18, y + layerH * .6);
+  });
 }
 
 function drawValidationChart() {
@@ -1232,6 +1559,12 @@ function renderPage() {
   renderQuality();
   renderReportingBoard();
   renderBenchmark();
+  drawMarketNoiseChart();
+  drawIndicatorStackChart();
+  drawBacktestGapChart();
+  drawLagChart();
+  drawValidationStandardChart();
+  drawEvidenceStackChart();
   drawValidationChart();
   drawEquityChart();
   drawMonthlyProfileChart();
@@ -1254,6 +1587,12 @@ function drawVisibleSlideCharts() {
   if (!active) return;
   if (active.querySelector("#contribution-wheel")) drawContributionWheel();
   if (active.querySelector("#portfolio-contribution-wheel")) drawContributionWheel("portfolio-contribution-wheel");
+  if (active.querySelector("#market-noise-chart")) drawMarketNoiseChart();
+  if (active.querySelector("#indicator-stack-chart")) drawIndicatorStackChart();
+  if (active.querySelector("#backtest-gap-chart")) drawBacktestGapChart();
+  if (active.querySelector("#lag-chart")) drawLagChart();
+  if (active.querySelector("#validation-standard-chart")) drawValidationStandardChart();
+  if (active.querySelector("#evidence-stack-chart")) drawEvidenceStackChart();
   if (active.querySelector("#equity-chart")) drawEquityChart();
   if (active.querySelector("#validation-chart")) drawValidationChart();
   if (active.querySelector("#annual-fd-chart")) drawAnnualFdChart();

@@ -739,6 +739,100 @@ p {
   line-height: 1.38;
 }
 
+.evidence-page {
+  display: grid;
+  align-content: center;
+}
+
+.evidence-layout,
+.proof-layout,
+.standard-layout {
+  display: grid;
+  grid-template-columns: minmax(0, .62fr) minmax(320px, .38fr);
+  gap: 54px;
+  align-items: center;
+}
+
+.evidence-canvas,
+.proof-canvas,
+.standard-canvas {
+  height: 430px;
+}
+
+.stack-canvas {
+  height: 520px;
+}
+
+.evidence-points {
+  display: grid;
+  gap: 14px;
+}
+
+.evidence-points article,
+.proof-callout,
+.standard-grid article {
+  background: #f7f6f1;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+
+.evidence-points article {
+  min-height: 132px;
+  padding: 24px;
+}
+
+.evidence-points strong,
+.evidence-points span,
+.proof-callout strong,
+.proof-callout span,
+.standard-grid span,
+.standard-grid strong {
+  display: block;
+}
+
+.evidence-points strong,
+.proof-callout strong {
+  color: var(--ink);
+  font: 820 23px/1.08 var(--sans);
+  letter-spacing: -.02em;
+}
+
+.evidence-points span,
+.proof-callout span {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.38;
+}
+
+.proof-callout {
+  padding: 32px;
+}
+
+.standard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.standard-grid article {
+  min-height: 120px;
+  padding: 22px;
+}
+
+.standard-grid span {
+  color: var(--gold);
+  font: 820 11px/1 var(--mono);
+  letter-spacing: .08em;
+}
+
+.standard-grid strong {
+  margin-top: 34px;
+  color: var(--ink);
+  font: 820 20px/1.08 var(--sans);
+  letter-spacing: -.02em;
+}
+
 .monthly-layout {
   display: grid;
   grid-template-columns: minmax(0, .62fr) minmax(320px, .38fr);
@@ -2010,6 +2104,9 @@ p {
 @media (max-width: 1100px) {
   .solution-layout,
   .validation-layout,
+  .evidence-layout,
+  .proof-layout,
+  .standard-layout,
   .durability-charts,
   .breadth-layout,
   .reporting-layout,
@@ -2032,6 +2129,12 @@ p {
 
   .fund-hero-page.is-active,
   .fund-problem-page.is-active,
+  .market-noise-page.is-active,
+  .indicator-page.is-active,
+  .backtest-gap-page.is-active,
+  .lag-page.is-active,
+  .validation-standard-page.is-active,
+  .evidence-stack-page.is-active,
   .validation-page.is-active,
   .solution-page.is-active,
   .curve-page.is-active,
@@ -2074,6 +2177,68 @@ p {
 
   .validation-page .slide-copy {
     display: none;
+  }
+
+  .evidence-page .slide-head {
+    margin-bottom: 16px;
+  }
+
+  .evidence-page .slide-copy {
+    display: none;
+  }
+
+  .evidence-layout,
+  .proof-layout,
+  .standard-layout {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  .evidence-canvas,
+  .proof-canvas,
+  .standard-canvas {
+    height: 198px;
+  }
+
+  .stack-canvas {
+    height: 320px;
+  }
+
+  .evidence-points {
+    gap: 7px;
+  }
+
+  .evidence-points article,
+  .proof-callout {
+    min-height: 0;
+    padding: 11px 14px;
+  }
+
+  .evidence-points strong,
+  .proof-callout strong {
+    font-size: 17px;
+  }
+
+  .evidence-points span,
+  .proof-callout span {
+    margin-top: 5px;
+    font-size: 12px;
+    line-height: 1.22;
+  }
+
+  .standard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .standard-grid article {
+    min-height: 70px;
+    padding: 10px 11px;
+  }
+
+  .standard-grid strong {
+    margin-top: 18px;
+    font-size: 14px;
   }
 
   .validation-layout {
@@ -2291,9 +2456,15 @@ p {
     #efeee9;
 }
 
-  .fundraise-deck .solution-page,
-  .fundraise-deck .validation-page,
-  .fundraise-deck .benchmark-page,
+.fundraise-deck .market-noise-page,
+.fundraise-deck .indicator-page,
+.fundraise-deck .backtest-gap-page,
+.fundraise-deck .lag-page,
+.fundraise-deck .validation-standard-page,
+.fundraise-deck .evidence-stack-page,
+.fundraise-deck .solution-page,
+.fundraise-deck .validation-page,
+.fundraise-deck .benchmark-page,
 .fundraise-deck .contribution-page,
 .fundraise-deck .monthly-page,
 .fundraise-deck .breadth-page,
