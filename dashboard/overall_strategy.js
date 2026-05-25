@@ -188,6 +188,59 @@ function drawFailureChart() {
   });
 }
 
+function drawDataAdvantageChart() {
+  const canvas = $("data-advantage-chart");
+  const state = clear(canvas);
+  if (!state) return;
+  const { ctx, w, h } = state;
+  const compact = w < 520;
+  if (compact) {
+    const rows = [
+      ["Price label", "Late"],
+      ["Indicator stack", "Reactive"],
+      ["Data analysis", "Context"],
+      ["Portfolio review", "Evidence"],
+    ];
+    rows.forEach(([label, value], i) => {
+      const y = 24 + i * 54;
+      roundRect(ctx, 18, y, w - 36, 38, 2);
+      ctx.fillStyle = i < 2 ? "rgba(184,137,53,.16)" : "rgba(0,107,79,.14)";
+      ctx.fill();
+      ctx.strokeStyle = i < 2 ? "rgba(184,137,53,.32)" : "rgba(0,107,79,.28)";
+      ctx.stroke();
+      drawLabel(ctx, label, 32, y + 24, COLORS.ink, 12, 780);
+      drawLabel(ctx, value, w - 98, y + 24, i < 2 ? COLORS.gold : COLORS.green, 12, 820);
+    });
+    return;
+  }
+  const left = 48;
+  const top = 70;
+  const colW = (w - 120) / 2;
+  const rows = [
+    ["Indicator label", "Price cross", "MACD / RSI", "Single confirmation"],
+    ["Data analysis", "Regime context", "Liquidity / positioning", "Portfolio evidence"],
+  ];
+  rows.forEach(([title, one, two, three], i) => {
+    const x = left + i * (colW + 24);
+    roundRect(ctx, x, top, colW, h - 130, 2);
+    ctx.fillStyle = i === 0 ? "rgba(184,137,53,.10)" : "rgba(0,107,79,.10)";
+    ctx.fill();
+    ctx.strokeStyle = i === 0 ? "rgba(184,137,53,.28)" : "rgba(0,107,79,.28)";
+    ctx.stroke();
+    drawLabel(ctx, title, x + 28, top + 44, i === 0 ? COLORS.gold : COLORS.green, 22, 840);
+    [one, two, three].forEach((text, j) => {
+      const y = top + 96 + j * 62;
+      ctx.strokeStyle = "rgba(16,33,27,.12)";
+      ctx.beginPath();
+      ctx.moveTo(x + 28, y - 24);
+      ctx.lineTo(x + colW - 28, y - 24);
+      ctx.stroke();
+      drawLabel(ctx, text, x + 28, y, COLORS.ink, 16, 760);
+    });
+  });
+  drawLabel(ctx, "The advantage is context before confirmation.", left, h - 36, COLORS.muted, 14, 720);
+}
+
 function drawValidationStackChart() {
   const canvas = $("validation-stack-chart");
   const state = clear(canvas);
@@ -377,6 +430,69 @@ function drawAnnualRegimeChart() {
     ctx.fill();
     drawLabel(ctx, regime[lang], x, h - 14, "#fff", 10, 760);
   });
+}
+
+function drawRegimeExplainerChart() {
+  const canvas = $("regime-explainer-chart");
+  const state = clear(canvas);
+  if (!state) return;
+  const { ctx, w, h } = state;
+  const compact = w < 520;
+  const rows = [
+    { label: lang === "zh" ? "熊市" : "Bear", color: COLORS.teal, points: [28, 18, 24, 22, 30], mode: lang === "zh" ? "更选择性" : "Selective" },
+    { label: lang === "zh" ? "牛市" : "Bull", color: COLORS.green, points: [22, 36, 48, 58, 72], mode: lang === "zh" ? "更积极" : "Expansion" },
+    { label: lang === "zh" ? "震荡市" : "Mixed", color: COLORS.gold, points: [26, 34, 25, 40, 32], mode: lang === "zh" ? "轮动贡献" : "Rotation" },
+  ];
+  if (compact) {
+    rows.forEach((row, i) => {
+      const y = 28 + i * 76;
+      drawLabel(ctx, row.label, 18, y + 15, COLORS.ink, 14, 820);
+      const x = 86;
+      const bw = w - 126;
+      row.points.forEach((p, j) => {
+        const px = x + j * (bw / (row.points.length - 1));
+        const py = y + 42 - p * .32;
+        ctx.beginPath();
+        if (j === 0) ctx.moveTo(px, py);
+      });
+      ctx.strokeStyle = row.color;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      row.points.forEach((p, j) => {
+        const px = x + j * (bw / (row.points.length - 1));
+        const py = y + 48 - p * .32;
+        if (j === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+      drawLabel(ctx, row.mode, w - 88, y + 18, row.color, 11, 760);
+    });
+    return;
+  }
+  const chartX = 44;
+  const chartY = 58;
+  const chartW = w - 88;
+  const bandH = (h - 126) / rows.length;
+  rows.forEach((row, i) => {
+    const y = chartY + i * bandH;
+    ctx.fillStyle = i % 2 ? "rgba(16,33,27,.035)" : "rgba(16,33,27,.02)";
+    ctx.fillRect(chartX, y, chartW, bandH - 14);
+    drawLabel(ctx, row.label, chartX + 18, y + 34, COLORS.ink, 18, 820);
+    drawLabel(ctx, row.mode, chartX + 18, y + 58, row.color, 12, 780);
+    const x0 = chartX + 170;
+    const lineW = chartW - 210;
+    ctx.strokeStyle = row.color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    row.points.forEach((p, j) => {
+      const px = x0 + j * (lineW / (row.points.length - 1));
+      const py = y + bandH - 36 - p * .55;
+      if (j === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    });
+    ctx.stroke();
+  });
+  drawLabel(ctx, "Return rhythm changes with market structure; the portfolio adapts by engine participation.", chartX, h - 28, COLORS.muted, 14, 720);
 }
 
 function drawMonthlyDistribution() {
@@ -720,6 +836,7 @@ function renderHeatmap() {
 
 function drawAllCharts() {
   drawThesisMap();
+  drawDataAdvantageChart();
   drawFailureChart();
   drawValidationStackChart();
   drawGovernanceChart();
@@ -727,6 +844,7 @@ function drawAllCharts() {
   drawEquityChart();
   drawBenchmarkChart();
   drawAnnualRegimeChart();
+  drawRegimeExplainerChart();
   drawMonthlyDistribution();
   drawContributionWheel();
   drawStrategyRoiChart();
@@ -760,6 +878,7 @@ function visibleCharts() {
   const active = document.querySelector(".slide-page.is-active");
   if (!active) return;
   if (active.querySelector("#thesis-map")) drawThesisMap();
+  if (active.querySelector("#data-advantage-chart")) drawDataAdvantageChart();
   if (active.querySelector("#failure-chart")) drawFailureChart();
   if (active.querySelector("#validation-stack-chart")) drawValidationStackChart();
   if (active.querySelector("#governance-chart")) drawGovernanceChart();
@@ -767,6 +886,7 @@ function visibleCharts() {
   if (active.querySelector("#equity-chart")) drawEquityChart();
   if (active.querySelector("#benchmark-chart")) drawBenchmarkChart();
   if (active.querySelector("#annual-regime-chart")) drawAnnualRegimeChart();
+  if (active.querySelector("#regime-explainer-chart")) drawRegimeExplainerChart();
   if (active.querySelector("#monthly-distribution-chart")) drawMonthlyDistribution();
   if (active.querySelector("#contribution-wheel")) drawContributionWheel();
   if (active.querySelector("#strategy-roi-chart")) drawStrategyRoiChart();

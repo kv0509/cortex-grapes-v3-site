@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NTS Alpha Labs | Institutional Capital Platform</title>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="stylesheet" href="./overall_strategy.css?v=20260525-institutional-1" />
+    <link rel="stylesheet" href="./overall_strategy.css?v=20260525-institutional-2" />
   </head>
   <body>
     <main class="deck-shell" id="overall-shell">
@@ -63,6 +63,21 @@
 
       <section class="slide-page fail-page" data-slide="04">
         <div class="slide-head">
+          <p class="kicker" data-en="Data Advantage" data-zh="数据分析优势">Data Advantage</p>
+          <h1 data-en="Label strategies react to price. Data analysis reads market behavior." data-zh="标签策略只是在价格后面反应；数据分析是在理解市场行为。">Label strategies react to price. Data analysis reads market behavior.</h1>
+        </div>
+        <div class="evidence-grid">
+          <canvas id="data-advantage-chart" class="chart evidence-chart"></canvas>
+          <div class="compact-list">
+            <article><strong data-en="More context" data-zh="更多市场上下文">More context</strong><span data-en="Trend is read together with liquidity, positioning, volatility and participation." data-zh="趋势会结合流动性、仓位、波动和参与行为一起判断。">Trend is read together with liquidity, positioning, volatility and participation.</span></article>
+            <article><strong data-en="Less lag" data-zh="减少滞后">Less lag</strong><span data-en="The goal is to recognize changing conditions before a simple indicator confirms too late." data-zh="目标是在普通指标太迟确认之前，先识别市场条件正在改变。">The goal is to recognize changing conditions before a simple indicator confirms too late.</span></article>
+            <article><strong data-en="Reviewable evidence" data-zh="可审阅证据">Reviewable evidence</strong><span data-en="Every signal class is judged through historical behavior, regime fit and portfolio contribution." data-zh="每一类信号都要通过历史行为、周期适配和组合贡献来评估。">Every signal class is judged through historical behavior, regime fit and portfolio contribution.</span></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide-page fail-page" data-slide="05">
+        <div class="slide-head">
           <p class="kicker" data-en="Why Systems Fail" data-zh="为什么系统会失败">Why Systems Fail</p>
           <h1 data-en="Most strategies fail because they rely on one market behavior." data-zh="多数策略失败，是因为它们只依赖一种市场行为。">Most strategies fail because they rely on one market behavior.</h1>
         </div>
@@ -76,7 +91,7 @@
         </div>
       </section>
 
-      <section class="slide-page position-page dark-page" data-slide="05">
+      <section class="slide-page position-page dark-page" data-slide="06">
         <div class="big-line" data-en="Not a bot." data-zh="不是一个 bot。">Not a bot.</div>
         <div class="position-copy">
           <h1 data-en="A miniature quant firm, packaged as a capital platform." data-zh="把 miniature quant firm，产品化成资本平台。">A miniature quant firm, packaged as a capital platform.</h1>
@@ -84,7 +99,7 @@
         </div>
       </section>
 
-      <section class="slide-page engine-page" data-slide="06">
+      <section class="slide-page engine-page" data-slide="07">
         <div class="slide-head">
           <p class="kicker" data-en="Engine Architecture" data-zh="引擎架构">Engine Architecture</p>
           <h1 data-en="Eight return engines. Professional roles first, codenames second." data-zh="八个收益引擎。先看专业角色，再看内部 codename。">Eight return engines. Professional roles first, codenames second.</h1>
@@ -101,7 +116,7 @@
         </div>
       </section>
 
-      <section class="slide-page validation-page soft-page" data-slide="07">
+      <section class="slide-page validation-page soft-page" data-slide="08">
         <div class="slide-head">
           <p class="kicker" data-en="Validation Framework" data-zh="验证框架">Validation Framework</p>
           <h1 data-en="Validation is treated as part of the strategy itself." data-zh="验证本身，就是策略的一部分。">Validation is treated as part of the strategy itself.</h1>
@@ -120,7 +135,7 @@
         </div>
       </section>
 
-      <section class="slide-page governance-page" data-slide="08">
+      <section class="slide-page governance-page" data-slide="09">
         <div class="statement narrow">
           <h1 data-en="Decision quality improves when weak signals are stopped before execution." data-zh="真正的决策质量，是在执行前拦掉弱信号。">Decision quality improves when weak signals are stopped before execution.</h1>
           <p data-en="The governance layer combines data analysis, RL-assisted review, veto logic, degradation detection, live divergence monitoring, and exposure discipline." data-zh="治理层结合数据分析、RL-assisted review、veto logic、degradation detection、live divergence monitor 和 exposure discipline。">The governance layer combines data analysis, RL-assisted review, veto logic, degradation detection, live divergence monitoring, and exposure discipline.</p>
@@ -128,7 +143,7 @@
         <canvas id="governance-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page construction-page" data-slide="09">
+      <section class="slide-page construction-page" data-slide="10">
         <div class="slide-head">
           <p class="kicker" data-en="Portfolio Construction" data-zh="组合构建">Portfolio Construction</p>
           <h1 data-en="The allocation case is stronger when alpha streams are not all the same." data-zh="当 alpha 来源不完全相同，allocation case 才更强。">The allocation case is stronger when alpha streams are not all the same.</h1>
@@ -143,7 +158,7 @@
         </div>
       </section>
 
-      <section class="slide-page performance-page" data-slide="10">
+      <section class="slide-page performance-page" data-slide="11">
         <div class="performance-frame">
           <div>
             <p class="kicker" data-en="Performance Evidence" data-zh="收益证据">Performance Evidence</p>
@@ -154,7 +169,7 @@
         <canvas id="equity-chart" class="chart hero-chart"></canvas>
       </section>
 
-      <section class="slide-page benchmark-page" data-slide="11">
+      <section class="slide-page benchmark-page" data-slide="12">
         <div class="slide-head">
           <p class="kicker" data-en="Benchmark Context" data-zh="基准对比">Benchmark Context</p>
           <h1 data-en="The return gap becomes clear when placed beside common alternatives." data-zh="和常见选择放在一起，收益差距会更直观。">The return gap becomes clear when placed beside common alternatives.</h1>
@@ -162,7 +177,7 @@
         <canvas id="benchmark-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page regime-page soft-page" data-slide="12">
+      <section class="slide-page regime-page soft-page" data-slide="13">
         <div class="slide-head">
           <p class="kicker" data-en="Across Market Cycles" data-zh="跨市场周期">Across Market Cycles</p>
           <h1 data-en="Bull years, bear years, and mixed years should not be judged the same way." data-zh="牛市、熊市、震荡市，不应该用同一种方式判断。">Bull years, bear years, and mixed years should not be judged the same way.</h1>
@@ -170,7 +185,22 @@
         <canvas id="annual-regime-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page monthly-page" data-slide="13">
+      <section class="slide-page regime-explain-page" data-slide="14">
+        <div class="slide-head">
+          <p class="kicker" data-en="Regime Return Logic" data-zh="周期收益逻辑">Regime Return Logic</p>
+          <h1 data-en="Different regimes create different return paths." data-zh="不同市场周期，会产生不同的收益路径。">Different regimes create different return paths.</h1>
+        </div>
+        <div class="evidence-grid">
+          <canvas id="regime-explainer-chart" class="chart evidence-chart"></canvas>
+          <div class="compact-list">
+            <article><strong data-en="Bull markets" data-zh="牛市">Bull markets</strong><span data-en="More continuation and acceleration setups appear, so participation can be stronger." data-zh="延续和加速机会更多，组合参与度通常可以更高。">More continuation and acceleration setups appear, so participation can be stronger.</span></article>
+            <article><strong data-en="Bear markets" data-zh="熊市">Bear markets</strong><span data-en="The system becomes more selective. The objective is cleaner participation, not forcing trades." data-zh="系统会更选择性。目标不是硬做交易，而是只参与更干净的机会。">The system becomes more selective. The objective is cleaner participation, not forcing trades.</span></article>
+            <article><strong data-en="Mixed markets" data-zh="震荡 / 轮动市">Mixed markets</strong><span data-en="Return comes from rotation: different engines take turns instead of one engine carrying the full portfolio." data-zh="收益来自轮动：不同引擎轮流贡献，而不是让单一引擎扛完整个组合。">Return comes from rotation: different engines take turns instead of one engine carrying the full portfolio.</span></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide-page monthly-page" data-slide="15">
         <div class="slide-head">
           <p class="kicker" data-en="Monthly Behavior" data-zh="月度行为">Monthly Behavior</p>
           <h1 data-en="Consistency matters because capital needs time." data-zh="资本需要时间，所以一致性很重要。">Consistency matters because capital needs time.</h1>
@@ -181,7 +211,7 @@
         </div>
       </section>
 
-      <section class="slide-page contribution-page" data-slide="14">
+      <section class="slide-page contribution-page" data-slide="16">
         <div class="slide-head">
           <p class="kicker" data-en="Contribution Breadth" data-zh="贡献广度">Contribution Breadth</p>
           <h1 data-en="The headline return is supported by more than one engine." data-zh="总收益不是只靠一个引擎撑起来。">The headline return is supported by more than one engine.</h1>
@@ -192,7 +222,7 @@
         </div>
       </section>
 
-      <section class="slide-page risk-page dark-page" data-slide="15">
+      <section class="slide-page risk-page dark-page" data-slide="17">
         <div class="statement">
           <h1 data-en="Protect first. Compound second." data-zh="先保护，再复利。">Protect first. Compound second.</h1>
           <p data-en="Risk discipline is not a slide at the end. It is a design constraint inside every decision." data-zh="风控不是最后补上的一页，而是每一个决策里面的设计约束。">Risk discipline is not a slide at the end. It is a design constraint inside every decision.</p>
@@ -205,7 +235,7 @@
         </div>
       </section>
 
-      <section class="slide-page capacity-page" data-slide="16">
+      <section class="slide-page capacity-page" data-slide="18">
         <div class="slide-head">
           <p class="kicker" data-en="Capacity & Scaling" data-zh="容量与扩展">Capacity & Scaling</p>
           <h1 data-en="The real question is not only return. It is how much capital the process can responsibly absorb." data-zh="真正的问题不只是收益，而是这个流程能负责任地承接多少资本。">The real question is not only return. It is how much capital the process can responsibly absorb.</h1>
@@ -213,7 +243,7 @@
         <canvas id="capacity-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page os-page soft-page" data-slide="17">
+      <section class="slide-page os-page soft-page" data-slide="19">
         <div class="slide-head">
           <p class="kicker" data-en="Operating System" data-zh="操作系统">Operating System</p>
           <h1 data-en="Data to signal. Signal to decision. Decision to execution. Execution to monitoring." data-zh="数据到信号，信号到决策，决策到执行，执行到监控。">Data to signal. Signal to decision. Decision to execution. Execution to monitoring.</h1>
@@ -221,7 +251,7 @@
         <canvas id="os-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page reporting-page" data-slide="18">
+      <section class="slide-page reporting-page" data-slide="20">
         <div class="slide-head">
           <p class="kicker" data-en="Reporting Layer" data-zh="报告层">Reporting Layer</p>
           <h1 data-en="Transparency makes the platform investable." data-zh="透明度让平台变得可投资。">Transparency makes the platform investable.</h1>
@@ -234,7 +264,7 @@
         </div>
       </section>
 
-      <section class="slide-page expansion-page" data-slide="19">
+      <section class="slide-page expansion-page" data-slide="21">
         <div class="slide-head">
           <p class="kicker" data-en="Market-Agnostic Expansion" data-zh="跨市场扩展">Market-Agnostic Expansion</p>
           <h1 data-en="Crypto is the first proof point, not the ceiling." data-zh="Crypto 是第一个 proof point，不是天花板。">Crypto is the first proof point, not the ceiling.</h1>
@@ -242,7 +272,7 @@
         <canvas id="market-expansion-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page scale-page soft-page" data-slide="20">
+      <section class="slide-page scale-page soft-page" data-slide="22">
         <div class="slide-head">
           <p class="kicker" data-en="Scale Narrative" data-zh="扩张叙事">Scale Narrative</p>
           <h1 data-en="From proof point to product layer to allocation platform." data-zh="从 proof point，到产品层，再到 allocation platform。">From proof point to product layer to allocation platform.</h1>
@@ -250,7 +280,7 @@
         <canvas id="scale-timeline-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page path-page" data-slide="21">
+      <section class="slide-page path-page" data-slide="23">
         <div class="slide-head">
           <p class="kicker" data-en="North Star" data-zh="North Star">North Star</p>
           <h1 data-en="The path is built for a 100M allocation conversation." data-zh="这条路径，是为了进入 100M allocation conversation。">The path is built for a 100M allocation conversation.</h1>
@@ -258,7 +288,7 @@
         <canvas id="path-100m-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page closing-page dark-page" data-slide="22">
+      <section class="slide-page closing-page dark-page" data-slide="24">
         <img class="closing-logo" src="./favicon.svg" alt="NTS Alpha Labs logo" />
         <h1 data-en="Systematic by design. Disciplined in execution. Built for long-term compounding." data-zh="系统化设计。纪律化执行。为长期复利而建。">Systematic by design. Disciplined in execution. Built for long-term compounding.</h1>
         <div class="closing-stats">
@@ -270,11 +300,11 @@
 
       <nav class="mobile-slide-controls" aria-label="Mobile presentation controls">
         <button id="mobile-prev" type="button">Prev</button>
-        <span id="mobile-slide-count">1 / 22</span>
+        <span id="mobile-slide-count">1 / 24</span>
         <button id="mobile-next" type="button">Next</button>
       </nav>
     </main>
 
-    <script src="./overall_strategy.js?v=20260525-institutional-1" type="module"></script>
+    <script src="./overall_strategy.js?v=20260525-institutional-2" type="module"></script>
   </body>
 </html>
