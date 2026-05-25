@@ -28,6 +28,20 @@ let DATA = null;
 let currentLang = "en";
 let currentMobileSlide = 0;
 
+function byId(id) {
+  return document.getElementById(id);
+}
+
+function setText(id, value) {
+  const node = byId(id);
+  if (node) node.textContent = value;
+}
+
+function setHTML(id, value) {
+  const node = byId(id);
+  if (node) node.innerHTML = value;
+}
+
 const MARKET_REGIMES = {
   "2022": { type: "bear", en: "Bear", zh: "熊市" },
   "2023": { type: "mixed", en: "Mixed / recovery", zh: "震荡 / 修复" },
@@ -47,8 +61,8 @@ const TEXT = {
     asOf: "As of May 24, 2026",
     downloadScreenshot: "Download Screenshot",
     coverEyebrow: "Investor Overview",
-    coverTitle: "NTS Alpha Labs.",
-    coverSubtitle: "Systematic alpha portfolio, validated across multiple market regimes.",
+    coverTitle: "Systematic Alpha Portfolio",
+    coverSubtitle: "Validated across multiple market cycles.",
     coverNarrativeOne: "A portfolio of eight return engines, designed for allocation review rather than single-strategy storytelling.",
     coverNarrativeTwo: "Crypto is the first proof point. The product layer can extend into other liquid markets over time.",
     portfolioRoi: "Portfolio ROI",
@@ -62,15 +76,22 @@ const TEXT = {
     productThreeTitle: "Market Expansion",
     productThreeCopy: "Crypto is the first proof point. The product layer can later extend into FX, indices, commodities, and other liquid markets.",
     problemEyebrow: "The Problem",
-    problemTitle: "Most strategies fail to become allocation products.",
+    problemTitle: "Why most systematic strategies fail.",
     problemOneTitle: "Single-strategy dependence",
-    problemOneCopy: "Results look good until the market regime changes.",
-    problemTwoTitle: "Too complex to assess",
-    problemTwoCopy: "Investors cannot allocate to what they cannot explain.",
-    problemThreeTitle: "Disconnected process",
-    problemThreeCopy: "Research, backtest, reporting, and execution often live in separate worlds.",
+    problemOneCopy: "One return source can look strong until the market regime changes.",
+    problemTwoTitle: "Regime fragility",
+    problemTwoCopy: "A strategy that only works in one market mood is difficult to allocate to with confidence.",
+    problemThreeTitle: "Lack of portfolio breadth",
+    problemThreeCopy: "Without multiple return engines, performance becomes too dependent on one behavior.",
+    problemFourTitle: "Inconsistent execution",
+    problemFourCopy: "A good idea still needs a repeatable process before it becomes an investable product.",
+    solutionEyebrow: "Our Solution",
+    solutionTitle: "One portfolio. Multiple independent return engines.",
+    solutionCopy: "NTS Alpha Labs is presented as a portfolio first. The strategy set is designed so different engines can contribute under different market conditions.",
+    strategyEngines: "strategy engines",
+    solutionNote: "Same goal: consistent, risk-aware compounding across cycles.",
     performanceEyebrow: "Performance",
-    performanceTitle: "Performance first.",
+    performanceTitle: "Let the return curve speak.",
     performanceSubtitle: "2022-2026 validated portfolio ROI with supporting evidence across yearly, monthly, and strategy-level records.",
     cumulativeRoi: "Cumulative ROI",
     returnCurve: "Return curve since inception",
@@ -94,14 +115,14 @@ const TEXT = {
     benchmarkFdLabel: "4-year FD benchmark",
     benchmarkMultipleLabel: "ROI multiple over S&P 500",
     singleYearBenchmark: "Single-year ROI: NTS vs S&P 500 vs FD",
-    strategyEyebrow: "Strategy Portfolio",
-    strategyTitle: "Breadth matters.",
-    strategyCopy: "The portfolio is not built around one market behavior. Multiple engines create the return profile.",
+    strategyEyebrow: "Why Breadth Matters",
+    strategyTitle: "Different alpha sources reduce dependence.",
+    strategyCopy: "Each engine has a role. The point is not to sell eight separate products, but to show that portfolio return does not rely on one market behavior.",
     strategyRoiBreadth: "Strategy ROI breadth",
     strategySideCopy: "The leading engines drive the headline return, while the broader set demonstrates that the portfolio is not dependent on a single return source.",
-    qualityEyebrow: "Return Quality",
-    qualityTitle: "Durability across regimes.",
-    qualityCopy: "Some years earn more, some years earn less. The point is whether the portfolio keeps producing across changing market conditions.",
+    qualityEyebrow: "Durability",
+    qualityTitle: "Consistency matters.",
+    qualityCopy: "The allocation case is stronger when return is viewed together with monthly behavior, market cycles, and contribution breadth.",
     recentMonthlyProfile: "Recent monthly profile",
     annualRoiView: "Annual ROI view",
     marketCycleMap: "Annual market cycle map",
@@ -112,14 +133,36 @@ const TEXT = {
     mixBulletOne: "The largest contributor anchors the portfolio's headline ROI.",
     mixBulletTwo: "Additional engines support the return profile when market leadership changes.",
     mixBulletThree: "This gives investors a clearer view of how the portfolio is built to grow over time.",
-    marketEyebrow: "Market Context",
-    marketTitle: "Beyond crypto.",
+    riskEyebrow: "Risk Framework",
+    riskTitle: "Protect first. Compound second.",
+    riskOneTitle: "Exposure control",
+    riskOneCopy: "Positioning is managed so the portfolio does not depend on one oversized view.",
+    riskTwoTitle: "Execution discipline",
+    riskTwoCopy: "The process favors repeatability over impulse.",
+    riskThreeTitle: "Regime awareness",
+    riskThreeCopy: "Market context affects how aggressively the portfolio should participate.",
+    riskFourTitle: "Portfolio balancing",
+    riskFourCopy: "Multiple engines are reviewed as one allocation profile.",
+    infraEyebrow: "Infrastructure",
+    infraTitle: "An operating system for systematic allocation.",
+    infraCopy: "The product is not a trading bot. It is a repeatable operating rhythm that connects research, decisioning, execution, and monitoring into one reviewable process.",
+    reportingEyebrow: "Reporting Layer",
+    reportingTitle: "Transparency makes the portfolio investable.",
+    reportingCopy: "Investors should be able to review performance, contribution, and monthly behavior without needing to understand the full internal system.",
+    reportingOneTitle: "Portfolio overview",
+    reportingOneCopy: "One place to understand the headline return and active strategy set.",
+    reportingTwoTitle: "Contribution review",
+    reportingTwoCopy: "Return sources are visible instead of hidden behind a single number.",
+    reportingThreeTitle: "Bilingual access",
+    reportingThreeCopy: "Investor-facing materials can be reviewed in English or Mandarin.",
+    marketEyebrow: "Expansion",
+    marketTitle: "The infrastructure is market-agnostic.",
     marketOneTitle: "Crypto as first proof",
-    marketOneCopy: "Digital assets give the portfolio an active, continuous market to build and show its first track record.",
-    marketTwoTitle: "Reusable product layer",
-    marketTwoCopy: "The same portfolio, reporting, and review structure can support more markets as the platform matures.",
-    marketThreeTitle: "Broader market roadmap",
-    marketThreeCopy: "The direction is to expand into other liquid markets, not stay limited to crypto only.",
+    marketOneCopy: "Digital assets provide the first visible track record.",
+    marketTwoTitle: "Same system, broader markets",
+    marketTwoCopy: "The product layer can extend into FX, indices, commodities, and other liquid markets.",
+    marketThreeTitle: "Longer-term allocation platform",
+    marketThreeCopy: "The direction is to build a portfolio platform, not stay limited to one market.",
     cycleBullLabel: "Bull markets",
     cycleBullTitle: "More opportunity to compound",
     cycleBullCopy: "In stronger market years, the portfolio has more room to capture momentum and broader participation, so annual ROI can naturally look stronger.",
@@ -131,9 +174,9 @@ const TEXT = {
     cycleRangeCopy: "Some years earn more and some years earn less. The value of the portfolio is that the return profile can come from different engines across different market moods.",
     marketNote: "Crypto is the first market where the system has built visible proof. Over time, NTS Alpha Labs can extend the same product discipline into FX, indices, commodities, and other liquid markets where repeatable opportunities can be measured.",
     closeEyebrow: "Investor Discussion",
-    closeTitle: "Ready for allocation review.",
+    closeTitle: "Systematic by design. Disciplined in execution. Built for long-term compounding.",
     currentSnapshot: "Current snapshot",
-    closeCopy: "Portfolio ROI across the validated strategy set, with 8 active strategies and monthly records prepared for investor review.",
+    closeCopy: "Total portfolio ROI, 2022-2026.",
     closeBulletOne: "Performance profile is already visible.",
     closeBulletTwo: "Portfolio has multiple return sources.",
     closeBulletThree: "Next discussion can focus on allocation size, reporting cadence, and investor terms.",
@@ -171,8 +214,8 @@ const TEXT = {
     asOf: "更新日期：2026年5月24日",
     downloadScreenshot: "下载截图",
     coverEyebrow: "投资人简介",
-    coverTitle: "NTS Alpha Labs.",
-    coverSubtitle: "系统化 alpha 组合，已经跨多个市场环境验证。",
+    coverTitle: "系统化 Alpha 组合",
+    coverSubtitle: "跨多个市场周期验证。",
     coverNarrativeOne: "这不是单一策略故事，而是一组可以进入 allocation review 的 return engines。",
     coverNarrativeTwo: "Crypto 是第一个 proof point，之后产品层可以继续扩展到其他流动性市场。",
     portfolioRoi: "组合 ROI",
@@ -186,15 +229,22 @@ const TEXT = {
     productThreeTitle: "市场扩展",
     productThreeCopy: "Crypto 是第一个 proof point。之后同一套产品层可以继续扩展到 FX、指数、商品和其他流动性市场。",
     problemEyebrow: "问题",
-    problemTitle: "大多数策略，很难变成真正的 allocation product。",
+    problemTitle: "为什么大多数系统化策略很难交付。",
     problemOneTitle: "依赖单一策略",
-    problemOneCopy: "市场环境一变，原本好看的结果就不一定站得住。",
-    problemTwoTitle: "太复杂，难评估",
-    problemTwoCopy: "投资人无法配置一个自己解释不了的产品。",
-    problemThreeTitle: "流程割裂",
-    problemThreeCopy: "研究、回测、报告和执行如果没有统一口径，很难规模化。",
+    problemOneCopy: "单一回报来源在某些阶段很好看，但市场环境一变就容易失效。",
+    problemTwoTitle: "对市场环境太敏感",
+    problemTwoCopy: "如果只适合一种市场情绪，投资人很难长期配置。",
+    problemThreeTitle: "缺少组合广度",
+    problemThreeCopy: "没有多个 return engines，表现就太依赖一种市场行为。",
+    problemFourTitle: "执行不稳定",
+    problemFourCopy: "好的策略想法，也需要可重复的流程，才会变成可投资产品。",
+    solutionEyebrow: "我们的解法",
+    solutionTitle: "一个组合，多个独立回报引擎。",
+    solutionCopy: "NTS Alpha Labs 先以 portfolio 呈现。不同策略在不同市场状态下轮流贡献，让整体回报不依赖单一行情。",
+    strategyEngines: "个策略引擎",
+    solutionNote: "共同目标：跨周期、可复利、风险意识清楚。",
     performanceEyebrow: "表现摘要",
-    performanceTitle: "Performance first.",
+    performanceTitle: "让回报曲线说话。",
     performanceSubtitle: "2022-2026 已验证 portfolio ROI，并由年度、月度和策略层面的记录支撑。",
     cumulativeRoi: "累计 ROI",
     returnCurve: "成立以来的回报曲线",
@@ -218,14 +268,14 @@ const TEXT = {
     benchmarkFdLabel: "4 年 FD 基准",
     benchmarkMultipleLabel: "相对 S&P 500 的 ROI 倍数",
     singleYearBenchmark: "单年 ROI：NTS vs S&P 500 vs FD",
-    strategyEyebrow: "策略组合",
-    strategyTitle: "Breadth matters.",
-    strategyCopy: "组合不是压在一种市场行为上，而是由多个 return engines 一起构成回报来源。",
+    strategyEyebrow: "为什么广度重要",
+    strategyTitle: "不同 alpha sources 降低单点依赖。",
+    strategyCopy: "每个策略都有自己的角色。重点不是卖八个产品，而是让投资人看到整体组合不是靠单一市场行为撑起来。",
     strategyRoiBreadth: "策略 ROI 覆盖",
     strategySideCopy: "领先策略负责拉高 headline return，其他策略则让组合看起来不是单点依赖。",
-    qualityEyebrow: "回报质量",
-    qualityTitle: "跨市场环境的持续性。",
-    qualityCopy: "有些年份赚多一点，有些年份赚少一点。重点是组合能不能在不同市场节奏里持续产出。",
+    qualityEyebrow: "持续性",
+    qualityTitle: "Consistency matters.",
+    qualityCopy: "真正适合 allocation 的表现，不只看 headline ROI，也要看月度行为、市场周期和贡献广度。",
     recentMonthlyProfile: "近期月度表现",
     annualRoiView: "年度 ROI",
     marketCycleMap: "年度市场环境图",
@@ -236,14 +286,36 @@ const TEXT = {
     mixBulletOne: "主要策略负责撑起组合的核心回报。",
     mixBulletTwo: "其他策略在市场节奏改变时提供额外机会。",
     mixBulletThree: "投资人看到的不是单一来源，而是一套可以持续扩展的组合结构。",
-    marketEyebrow: "市场路线",
-    marketTitle: "不只 crypto。",
+    riskEyebrow: "风控框架",
+    riskTitle: "先保护，再复利。",
+    riskOneTitle: "敞口控制",
+    riskOneCopy: "组合不应该依赖一个过大的单边判断。",
+    riskTwoTitle: "执行纪律",
+    riskTwoCopy: "流程优先于冲动，重复性优先于情绪判断。",
+    riskThreeTitle: "市场环境意识",
+    riskThreeCopy: "不同市场环境下，组合参与的力度应该不一样。",
+    riskFourTitle: "组合平衡",
+    riskFourCopy: "多个策略不是分开看，而是作为一个 allocation profile 来 review。",
+    infraEyebrow: "基础设施",
+    infraTitle: "一个系统化 allocation operating system。",
+    infraCopy: "这不是 trading bot，而是一套可重复的运行节奏，把 research、decision、execution 和 monitoring 接到同一个可 review 的流程里。",
+    reportingEyebrow: "报告层",
+    reportingTitle: "透明度，让组合更适合投资人 review。",
+    reportingCopy: "投资人应该可以看懂 performance、贡献来源和月度行为，而不需要先理解完整内部系统。",
+    reportingOneTitle: "组合总览",
+    reportingOneCopy: "用一个页面看 headline return 和 active strategy set。",
+    reportingTwoTitle: "贡献 review",
+    reportingTwoCopy: "回报来源是可见的，不是藏在一个总数字后面。",
+    reportingThreeTitle: "中英双语",
+    reportingThreeCopy: "投资人材料可以用英文或中文阅读。",
+    marketEyebrow: "扩展方向",
+    marketTitle: "这套基础设施不绑定单一市场。",
     marketOneTitle: "Crypto 是第一站",
-    marketOneCopy: "Digital assets 提供连续活跃的市场环境，让组合先建立可见 track record。",
-    marketTwoTitle: "产品层可以复用",
-    marketTwoCopy: "组合、报告和 review structure 不是只为 crypto 写死，后面可以支持更多市场。",
-    marketThreeTitle: "更宽的市场路线",
-    marketThreeCopy: "方向不是永远停留在 crypto，而是逐步扩展到其他流动性市场。",
+    marketOneCopy: "Digital assets 是第一条已经跑出证明的 track record。",
+    marketTwoTitle: "同一套系统，更宽的市场",
+    marketTwoCopy: "产品层之后可以扩展到 FX、指数、商品和其他流动性市场。",
+    marketThreeTitle: "长期 allocation platform",
+    marketThreeCopy: "方向不是停在单一市场，而是建立可以扩展的 portfolio platform。",
     cycleBullLabel: "牛市",
     cycleBullTitle: "更容易放大回报",
     cycleBullCopy: "市场强、行情活跃的年份，组合更容易参与趋势和市场热度，所以年度 ROI 自然会更好看。",
@@ -255,9 +327,9 @@ const TEXT = {
     cycleRangeCopy: "有些年份会赚多一点，有些年份会赚少一点。组合的价值，是不同市场情绪下可以由不同策略轮流贡献。",
     marketNote: "Crypto 是第一个已经跑出证明的市场。随着系统成熟，NTS Alpha Labs 可以把同一套产品纪律扩展到 FX、指数、商品和其他流动性市场。",
     closeEyebrow: "投资人讨论",
-    closeTitle: "进入 allocation review。",
+    closeTitle: "系统化设计。纪律化执行。为长期复利而建。",
     currentSnapshot: "当前快照",
-    closeCopy: "这是已验证策略组合的 portfolio ROI，目前有 8 个 active strategies，并整理好月度记录，适合进入投资人 review。",
+    closeCopy: "2022-2026 total portfolio ROI。",
     closeBulletOne: "Performance profile 已经可以看得见。",
     closeBulletTwo: "组合有多个回报来源。",
     closeBulletThree: "下一步可以讨论 allocation size、reporting cadence 和 investor terms。",
@@ -500,6 +572,7 @@ function drawEquityChart() {
 
 function drawMonthlyProfileChart() {
   const canvas = document.getElementById("monthly-profile-chart");
+  if (!canvas) return;
   const { ctx, width, height } = setupCanvas(canvas);
   const data = DATA.monthly_returns.filter((row) => row.return_pct != null).slice(-24);
   ctx.clearRect(0, 0, width, height);
@@ -535,6 +608,67 @@ function drawMonthlyProfileChart() {
   ctx.fillText(data[0].month, x, y + h + 24);
   ctx.textAlign = "right";
   ctx.fillText(data[data.length - 1].month, x + w, y + h + 24);
+  ctx.textAlign = "left";
+}
+
+function drawContributionWheel() {
+  const canvas = document.getElementById("contribution-wheel");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  const rows = DATA.strategy_contribution.slice().sort((a, b) => b.contribution_pct - a.contribution_pct);
+  ctx.clearRect(0, 0, width, height);
+  const cx = width * 0.48;
+  const cy = height * 0.5;
+  const radius = Math.min(width, height) * 0.34;
+  const inner = radius * 0.58;
+  const total = rows.reduce((sum, row) => sum + row.contribution_pct, 0);
+  let start = -Math.PI / 2;
+  rows.forEach((row, index) => {
+    const angle = (row.contribution_pct / total) * Math.PI * 2;
+    const end = start + angle;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, start, end);
+    ctx.closePath();
+    ctx.fillStyle = index < 2 ? COLORS.green : index < 4 ? COLORS.teal : COLORS.amber;
+    ctx.globalAlpha = 1 - Math.min(index, 6) * 0.075;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    if (width > 520 && row.contribution_pct >= 8) {
+      const mid = start + angle / 2;
+      const lx = cx + Math.cos(mid) * (radius + 30);
+      const ly = cy + Math.sin(mid) * (radius + 8);
+      ctx.fillStyle = COLORS.ink;
+      ctx.font = "800 12px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.textAlign = lx > cx ? "left" : "right";
+      ctx.fillText(row.strategy, lx, ly);
+      ctx.fillStyle = COLORS.muted;
+      ctx.font = "700 11px ui-monospace, Menlo, monospace";
+      ctx.fillText(fmtPct(row.contribution_pct, 1), lx, ly + 16);
+      ctx.textAlign = "left";
+    }
+    start = end;
+  });
+
+  ctx.fillStyle = "#ffffff";
+  ctx.beginPath();
+  ctx.arc(cx, cy, inner, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = COLORS.line;
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.fillStyle = COLORS.ink;
+  ctx.font = "800 13px -apple-system, BlinkMacSystemFont, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("STRATEGY", cx, cy - 8);
+  ctx.fillText("CONTRIBUTION", cx, cy + 10);
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = "700 11px ui-monospace, Menlo, monospace";
+  ctx.fillText("2022-2026", cx, cy + 30);
   ctx.textAlign = "left";
 }
 
@@ -740,6 +874,7 @@ function drawStrategyRoiChart() {
 }
 
 function renderKpis() {
+  if (!byId("kpi-grid")) return;
   const p = DATA.portfolio;
   const h = DATA.headline;
   const m = monthlyStats();
@@ -750,9 +885,9 @@ function renderKpis() {
     [t("avgStrategyRoi"), fmtPct(h.headline_average_return_pct), t("strategyReturnBreadth"), "teal"],
     [t("positiveMonths"), fmtPct(m.positiveRate, 0), `${m.months}${currentLang === "zh" ? t("monthlyRecords") : ` ${t("monthlyRecords")}`}`, "green"],
   ];
-  document.getElementById("kpi-grid").innerHTML = cards
+  setHTML("kpi-grid", cards
     .map(([title, value, label, tone]) => `<article class="kpi-card ${tone}"><strong>${value}</strong><span>${title}<br>${label}</span></article>`)
-    .join("");
+    .join(""));
 }
 
 function renderRiskStats() {
@@ -780,6 +915,7 @@ function heatColor(value, min, max) {
 }
 
 function renderHeatmap(id = "monthly-heatmap") {
+  if (!byId(id)) return;
   const h = DATA.monthly_heatmap;
   const monthLabels = ["", "J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
   let html = monthLabels.map((m) => `<div class="heat-label">${m}</div>`).join("");
@@ -791,11 +927,12 @@ function renderHeatmap(id = "monthly-heatmap") {
       html += `<div class="heat-cell ${cls}" style="background:${heatColor(value, h.min_value, h.max_value)}" title="${year}-${month}: ${value ?? "--"}%">${value == null ? "" : value.toFixed(1)}</div>`;
     });
   });
-  document.getElementById(id).innerHTML = html;
+  setHTML(id, html);
 }
 
 function renderBars(id, rows, maxValue, valueKey, labelSuffix = "%", meta = null) {
-  document.getElementById(id).innerHTML = rows
+  if (!byId(id)) return;
+  setHTML(id, rows
     .map((row, index) => {
       const value = row[valueKey];
       const width = Math.max(1, (value / maxValue) * 100);
@@ -809,33 +946,36 @@ function renderBars(id, rows, maxValue, valueKey, labelSuffix = "%", meta = null
           ${sub}
         </div>`;
     })
-    .join("");
+    .join(""));
 }
 
 function renderCover() {
   const p = DATA.portfolio;
   const m = monthlyStats();
-  document.getElementById("cover-roi").textContent = fmtPct(p.validated_combo_return_pct);
-  document.getElementById("close-roi").textContent = fmtPct(p.validated_combo_return_pct);
-  document.getElementById("cover-metrics").innerHTML = [
+  setText("cover-roi", fmtPct(p.validated_combo_return_pct));
+  setText("performance-roi", fmtPct(p.validated_combo_return_pct));
+  setText("close-roi", fmtPct(p.validated_combo_return_pct));
+  setHTML("cover-metrics", [
     [t("growthMultiple"), fmtMultiple(p.validated_combo_return_pct)],
     [t("recentRoi"), fmtPct(p.independent_combo_return_pct)],
     [t("positiveMonths"), fmtPct(m.positiveRate, 0)],
-  ].map(([label, value]) => `<div><strong>${value}</strong><span>${label}</span></div>`).join("");
+  ].map(([label, value]) => `<div><strong>${value}</strong><span>${label}</span></div>`).join(""));
   renderIconStrip("cover-icon-strip");
   renderIconStrip("mix-icons");
 }
 
 function renderIconStrip(id) {
+  if (!byId(id)) return;
   const rows = DATA.strategy_returns;
-  document.getElementById(id).innerHTML = rows
+  setHTML(id, rows
     .map((row) => `<img src="${strategyIcon(row.strategy)}" alt="${row.strategy}" title="${row.strategy}" />`)
-    .join("");
+    .join(""));
 }
 
 function renderStrategyCards() {
+  if (!byId("strategy-card-grid")) return;
   const rows = DATA.strategy_returns;
-  document.getElementById("strategy-card-grid").innerHTML = rows
+  setHTML("strategy-card-grid", rows
     .map((row, index) => `
       <article class="strategy-card ${index < 3 ? "lead-card" : ""}">
         <img src="${strategyIcon(row.strategy)}" alt="" />
@@ -845,27 +985,29 @@ function renderStrategyCards() {
         </div>
         <em>${fmtPct(row.return_pct, 1)}</em>
       </article>`)
-    .join("");
+    .join(""));
 }
 
 function renderQuality() {
+  if (!byId("quality-metrics")) return;
   const m = monthlyStats();
-  document.getElementById("quality-metrics").innerHTML = [
+  setHTML("quality-metrics", [
     [t("positiveMonths"), fmtPct(m.positiveRate, 0), currentLang === "zh" ? `${m.months}${t("monthlyRecords")}` : `${m.months} ${t("monthlyRecords")}`],
     [t("averageMonth"), fmtPct(m.avgMonthly), t("acrossRun")],
     [t("bestMonth"), fmtPct(m.bestMonth.return_pct), m.bestMonth.month],
     [t("recentRoi"), fmtPct(DATA.portfolio.independent_combo_return_pct), t("latestPeriod")],
-  ].map(([label, value, note]) => `<article><strong>${value}</strong><span>${label}</span><small>${note}</small></article>`).join("");
+  ].map(([label, value, note]) => `<article><strong>${value}</strong><span>${label}</span><small>${note}</small></article>`).join(""));
 }
 
 function renderBenchmark() {
+  if (!byId("benchmark-overall-roi")) return;
   const portfolioRoi = DATA.portfolio.validated_combo_return_pct;
   const fdRoi = fdBenchmarkReturn();
-  document.getElementById("benchmark-overall-roi").textContent = fmtPct(portfolioRoi);
-  document.getElementById("benchmark-sp500-roi").textContent = fmtPct(SP500_BENCHMARK_RETURN);
-  document.getElementById("benchmark-fd-roi").textContent = fmtPct(fdRoi);
-  document.getElementById("benchmark-multiple").textContent = `${(portfolioRoi / SP500_BENCHMARK_RETURN).toFixed(1)}x`;
-  document.getElementById("annual-roi-table").innerHTML = annualReturns()
+  setText("benchmark-overall-roi", fmtPct(portfolioRoi));
+  setText("benchmark-sp500-roi", fmtPct(SP500_BENCHMARK_RETURN));
+  setText("benchmark-fd-roi", fmtPct(fdRoi));
+  setText("benchmark-multiple", `${(portfolioRoi / SP500_BENCHMARK_RETURN).toFixed(1)}x`);
+  setHTML("annual-roi-table", annualReturns()
     .map((row) => `
       <div>
         <span>${row.year}${row.year === "2026" ? " YTD" : ""}</span>
@@ -873,22 +1015,24 @@ function renderBenchmark() {
         <em>S&P 500 ${fmtPct(SP500_YEARLY_RETURNS[row.year] ?? 0, 1)}</em>
         <em>${t("fdShort")} ${fmtPct(FD_BENCHMARK_RATE, 2)}</em>
       </div>`)
-    .join("");
+    .join(""));
 }
 
 function renderPage() {
   applyLanguage();
-  document.getElementById("source-note").textContent = t("sourceNote");
-  document.getElementById("source-metrics").innerHTML = [
+  setText("source-note", t("sourceNote"));
+  setHTML("source-metrics", [
     `${DATA.meta.updated_at}`,
     currentLang === "zh" ? `${DATA.headline.engine_count}${t("strategies")}` : `${DATA.headline.engine_count} ${t("strategies")}`,
     currentLang === "zh" ? `${DATA.monthly_returns.length}${t("monthlySamples")}` : `${DATA.monthly_returns.length} ${t("monthlySamples")}`,
-  ].map((x) => `<span>${x}</span>`).join("");
+  ].map((x) => `<span>${x}</span>`).join(""));
 
   renderCover();
   renderKpis();
   renderHeatmap("monthly-heatmap");
   renderHeatmap("quality-heatmap");
+  drawContributionWheel();
+  renderBars("solution-bars", DATA.strategy_contribution, Math.max(...DATA.strategy_contribution.map((d) => d.contribution_pct)), "contribution_pct", "%", () => t("contributionShare"));
   renderBars("contribution-bars", DATA.strategy_contribution, Math.max(...DATA.strategy_contribution.map((d) => d.contribution_pct)), "contribution_pct", "%", () => t("portfolioContribution"));
   renderBars("strategy-ranking", DATA.strategy_returns, Math.max(...DATA.strategy_returns.map((d) => d.return_pct)), "return_pct", "%", (row) => `${strategyRole(row.strategy)}`);
   renderBars("composition-bars", DATA.strategy_contribution, Math.max(...DATA.strategy_contribution.map((d) => d.contribution_pct)), "contribution_pct", "%", () => t("contributionShare"));
@@ -911,6 +1055,7 @@ function isMobileSlideMode() {
 function drawVisibleSlideCharts() {
   const active = document.querySelector(".slide-page.is-active");
   if (!active) return;
+  if (active.querySelector("#contribution-wheel")) drawContributionWheel();
   if (active.querySelector("#equity-chart")) drawEquityChart();
   if (active.querySelector("#annual-fd-chart")) drawAnnualFdChart();
   if (active.querySelector("#strategy-roi-chart")) drawStrategyRoiChart();

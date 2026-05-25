@@ -1403,3 +1403,564 @@ p {
     font-size: clamp(48px, 18cqw, 64px);
   }
 }
+
+/* Fundraise presentation choreography */
+.fundraise-deck .slide-page {
+  min-height: 800px;
+  padding: 70px 86px;
+}
+
+.fundraise-deck .slide-head {
+  margin-bottom: 46px;
+}
+
+.fundraise-deck .compact-head {
+  margin-bottom: 34px;
+}
+
+.fund-hero-page {
+  display: grid;
+  align-content: center;
+  gap: 28px;
+}
+
+.hero-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--ink);
+  font: 820 13px/1 var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.hero-lockup img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.fund-hero-number {
+  max-width: 100%;
+  color: var(--green);
+  font: 900 clamp(96px, 14vw, 186px)/.82 var(--sans);
+  letter-spacing: -.07em;
+  white-space: nowrap;
+}
+
+.fund-hero-page h1 {
+  max-width: 760px;
+  color: var(--ink);
+  font: 760 clamp(38px, 4.3vw, 70px)/1 var(--sans);
+  letter-spacing: -.04em;
+}
+
+.fund-hero-page p {
+  max-width: 640px;
+  margin-top: 16px;
+  color: rgba(14, 23, 20, .62);
+  font: 720 26px/1.18 var(--sans);
+}
+
+.fund-hero-page small {
+  display: block;
+  margin-top: 38px;
+  color: var(--muted);
+  font: 820 12px/1 var(--mono);
+  letter-spacing: .12em;
+}
+
+.fund-problem-page {
+  align-content: center;
+  background: #fff;
+}
+
+.fund-problem-list {
+  max-width: 760px;
+}
+
+.fund-problem-list article {
+  min-height: 74px;
+}
+
+.solution-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, .42fr) minmax(430px, .58fr) minmax(300px, .38fr);
+  gap: 52px;
+  align-items: center;
+}
+
+.solution-statement {
+  padding-top: 20px;
+  border-top: 1px solid rgba(14, 23, 20, .16);
+}
+
+.solution-statement strong {
+  display: block;
+  color: var(--green);
+  font: 500 142px/.82 var(--serif);
+  letter-spacing: -.04em;
+}
+
+.solution-statement span {
+  display: block;
+  margin-top: 8px;
+  color: var(--ink);
+  font: 820 18px/1.1 var(--mono);
+  text-transform: uppercase;
+}
+
+.solution-statement p {
+  max-width: 300px;
+  margin-top: 28px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.42;
+}
+
+.wheel-panel {
+  min-width: 0;
+  border-left: 1px solid rgba(14, 23, 20, .12);
+  border-right: 1px solid rgba(14, 23, 20, .12);
+}
+
+.contribution-wheel {
+  height: 490px;
+}
+
+.solution-bars .bar-row {
+  grid-template-columns: 110px minmax(0, 1fr) 58px;
+}
+
+.curve-page {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.curve-page .panel-head {
+  align-items: end;
+  margin-bottom: 22px;
+}
+
+.curve-page h1 {
+  max-width: 760px;
+  color: var(--ink);
+  font: 760 clamp(40px, 4vw, 64px)/1 var(--sans);
+  letter-spacing: -.035em;
+}
+
+.curve-kpi {
+  min-width: 210px;
+  text-align: right;
+}
+
+.curve-kpi strong,
+.closing-metric span {
+  display: block;
+  color: var(--green);
+  font: 900 clamp(52px, 6vw, 88px)/.9 var(--sans);
+  letter-spacing: -.055em;
+  white-space: nowrap;
+}
+
+.curve-kpi span,
+.closing-metric p {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.full-curve {
+  height: 610px;
+}
+
+.durability-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-bottom: 34px;
+  border: 1px solid rgba(14, 23, 20, .12);
+  background: rgba(14, 23, 20, .12);
+}
+
+.durability-metrics article {
+  min-width: 0;
+  padding: 26px;
+  background: #fff;
+}
+
+.durability-metrics strong {
+  display: block;
+  color: var(--green);
+  font: 850 clamp(30px, 3.3vw, 48px)/1 var(--sans);
+  letter-spacing: -.045em;
+  white-space: nowrap;
+}
+
+.durability-metrics span,
+.durability-metrics small {
+  display: block;
+  color: var(--muted);
+}
+
+.durability-metrics span {
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.durability-metrics small {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.durability-charts {
+  display: grid;
+  grid-template-columns: minmax(0, .52fr) minmax(0, .48fr);
+  gap: 50px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(14, 23, 20, .12);
+}
+
+.durability-charts h2 {
+  margin-bottom: 16px;
+  color: var(--ink);
+  font: 800 20px/1.1 var(--sans);
+}
+
+.breadth-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(380px, .42fr);
+  gap: 56px;
+  align-items: start;
+}
+
+.risk-page,
+.infra-page,
+.expansion-page {
+  display: grid;
+  align-content: center;
+}
+
+.conviction-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  border-top: 1px solid rgba(14, 23, 20, .16);
+}
+
+.conviction-grid article {
+  min-height: 210px;
+  padding: 30px 28px 0 0;
+}
+
+.conviction-grid article + article {
+  padding-left: 28px;
+  border-left: 1px solid rgba(14, 23, 20, .12);
+}
+
+.conviction-grid strong {
+  display: block;
+  color: var(--ink);
+  font: 820 25px/1.06 var(--sans);
+  letter-spacing: -.025em;
+}
+
+.conviction-grid span {
+  display: block;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.42;
+}
+
+.process-rail {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 46px;
+  border-top: 1px solid rgba(14, 23, 20, .16);
+  border-bottom: 1px solid rgba(14, 23, 20, .16);
+}
+
+.process-rail article {
+  min-height: 190px;
+  padding: 32px 24px;
+}
+
+.process-rail article + article {
+  border-left: 1px solid rgba(14, 23, 20, .12);
+}
+
+.process-rail span {
+  display: block;
+  color: rgba(6, 79, 54, .58);
+  font: 820 12px/1 var(--mono);
+}
+
+.process-rail strong {
+  display: block;
+  margin-top: 76px;
+  color: var(--ink);
+  font: 820 25px/1 var(--sans);
+}
+
+.reporting-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, .38fr);
+  gap: 56px;
+  align-items: start;
+}
+
+.reporting-points {
+  display: grid;
+  gap: 26px;
+  padding-left: 36px;
+  border-left: 1px solid rgba(14, 23, 20, .12);
+}
+
+.reporting-points strong {
+  display: block;
+  color: var(--ink);
+  font: 820 22px/1.1 var(--sans);
+}
+
+.reporting-points span {
+  display: block;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.closing-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, .42fr);
+  gap: 76px;
+  align-items: center;
+}
+
+.closing-copy h1 {
+  max-width: 900px;
+  color: var(--ink);
+  font: 760 clamp(48px, 5.1vw, 82px)/.98 var(--sans);
+  letter-spacing: -.04em;
+}
+
+.closing-metric {
+  padding-left: 48px;
+  border-left: 1px solid rgba(14, 23, 20, .14);
+}
+
+@media (max-width: 1100px) {
+  .solution-layout,
+  .durability-charts,
+  .breadth-layout,
+  .reporting-layout,
+  .closing-page {
+    grid-template-columns: 1fr;
+  }
+
+  .conviction-grid,
+  .process-rail,
+  .durability-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .fundraise-deck .slide-page {
+    min-height: calc(100svh - 112px);
+    padding: 28px 18px 28px;
+  }
+
+  .fund-hero-page.is-active,
+  .fund-problem-page.is-active,
+  .solution-page.is-active,
+  .curve-page.is-active,
+  .durability-page.is-active,
+  .breadth-page.is-active,
+  .risk-page.is-active,
+  .infra-page.is-active,
+  .reporting-page.is-active,
+  .expansion-page.is-active,
+  .closing-page.is-active {
+    display: grid;
+    align-content: start;
+  }
+
+  .fund-hero-number {
+    font-size: clamp(58px, 18vw, 72px);
+    letter-spacing: -.055em;
+  }
+
+  .fund-hero-page h1,
+  .curve-page h1,
+  .closing-copy h1 {
+    max-width: 100%;
+    font-size: clamp(31px, 9vw, 40px);
+  }
+
+  .fund-hero-page p {
+    font-size: 17px;
+  }
+
+  .solution-layout {
+    gap: 12px;
+  }
+
+  .solution-statement strong {
+    font-size: 62px;
+  }
+
+  .solution-statement p,
+  .solution-bars,
+  .solution-page .slide-copy,
+  .durability-page .slide-copy,
+  .reporting-points,
+  .curve-kpi {
+    display: none;
+  }
+
+  .wheel-panel {
+    border: 0;
+  }
+
+  .contribution-wheel {
+    height: 230px;
+  }
+
+  .full-curve {
+    height: 440px;
+  }
+
+  .durability-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 18px;
+  }
+
+  .durability-metrics article {
+    padding: 12px;
+  }
+
+  .durability-metrics strong {
+    font-size: 24px;
+  }
+
+  .durability-metrics span {
+    font-size: 12px;
+  }
+
+  .durability-metrics small {
+    font-size: 10px;
+  }
+
+  .durability-charts {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-top: 14px;
+  }
+
+  .durability-charts section:first-child {
+    display: none;
+  }
+
+  .durability-page .cycle-canvas {
+    height: 175px;
+  }
+
+  .conviction-grid,
+  .process-rail,
+  .expansion-grid {
+    grid-template-columns: 1fr;
+    border-top: 1px solid rgba(14, 23, 20, .14);
+  }
+
+  .conviction-grid article,
+  .process-rail article {
+    min-height: 0;
+    padding: 18px 0;
+  }
+
+  .conviction-grid article + article,
+  .process-rail article + article {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid rgba(14, 23, 20, .1);
+  }
+
+  .process-rail {
+    margin-top: 20px;
+  }
+
+  .infra-page .slide-copy {
+    display: none;
+  }
+
+  .process-rail strong {
+    margin-top: 10px;
+  }
+
+  .process-rail article {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    padding: 14px 0;
+  }
+
+  .breadth-layout .side-chart,
+  .breadth-page .slide-copy {
+    display: none;
+  }
+
+  .breadth-page .strategy-card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .breadth-page .strategy-card {
+    min-height: 82px;
+    gap: 7px;
+    padding: 12px;
+  }
+
+  .breadth-page .strategy-card img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .breadth-page .strategy-card strong {
+    font-size: 14px;
+  }
+
+  .breadth-page .strategy-card span {
+    display: none;
+  }
+
+  .breadth-page .strategy-card em {
+    font-size: 17px;
+  }
+
+  .reporting-layout {
+    gap: 0;
+  }
+
+  .reporting-page .large-heatmap {
+    grid-template-columns: 40px repeat(12, minmax(22px, 1fr));
+    gap: 4px;
+  }
+
+  .closing-page {
+    align-content: center;
+  }
+
+  .closing-metric {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .closing-metric span {
+    font-size: clamp(48px, 17vw, 66px);
+  }
+}
