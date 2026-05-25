@@ -115,6 +115,13 @@ const TEXT = {
     benchmarkFdLabel: "4-year FD benchmark",
     benchmarkMultipleLabel: "ROI multiple over S&P 500",
     singleYearBenchmark: "Single-year ROI: NTS vs S&P 500 vs FD",
+    regimeEyebrow: "Market Regimes",
+    regimeTitle: "Performance across different market moods.",
+    regimeCopy: "Bull years, bear years, and mixed years do not behave the same. The stronger point is that the portfolio has produced through more than one cycle.",
+    contributionEyebrow: "Portfolio Contribution",
+    contributionTitle: "The return is led, but not singular.",
+    contributionCopy: "A fundable portfolio should show where return comes from. The NTS Alpha Labs profile is anchored by stronger engines, with the broader set adding depth around the headline ROI.",
+    contributionBarsTitle: "Contribution by engine",
     strategyEyebrow: "Why Breadth Matters",
     strategyTitle: "Different alpha sources reduce dependence.",
     strategyCopy: "Each engine has a role. The point is not to sell eight separate products, but to show that portfolio return does not rely on one market behavior.",
@@ -268,6 +275,13 @@ const TEXT = {
     benchmarkFdLabel: "4 年 FD 基准",
     benchmarkMultipleLabel: "相对 S&P 500 的 ROI 倍数",
     singleYearBenchmark: "单年 ROI：NTS vs S&P 500 vs FD",
+    regimeEyebrow: "市场周期",
+    regimeTitle: "不同市场情绪下的表现。",
+    regimeCopy: "牛市、熊市和震荡市不会用同一种节奏运行。更重要的是，组合已经不只在一种市场环境里产生回报。",
+    contributionEyebrow: "组合贡献",
+    contributionTitle: "回报有主线，但不是单点。",
+    contributionCopy: "适合 fundraise 的组合，需要讲清楚回报来自哪里。NTS Alpha Labs 由较强引擎带动 headline ROI，同时其他策略补足组合深度。",
+    contributionBarsTitle: "各引擎贡献",
     strategyEyebrow: "为什么广度重要",
     strategyTitle: "不同 alpha sources 降低单点依赖。",
     strategyCopy: "每个策略都有自己的角色。重点不是卖八个产品，而是让投资人看到整体组合不是靠单一市场行为撑起来。",
@@ -611,8 +625,8 @@ function drawMonthlyProfileChart() {
   ctx.textAlign = "left";
 }
 
-function drawContributionWheel() {
-  const canvas = document.getElementById("contribution-wheel");
+function drawContributionWheel(canvasId = "contribution-wheel") {
+  const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const { ctx, width, height } = setupCanvas(canvas);
   const rows = DATA.strategy_contribution.slice().sort((a, b) => b.contribution_pct - a.contribution_pct);
@@ -704,8 +718,8 @@ function drawAnnualRoiChart() {
   });
 }
 
-function drawMarketCycleChart() {
-  const canvas = document.getElementById("market-cycle-chart");
+function drawMarketCycleChart(canvasId = "market-cycle-chart") {
+  const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const { ctx, width, height } = setupCanvas(canvas);
   const data = annualReturns();
@@ -1041,8 +1055,10 @@ function renderPage() {
   renderBenchmark();
   drawEquityChart();
   drawMonthlyProfileChart();
+  drawContributionWheel("portfolio-contribution-wheel");
   drawAnnualRoiChart();
   drawMarketCycleChart();
+  drawMarketCycleChart("regime-cycle-chart");
   drawStrategyRoiChart();
   drawAnnualFdChart();
   updateMobileSlides(false);
@@ -1056,6 +1072,7 @@ function drawVisibleSlideCharts() {
   const active = document.querySelector(".slide-page.is-active");
   if (!active) return;
   if (active.querySelector("#contribution-wheel")) drawContributionWheel();
+  if (active.querySelector("#portfolio-contribution-wheel")) drawContributionWheel("portfolio-contribution-wheel");
   if (active.querySelector("#equity-chart")) drawEquityChart();
   if (active.querySelector("#annual-fd-chart")) drawAnnualFdChart();
   if (active.querySelector("#strategy-roi-chart")) drawStrategyRoiChart();
@@ -1063,6 +1080,7 @@ function drawVisibleSlideCharts() {
   if (active.querySelector("#monthly-profile-chart")) drawMonthlyProfileChart();
   if (active.querySelector("#annual-roi-chart")) drawAnnualRoiChart();
   if (active.querySelector("#market-cycle-chart")) drawMarketCycleChart();
+  if (active.querySelector("#regime-cycle-chart")) drawMarketCycleChart("regime-cycle-chart");
 }
 
 function updateMobileSlides(scrollTop = true) {

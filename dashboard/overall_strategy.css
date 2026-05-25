@@ -594,6 +594,63 @@ p {
   font: normal 12px/1 var(--sans);
 }
 
+.regime-layout,
+.contribution-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, .38fr);
+  gap: 56px;
+  align-items: start;
+}
+
+.regime-canvas {
+  height: 520px;
+}
+
+.regime-story {
+  display: grid;
+  gap: 18px;
+}
+
+.regime-story article {
+  padding: 24px;
+  border-top: 1px solid rgba(14, 23, 20, .14);
+}
+
+.regime-story span {
+  display: block;
+  color: var(--gold);
+  font: 820 11px/1 var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.regime-story strong {
+  display: block;
+  margin-top: 12px;
+  color: var(--ink);
+  font: 820 23px/1.08 var(--sans);
+  letter-spacing: -.02em;
+}
+
+.contribution-layout {
+  grid-template-columns: minmax(430px, .58fr) minmax(0, .42fr);
+  align-items: center;
+}
+
+.contribution-wheel-panel {
+  border: 0;
+}
+
+.contribution-bars {
+  margin-top: 22px;
+}
+
+.contribution-page h2 {
+  color: var(--ink);
+  font: 800 20px/1.1 var(--sans);
+  letter-spacing: -.02em;
+}
+
 /* Bars, heatmaps, strategy */
 .monthly-heatmap {
   display: grid;
@@ -1042,6 +1099,8 @@ p {
   .chart-pair,
   .cycle-grid,
   .mix-layout,
+  .regime-layout,
+  .contribution-layout,
   .close-page {
     grid-template-columns: 1fr;
   }
@@ -1277,7 +1336,9 @@ p {
   .strategy-layout,
   .quality-layout,
   .chart-pair,
-  .mix-layout {
+  .mix-layout,
+  .regime-layout,
+  .contribution-layout {
     display: grid;
     grid-template-columns: 1fr;
   }
@@ -1306,6 +1367,11 @@ p {
   .benchmark-page .benchmark-summary,
   .benchmark-page .slide-copy,
   .benchmark-page .annual-roi-table,
+  .regime-page .slide-copy,
+  .regime-story,
+  .contribution-page .slide-copy,
+  .contribution-page h2,
+  .contribution-bars,
   .strategy-page .strategy-card-grid,
   .strategy-page .slide-copy,
   .quality-page .slide-copy,
@@ -1359,6 +1425,14 @@ p {
   .benchmark-canvas,
   .side-canvas {
     height: 260px;
+  }
+
+  .regime-canvas {
+    height: 390px;
+  }
+
+  .contribution-page .contribution-wheel {
+    height: 310px;
   }
 
   .small-chart {
@@ -1999,6 +2073,7 @@ p {
 }
 
 .fundraise-deck .fund-problem-page,
+.fundraise-deck .regime-page,
 .fundraise-deck .reporting-page {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, .68), rgba(255, 255, 255, .36)),
@@ -2006,6 +2081,8 @@ p {
 }
 
 .fundraise-deck .solution-page,
+.fundraise-deck .benchmark-page,
+.fundraise-deck .contribution-page,
 .fundraise-deck .durability-page,
 .fundraise-deck .breadth-page,
 .fundraise-deck .expansion-page {
@@ -2058,6 +2135,7 @@ p {
 }
 
 .curve-page .panel-head,
+.benchmark-page .slide-head,
 .durability-page .slide-head,
 .closing-copy {
   position: relative;
@@ -2065,6 +2143,7 @@ p {
 }
 
 .curve-page .panel-head::before,
+.benchmark-page .slide-head::before,
 .durability-page .slide-head::before,
 .closing-copy::before {
   content: "242.79%";
@@ -2083,6 +2162,11 @@ p {
   right: -12px;
 }
 
+.benchmark-page .slide-head::before {
+  top: -48px;
+  right: -190px;
+}
+
 .durability-page .slide-head::before {
   top: -42px;
   right: -260px;
@@ -2098,6 +2182,8 @@ p {
 .durability-metrics article,
 .kpi-card,
 .solution-statement,
+.benchmark-summary article,
+.regime-story article,
 .reporting-points article {
   background: #f7f6f1;
   border: 1px solid var(--line);
@@ -2110,9 +2196,23 @@ p {
   background: transparent;
 }
 
+.benchmark-summary {
+  gap: 14px;
+}
+
+.benchmark-summary article {
+  padding: 24px;
+  box-shadow: 0 12px 30px rgba(16, 33, 27, .035);
+}
+
 .durability-metrics article {
   padding: 28px;
   box-shadow: 0 12px 30px rgba(16, 33, 27, .035);
+}
+
+.regime-story article {
+  border-top: 1px solid var(--line);
+  box-shadow: 0 12px 30px rgba(16, 33, 27, .025);
 }
 
 .solution-statement {
@@ -2199,6 +2299,7 @@ p {
   }
 
   .curve-page .panel-head::before,
+  .benchmark-page .slide-head::before,
   .durability-page .slide-head::before,
   .closing-copy::before {
     font-size: 76px;
@@ -2208,6 +2309,11 @@ p {
   .curve-page .panel-head::before {
     top: -20px;
     right: -44px;
+  }
+
+  .benchmark-page .slide-head::before {
+    top: -14px;
+    right: -118px;
   }
 
   .durability-page .slide-head::before {
@@ -2226,6 +2332,8 @@ p {
 
   .durability-metrics article,
   .solution-statement,
+  .benchmark-summary article,
+  .regime-story article,
   .reporting-points article,
   .conviction-grid article {
     box-shadow: none;

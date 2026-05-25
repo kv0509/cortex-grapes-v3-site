@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NTS Alpha Labs Investor Snapshot</title>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="stylesheet" href="./overall_strategy.css?v=20260525-premium-system-3" />
+    <link rel="stylesheet" href="./overall_strategy.css?v=20260525-expanded-deck-2" />
   </head>
   <body>
     <main class="deck-shell fundraise-deck" id="overall-shell">
@@ -82,7 +82,60 @@
         <canvas id="equity-chart" class="chart equity-chart full-curve"></canvas>
       </section>
 
-      <section class="slide-page durability-page" data-slide="05">
+      <section class="slide-page benchmark-page" data-slide="05">
+        <div class="slide-head compact-head">
+          <p class="eyebrow" data-i18n="benchmarkEyebrow">ROI Benchmark</p>
+          <h1 data-i18n="benchmarkTitle">Outperformance needs a reference point.</h1>
+          <p class="slide-copy" data-i18n="benchmarkCopy">NTS portfolio ROI is shown against Malaysia fixed deposit rates and a same-period S&P 500 investment so the return gap is immediately visible.</p>
+        </div>
+        <div class="benchmark-layout">
+          <aside class="benchmark-summary">
+            <article><span data-i18n="benchmarkOverallLabel">2022-2026 portfolio ROI</span><strong id="benchmark-overall-roi">--</strong></article>
+            <article><span data-i18n="benchmarkSp500Label">S&P 500 same-period ROI</span><strong id="benchmark-sp500-roi">--</strong></article>
+            <article><span data-i18n="benchmarkFdLabel">4-year FD benchmark</span><strong id="benchmark-fd-roi">--</strong></article>
+            <article><span data-i18n="benchmarkMultipleLabel">ROI multiple over S&P 500</span><strong id="benchmark-multiple">--</strong></article>
+          </aside>
+          <div>
+            <h2 data-i18n="singleYearBenchmark">Single-year ROI: NTS vs S&P 500 vs FD</h2>
+            <canvas id="annual-fd-chart" class="chart benchmark-canvas"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide-page regime-page" data-slide="06">
+        <div class="slide-head compact-head">
+          <p class="eyebrow" data-i18n="regimeEyebrow">Market Regimes</p>
+          <h1 data-i18n="regimeTitle">Performance across different market moods.</h1>
+          <p class="slide-copy" data-i18n="regimeCopy">Bull years, bear years, and mixed years do not behave the same. The stronger point is that the portfolio has produced through more than one cycle.</p>
+        </div>
+        <div class="regime-layout">
+          <canvas id="regime-cycle-chart" class="chart regime-canvas"></canvas>
+          <div class="regime-story">
+            <article><span data-i18n="cycleBearLabel">Bear markets</span><strong data-i18n="cycleBearTitle">A slower, more selective pace</strong></article>
+            <article><span data-i18n="cycleBullLabel">Bull markets</span><strong data-i18n="cycleBullTitle">More opportunity to compound</strong></article>
+            <article><span data-i18n="cycleRangeLabel">Mixed markets</span><strong data-i18n="cycleRangeTitle">Different engines take turns</strong></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide-page contribution-page" data-slide="07">
+        <div class="slide-head compact-head">
+          <p class="eyebrow" data-i18n="contributionEyebrow">Portfolio Contribution</p>
+          <h1 data-i18n="contributionTitle">The return is led, but not singular.</h1>
+          <p class="slide-copy" data-i18n="contributionCopy">A fundable portfolio should show where return comes from. The NTS Alpha Labs profile is anchored by stronger engines, with the broader set adding depth around the headline ROI.</p>
+        </div>
+        <div class="contribution-layout">
+          <div class="wheel-panel contribution-wheel-panel">
+            <canvas id="portfolio-contribution-wheel" class="chart contribution-wheel"></canvas>
+          </div>
+          <div>
+            <h2 data-i18n="contributionBarsTitle">Contribution by engine</h2>
+            <div id="contribution-bars" class="bar-list contribution-bars"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide-page durability-page" data-slide="08">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="qualityEyebrow">Durability</p>
           <h1 data-i18n="qualityTitle">Consistency matters.</h1>
@@ -101,7 +154,7 @@
         </div>
       </section>
 
-      <section class="slide-page breadth-page" data-slide="06">
+      <section class="slide-page breadth-page" data-slide="09">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="strategyEyebrow">Why Breadth Matters</p>
           <h1 data-i18n="strategyTitle">Different alpha sources reduce dependence.</h1>
@@ -116,7 +169,7 @@
         </div>
       </section>
 
-      <section class="slide-page risk-page" data-slide="07">
+      <section class="slide-page risk-page" data-slide="10">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="riskEyebrow">Risk Framework</p>
           <h1 data-i18n="riskTitle">Protect first. Compound second.</h1>
@@ -129,7 +182,7 @@
         </div>
       </section>
 
-      <section class="slide-page infra-page" data-slide="08">
+      <section class="slide-page infra-page" data-slide="11">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="infraEyebrow">Infrastructure</p>
           <h1 data-i18n="infraTitle">An operating system for systematic allocation.</h1>
@@ -144,7 +197,7 @@
         </div>
       </section>
 
-      <section class="slide-page reporting-page" data-slide="09">
+      <section class="slide-page reporting-page" data-slide="12">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="reportingEyebrow">Reporting Layer</p>
           <h1 data-i18n="reportingTitle">Transparency makes the portfolio investable.</h1>
@@ -160,7 +213,7 @@
         </div>
       </section>
 
-      <section class="slide-page expansion-page" data-slide="10">
+      <section class="slide-page expansion-page" data-slide="13">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="marketEyebrow">Expansion</p>
           <h1 data-i18n="marketTitle">The infrastructure is market-agnostic.</h1>
@@ -172,7 +225,7 @@
         </div>
       </section>
 
-      <section class="slide-page closing-page" data-slide="11">
+      <section class="slide-page closing-page" data-slide="14">
         <div class="closing-copy">
           <p class="eyebrow" data-i18n="closeEyebrow">Investor Discussion</p>
           <h1 data-i18n="closeTitle">Systematic by design. Disciplined in execution. Built for long-term compounding.</h1>
@@ -190,11 +243,11 @@
 
       <nav class="mobile-slide-controls" aria-label="Mobile presentation controls">
         <button id="mobile-prev" type="button">Prev</button>
-        <span id="mobile-slide-count">1 / 11</span>
+        <span id="mobile-slide-count">1 / 14</span>
         <button id="mobile-next" type="button">Next</button>
       </nav>
     </main>
 
-    <script src="./overall_strategy.js?v=20260525-premium-system-3" type="module"></script>
+    <script src="./overall_strategy.js?v=20260525-expanded-deck-2" type="module"></script>
   </body>
 </html>
