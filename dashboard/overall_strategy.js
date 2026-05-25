@@ -121,10 +121,30 @@ const TEXT = {
     standardThree: "Monthly behavior",
     standardFour: "Veto logic",
     standardFive: "Execution awareness",
-    standardSix: "Investor reporting",
+    standardSix: "Transparent reporting",
     evidenceStackEyebrow: "NTS Evidence Stack",
     evidenceStackTitle: "The pitch is built on evidence, not indicator names.",
     evidenceStackCopy: "NTS Alpha Labs presents the strategy as a portfolio with visible ROI, annual context, monthly behavior, contribution breadth, and a decision layer that can be reviewed before capital is allocated.",
+    investorLensEyebrow: "Allocation Case",
+    investorLensTitle: "A strong product has to prove more than one number.",
+    investorLensCopy: "The case becomes stronger when return, process, discipline, visibility, and scalability are all visible in the same story.",
+    investorLensOneTitle: "Return proof",
+    investorLensOneCopy: "Headline ROI is stronger when annual and monthly evidence support it.",
+    investorLensTwoTitle: "Visible process",
+    investorLensTwoCopy: "The portfolio should be easy to review without exposing every internal detail.",
+    investorLensThreeTitle: "Scalable base",
+    investorLensThreeCopy: "The same infrastructure should support more engines and more liquid markets over time.",
+    competitiveEyebrow: "Market Position",
+    competitiveTitle: "NTS separates through proof, not AI wording.",
+    competitiveCopy: "The advantage is not a louder claim. It is a stronger evidence layer: portfolio ROI, backtest behavior, multiple engines, veto logic, and transparent reporting.",
+    edgeArchitectureEyebrow: "Return Architecture",
+    edgeArchitectureTitle: "The edge is a system, not one indicator.",
+    edgeArchitectureCopy: "NTS combines data analysis, regime review, veto discipline, and multiple return engines. The product is designed so weak signals are filtered before they become portfolio exposure.",
+    forwardValueEyebrow: "Forward Value",
+    forwardValueTitle: "Future value comes from repeatable expansion.",
+    forwardValueCopy: "The upside case is not only one crypto strategy. It is the ability to expand the same research, validation, execution, and reporting discipline into more engines and more liquid markets.",
+    forwardValueCallout: "The platform gets stronger as coverage expands.",
+    forwardValueCalloutCopy: "More validated engines, more market coverage, and better reporting create a stronger platform value over time.",
     validationEyebrow: "Decision Quality",
     validationTitle: "AI alone is not an edge. Validation is.",
     validationCopy: "Many so-called AI trading systems still depend on delayed signals, black-box rules, and weak verification. NTS adds a decision layer that reviews data, learns from regime behavior, and can veto low-quality setups before execution.",
@@ -224,13 +244,13 @@ const TEXT = {
     railMonitoring: "Monitoring",
     reportingEyebrow: "Reporting Layer",
     reportingTitle: "Transparency makes the portfolio investable.",
-    reportingCopy: "Investors should be able to review performance, contribution, and monthly behavior without needing to understand the full internal system.",
+    reportingCopy: "Performance, contribution, and monthly behavior are presented clearly without requiring the full internal system to be explained.",
     reportingOneTitle: "Portfolio overview",
     reportingOneCopy: "One place to understand the headline return and active strategy set.",
     reportingTwoTitle: "Contribution review",
     reportingTwoCopy: "Return sources are visible instead of hidden behind a single number.",
     reportingThreeTitle: "Bilingual access",
-    reportingThreeCopy: "Investor-facing materials can be reviewed in English or Mandarin.",
+    reportingThreeCopy: "Materials can be reviewed in English or Mandarin.",
     marketEyebrow: "Expansion",
     marketTitle: "The infrastructure is market-agnostic.",
     marketOneTitle: "Crypto as first proof",
@@ -249,7 +269,7 @@ const TEXT = {
     cycleRangeTitle: "Different engines take turns",
     cycleRangeCopy: "Some years earn more and some years earn less. The value of the portfolio is that the return profile can come from different engines across different market moods.",
     marketNote: "Crypto is the first market where the system has built visible proof. Over time, NTS Alpha Labs can extend the same product discipline into FX, indices, commodities, and other liquid markets where repeatable opportunities can be measured.",
-    closeEyebrow: "Investor Discussion",
+    closeEyebrow: "Allocation Review",
     closeTitle: "Systematic by design. Disciplined in execution. Built for long-term compounding.",
     currentSnapshot: "Current snapshot",
     closeCopy: "Total portfolio ROI, 2022-2026.",
@@ -350,10 +370,30 @@ const TEXT = {
     standardThree: "Monthly behavior",
     standardFour: "Veto logic",
     standardFive: "Execution awareness",
-    standardSix: "Investor reporting",
+    standardSix: "Transparent reporting",
     evidenceStackEyebrow: "NTS 证据层",
     evidenceStackTitle: "我们讲的是证据，不是指标名字。",
     evidenceStackCopy: "NTS Alpha Labs 用 portfolio 的方式呈现策略：可见 ROI、年度 context、月度行为、贡献广度，以及在 capital allocation 前可以 review 的决策层。",
+    investorLensEyebrow: "配置逻辑",
+    investorLensTitle: "强产品不能只证明一个数字。",
+    investorLensCopy: "当回报、流程、纪律、透明度和扩展性都能在同一个 story 里看见，case 才会更强。",
+    investorLensOneTitle: "回报证据",
+    investorLensOneCopy: "Headline ROI 有年度和月度证据支撑，才更有力量。",
+    investorLensTwoTitle: "流程可见",
+    investorLensTwoCopy: "组合应该容易 review，但不需要暴露所有内部细节。",
+    investorLensThreeTitle: "可扩展基础",
+    investorLensThreeCopy: "同一套基础设施应该能支持更多策略引擎和更多流动性市场。",
+    competitiveEyebrow: "市场定位",
+    competitiveTitle: "NTS 靠 proof 拉开距离，不靠 AI wording。",
+    competitiveCopy: "优势不是更会讲，而是证据层更完整：portfolio ROI、backtest behavior、多引擎、veto logic 和透明 reporting。",
+    edgeArchitectureEyebrow: "回报架构",
+    edgeArchitectureTitle: "Edge 是系统，不是一个指标。",
+    edgeArchitectureCopy: "NTS 把数据分析、市场环境 review、veto 纪律和多个 return engines 接在一起。弱信号应该在进入 portfolio exposure 前先被过滤。",
+    forwardValueEyebrow: "未来价值",
+    forwardValueTitle: "未来价值来自可重复扩展。",
+    forwardValueCopy: "Upside case 不只是一个 crypto 策略，而是把同一套 research、validation、execution 和 reporting 纪律扩展到更多引擎和更多流动性市场。",
+    forwardValueCallout: "覆盖面越宽，平台价值越强。",
+    forwardValueCalloutCopy: "更多已验证引擎、更多市场覆盖和更好的 reporting，会让平台价值随时间变得更强。",
     validationEyebrow: "决策质量",
     validationTitle: "AI 本身不是 edge，验证才是。",
     validationCopy: "市面上很多所谓 AI 交易，本质还是延迟信号、黑箱规则和薄弱验证。NTS 在执行前加入决策层：先读数据、理解市场状态，再用 veto 机制过滤低质量机会。",
@@ -453,13 +493,13 @@ const TEXT = {
     railMonitoring: "Monitoring",
     reportingEyebrow: "报告层",
     reportingTitle: "透明度，让组合更适合投资人 review。",
-    reportingCopy: "投资人应该可以看懂 performance、贡献来源和月度行为，而不需要先理解完整内部系统。",
+    reportingCopy: "Performance、贡献来源和月度行为会被清楚呈现，不需要先解释完整内部系统。",
     reportingOneTitle: "组合总览",
     reportingOneCopy: "用一个页面看 headline return 和 active strategy set。",
     reportingTwoTitle: "贡献 review",
     reportingTwoCopy: "回报来源是可见的，不是藏在一个总数字后面。",
     reportingThreeTitle: "中英双语",
-    reportingThreeCopy: "投资人材料可以用英文或中文阅读。",
+    reportingThreeCopy: "材料可以用英文或中文阅读。",
     marketEyebrow: "扩展方向",
     marketTitle: "这套基础设施不绑定单一市场。",
     marketOneTitle: "Crypto 是第一站",
@@ -478,7 +518,7 @@ const TEXT = {
     cycleRangeTitle: "不同策略轮流贡献",
     cycleRangeCopy: "有些年份会赚多一点，有些年份会赚少一点。组合的价值，是不同市场情绪下可以由不同策略轮流贡献。",
     marketNote: "Crypto 是第一个已经跑出证明的市场。随着系统成熟，NTS Alpha Labs 可以把同一套产品纪律扩展到 FX、指数、商品和其他流动性市场。",
-    closeEyebrow: "投资人讨论",
+    closeEyebrow: "Allocation review",
     closeTitle: "系统化设计。纪律化执行。为长期复利而建。",
     currentSnapshot: "当前快照",
     closeCopy: "2022-2026 total portfolio ROI。",
@@ -898,6 +938,184 @@ function drawEvidenceStackChart() {
     ctx.font = `850 ${compact ? 13 : 17}px -apple-system, BlinkMacSystemFont, sans-serif`;
     ctx.fillText(label, x + 18, y + layerH * .6);
   });
+}
+
+function drawInvestorLensChart() {
+  const canvas = document.getElementById("investor-lens-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const items = currentLang === "zh"
+    ? [
+      ["回报", 92],
+      ["流程", 84],
+      ["风险纪律", 78],
+      ["透明度", 86],
+      ["扩展性", 80],
+    ]
+    : [
+      ["Return", 92],
+      ["Process", 84],
+      ["Risk discipline", 78],
+      ["Visibility", 86],
+      ["Scalability", 80],
+    ];
+  const pad = { l: compact ? 88 : 150, r: 34, t: 30, b: 26 };
+  const x = pad.l;
+  const w = width - pad.l - pad.r;
+  const rowH = (height - pad.t - pad.b) / items.length;
+  items.forEach(([label, value], index) => {
+    const yy = pad.t + index * rowH;
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = `${compact ? "800 12px" : "800 15px"} -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.fillText(label, 12, yy + rowH * .56);
+    ctx.fillStyle = "rgba(6, 107, 79, .11)";
+    ctx.beginPath();
+    ctx.roundRect(x, yy + rowH * .32, w, compact ? 16 : 22, 12);
+    ctx.fill();
+    ctx.fillStyle = index < 2 ? COLORS.green : index < 4 ? COLORS.teal : COLORS.amber;
+    ctx.beginPath();
+    ctx.roundRect(x, yy + rowH * .32, w * value / 100, compact ? 16 : 22, 12);
+    ctx.fill();
+    ctx.fillStyle = COLORS.muted;
+    ctx.font = "800 11px ui-monospace, Menlo, monospace";
+    ctx.fillText(`${value}%`, x + w * value / 100 + 8, yy + rowH * .32 + (compact ? 13 : 16));
+  });
+}
+
+function drawCompetitiveMatrixChart() {
+  const canvas = document.getElementById("competitive-matrix-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const rows = currentLang === "zh"
+    ? [
+      ["AI 名义", "High", "Medium"],
+      ["严肃回测", "Low", "High"],
+      ["多策略组合", "Low", "High"],
+      ["Veto 纪律", "Low", "High"],
+      ["透明 reporting", "Low", "High"],
+    ]
+    : [
+      ["AI wording", "High", "Medium"],
+      ["Serious backtest", "Low", "High"],
+      ["Multi-engine portfolio", "Low", "High"],
+      ["Veto discipline", "Low", "High"],
+      ["Transparent reporting", "Low", "High"],
+    ];
+  const pad = { l: compact ? 18 : 42, r: compact ? 18 : 42, t: 52, b: 28 };
+  const col1 = compact ? width * .42 : width * .38;
+  const col2 = compact ? width * .27 : width * .25;
+  const col3 = compact ? width * .27 : width * .25;
+  const rowH = (height - pad.t - pad.b) / rows.length;
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = "800 11px ui-monospace, Menlo, monospace";
+  ctx.fillText(currentLang === "zh" ? "维度" : "Dimension", pad.l, 26);
+  ctx.fillText(currentLang === "zh" ? "普通 offer" : "Typical offer", pad.l + col1, 26);
+  ctx.fillText("NTS", pad.l + col1 + col2, 26);
+  rows.forEach((row, index) => {
+    const y = pad.t + index * rowH;
+    ctx.fillStyle = index % 2 ? "rgba(16, 33, 27, .025)" : "rgba(247, 246, 241, .78)";
+    ctx.fillRect(pad.l - 12, y - 8, width - pad.l - pad.r + 24, rowH - 4);
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = `800 ${compact ? 11 : 15}px -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.fillText(row[0], pad.l, y + rowH * .45);
+    ctx.fillStyle = row[1] === "High" ? COLORS.amber : COLORS.muted;
+    ctx.fillText(row[1], pad.l + col1, y + rowH * .45);
+    ctx.fillStyle = row[2] === "High" ? COLORS.green : COLORS.amber;
+    ctx.fillText(row[2], pad.l + col1 + col2, y + rowH * .45);
+  });
+}
+
+function drawEdgeArchitectureChart() {
+  const canvas = document.getElementById("edge-architecture-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const nodes = currentLang === "zh"
+    ? ["Data", "Regime", "Veto", "Engines", "Portfolio", "Reporting"]
+    : ["Data", "Regime", "Veto", "Engines", "Portfolio", "Reporting"];
+  const pad = { l: compact ? 20 : 48, r: compact ? 20 : 48, t: compact ? 58 : 100, b: 38 };
+  const w = width - pad.l - pad.r;
+  const y = height * .5;
+  const nodeW = compact ? Math.min(74, w / nodes.length - 8) : Math.min(150, w / nodes.length - 18);
+  const nodeH = compact ? 54 : 82;
+  const innerW = w - nodeW;
+  nodes.forEach((label, index) => {
+    const centerX = pad.l + nodeW / 2 + index * (innerW / (nodes.length - 1));
+    const x = centerX - nodeW / 2;
+    if (index > 0) {
+      const prevCenterX = pad.l + nodeW / 2 + (index - 1) * (innerW / (nodes.length - 1));
+      const px = prevCenterX + nodeW / 2;
+      ctx.strokeStyle = index === 2 ? COLORS.amber : COLORS.green;
+      ctx.lineWidth = compact ? 2 : 3;
+      ctx.beginPath();
+      ctx.moveTo(px, y);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    }
+    ctx.fillStyle = index === 2 ? "rgba(184, 137, 53, .14)" : "rgba(6, 107, 79, .11)";
+    ctx.strokeStyle = index === 2 ? "rgba(184, 137, 53, .55)" : "rgba(6, 107, 79, .36)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.roundRect(x, y - nodeH / 2, nodeW, nodeH, 4);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = index === 2 ? COLORS.amber : COLORS.green;
+    ctx.font = "800 11px ui-monospace, Menlo, monospace";
+    ctx.fillText(String(index + 1).padStart(2, "0"), x + 12, y - nodeH / 2 + 18);
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = `850 ${compact ? 12 : 17}px -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.fillText(label, x + 12, y + 12);
+  });
+}
+
+function drawForwardValueChart() {
+  const canvas = document.getElementById("forward-value-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const stages = currentLang === "zh"
+    ? [
+      ["Crypto proof", 1],
+      ["更多 engines", 2],
+      ["更多 markets", 3],
+      ["Portfolio platform", 4],
+    ]
+    : [
+      ["Crypto proof", 1],
+      ["More engines", 2],
+      ["More markets", 3],
+      ["Portfolio platform", 4],
+    ];
+  const pad = { l: compact ? 32 : 58, r: compact ? 24 : 42, t: 36, b: compact ? 54 : 70 };
+  const w = width - pad.l - pad.r;
+  const h = height - pad.t - pad.b;
+  const stepW = w / stages.length;
+  stages.forEach(([label, level], index) => {
+    const barH = h * (level / stages.length);
+    const x = pad.l + index * stepW + stepW * .18;
+    const y = pad.t + h - barH;
+    ctx.fillStyle = index < 2 ? COLORS.teal : COLORS.green;
+    ctx.globalAlpha = .72 + index * .07;
+    ctx.beginPath();
+    ctx.roundRect(x, y, stepW * .52, barH, 8);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = "800 12px ui-monospace, Menlo, monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(`${level}x`, x + stepW * .26, y - 8);
+    ctx.fillStyle = COLORS.muted;
+    ctx.font = `${compact ? "9px" : "12px"} -apple-system, BlinkMacSystemFont, sans-serif`;
+    const short = compact ? label.replace("Portfolio platform", "Platform").replace("More ", "+") : label;
+    ctx.fillText(short, x + stepW * .26, pad.t + h + 24);
+  });
+  ctx.textAlign = "left";
 }
 
 function drawValidationChart() {
@@ -1565,6 +1783,10 @@ function renderPage() {
   drawLagChart();
   drawValidationStandardChart();
   drawEvidenceStackChart();
+  drawInvestorLensChart();
+  drawCompetitiveMatrixChart();
+  drawEdgeArchitectureChart();
+  drawForwardValueChart();
   drawValidationChart();
   drawEquityChart();
   drawMonthlyProfileChart();
@@ -1593,6 +1815,10 @@ function drawVisibleSlideCharts() {
   if (active.querySelector("#lag-chart")) drawLagChart();
   if (active.querySelector("#validation-standard-chart")) drawValidationStandardChart();
   if (active.querySelector("#evidence-stack-chart")) drawEvidenceStackChart();
+  if (active.querySelector("#investor-lens-chart")) drawInvestorLensChart();
+  if (active.querySelector("#competitive-matrix-chart")) drawCompetitiveMatrixChart();
+  if (active.querySelector("#edge-architecture-chart")) drawEdgeArchitectureChart();
+  if (active.querySelector("#forward-value-chart")) drawForwardValueChart();
   if (active.querySelector("#equity-chart")) drawEquityChart();
   if (active.querySelector("#validation-chart")) drawValidationChart();
   if (active.querySelector("#annual-fd-chart")) drawAnnualFdChart();
