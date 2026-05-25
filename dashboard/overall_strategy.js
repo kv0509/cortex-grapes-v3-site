@@ -76,15 +76,29 @@ const TEXT = {
     productThreeTitle: "Market Expansion",
     productThreeCopy: "Crypto is the first proof point. The product layer can later extend into FX, indices, commodities, and other liquid markets.",
     problemEyebrow: "The Problem",
-    problemTitle: "Why most systematic strategies fail.",
+    problemTitle: "Why most AI trading claims fail.",
     problemOneTitle: "Single-strategy dependence",
     problemOneCopy: "One return source can look strong until the market regime changes.",
-    problemTwoTitle: "Regime fragility",
-    problemTwoCopy: "A strategy that only works in one market mood is difficult to allocate to with confidence.",
-    problemThreeTitle: "Lack of portfolio breadth",
-    problemThreeCopy: "Without multiple return engines, performance becomes too dependent on one behavior.",
-    problemFourTitle: "Inconsistent execution",
-    problemFourCopy: "A good idea still needs a repeatable process before it becomes an investable product.",
+    problemTwoTitle: "Signal lag",
+    problemTwoCopy: "Many systems react after the move has already become obvious.",
+    problemThreeTitle: "No validation layer",
+    problemThreeCopy: "A model output is not enough if the signal is not tested against market context and historical behavior.",
+    problemFourTitle: "No veto discipline",
+    problemFourCopy: "Without a filter before execution, weak signals can still become real positions.",
+    validationEyebrow: "Decision Quality",
+    validationTitle: "AI alone is not an edge. Validation is.",
+    validationCopy: "Many so-called AI trading systems still depend on delayed signals, black-box rules, and weak verification. NTS adds a decision layer that reviews data, learns from regime behavior, and can veto low-quality setups before execution.",
+    validationOneTitle: "Data first",
+    validationOneCopy: "Signals are read through market data, liquidity behavior, and historical evidence before they become decisions.",
+    validationTwoTitle: "RL-assisted review",
+    validationTwoCopy: "The learning layer helps evaluate how market conditions change, instead of assuming one fixed rule always works.",
+    validationThreeTitle: "Veto before execution",
+    validationThreeCopy: "Not every signal deserves capital. A veto layer is designed to filter weak, late, or low-conviction setups.",
+    validationChartData: "Data analysis",
+    validationChartRL: "RL review",
+    validationChartVeto: "Veto gate",
+    validationChartLag: "Lag control",
+    validationChartReview: "Review trail",
     solutionEyebrow: "Our Solution",
     solutionTitle: "One portfolio. Multiple independent return engines.",
     solutionCopy: "NTS Alpha Labs is presented as a portfolio first. The strategy set is designed so different engines can contribute under different market conditions.",
@@ -162,7 +176,12 @@ const TEXT = {
     riskFourCopy: "Multiple engines are reviewed as one allocation profile.",
     infraEyebrow: "Infrastructure",
     infraTitle: "An operating system for systematic allocation.",
-    infraCopy: "The product is not a trading bot. It is a repeatable operating rhythm that connects research, decisioning, execution, and monitoring into one reviewable process.",
+    infraCopy: "The product is not a trading bot. It is a repeatable operating rhythm that connects data analysis, signal review, veto logic, execution, and monitoring into one reviewable process.",
+    railData: "Data",
+    railSignal: "Signal",
+    railVeto: "Veto",
+    railExecution: "Execution",
+    railMonitoring: "Monitoring",
     reportingEyebrow: "Reporting Layer",
     reportingTitle: "Transparency makes the portfolio investable.",
     reportingCopy: "Investors should be able to review performance, contribution, and monthly behavior without needing to understand the full internal system.",
@@ -246,15 +265,29 @@ const TEXT = {
     productThreeTitle: "市场扩展",
     productThreeCopy: "Crypto 是第一个 proof point。之后同一套产品层可以继续扩展到 FX、指数、商品和其他流动性市场。",
     problemEyebrow: "问题",
-    problemTitle: "为什么大多数系统化策略很难交付。",
+    problemTitle: "为什么大多数 AI 交易很难真正交付。",
     problemOneTitle: "依赖单一策略",
     problemOneCopy: "单一回报来源在某些阶段很好看，但市场环境一变就容易失效。",
-    problemTwoTitle: "对市场环境太敏感",
-    problemTwoCopy: "如果只适合一种市场情绪，投资人很难长期配置。",
-    problemThreeTitle: "缺少组合广度",
-    problemThreeCopy: "没有多个 return engines，表现就太依赖一种市场行为。",
-    problemFourTitle: "执行不稳定",
-    problemFourCopy: "好的策略想法，也需要可重复的流程，才会变成可投资产品。",
+    problemTwoTitle: "Signal lag",
+    problemTwoCopy: "很多系统是在行情已经走出来之后才反应，信号本身就慢了一拍。",
+    problemThreeTitle: "缺少验证层",
+    problemThreeCopy: "单纯模型输出不等于可以交易；信号必须经过市场环境和历史行为验证。",
+    problemFourTitle: "没有 veto 纪律",
+    problemFourCopy: "如果执行前没有过滤层，弱信号也会变成真实仓位。",
+    validationEyebrow: "决策质量",
+    validationTitle: "AI 本身不是 edge，验证才是。",
+    validationCopy: "市面上很多所谓 AI 交易，本质还是延迟信号、黑箱规则和薄弱验证。NTS 在执行前加入决策层：先读数据、理解市场状态，再用 veto 机制过滤低质量机会。",
+    validationOneTitle: "数据优先",
+    validationOneCopy: "信号会先经过市场数据、流动性行为和历史证据阅读，再进入决策。",
+    validationTwoTitle: "RL 辅助 review",
+    validationTwoCopy: "学习层用于观察市场环境如何变化，而不是假设一条固定规则永远有效。",
+    validationThreeTitle: "执行前 veto",
+    validationThreeCopy: "不是每个信号都值得投入 capital。veto 层用于过滤偏慢、偏弱或 conviction 不够的 setup。",
+    validationChartData: "数据分析",
+    validationChartRL: "RL review",
+    validationChartVeto: "Veto gate",
+    validationChartLag: "延迟控制",
+    validationChartReview: "可复核流程",
     solutionEyebrow: "我们的解法",
     solutionTitle: "一个组合，多个独立回报引擎。",
     solutionCopy: "NTS Alpha Labs 先以 portfolio 呈现。不同策略在不同市场状态下轮流贡献，让整体回报不依赖单一行情。",
@@ -332,7 +365,12 @@ const TEXT = {
     riskFourCopy: "多个策略不是分开看，而是作为一个 allocation profile 来 review。",
     infraEyebrow: "基础设施",
     infraTitle: "一个系统化 allocation operating system。",
-    infraCopy: "这不是 trading bot，而是一套可重复的运行节奏，把 research、decision、execution 和 monitoring 接到同一个可 review 的流程里。",
+    infraCopy: "这不是 trading bot，而是一套可重复的运行节奏，把数据分析、信号 review、veto 逻辑、执行和 monitoring 接到同一个可 review 的流程里。",
+    railData: "Data",
+    railSignal: "Signal",
+    railVeto: "Veto",
+    railExecution: "Execution",
+    railMonitoring: "Monitoring",
     reportingEyebrow: "报告层",
     reportingTitle: "透明度，让组合更适合投资人 review。",
     reportingCopy: "投资人应该可以看懂 performance、贡献来源和月度行为，而不需要先理解完整内部系统。",
@@ -533,6 +571,69 @@ function drawAxes(ctx, x, y, w, h, yTicks = 4) {
   ctx.lineTo(x, y + h);
   ctx.lineTo(x + w, y + h);
   ctx.stroke();
+}
+
+function drawValidationChart() {
+  const canvas = document.getElementById("validation-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+
+  const rows = [
+    { nts: t("validationChartData"), other: currentLang === "zh" ? "薄弱" : "Weak", level: 1 },
+    { nts: t("validationChartRL"), other: currentLang === "zh" ? "少见" : "Rare", level: 1 },
+    { nts: t("validationChartVeto"), other: currentLang === "zh" ? "没有" : "Absent", level: 1 },
+    { nts: t("validationChartLag"), other: currentLang === "zh" ? "偏慢" : "Lagging", level: .72 },
+    { nts: t("validationChartReview"), other: currentLang === "zh" ? "不透明" : "Opaque", level: 1 },
+  ];
+
+  const pad = { l: width < 520 ? 22 : 44, r: width < 520 ? 18 : 34, t: 34, b: 26 };
+  const labelW = width < 520 ? 112 : 190;
+  const x = pad.l + labelW;
+  const y = pad.t;
+  const w = width - pad.l - pad.r - labelW;
+  const rowH = Math.min(width < 520 ? 34 : 66, (height - pad.t - pad.b) / rows.length);
+  const gap = width < 520 ? 10 : 22;
+  const ntsW = w * (width < 520 ? .62 : .64);
+  const otherW = w * (width < 520 ? .24 : .28);
+
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = "800 11px ui-monospace, Menlo, monospace";
+  ctx.textAlign = "left";
+  ctx.fillText("NTS", x, 16);
+  ctx.fillText(width < 520 ? "AI bot" : currentLang === "zh" ? "普通 AI bot" : "Typical AI bot", x + ntsW + gap, 16);
+
+  rows.forEach((row, index) => {
+    const yy = y + index * rowH;
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = `${width < 520 ? "700 12px" : "800 14px"} -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.textAlign = "left";
+    ctx.fillText(row.nts, pad.l, yy + rowH * .55);
+
+    ctx.fillStyle = "rgba(6, 107, 79, .11)";
+    ctx.beginPath();
+    ctx.roundRect(x, yy + 10, ntsW, width < 520 ? 20 : 24, 12);
+    ctx.fill();
+    ctx.fillStyle = COLORS.green;
+    ctx.beginPath();
+    ctx.roundRect(x, yy + 10, ntsW * row.level, width < 520 ? 20 : 24, 12);
+    ctx.fill();
+
+    ctx.fillStyle = "rgba(184, 137, 53, .14)";
+    ctx.beginPath();
+    ctx.roundRect(x + ntsW + gap, yy + 10, otherW, width < 520 ? 20 : 24, 12);
+    ctx.fill();
+    ctx.fillStyle = "rgba(184, 137, 53, .82)";
+    ctx.beginPath();
+    ctx.roundRect(x + ntsW + gap, yy + 10, otherW * .3, width < 520 ? 20 : 24, 12);
+    ctx.fill();
+
+    if (width >= 520) {
+      ctx.fillStyle = COLORS.muted;
+      ctx.font = "700 11px ui-monospace, Menlo, monospace";
+      ctx.fillText(row.other, x + ntsW + gap, yy + 54);
+    }
+  });
 }
 
 function drawEquityChart() {
@@ -1131,6 +1232,7 @@ function renderPage() {
   renderQuality();
   renderReportingBoard();
   renderBenchmark();
+  drawValidationChart();
   drawEquityChart();
   drawMonthlyProfileChart();
   drawMonthlyDistributionChart();
@@ -1153,6 +1255,7 @@ function drawVisibleSlideCharts() {
   if (active.querySelector("#contribution-wheel")) drawContributionWheel();
   if (active.querySelector("#portfolio-contribution-wheel")) drawContributionWheel("portfolio-contribution-wheel");
   if (active.querySelector("#equity-chart")) drawEquityChart();
+  if (active.querySelector("#validation-chart")) drawValidationChart();
   if (active.querySelector("#annual-fd-chart")) drawAnnualFdChart();
   if (active.querySelector("#strategy-roi-chart")) drawStrategyRoiChart();
   if (active.querySelector("#quality-heatmap")) renderHeatmap("quality-heatmap");

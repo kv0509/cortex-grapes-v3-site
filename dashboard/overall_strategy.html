@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NTS Alpha Labs Investor Snapshot</title>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="stylesheet" href="./overall_strategy.css?v=20260525-merged-deck-1" />
+    <link rel="stylesheet" href="./overall_strategy.css?v=20260525-validation-layer-1" />
   </head>
   <body>
     <main class="deck-shell fundraise-deck" id="overall-shell">
@@ -49,7 +49,23 @@
         </div>
       </section>
 
-      <section class="slide-page solution-page" data-slide="03">
+      <section class="slide-page validation-page" data-slide="03">
+        <div class="slide-head compact-head">
+          <p class="eyebrow" data-i18n="validationEyebrow">Decision Quality</p>
+          <h1 data-i18n="validationTitle">AI alone is not an edge. Validation is.</h1>
+          <p class="slide-copy" data-i18n="validationCopy">Many so-called AI trading systems still depend on delayed signals, black-box rules, and weak verification. NTS adds a decision layer that reviews data, learns from regime behavior, and can veto low-quality setups before execution.</p>
+        </div>
+        <div class="validation-layout">
+          <canvas id="validation-chart" class="chart validation-canvas"></canvas>
+          <div class="validation-points">
+            <article><strong data-i18n="validationOneTitle">Data first</strong><span data-i18n="validationOneCopy">Signals are read through market data, liquidity behavior, and historical evidence before they become decisions.</span></article>
+            <article><strong data-i18n="validationTwoTitle">RL-assisted review</strong><span data-i18n="validationTwoCopy">The learning layer helps evaluate how market conditions change, instead of assuming one fixed rule always works.</span></article>
+            <article><strong data-i18n="validationThreeTitle">Veto before execution</strong><span data-i18n="validationThreeCopy">Not every signal deserves capital. A veto layer is designed to filter weak, late, or low-conviction setups.</span></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide-page solution-page" data-slide="04">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="solutionEyebrow">Our Solution</p>
           <h1 data-i18n="solutionTitle">One portfolio. Multiple independent return engines.</h1>
@@ -69,7 +85,7 @@
         </div>
       </section>
 
-      <section class="slide-page curve-page" data-slide="04">
+      <section class="slide-page curve-page" data-slide="05">
         <div class="panel-head">
           <div>
             <p class="eyebrow" data-i18n="performanceEyebrow">Performance</p>
@@ -83,7 +99,7 @@
         <canvas id="equity-chart" class="chart equity-chart full-curve"></canvas>
       </section>
 
-      <section class="slide-page benchmark-page" data-slide="05">
+      <section class="slide-page benchmark-page" data-slide="06">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="benchmarkEyebrow">ROI Benchmark</p>
           <h1 data-i18n="benchmarkTitle">Outperformance needs a reference point.</h1>
@@ -103,7 +119,7 @@
         </div>
       </section>
 
-      <section class="slide-page regime-page" data-slide="06">
+      <section class="slide-page regime-page" data-slide="07">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="regimeEyebrow">Market Regimes</p>
           <h1 data-i18n="regimeTitle">Annual ROI across market moods.</h1>
@@ -119,7 +135,7 @@
         </div>
       </section>
 
-      <section class="slide-page contribution-page" data-slide="07">
+      <section class="slide-page contribution-page" data-slide="08">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="contributionEyebrow">Portfolio Contribution</p>
           <h1 data-i18n="contributionTitle">Different engines. One portfolio.</h1>
@@ -136,7 +152,7 @@
         </div>
       </section>
 
-      <section class="slide-page monthly-page" data-slide="08">
+      <section class="slide-page monthly-page" data-slide="09">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="monthlyBehaviorEyebrow">Monthly Behavior</p>
           <h1 data-i18n="monthlyBehaviorTitle">Consistency matters.</h1>
@@ -155,7 +171,7 @@
         </div>
       </section>
 
-      <section class="slide-page risk-page" data-slide="09">
+      <section class="slide-page risk-page" data-slide="10">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="riskEyebrow">Risk Framework</p>
           <h1 data-i18n="riskTitle">Protect first. Compound second.</h1>
@@ -168,22 +184,22 @@
         </div>
       </section>
 
-      <section class="slide-page infra-page" data-slide="10">
+      <section class="slide-page infra-page" data-slide="11">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="infraEyebrow">Infrastructure</p>
           <h1 data-i18n="infraTitle">An operating system for systematic allocation.</h1>
-          <p class="slide-copy" data-i18n="infraCopy">The product is not a trading bot. It is a repeatable operating rhythm that connects research, decisioning, execution, and monitoring into one reviewable process.</p>
+          <p class="slide-copy" data-i18n="infraCopy">The product is not a trading bot. It is a repeatable operating rhythm that connects data analysis, signal review, veto logic, execution, and monitoring into one reviewable process.</p>
         </div>
         <div class="process-rail">
-          <article><span>01</span><strong>Data</strong></article>
-          <article><span>02</span><strong>Signal</strong></article>
-          <article><span>03</span><strong>Decision</strong></article>
-          <article><span>04</span><strong>Execution</strong></article>
-          <article><span>05</span><strong>Monitoring</strong></article>
+          <article><span>01</span><strong data-i18n="railData">Data</strong></article>
+          <article><span>02</span><strong data-i18n="railSignal">Signal</strong></article>
+          <article><span>03</span><strong data-i18n="railVeto">Veto</strong></article>
+          <article><span>04</span><strong data-i18n="railExecution">Execution</strong></article>
+          <article><span>05</span><strong data-i18n="railMonitoring">Monitoring</strong></article>
         </div>
       </section>
 
-      <section class="slide-page reporting-page" data-slide="11">
+      <section class="slide-page reporting-page" data-slide="12">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="reportingEyebrow">Reporting Layer</p>
           <h1 data-i18n="reportingTitle">Transparency makes the portfolio investable.</h1>
@@ -204,7 +220,7 @@
         </div>
       </section>
 
-      <section class="slide-page expansion-page" data-slide="12">
+      <section class="slide-page expansion-page" data-slide="13">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="marketEyebrow">Expansion</p>
           <h1 data-i18n="marketTitle">The infrastructure is market-agnostic.</h1>
@@ -216,7 +232,7 @@
         </div>
       </section>
 
-      <section class="slide-page closing-page" data-slide="13">
+      <section class="slide-page closing-page" data-slide="14">
         <div class="closing-copy">
           <p class="eyebrow" data-i18n="closeEyebrow">Investor Discussion</p>
           <h1 data-i18n="closeTitle">Systematic by design. Disciplined in execution. Built for long-term compounding.</h1>
@@ -234,11 +250,11 @@
 
       <nav class="mobile-slide-controls" aria-label="Mobile presentation controls">
         <button id="mobile-prev" type="button">Prev</button>
-        <span id="mobile-slide-count">1 / 13</span>
+        <span id="mobile-slide-count">1 / 14</span>
         <button id="mobile-next" type="button">Next</button>
       </nav>
     </main>
 
-    <script src="./overall_strategy.js?v=20260525-merged-deck-1" type="module"></script>
+    <script src="./overall_strategy.js?v=20260525-validation-layer-1" type="module"></script>
   </body>
 </html>

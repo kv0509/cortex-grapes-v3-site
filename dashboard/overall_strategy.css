@@ -692,6 +692,53 @@ p {
   line-height: 1.42;
 }
 
+.validation-page {
+  display: grid;
+  align-content: center;
+}
+
+.validation-layout {
+  display: grid;
+  grid-template-columns: minmax(0, .62fr) minmax(320px, .38fr);
+  gap: 54px;
+  align-items: stretch;
+}
+
+.validation-canvas {
+  height: 440px;
+}
+
+.validation-points {
+  display: grid;
+  gap: 14px;
+}
+
+.validation-points article {
+  min-height: 132px;
+  padding: 24px;
+  background: #f7f6f1;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+
+.validation-points strong,
+.validation-points span {
+  display: block;
+}
+
+.validation-points strong {
+  color: var(--ink);
+  font: 820 23px/1.08 var(--sans);
+  letter-spacing: -.02em;
+}
+
+.validation-points span {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.38;
+}
+
 .monthly-layout {
   display: grid;
   grid-template-columns: minmax(0, .62fr) minmax(320px, .38fr);
@@ -1962,6 +2009,7 @@ p {
 
 @media (max-width: 1100px) {
   .solution-layout,
+  .validation-layout,
   .durability-charts,
   .breadth-layout,
   .reporting-layout,
@@ -1984,6 +2032,7 @@ p {
 
   .fund-hero-page.is-active,
   .fund-problem-page.is-active,
+  .validation-page.is-active,
   .solution-page.is-active,
   .curve-page.is-active,
   .benchmark-page.is-active,
@@ -2017,6 +2066,42 @@ p {
 
   .solution-layout {
     gap: 12px;
+  }
+
+  .validation-page .slide-head {
+    margin-bottom: 18px;
+  }
+
+  .validation-page .slide-copy {
+    display: none;
+  }
+
+  .validation-layout {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .validation-canvas {
+    height: 190px;
+  }
+
+  .validation-points {
+    gap: 7px;
+  }
+
+  .validation-points article {
+    min-height: 0;
+    padding: 11px 14px;
+  }
+
+  .validation-points strong {
+    font-size: 17px;
+  }
+
+  .validation-points span {
+    margin-top: 5px;
+    font-size: 12px;
+    line-height: 1.22;
   }
 
   .solution-statement strong {
@@ -2206,8 +2291,9 @@ p {
     #efeee9;
 }
 
-.fundraise-deck .solution-page,
-.fundraise-deck .benchmark-page,
+  .fundraise-deck .solution-page,
+  .fundraise-deck .validation-page,
+  .fundraise-deck .benchmark-page,
 .fundraise-deck .contribution-page,
 .fundraise-deck .monthly-page,
 .fundraise-deck .breadth-page,
@@ -2310,6 +2396,7 @@ p {
 .solution-statement,
 .benchmark-summary article,
 .regime-story article,
+.validation-points article,
 .reporting-points article {
   background: #f7f6f1;
   border: 1px solid var(--line);
