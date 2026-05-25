@@ -259,6 +259,26 @@ const TEXT = {
     marketTwoCopy: "The product layer can extend into FX, indices, commodities, and other liquid markets.",
     marketThreeTitle: "Longer-term allocation platform",
     marketThreeCopy: "The direction is to build a portfolio platform, not stay limited to one market.",
+    scaleStoryEyebrow: "Scale Narrative",
+    scaleStoryTitle: "From one proof point to an allocation platform.",
+    scaleStoryCopy: "The story is not only a crypto strategy. It is a staged path from validated performance, to repeatable product, to broader market coverage.",
+    scaleStoryOneTitle: "Proof",
+    scaleStoryOneCopy: "Show that the process can produce visible ROI and monthly behavior.",
+    scaleStoryTwoTitle: "Product",
+    scaleStoryTwoCopy: "Package the portfolio, reporting, and decision layer into a repeatable allocation product.",
+    scaleStoryThreeTitle: "Platform",
+    scaleStoryThreeCopy: "Extend the same operating system across more engines and liquid markets.",
+    path100Eyebrow: "North Star",
+    path100Title: "The path is built for a 100M allocation conversation.",
+    path100Copy: "Capital does not scale only because a strategy returns well. It scales when performance, reporting, risk discipline, and market coverage mature together.",
+    flywheelEyebrow: "Capital Flywheel",
+    flywheelTitle: "Track record creates trust. Trust unlocks scale.",
+    flywheelCopy: "The compounding story is not only in ROI. It is also in how proof, reporting, and broader coverage make each next allocation discussion easier than the last.",
+    platformValueEyebrow: "Platform Value",
+    platformValueTitle: "Every validated engine increases the surface area of the platform.",
+    platformValueCopy: "As more engines and markets are added, the company becomes less like a single trading product and more like a systematic allocation infrastructure.",
+    platformValueCallout: "This is the 0 to 100M story.",
+    platformValueCalloutCopy: "Start with one visible proof point. Build repeatable reporting. Add more engines. Expand market coverage. Grow into a platform that can absorb larger allocation discussions.",
     cycleBullLabel: "Bull markets",
     cycleBullTitle: "More opportunity to compound",
     cycleBullCopy: "In stronger market years, the portfolio has more room to capture momentum and broader participation, so annual ROI can naturally look stronger.",
@@ -508,6 +528,26 @@ const TEXT = {
     marketTwoCopy: "产品层之后可以扩展到 FX、指数、商品和其他流动性市场。",
     marketThreeTitle: "长期 allocation platform",
     marketThreeCopy: "方向不是停在单一市场，而是建立可以扩展的 portfolio platform。",
+    scaleStoryEyebrow: "规模叙事",
+    scaleStoryTitle: "从一个 proof point，走向 allocation platform。",
+    scaleStoryCopy: "故事不只是一个 crypto 策略，而是从已验证表现，到可重复产品，再到更宽市场覆盖的 staged path。",
+    scaleStoryOneTitle: "Proof",
+    scaleStoryOneCopy: "先证明流程可以跑出可见 ROI 和月度行为。",
+    scaleStoryTwoTitle: "Product",
+    scaleStoryTwoCopy: "把组合、reporting 和决策层包装成可重复的 allocation product。",
+    scaleStoryThreeTitle: "Platform",
+    scaleStoryThreeCopy: "把同一套 operating system 扩展到更多引擎和流动性市场。",
+    path100Eyebrow: "North Star",
+    path100Title: "这条路径是为了进入 100M allocation conversation。",
+    path100Copy: "Capital 不会只因为一个策略回报好就放大。它会在 performance、reporting、风险纪律和市场覆盖一起成熟时放大。",
+    flywheelEyebrow: "资本飞轮",
+    flywheelTitle: "Track record 建立信任，信任带来规模。",
+    flywheelCopy: "复利故事不只在 ROI，也在 proof、reporting 和市场覆盖如何让下一次 allocation discussion 更容易。",
+    platformValueEyebrow: "平台价值",
+    platformValueTitle: "每一个已验证引擎，都会扩大平台的价值面积。",
+    platformValueCopy: "当更多引擎和市场被加入，公司就不再像单一交易产品，而更像 systematic allocation infrastructure。",
+    platformValueCallout: "这就是 0 到 100M 的故事。",
+    platformValueCalloutCopy: "先有一个可见 proof point，再建立可重复 reporting，加入更多引擎，扩展市场覆盖，最后变成能承接更大 allocation discussion 的平台。",
     cycleBullLabel: "牛市",
     cycleBullTitle: "更容易放大回报",
     cycleBullCopy: "市场强、行情活跃的年份，组合更容易参与趋势和市场热度，所以年度 ROI 自然会更好看。",
@@ -1116,6 +1156,178 @@ function drawForwardValueChart() {
     ctx.fillText(short, x + stepW * .26, pad.t + h + 24);
   });
   ctx.textAlign = "left";
+}
+
+function drawScaleStoryChart() {
+  const canvas = document.getElementById("scale-story-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const stages = currentLang === "zh"
+    ? [["Proof", "ROI + monthly behavior"], ["Product", "Portfolio + reporting"], ["Platform", "Engines + markets"]]
+    : [["Proof", "ROI + monthly behavior"], ["Product", "Portfolio + reporting"], ["Platform", "Engines + markets"]];
+  const pad = { l: compact ? 20 : 48, r: compact ? 20 : 48, t: compact ? 42 : 78, b: 42 };
+  const w = width - pad.l - pad.r;
+  const stepW = w / stages.length;
+  const y = height * .5;
+  stages.forEach(([title, copy], index) => {
+    const x = pad.l + index * stepW + stepW * .08;
+    const boxW = stepW * .78;
+    const boxH = compact ? 82 : 116;
+    if (index > 0) {
+      ctx.strokeStyle = index === 2 ? COLORS.green : COLORS.teal;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(x - stepW * .14, y);
+      ctx.lineTo(x - 12, y);
+      ctx.stroke();
+    }
+    ctx.fillStyle = index === 0 ? "rgba(23, 111, 128, .12)" : index === 1 ? "rgba(6, 107, 79, .11)" : "rgba(184, 137, 53, .13)";
+    ctx.strokeStyle = index === 2 ? "rgba(184, 137, 53, .45)" : "rgba(6, 107, 79, .28)";
+    ctx.beginPath();
+    ctx.roundRect(x, y - boxH / 2, boxW, boxH, 4);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = index === 2 ? COLORS.amber : COLORS.green;
+    ctx.font = "800 11px ui-monospace, Menlo, monospace";
+    ctx.fillText(`0${index + 1}`, x + 16, y - boxH / 2 + 22);
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = `850 ${compact ? 16 : 24}px -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.fillText(title, x + 16, y + 2);
+    ctx.fillStyle = COLORS.muted;
+    ctx.font = `${compact ? 10 : 13}px -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.fillText(copy, x + 16, y + 26);
+  });
+}
+
+function drawPath100mChart() {
+  const canvas = document.getElementById("path-100m-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const stages = [
+    { label: currentLang === "zh" ? "Proof" : "Proof", value: 1 },
+    { label: currentLang === "zh" ? "10M review" : "10M review", value: 10 },
+    { label: currentLang === "zh" ? "50M platform" : "50M platform", value: 50 },
+    { label: currentLang === "zh" ? "100M allocation" : "100M allocation", value: 100 },
+  ];
+  const pad = { l: compact ? 34 : 70, r: compact ? 28 : 56, t: 42, b: compact ? 58 : 76 };
+  const x = pad.l;
+  const y = pad.t;
+  const w = width - pad.l - pad.r;
+  const h = height - pad.t - pad.b;
+  drawAxes(ctx, x, y, w, h, 4);
+  const sx = (i) => x + (w * i) / (stages.length - 1);
+  const sy = (v) => y + h - (Math.log10(v + 1) / Math.log10(101)) * h;
+  ctx.strokeStyle = COLORS.green;
+  ctx.lineWidth = 4;
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  stages.forEach((stage, index) => {
+    const px = sx(index);
+    const py = sy(stage.value);
+    if (index === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  });
+  ctx.stroke();
+  stages.forEach((stage, index) => {
+    const px = sx(index);
+    const py = sy(stage.value);
+    ctx.fillStyle = index === stages.length - 1 ? COLORS.amber : COLORS.green;
+    ctx.beginPath();
+    ctx.arc(px, py, compact ? 5 : 7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = `850 ${compact ? 13 : 18}px ui-monospace, Menlo, monospace`;
+    ctx.textAlign = "center";
+    ctx.fillText(index === 0 ? "1M" : `${stage.value}M`, px, py - 16);
+    ctx.fillStyle = COLORS.muted;
+    ctx.font = `${compact ? "9px" : "12px"} -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.fillText(compact ? stage.label.replace(" allocation", "").replace(" platform", "") : stage.label, px, y + h + 28);
+  });
+  ctx.textAlign = "left";
+}
+
+function drawCapitalFlywheelChart() {
+  const canvas = document.getElementById("capital-flywheel-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const labels = currentLang === "zh"
+    ? ["Track record", "Trust", "Allocation", "Infrastructure", "More engines", "Reporting"]
+    : ["Track record", "Trust", "Allocation", "Infrastructure", "More engines", "Reporting"];
+  const cx = width / 2;
+  const cy = height / 2 + (compact ? 6 : 18);
+  const r = Math.min(width, height) * (compact ? .3 : .34);
+  labels.forEach((label, index) => {
+    const angle = -Math.PI / 2 + index * Math.PI * 2 / labels.length;
+    const nx = cx + Math.cos(angle) * r;
+    const ny = cy + Math.sin(angle) * r;
+    const nextAngle = -Math.PI / 2 + ((index + 1) % labels.length) * Math.PI * 2 / labels.length;
+    const tx = cx + Math.cos(nextAngle) * r;
+    const ty = cy + Math.sin(nextAngle) * r;
+    ctx.strokeStyle = index < 3 ? COLORS.green : COLORS.teal;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(nx, ny);
+    ctx.quadraticCurveTo(cx, cy, tx, ty);
+    ctx.stroke();
+    ctx.fillStyle = index === 2 ? "rgba(184, 137, 53, .16)" : "rgba(6, 107, 79, .12)";
+    ctx.strokeStyle = index === 2 ? "rgba(184, 137, 53, .52)" : "rgba(6, 107, 79, .35)";
+    const boxW = compact ? 92 : 150;
+    const boxH = compact ? 42 : 56;
+    ctx.beginPath();
+    ctx.roundRect(nx - boxW / 2, ny - boxH / 2, boxW, boxH, 4);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = `850 ${compact ? 11 : 15}px -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.textAlign = "center";
+    ctx.fillText(label, nx, ny + 4);
+  });
+  ctx.fillStyle = COLORS.green;
+  ctx.font = `900 ${compact ? 22 : 38}px -apple-system, BlinkMacSystemFont, sans-serif`;
+  ctx.textAlign = "center";
+  ctx.fillText("100M", cx, cy - 2);
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = `${compact ? "10px" : "13px"} -apple-system, BlinkMacSystemFont, sans-serif`;
+  ctx.fillText(currentLang === "zh" ? "allocation story" : "allocation story", cx, cy + (compact ? 18 : 28));
+  ctx.textAlign = "left";
+}
+
+function drawPlatformValueChart() {
+  const canvas = document.getElementById("platform-value-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, width, height);
+  const compact = width < 520;
+  const rows = currentLang === "zh" ? ["Crypto", "FX", "Indices", "Commodities"] : ["Crypto", "FX", "Indices", "Commodities"];
+  const cols = currentLang === "zh" ? ["Signals", "Engines", "Reporting", "Allocation"] : ["Signals", "Engines", "Reporting", "Allocation"];
+  const pad = { l: compact ? 78 : 130, r: 24, t: compact ? 42 : 58, b: 28 };
+  const gridW = width - pad.l - pad.r;
+  const gridH = height - pad.t - pad.b;
+  const cellW = gridW / cols.length;
+  const cellH = gridH / rows.length;
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = `800 ${compact ? 9 : 11}px ui-monospace, Menlo, monospace`;
+  cols.forEach((col, i) => ctx.fillText(compact ? col.slice(0, 4) : col, pad.l + i * cellW + 8, 22));
+  rows.forEach((row, rIndex) => {
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = `850 ${compact ? 11 : 14}px -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.fillText(row, 10, pad.t + rIndex * cellH + cellH * .6);
+    cols.forEach((_, cIndex) => {
+      const intensity = Math.min(1, .35 + (rIndex + cIndex) * .1);
+      const x = pad.l + cIndex * cellW + 5;
+      const y = pad.t + rIndex * cellH + 5;
+      ctx.fillStyle = cIndex >= 2 ? `rgba(6, 107, 79, ${intensity})` : `rgba(23, 111, 128, ${intensity})`;
+      ctx.beginPath();
+      ctx.roundRect(x, y, cellW - 10, cellH - 10, 4);
+      ctx.fill();
+    });
+  });
 }
 
 function drawValidationChart() {
@@ -1787,6 +1999,10 @@ function renderPage() {
   drawCompetitiveMatrixChart();
   drawEdgeArchitectureChart();
   drawForwardValueChart();
+  drawScaleStoryChart();
+  drawPath100mChart();
+  drawCapitalFlywheelChart();
+  drawPlatformValueChart();
   drawValidationChart();
   drawEquityChart();
   drawMonthlyProfileChart();
@@ -1819,6 +2035,10 @@ function drawVisibleSlideCharts() {
   if (active.querySelector("#competitive-matrix-chart")) drawCompetitiveMatrixChart();
   if (active.querySelector("#edge-architecture-chart")) drawEdgeArchitectureChart();
   if (active.querySelector("#forward-value-chart")) drawForwardValueChart();
+  if (active.querySelector("#scale-story-chart")) drawScaleStoryChart();
+  if (active.querySelector("#path-100m-chart")) drawPath100mChart();
+  if (active.querySelector("#capital-flywheel-chart")) drawCapitalFlywheelChart();
+  if (active.querySelector("#platform-value-chart")) drawPlatformValueChart();
   if (active.querySelector("#equity-chart")) drawEquityChart();
   if (active.querySelector("#validation-chart")) drawValidationChart();
   if (active.querySelector("#annual-fd-chart")) drawAnnualFdChart();
