@@ -661,25 +661,12 @@ function drawAnnualFdChart() {
   const { ctx, width, height } = setupCanvas(canvas);
   const data = annualReturns();
   ctx.clearRect(0, 0, width, height);
-  const pad = { l: 54, r: 34, t: 36, b: 36 };
+  const pad = { l: 54, r: 34, t: 22, b: 36 };
   const x = pad.l;
   const y = pad.t;
   const w = width - pad.l - pad.r;
   const h = height - pad.t - pad.b;
   drawAxes(ctx, x, y, w, h, 4);
-  const legend = [
-    ["NTS", COLORS.green],
-    ["S&P 500", COLORS.teal],
-    ["FD", "rgba(104, 113, 109, .7)"],
-  ];
-  legend.forEach(([label, color], i) => {
-    const lx = x + i * 92;
-    ctx.fillStyle = color;
-    ctx.fillRect(lx, 8, 16, 4);
-    ctx.fillStyle = COLORS.muted;
-    ctx.font = "12px -apple-system, BlinkMacSystemFont, sans-serif";
-    ctx.fillText(label, lx + 22, 12);
-  });
   const values = data.flatMap((d) => [d.return_pct, SP500_YEARLY_RETURNS[d.year] ?? 0, FD_BENCHMARK_RATE]);
   const max = Math.max(...values, 1) * 1.18;
   const min = Math.min(...values, 0) * 1.18;
