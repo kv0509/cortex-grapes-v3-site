@@ -3,19 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NTS Alpha Labs Investor Snapshot</title>
+    <title>NTS Alpha Labs | Institutional Capital Platform</title>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="stylesheet" href="./overall_strategy.css?v=20260525-capital-story-1" />
+    <link rel="stylesheet" href="./overall_strategy.css?v=20260525-institutional-1" />
   </head>
   <body>
-    <main class="deck-shell fundraise-deck" id="overall-shell">
+    <main class="deck-shell" id="overall-shell">
       <header class="deck-topbar">
         <div class="brand-lockup">
-          <img class="brand-logo" src="./favicon.svg" alt="NTS Alpha Labs logo" />
+          <img src="./favicon.svg" alt="NTS Alpha Labs logo" />
           <span>NTS Alpha Labs</span>
         </div>
         <div class="header-actions">
-          <span class="as-of" data-i18n="asOf">As of May 24, 2026</span>
+          <span class="as-of" data-en="As of May 24, 2026" data-zh="截至 2026 年 5 月 24 日">As of May 24, 2026</span>
           <div class="lang-switch" aria-label="Language">
             <button class="lang-btn active" data-lang="en" type="button">EN</button>
             <button class="lang-btn" data-lang="zh" type="button">中文</button>
@@ -23,426 +23,258 @@
         </div>
       </header>
 
-      <section class="slide-page fund-hero-page" data-slide="01">
-        <div class="hero-lockup">
+      <section class="slide-page cover-page dark-page" data-slide="01">
+        <div class="cover-mark">
           <img src="./favicon.svg" alt="NTS Alpha Labs logo" />
           <span>NTS Alpha Labs</span>
         </div>
-        <div class="fund-hero-number" id="cover-roi">--</div>
-        <div>
-          <h1 data-i18n="coverTitle">Systematic Alpha Portfolio</h1>
-          <p data-i18n="coverSubtitle">Validated across multiple market cycles.</p>
-          <small>2022-2026</small>
+        <div class="cover-copy">
+          <h1 data-en="Institutional Systematic Capital Platform" data-zh="机构级系统化资本平台">Institutional Systematic Capital Platform</h1>
+          <p data-en="Designed for fragmented and regime-shifting markets." data-zh="为碎片化、周期不断切换的市场而设计。">Designed for fragmented and regime-shifting markets.</p>
+        </div>
+        <div class="cover-footer">
+          <span data-en="Private allocation review" data-zh="Private allocation review">Private allocation review</span>
+          <span>2022-2026</span>
         </div>
       </section>
 
-      <section class="slide-page problem-page fund-problem-page" data-slide="02">
+      <section class="slide-page thesis-page" data-slide="02">
+        <div class="statement">
+          <h1 data-en="Markets are no longer driven by a single regime." data-zh="市场已经不再由单一周期驱动。">Markets are no longer driven by a single regime.</h1>
+          <p data-en="A durable platform needs to read trend, liquidity, positioning, volatility, and crowd behavior together." data-zh="一个能长期生存的平台，需要同时理解趋势、流动性、仓位、波动和群体行为。">A durable platform needs to read trend, liquidity, positioning, volatility, and crowd behavior together.</p>
+        </div>
+        <canvas id="thesis-map" class="chart large-chart"></canvas>
+      </section>
+
+      <section class="slide-page problem-page soft-page" data-slide="03">
+        <div class="split">
+          <div class="slide-copy">
+            <p class="kicker" data-en="Market Problem" data-zh="市场问题">Market Problem</p>
+            <h1 data-en="Most AI trading products sell language before process." data-zh="很多 AI 交易产品，先卖说法，再谈流程。">Most AI trading products sell language before process.</h1>
+            <p data-en="In Malaysia and across retail crypto, many products sound sophisticated, but the actual logic is often a small stack of generic indicators with limited validation." data-zh="在 Malaysia 以及很多 retail crypto 场景里，很多产品听起来很先进，但底层往往只是普通指标组合，而且缺少严谨验证。">In Malaysia and across retail crypto, many products sound sophisticated, but the actual logic is often a small stack of generic indicators with limited validation.</p>
+          </div>
+          <div class="issue-list">
+            <article><span>01</span><strong data-en="AI label first" data-zh="先贴 AI 标签">AI label first</strong><p data-en="The wording is advanced before the process is proven." data-zh="话术很先进，但流程未必被证明。">The wording is advanced before the process is proven.</p></article>
+            <article><span>02</span><strong data-en="Indicator core" data-zh="指标拼装">Indicator core</strong><p data-en="Supertrend, MACD, RSI and moving averages are repackaged as edge." data-zh="Supertrend、MACD、RSI、均线，被包装成所谓 edge。">Supertrend, MACD, RSI and moving averages are repackaged as edge.</p></article>
+            <article><span>03</span><strong data-en="Weak evidence" data-zh="证据层薄">Weak evidence</strong><p data-en="Screenshots replace backtest, regime review, and monthly behavior." data-zh="用截图代替回测、周期验证和月度行为。">Screenshots replace backtest, regime review, and monthly behavior.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide-page fail-page" data-slide="04">
         <div class="slide-head">
-          <p class="eyebrow" data-i18n="problemEyebrow">The Problem</p>
-          <h1 data-i18n="problemTitle">The problem is not AI. It is unverified AI marketing.</h1>
+          <p class="kicker" data-en="Why Systems Fail" data-zh="为什么系统会失败">Why Systems Fail</p>
+          <h1 data-en="Most strategies fail because they rely on one market behavior." data-zh="多数策略失败，是因为它们只依赖一种市场行为。">Most strategies fail because they rely on one market behavior.</h1>
         </div>
-        <div class="problem-list fund-problem-list">
-          <article><span>×</span><div><strong data-i18n="problemOneTitle">AI label first</strong><p data-i18n="problemOneCopy">Many offers lead with the word AI before showing a real strategy process.</p></div></article>
-          <article><span>×</span><div><strong data-i18n="problemTwoTitle">Generic indicator core</strong><p data-i18n="problemTwoCopy">Under the surface, many systems are still basic Supertrend, MACD, RSI, and moving-average combinations.</p></div></article>
-          <article><span>×</span><div><strong data-i18n="problemThreeTitle">No serious backtest</strong><p data-i18n="problemThreeCopy">Without regime-tested evidence, a strategy is only a claim.</p></div></article>
-          <article><span>×</span><div><strong data-i18n="problemFourTitle">No execution proof</strong><p data-i18n="problemFourCopy">A signal that cannot survive lag, fees, execution, and review is not ready for allocation.</p></div></article>
-        </div>
-      </section>
-
-      <section class="slide-page market-noise-page evidence-page" data-slide="03">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="aiMarketEyebrow">Market Reality</p>
-          <h1 data-i18n="aiMarketTitle">Malaysia's AI trading market is noisy.</h1>
-          <p class="slide-copy" data-i18n="aiMarketCopy">The investor problem is simple: many products sound advanced, but the proof layer is thin. The gap between marketing language and validated process is where capital gets misled.</p>
-        </div>
-        <div class="evidence-layout">
-          <canvas id="market-noise-chart" class="chart evidence-canvas"></canvas>
-          <div class="evidence-points">
-            <article><strong data-i18n="aiMarketOneTitle">AI as packaging</strong><span data-i18n="aiMarketOneCopy">The story can sound intelligent even when the underlying trading logic is ordinary.</span></article>
-            <article><strong data-i18n="aiMarketTwoTitle">Screenshots over evidence</strong><span data-i18n="aiMarketTwoCopy">A few profitable trades are not the same as a tested investment process.</span></article>
-            <article><strong data-i18n="aiMarketThreeTitle">Low auditability</strong><span data-i18n="aiMarketThreeCopy">Investors rarely get clean backtest, monthly behavior, contribution, and execution review in one place.</span></article>
+        <div class="evidence-grid">
+          <canvas id="failure-chart" class="chart evidence-chart"></canvas>
+          <div class="compact-list">
+            <article><strong data-en="Overfit logic" data-zh="过拟合逻辑">Overfit logic</strong><span data-en="Looks clean in one period, then breaks when the market changes." data-zh="在一个时期很好看，市场一换就失效。">Looks clean in one period, then breaks when the market changes.</span></article>
+            <article><strong data-en="Single-engine fragility" data-zh="单引擎脆弱">Single-engine fragility</strong><span data-en="One alpha source becomes one point of failure." data-zh="一个 alpha 来源，也会变成一个失败点。">One alpha source becomes one point of failure.</span></article>
+            <article><strong data-en="Correlated alpha decay" data-zh="相关性衰减">Correlated alpha decay</strong><span data-en="Crowded signals lose value together." data-zh="拥挤信号往往会一起失去价值。">Crowded signals lose value together.</span></article>
           </div>
         </div>
       </section>
 
-      <section class="slide-page indicator-page evidence-page" data-slide="04">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="indicatorEyebrow">Generic Indicator Problem</p>
-          <h1 data-i18n="indicatorTitle">Supertrend, MACD and RSI are not a strategy by themselves.</h1>
-          <p class="slide-copy" data-i18n="indicatorCopy">Indicators can be useful inputs. But when they are simply stacked together and called AI, the result is usually reactive, crowded, and fragile across regimes.</p>
+      <section class="slide-page position-page dark-page" data-slide="05">
+        <div class="big-line" data-en="Not a bot." data-zh="不是一个 bot。">Not a bot.</div>
+        <div class="position-copy">
+          <h1 data-en="A miniature quant firm, packaged as a capital platform." data-zh="把 miniature quant firm，产品化成资本平台。">A miniature quant firm, packaged as a capital platform.</h1>
+          <p data-en="NTS Alpha Labs is built around process, validation, governance, execution discipline, and reporting. The return number matters, but it is not the only thing being underwritten." data-zh="NTS Alpha Labs 的核心不是单一收益数字，而是流程、验证、治理、执行纪律和报告层。收益重要，但不是唯一被评估的东西。">NTS Alpha Labs is built around process, validation, governance, execution discipline, and reporting. The return number matters, but it is not the only thing being underwritten.</p>
         </div>
-        <div class="evidence-layout">
-          <canvas id="indicator-stack-chart" class="chart evidence-canvas"></canvas>
-          <div class="evidence-points">
-            <article><strong data-i18n="indicatorOneTitle">Easy to copy</strong><span data-i18n="indicatorOneCopy">Common indicators rarely create lasting differentiation on their own.</span></article>
-            <article><strong data-i18n="indicatorTwoTitle">Late by design</strong><span data-i18n="indicatorTwoCopy">Many indicator combinations only confirm after the move has already developed.</span></article>
-            <article><strong data-i18n="indicatorThreeTitle">Weak alone</strong><span data-i18n="indicatorThreeCopy">Without portfolio context and validation, indicator logic can look good in one market and poor in another.</span></article>
+      </section>
+
+      <section class="slide-page engine-page" data-slide="06">
+        <div class="slide-head">
+          <p class="kicker" data-en="Engine Architecture" data-zh="引擎架构">Engine Architecture</p>
+          <h1 data-en="Eight return engines. Professional roles first, codenames second." data-zh="八个收益引擎。先看专业角色，再看内部 codename。">Eight return engines. Professional roles first, codenames second.</h1>
+        </div>
+        <div class="engine-grid">
+          <article><span>Trend Engine</span><strong>Grapes</strong><em data-en="Core return engine" data-zh="核心收益引擎">Core return engine</em></article>
+          <article><span>Defensive Engine</span><strong>Watermelon</strong><em data-en="Tactical defense" data-zh="战术防御">Tactical defense</em></article>
+          <article><span>Rebound Engine</span><strong>Peach</strong><em data-en="Reversal capture" data-zh="反弹捕捉">Reversal capture</em></article>
+          <article><span>Quality Engine</span><strong>Pomelo</strong><em data-en="Portfolio quality" data-zh="组合质量">Portfolio quality</em></article>
+          <article><span>Structure Engine</span><strong>Citrus</strong><em data-en="Structured alpha" data-zh="结构型 alpha">Structured alpha</em></article>
+          <article><span>Cross-Asset Engine</span><strong>Lychee</strong><em data-en="Breadth layer" data-zh="广度层">Breadth layer</em></article>
+          <article><span>Squeeze Engine</span><strong>Kiwi</strong><em data-en="Expansion capture" data-zh="扩张捕捉">Expansion capture</em></article>
+          <article><span>Acceleration Engine</span><strong>Mango</strong><em data-en="Momentum acceleration" data-zh="动能加速">Momentum acceleration</em></article>
+        </div>
+      </section>
+
+      <section class="slide-page validation-page soft-page" data-slide="07">
+        <div class="slide-head">
+          <p class="kicker" data-en="Validation Framework" data-zh="验证框架">Validation Framework</p>
+          <h1 data-en="Validation is treated as part of the strategy itself." data-zh="验证本身，就是策略的一部分。">Validation is treated as part of the strategy itself.</h1>
+        </div>
+        <div class="stack-layout">
+          <canvas id="validation-stack-chart" class="chart stack-chart"></canvas>
+          <div class="stack-list">
+            <span>Walk Forward</span>
+            <span>Purged CV</span>
+            <span>Monte Carlo</span>
+            <span>Parameter Stability</span>
+            <span>Execution Stress</span>
+            <span>Negative Control</span>
+            <span>Replay Reconciliation</span>
           </div>
         </div>
       </section>
 
-      <section class="slide-page backtest-gap-page evidence-page" data-slide="05">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="backtestGapEyebrow">Proof Gap</p>
-          <h1 data-i18n="backtestGapTitle">No backtest, no allocation case.</h1>
-          <p class="slide-copy" data-i18n="backtestGapCopy">A fundable strategy needs more than a signal screenshot. It needs enough evidence for investors to understand repeatability, behavior across cycles, and whether the edge survives real trading assumptions.</p>
+      <section class="slide-page governance-page" data-slide="08">
+        <div class="statement narrow">
+          <h1 data-en="Decision quality improves when weak signals are stopped before execution." data-zh="真正的决策质量，是在执行前拦掉弱信号。">Decision quality improves when weak signals are stopped before execution.</h1>
+          <p data-en="The governance layer combines data analysis, RL-assisted review, veto logic, degradation detection, live divergence monitoring, and exposure discipline." data-zh="治理层结合数据分析、RL-assisted review、veto logic、degradation detection、live divergence monitor 和 exposure discipline。">The governance layer combines data analysis, RL-assisted review, veto logic, degradation detection, live divergence monitoring, and exposure discipline.</p>
         </div>
-        <div class="proof-layout">
-          <canvas id="backtest-gap-chart" class="chart proof-canvas"></canvas>
-          <div class="proof-callout">
-            <strong data-i18n="backtestGapCallout">Evidence should be layered.</strong>
-            <span data-i18n="backtestGapCalloutCopy">Backtest, annual ROI, monthly distribution, market regime review, contribution breadth, and reporting all need to point in the same direction.</span>
+        <canvas id="governance-chart" class="chart large-chart"></canvas>
+      </section>
+
+      <section class="slide-page construction-page" data-slide="09">
+        <div class="slide-head">
+          <p class="kicker" data-en="Portfolio Construction" data-zh="组合构建">Portfolio Construction</p>
+          <h1 data-en="The allocation case is stronger when alpha streams are not all the same." data-zh="当 alpha 来源不完全相同，allocation case 才更强。">The allocation case is stronger when alpha streams are not all the same.</h1>
+        </div>
+        <div class="evidence-grid">
+          <canvas id="construction-chart" class="chart evidence-chart"></canvas>
+          <div class="compact-list">
+            <article><strong data-en="Independent return roles" data-zh="独立收益角色">Independent return roles</strong><span data-en="Different engines are built for different market moods." data-zh="不同引擎服务不同市场状态。">Different engines are built for different market moods.</span></article>
+            <article><strong data-en="Portfolio-level balancing" data-zh="组合层平衡">Portfolio-level balancing</strong><span data-en="The product is reviewed as one allocation profile." data-zh="产品以一个 allocation profile 被评估。">The product is reviewed as one allocation profile.</span></article>
+            <article><strong data-en="Lower single-source dependence" data-zh="降低单一来源依赖">Lower single-source dependence</strong><span data-en="The goal is durability, not one lucky engine." data-zh="目标是持久性，不是单一引擎运气好。">The goal is durability, not one lucky engine.</span></article>
           </div>
         </div>
       </section>
 
-      <section class="slide-page lag-page evidence-page" data-slide="06">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="lagEyebrow">Signal Quality</p>
-          <h1 data-i18n="lagTitle">Lag kills edge before execution starts.</h1>
-          <p class="slide-copy" data-i18n="lagCopy">A late signal can still look correct on a chart, but the investable return is already reduced by entry delay, fees, slippage, and market crowding.</p>
-        </div>
-        <div class="proof-layout">
-          <canvas id="lag-chart" class="chart proof-canvas"></canvas>
-          <div class="proof-callout">
-            <strong data-i18n="lagCallout">The goal is not more signals.</strong>
-            <span data-i18n="lagCalloutCopy">The goal is better timing, better filtering, and fewer low-quality decisions reaching execution.</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide-page validation-standard-page evidence-page" data-slide="07">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="standardEyebrow">Validation Standard</p>
-          <h1 data-i18n="standardTitle">A serious strategy must prove the process.</h1>
-          <p class="slide-copy" data-i18n="standardCopy">For investor review, the question is not whether the system sounds intelligent. The question is whether the strategy has been tested, structured, monitored, and made explainable.</p>
-        </div>
-        <div class="standard-layout">
-          <canvas id="validation-standard-chart" class="chart standard-canvas"></canvas>
-          <div class="standard-grid">
-            <article><span>01</span><strong data-i18n="standardOne">Backtested record</strong></article>
-            <article><span>02</span><strong data-i18n="standardTwo">Regime review</strong></article>
-            <article><span>03</span><strong data-i18n="standardThree">Monthly behavior</strong></article>
-            <article><span>04</span><strong data-i18n="standardFour">Veto logic</strong></article>
-            <article><span>05</span><strong data-i18n="standardFive">Execution awareness</strong></article>
-            <article><span>06</span><strong data-i18n="standardSix">Transparent reporting</strong></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide-page evidence-stack-page evidence-page" data-slide="08">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="evidenceStackEyebrow">NTS Evidence Stack</p>
-          <h1 data-i18n="evidenceStackTitle">The pitch is built on evidence, not indicator names.</h1>
-          <p class="slide-copy" data-i18n="evidenceStackCopy">NTS Alpha Labs presents the strategy as a portfolio with visible ROI, annual context, monthly behavior, contribution breadth, and a decision layer that can be reviewed before capital is allocated.</p>
-        </div>
-        <canvas id="evidence-stack-chart" class="chart stack-canvas"></canvas>
-      </section>
-
-      <section class="slide-page investor-lens-page evidence-page" data-slide="09">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="investorLensEyebrow">Allocation Case</p>
-          <h1 data-i18n="investorLensTitle">A strong product has to prove more than one number.</h1>
-          <p class="slide-copy" data-i18n="investorLensCopy">The case becomes stronger when return, process, discipline, visibility, and scalability are all visible in the same story.</p>
-        </div>
-        <div class="evidence-layout">
-          <canvas id="investor-lens-chart" class="chart evidence-canvas"></canvas>
-          <div class="evidence-points">
-            <article><strong data-i18n="investorLensOneTitle">Return proof</strong><span data-i18n="investorLensOneCopy">Headline ROI is stronger when annual and monthly evidence support it.</span></article>
-            <article><strong data-i18n="investorLensTwoTitle">Visible process</strong><span data-i18n="investorLensTwoCopy">The portfolio should be easy to review without exposing every internal detail.</span></article>
-            <article><strong data-i18n="investorLensThreeTitle">Scalable base</strong><span data-i18n="investorLensThreeCopy">The same infrastructure should support more engines and more liquid markets over time.</span></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide-page competitive-page evidence-page" data-slide="10">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="competitiveEyebrow">Market Position</p>
-          <h1 data-i18n="competitiveTitle">NTS separates through proof, not AI wording.</h1>
-          <p class="slide-copy" data-i18n="competitiveCopy">The advantage is not a louder claim. It is a stronger evidence layer: portfolio ROI, backtest behavior, multiple engines, veto logic, and transparent reporting.</p>
-        </div>
-        <canvas id="competitive-matrix-chart" class="chart stack-canvas"></canvas>
-      </section>
-
-      <section class="slide-page edge-architecture-page evidence-page" data-slide="11">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="edgeArchitectureEyebrow">Return Architecture</p>
-          <h1 data-i18n="edgeArchitectureTitle">The edge is a system, not one indicator.</h1>
-          <p class="slide-copy" data-i18n="edgeArchitectureCopy">NTS combines data analysis, regime review, veto discipline, and multiple return engines. The product is designed so weak signals are filtered before they become portfolio exposure.</p>
-        </div>
-        <canvas id="edge-architecture-chart" class="chart stack-canvas"></canvas>
-      </section>
-
-      <section class="slide-page forward-value-page evidence-page" data-slide="12">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="forwardValueEyebrow">Forward Value</p>
-          <h1 data-i18n="forwardValueTitle">Future value comes from repeatable expansion.</h1>
-          <p class="slide-copy" data-i18n="forwardValueCopy">The upside case is not only one crypto strategy. It is the ability to expand the same research, validation, execution, and reporting discipline into more engines and more liquid markets.</p>
-        </div>
-        <div class="proof-layout">
-          <canvas id="forward-value-chart" class="chart proof-canvas"></canvas>
-          <div class="proof-callout">
-            <strong data-i18n="forwardValueCallout">The platform gets stronger as coverage expands.</strong>
-            <span data-i18n="forwardValueCalloutCopy">More validated engines, more market coverage, and better reporting create a larger allocation conversation over time.</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide-page validation-page" data-slide="13">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="validationEyebrow">Decision Quality</p>
-          <h1 data-i18n="validationTitle">AI alone is not an edge. Validation is.</h1>
-          <p class="slide-copy" data-i18n="validationCopy">Many so-called AI trading systems still depend on delayed signals, black-box rules, and weak verification. NTS adds a decision layer that reviews data, learns from regime behavior, and can veto low-quality setups before execution.</p>
-        </div>
-        <div class="validation-layout">
-          <canvas id="validation-chart" class="chart validation-canvas"></canvas>
-          <div class="validation-points">
-            <article><strong data-i18n="validationOneTitle">Data first</strong><span data-i18n="validationOneCopy">Signals are read through market data, liquidity behavior, and historical evidence before they become decisions.</span></article>
-            <article><strong data-i18n="validationTwoTitle">RL-assisted review</strong><span data-i18n="validationTwoCopy">The learning layer helps evaluate how market conditions change, instead of assuming one fixed rule always works.</span></article>
-            <article><strong data-i18n="validationThreeTitle">Veto before execution</strong><span data-i18n="validationThreeCopy">Not every signal deserves capital. A veto layer is designed to filter weak, late, or low-conviction setups.</span></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide-page solution-page" data-slide="14">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="solutionEyebrow">Our Solution</p>
-          <h1 data-i18n="solutionTitle">One portfolio. Multiple independent return engines.</h1>
-          <p class="slide-copy" data-i18n="solutionCopy">NTS Alpha Labs is presented as a portfolio first. The strategy set is designed so different engines can contribute under different market conditions.</p>
-        </div>
-        <div class="solution-layout solution-layout-clean">
-          <div class="solution-statement">
-            <strong>8</strong>
-            <span data-i18n="strategyEngines">strategy engines</span>
-            <p data-i18n="solutionNote">Same goal: consistent, risk-aware compounding across cycles.</p>
-          </div>
-          <div class="solution-principles">
-            <article><span>01</span><strong data-i18n="solutionOneTitle">Portfolio first</strong><p data-i18n="solutionOneCopy">Investors review one allocation profile, not isolated strategy claims.</p></article>
-            <article><span>02</span><strong data-i18n="solutionTwoTitle">Multiple engines</strong><p data-i18n="solutionTwoCopy">Different return sources are built to participate under different market moods.</p></article>
-            <article><span>03</span><strong data-i18n="solutionThreeTitle">One reporting layer</strong><p data-i18n="solutionThreeCopy">Performance, contribution, and monthly behavior stay visible in one investor view.</p></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide-page curve-page" data-slide="15">
-        <div class="panel-head">
+      <section class="slide-page performance-page" data-slide="10">
+        <div class="performance-frame">
           <div>
-            <p class="eyebrow" data-i18n="performanceEyebrow">Performance</p>
-            <h1 data-i18n="performanceTitle">Let the return curve speak.</h1>
+            <p class="kicker" data-en="Performance Evidence" data-zh="收益证据">Performance Evidence</p>
+            <h1 data-en="After process comes proof." data-zh="先建立流程，再展示结果。">After process comes proof.</h1>
           </div>
-          <div class="curve-kpi">
-            <strong id="performance-roi">--</strong>
-            <span data-i18n="portfolioRoi">Portfolio ROI</span>
-          </div>
+          <div class="hero-kpi"><strong id="total-roi">--</strong><span data-en="Total portfolio ROI, 2022-2026" data-zh="2022-2026 组合总 ROI">Total portfolio ROI, 2022-2026</span></div>
         </div>
-        <canvas id="equity-chart" class="chart equity-chart full-curve"></canvas>
+        <canvas id="equity-chart" class="chart hero-chart"></canvas>
       </section>
 
-      <section class="slide-page benchmark-page" data-slide="16">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="benchmarkEyebrow">ROI Benchmark</p>
-          <h1 data-i18n="benchmarkTitle">Outperformance needs a reference point.</h1>
-          <p class="slide-copy" data-i18n="benchmarkCopy">NTS portfolio ROI is shown against Malaysia fixed deposit rates and a same-period S&P 500 investment so the return gap is immediately visible.</p>
+      <section class="slide-page benchmark-page" data-slide="11">
+        <div class="slide-head">
+          <p class="kicker" data-en="Benchmark Context" data-zh="基准对比">Benchmark Context</p>
+          <h1 data-en="The return gap becomes clear when placed beside common alternatives." data-zh="和常见选择放在一起，收益差距会更直观。">The return gap becomes clear when placed beside common alternatives.</h1>
         </div>
-        <div class="benchmark-layout">
-          <aside class="benchmark-summary">
-            <article><span data-i18n="benchmarkOverallLabel">2022-2026 portfolio ROI</span><strong id="benchmark-overall-roi">--</strong></article>
-            <article><span data-i18n="benchmarkSp500Label">S&P 500 same-period ROI</span><strong id="benchmark-sp500-roi">--</strong></article>
-            <article><span data-i18n="benchmarkFdLabel">4-year FD benchmark</span><strong id="benchmark-fd-roi">--</strong></article>
-            <article><span data-i18n="benchmarkMultipleLabel">ROI multiple over S&P 500</span><strong id="benchmark-multiple">--</strong></article>
-          </aside>
-          <div>
-            <h2 data-i18n="singleYearBenchmark">Single-year ROI: NTS vs S&P 500 vs FD</h2>
-            <canvas id="annual-fd-chart" class="chart benchmark-canvas"></canvas>
-          </div>
-        </div>
+        <canvas id="benchmark-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page regime-page" data-slide="17">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="regimeEyebrow">Market Regimes</p>
-          <h1 data-i18n="regimeTitle">Annual ROI across market moods.</h1>
-          <p class="slide-copy" data-i18n="regimeCopy">Bull years, bear years, and mixed years do not behave the same. The evidence is stronger when annual ROI is shown together with market context.</p>
+      <section class="slide-page regime-page soft-page" data-slide="12">
+        <div class="slide-head">
+          <p class="kicker" data-en="Across Market Cycles" data-zh="跨市场周期">Across Market Cycles</p>
+          <h1 data-en="Bull years, bear years, and mixed years should not be judged the same way." data-zh="牛市、熊市、震荡市，不应该用同一种方式判断。">Bull years, bear years, and mixed years should not be judged the same way.</h1>
         </div>
-        <div class="regime-layout">
-          <canvas id="regime-cycle-chart" class="chart regime-canvas"></canvas>
-          <div class="regime-story">
-            <article><span data-i18n="cycleBearLabel">Bear markets</span><strong data-i18n="cycleBearTitle">A slower, more selective pace</strong></article>
-            <article><span data-i18n="cycleBullLabel">Bull markets</span><strong data-i18n="cycleBullTitle">More opportunity to compound</strong></article>
-            <article><span data-i18n="cycleRangeLabel">Mixed markets</span><strong data-i18n="cycleRangeTitle">Different engines take turns</strong></article>
-          </div>
-        </div>
+        <canvas id="annual-regime-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page contribution-page" data-slide="18">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="contributionEyebrow">Portfolio Contribution</p>
-          <h1 data-i18n="contributionTitle">Different engines. One portfolio.</h1>
-          <p class="slide-copy" data-i18n="contributionCopy">A fundable portfolio should show both contribution and strategy ROI breadth. The profile is anchored by stronger engines, without presenting the return as a single-source outcome.</p>
+      <section class="slide-page monthly-page" data-slide="13">
+        <div class="slide-head">
+          <p class="kicker" data-en="Monthly Behavior" data-zh="月度行为">Monthly Behavior</p>
+          <h1 data-en="Consistency matters because capital needs time." data-zh="资本需要时间，所以一致性很重要。">Consistency matters because capital needs time.</h1>
         </div>
-        <div class="contribution-layout">
-          <div class="wheel-panel contribution-wheel-panel">
-            <canvas id="portfolio-contribution-wheel" class="chart contribution-wheel"></canvas>
-          </div>
-          <div class="contribution-chart-stack">
-            <h2 data-i18n="strategyRoiBreadth">Strategy ROI breadth</h2>
-            <canvas id="strategy-roi-chart" class="chart side-canvas"></canvas>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide-page monthly-page" data-slide="19">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="monthlyBehaviorEyebrow">Monthly Behavior</p>
-          <h1 data-i18n="monthlyBehaviorTitle">Consistency matters.</h1>
-          <p class="slide-copy" data-i18n="monthlyBehaviorCopy">The monthly record turns headline ROI into a more reviewable allocation case: recurring positive months, visible distribution, and a clear pattern over time.</p>
-        </div>
-        <div id="quality-metrics" class="durability-metrics"></div>
         <div class="monthly-layout">
-          <section>
-            <h2 data-i18n="monthlyRoiRecord">Monthly ROI record</h2>
-            <div id="monthly-quality-heatmap" class="monthly-heatmap large-heatmap"></div>
-          </section>
-          <section>
-            <h2 data-i18n="monthlyDistribution">Monthly ROI distribution</h2>
-            <canvas id="monthly-distribution-chart" class="chart monthly-distribution-canvas"></canvas>
-          </section>
+          <div id="monthly-heatmap" class="heatmap"></div>
+          <canvas id="monthly-distribution-chart" class="chart small-chart"></canvas>
         </div>
       </section>
 
-      <section class="slide-page risk-page" data-slide="20">
+      <section class="slide-page contribution-page" data-slide="14">
         <div class="slide-head">
-          <p class="eyebrow" data-i18n="riskEyebrow">Risk Framework</p>
-          <h1 data-i18n="riskTitle">Protect first. Compound second.</h1>
+          <p class="kicker" data-en="Contribution Breadth" data-zh="贡献广度">Contribution Breadth</p>
+          <h1 data-en="The headline return is supported by more than one engine." data-zh="总收益不是只靠一个引擎撑起来。">The headline return is supported by more than one engine.</h1>
         </div>
-        <div class="conviction-grid">
-          <article><strong data-i18n="riskOneTitle">Exposure control</strong><span data-i18n="riskOneCopy">Positioning is managed so the portfolio does not depend on one oversized view.</span></article>
-          <article><strong data-i18n="riskTwoTitle">Execution discipline</strong><span data-i18n="riskTwoCopy">The process favors repeatability over impulse.</span></article>
-          <article><strong data-i18n="riskThreeTitle">Regime awareness</strong><span data-i18n="riskThreeCopy">Market context affects how aggressively the portfolio should participate.</span></article>
-          <article><strong data-i18n="riskFourTitle">Portfolio balancing</strong><span data-i18n="riskFourCopy">Multiple engines are reviewed as one allocation profile.</span></article>
+        <div class="dual-chart">
+          <canvas id="contribution-wheel" class="chart donut-chart"></canvas>
+          <canvas id="strategy-roi-chart" class="chart bar-chart"></canvas>
         </div>
       </section>
 
-      <section class="slide-page infra-page" data-slide="21">
+      <section class="slide-page risk-page dark-page" data-slide="15">
+        <div class="statement">
+          <h1 data-en="Protect first. Compound second." data-zh="先保护，再复利。">Protect first. Compound second.</h1>
+          <p data-en="Risk discipline is not a slide at the end. It is a design constraint inside every decision." data-zh="风控不是最后补上的一页，而是每一个决策里面的设计约束。">Risk discipline is not a slide at the end. It is a design constraint inside every decision.</p>
+        </div>
+        <div class="risk-grid">
+          <article data-en="Exposure limits" data-zh="Exposure limits">Exposure limits</article>
+          <article data-en="Veto systems" data-zh="Veto systems">Veto systems</article>
+          <article data-en="Live divergence monitor" data-zh="Live divergence monitor">Live divergence monitor</article>
+          <article data-en="Execution state machine" data-zh="Execution state machine">Execution state machine</article>
+        </div>
+      </section>
+
+      <section class="slide-page capacity-page" data-slide="16">
         <div class="slide-head">
-          <p class="eyebrow" data-i18n="infraEyebrow">Infrastructure</p>
-          <h1 data-i18n="infraTitle">An operating system for systematic allocation.</h1>
-          <p class="slide-copy" data-i18n="infraCopy">The product is not a trading bot. It is a repeatable operating rhythm that connects data analysis, signal review, veto logic, execution, and monitoring into one reviewable process.</p>
+          <p class="kicker" data-en="Capacity & Scaling" data-zh="容量与扩展">Capacity & Scaling</p>
+          <h1 data-en="The real question is not only return. It is how much capital the process can responsibly absorb." data-zh="真正的问题不只是收益，而是这个流程能负责任地承接多少资本。">The real question is not only return. It is how much capital the process can responsibly absorb.</h1>
         </div>
-        <div class="process-rail">
-          <article><span>01</span><strong data-i18n="railData">Data</strong></article>
-          <article><span>02</span><strong data-i18n="railSignal">Signal</strong></article>
-          <article><span>03</span><strong data-i18n="railVeto">Veto</strong></article>
-          <article><span>04</span><strong data-i18n="railExecution">Execution</strong></article>
-          <article><span>05</span><strong data-i18n="railMonitoring">Monitoring</strong></article>
-        </div>
+        <canvas id="capacity-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page reporting-page" data-slide="22">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="reportingEyebrow">Reporting Layer</p>
-          <h1 data-i18n="reportingTitle">Transparency makes the portfolio investable.</h1>
-          <p class="slide-copy" data-i18n="reportingCopy">Performance, contribution, and monthly behavior are presented clearly without requiring the full internal system to be explained.</p>
-        </div>
-        <div class="reporting-layout">
-          <div class="reporting-board">
-            <article><span data-i18n="portfolioRoi">Portfolio ROI</span><strong id="reporting-roi">--</strong></article>
-            <article><span data-i18n="positiveMonths">Positive months</span><strong id="reporting-positive">--</strong></article>
-            <article><span data-i18n="strategyEngines">strategy engines</span><strong id="reporting-engines">--</strong></article>
-            <article><span data-i18n="recentRoi">Recent ROI</span><strong id="reporting-recent">--</strong></article>
-          </div>
-          <div class="reporting-points">
-            <article><strong data-i18n="reportingOneTitle">Portfolio overview</strong><span data-i18n="reportingOneCopy">One place to understand the headline return and active strategy set.</span></article>
-            <article><strong data-i18n="reportingTwoTitle">Contribution review</strong><span data-i18n="reportingTwoCopy">Return sources are visible instead of hidden behind a single number.</span></article>
-            <article><strong data-i18n="reportingThreeTitle">Bilingual access</strong><span data-i18n="reportingThreeCopy">Materials can be reviewed in English or Mandarin.</span></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide-page expansion-page" data-slide="23">
+      <section class="slide-page os-page soft-page" data-slide="17">
         <div class="slide-head">
-          <p class="eyebrow" data-i18n="marketEyebrow">Expansion</p>
-          <h1 data-i18n="marketTitle">The infrastructure is market-agnostic.</h1>
+          <p class="kicker" data-en="Operating System" data-zh="操作系统">Operating System</p>
+          <h1 data-en="Data to signal. Signal to decision. Decision to execution. Execution to monitoring." data-zh="数据到信号，信号到决策，决策到执行，执行到监控。">Data to signal. Signal to decision. Decision to execution. Execution to monitoring.</h1>
         </div>
-        <div class="conviction-grid expansion-grid">
-          <article><strong data-i18n="marketOneTitle">Crypto as first proof</strong><span data-i18n="marketOneCopy">Digital assets provide the first visible track record.</span></article>
-          <article><strong data-i18n="marketTwoTitle">Same system, broader markets</strong><span data-i18n="marketTwoCopy">The product layer can extend into FX, indices, commodities, and other liquid markets.</span></article>
-          <article><strong data-i18n="marketThreeTitle">Longer-term allocation platform</strong><span data-i18n="marketThreeCopy">The direction is to build a portfolio platform, not stay limited to one market.</span></article>
+        <canvas id="os-chart" class="chart large-chart"></canvas>
+      </section>
+
+      <section class="slide-page reporting-page" data-slide="18">
+        <div class="slide-head">
+          <p class="kicker" data-en="Reporting Layer" data-zh="报告层">Reporting Layer</p>
+          <h1 data-en="Transparency makes the platform investable." data-zh="透明度让平台变得可投资。">Transparency makes the platform investable.</h1>
+        </div>
+        <div class="report-grid">
+          <article><strong id="report-roi">--</strong><span data-en="Portfolio ROI" data-zh="组合 ROI">Portfolio ROI</span></article>
+          <article><strong id="report-positive">--</strong><span data-en="Positive months" data-zh="正收益月份">Positive months</span></article>
+          <article><strong id="report-engines">--</strong><span data-en="Return engines" data-zh="收益引擎">Return engines</span></article>
+          <article><strong id="report-recent">--</strong><span data-en="Recent ROI" data-zh="近期 ROI">Recent ROI</span></article>
         </div>
       </section>
 
-      <section class="slide-page scale-story-page evidence-page" data-slide="24">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="scaleStoryEyebrow">Scale Narrative</p>
-          <h1 data-i18n="scaleStoryTitle">From one proof point to an allocation platform.</h1>
-          <p class="slide-copy" data-i18n="scaleStoryCopy">The story is not only a crypto strategy. It is a staged path from validated performance, to repeatable product, to broader market coverage.</p>
+      <section class="slide-page expansion-page" data-slide="19">
+        <div class="slide-head">
+          <p class="kicker" data-en="Market-Agnostic Expansion" data-zh="跨市场扩展">Market-Agnostic Expansion</p>
+          <h1 data-en="Crypto is the first proof point, not the ceiling." data-zh="Crypto 是第一个 proof point，不是天花板。">Crypto is the first proof point, not the ceiling.</h1>
         </div>
-        <div class="evidence-layout">
-          <canvas id="scale-story-chart" class="chart evidence-canvas"></canvas>
-          <div class="evidence-points">
-            <article><strong data-i18n="scaleStoryOneTitle">Proof</strong><span data-i18n="scaleStoryOneCopy">Show that the process can produce visible ROI and monthly behavior.</span></article>
-            <article><strong data-i18n="scaleStoryTwoTitle">Product</strong><span data-i18n="scaleStoryTwoCopy">Package the portfolio, reporting, and decision layer into a repeatable allocation product.</span></article>
-            <article><strong data-i18n="scaleStoryThreeTitle">Platform</strong><span data-i18n="scaleStoryThreeCopy">Extend the same operating system across more engines and liquid markets.</span></article>
-          </div>
-        </div>
+        <canvas id="market-expansion-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page path-100m-page evidence-page" data-slide="25">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="path100Eyebrow">North Star</p>
-          <h1 data-i18n="path100Title">The path is built for a 100M allocation conversation.</h1>
-          <p class="slide-copy" data-i18n="path100Copy">Capital does not scale only because a strategy returns well. It scales when performance, reporting, risk discipline, and market coverage mature together.</p>
+      <section class="slide-page scale-page soft-page" data-slide="20">
+        <div class="slide-head">
+          <p class="kicker" data-en="Scale Narrative" data-zh="扩张叙事">Scale Narrative</p>
+          <h1 data-en="From proof point to product layer to allocation platform." data-zh="从 proof point，到产品层，再到 allocation platform。">From proof point to product layer to allocation platform.</h1>
         </div>
-        <canvas id="path-100m-chart" class="chart stack-canvas"></canvas>
+        <canvas id="scale-timeline-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page capital-flywheel-page evidence-page" data-slide="26">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="flywheelEyebrow">Capital Flywheel</p>
-          <h1 data-i18n="flywheelTitle">Track record creates trust. Trust unlocks scale.</h1>
-          <p class="slide-copy" data-i18n="flywheelCopy">The compounding story is not only in ROI. It is also in how proof, reporting, and broader coverage make each next allocation discussion easier than the last.</p>
+      <section class="slide-page path-page" data-slide="21">
+        <div class="slide-head">
+          <p class="kicker" data-en="North Star" data-zh="North Star">North Star</p>
+          <h1 data-en="The path is built for a 100M allocation conversation." data-zh="这条路径，是为了进入 100M allocation conversation。">The path is built for a 100M allocation conversation.</h1>
         </div>
-        <canvas id="capital-flywheel-chart" class="chart stack-canvas"></canvas>
+        <canvas id="path-100m-chart" class="chart large-chart"></canvas>
       </section>
 
-      <section class="slide-page platform-value-page evidence-page" data-slide="27">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="platformValueEyebrow">Platform Value</p>
-          <h1 data-i18n="platformValueTitle">Every validated engine increases the surface area of the platform.</h1>
-          <p class="slide-copy" data-i18n="platformValueCopy">As more engines and markets are added, the company becomes less like a single trading product and more like a systematic allocation infrastructure.</p>
+      <section class="slide-page closing-page dark-page" data-slide="22">
+        <img class="closing-logo" src="./favicon.svg" alt="NTS Alpha Labs logo" />
+        <h1 data-en="Systematic by design. Disciplined in execution. Built for long-term compounding." data-zh="系统化设计。纪律化执行。为长期复利而建。">Systematic by design. Disciplined in execution. Built for long-term compounding.</h1>
+        <div class="closing-stats">
+          <span><strong id="close-roi">--</strong><em data-en="Portfolio ROI" data-zh="组合 ROI">Portfolio ROI</em></span>
+          <span><strong>8</strong><em data-en="Return engines" data-zh="收益引擎">Return engines</em></span>
+          <span><strong>2022-2026</strong><em data-en="Validated period" data-zh="验证周期">Validated period</em></span>
         </div>
-        <div class="proof-layout">
-          <canvas id="platform-value-chart" class="chart proof-canvas"></canvas>
-          <div class="proof-callout">
-            <strong data-i18n="platformValueCallout">This is the 0 to 100M story.</strong>
-            <span data-i18n="platformValueCalloutCopy">Start with one visible proof point. Build repeatable reporting. Add more engines. Expand market coverage. Grow into a platform that can absorb larger allocation discussions.</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide-page closing-page" data-slide="28">
-        <div class="closing-copy">
-          <p class="eyebrow" data-i18n="closeEyebrow">Allocation Review</p>
-          <h1 data-i18n="closeTitle">Systematic by design. Disciplined in execution. Built for long-term compounding.</h1>
-        </div>
-        <div class="closing-metric">
-          <span id="close-roi">--</span>
-          <p data-i18n="closeCopy">Total portfolio ROI, 2022-2026.</p>
-        </div>
-      </section>
-
-      <section class="deck-footer">
-        <p id="source-note"></p>
-        <div class="source-metrics" id="source-metrics"></div>
       </section>
 
       <nav class="mobile-slide-controls" aria-label="Mobile presentation controls">
         <button id="mobile-prev" type="button">Prev</button>
-        <span id="mobile-slide-count">1 / 28</span>
+        <span id="mobile-slide-count">1 / 22</span>
         <button id="mobile-next" type="button">Next</button>
       </nav>
     </main>
 
-    <script src="./overall_strategy.js?v=20260525-capital-story-1" type="module"></script>
+    <script src="./overall_strategy.js?v=20260525-institutional-1" type="module"></script>
   </body>
 </html>
