@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NTS Alpha Labs Investor Snapshot</title>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="stylesheet" href="./overall_strategy.css?v=20260525-expanded-deck-2" />
+    <link rel="stylesheet" href="./overall_strategy.css?v=20260525-merged-deck-1" />
   </head>
   <body>
     <main class="deck-shell fundraise-deck" id="overall-shell">
@@ -55,16 +55,17 @@
           <h1 data-i18n="solutionTitle">One portfolio. Multiple independent return engines.</h1>
           <p class="slide-copy" data-i18n="solutionCopy">NTS Alpha Labs is presented as a portfolio first. The strategy set is designed so different engines can contribute under different market conditions.</p>
         </div>
-        <div class="solution-layout">
+        <div class="solution-layout solution-layout-clean">
           <div class="solution-statement">
             <strong>8</strong>
             <span data-i18n="strategyEngines">strategy engines</span>
             <p data-i18n="solutionNote">Same goal: consistent, risk-aware compounding across cycles.</p>
           </div>
-          <div class="wheel-panel">
-            <canvas id="contribution-wheel" class="chart contribution-wheel"></canvas>
+          <div class="solution-principles">
+            <article><span>01</span><strong data-i18n="solutionOneTitle">Portfolio first</strong><p data-i18n="solutionOneCopy">Investors review one allocation profile, not isolated strategy claims.</p></article>
+            <article><span>02</span><strong data-i18n="solutionTwoTitle">Multiple engines</strong><p data-i18n="solutionTwoCopy">Different return sources are built to participate under different market moods.</p></article>
+            <article><span>03</span><strong data-i18n="solutionThreeTitle">One reporting layer</strong><p data-i18n="solutionThreeCopy">Performance, contribution, and monthly behavior stay visible in one investor view.</p></article>
           </div>
-          <div id="solution-bars" class="bar-list solution-bars"></div>
         </div>
       </section>
 
@@ -105,8 +106,8 @@
       <section class="slide-page regime-page" data-slide="06">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="regimeEyebrow">Market Regimes</p>
-          <h1 data-i18n="regimeTitle">Performance across different market moods.</h1>
-          <p class="slide-copy" data-i18n="regimeCopy">Bull years, bear years, and mixed years do not behave the same. The stronger point is that the portfolio has produced through more than one cycle.</p>
+          <h1 data-i18n="regimeTitle">Annual ROI across market moods.</h1>
+          <p class="slide-copy" data-i18n="regimeCopy">Bull years, bear years, and mixed years do not behave the same. The evidence is stronger when annual ROI is shown together with market context.</p>
         </div>
         <div class="regime-layout">
           <canvas id="regime-cycle-chart" class="chart regime-canvas"></canvas>
@@ -121,55 +122,40 @@
       <section class="slide-page contribution-page" data-slide="07">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="contributionEyebrow">Portfolio Contribution</p>
-          <h1 data-i18n="contributionTitle">The return is led, but not singular.</h1>
-          <p class="slide-copy" data-i18n="contributionCopy">A fundable portfolio should show where return comes from. The NTS Alpha Labs profile is anchored by stronger engines, with the broader set adding depth around the headline ROI.</p>
+          <h1 data-i18n="contributionTitle">Different engines. One portfolio.</h1>
+          <p class="slide-copy" data-i18n="contributionCopy">A fundable portfolio should show both contribution and strategy ROI breadth. The profile is anchored by stronger engines, without presenting the return as a single-source outcome.</p>
         </div>
         <div class="contribution-layout">
           <div class="wheel-panel contribution-wheel-panel">
             <canvas id="portfolio-contribution-wheel" class="chart contribution-wheel"></canvas>
           </div>
-          <div>
-            <h2 data-i18n="contributionBarsTitle">Contribution by engine</h2>
-            <div id="contribution-bars" class="bar-list contribution-bars"></div>
+          <div class="contribution-chart-stack">
+            <h2 data-i18n="strategyRoiBreadth">Strategy ROI breadth</h2>
+            <canvas id="strategy-roi-chart" class="chart side-canvas"></canvas>
           </div>
         </div>
       </section>
 
-      <section class="slide-page durability-page" data-slide="08">
+      <section class="slide-page monthly-page" data-slide="08">
         <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="qualityEyebrow">Durability</p>
-          <h1 data-i18n="qualityTitle">Consistency matters.</h1>
-          <p class="slide-copy" data-i18n="qualityCopy">The allocation case is stronger when return is viewed together with monthly behavior, market cycles, and contribution breadth.</p>
+          <p class="eyebrow" data-i18n="monthlyBehaviorEyebrow">Monthly Behavior</p>
+          <h1 data-i18n="monthlyBehaviorTitle">Consistency matters.</h1>
+          <p class="slide-copy" data-i18n="monthlyBehaviorCopy">The monthly record turns headline ROI into a more reviewable allocation case: recurring positive months, visible distribution, and a clear pattern over time.</p>
         </div>
         <div id="quality-metrics" class="durability-metrics"></div>
-        <div class="durability-charts">
+        <div class="monthly-layout">
           <section>
-            <h2 data-i18n="annualRoiView">Annual ROI view</h2>
-            <canvas id="annual-roi-chart" class="chart small-chart"></canvas>
+            <h2 data-i18n="monthlyRoiRecord">Monthly ROI record</h2>
+            <div id="monthly-quality-heatmap" class="monthly-heatmap large-heatmap"></div>
           </section>
           <section>
-            <h2 data-i18n="marketCycleMap">Annual market cycle map</h2>
-            <canvas id="market-cycle-chart" class="chart cycle-canvas"></canvas>
+            <h2 data-i18n="monthlyDistribution">Monthly ROI distribution</h2>
+            <canvas id="monthly-distribution-chart" class="chart monthly-distribution-canvas"></canvas>
           </section>
         </div>
       </section>
 
-      <section class="slide-page breadth-page" data-slide="09">
-        <div class="slide-head compact-head">
-          <p class="eyebrow" data-i18n="strategyEyebrow">Why Breadth Matters</p>
-          <h1 data-i18n="strategyTitle">Different alpha sources reduce dependence.</h1>
-          <p class="slide-copy" data-i18n="strategyCopy">Each engine has a role. The point is not to sell eight separate products, but to show that portfolio return does not rely on one market behavior.</p>
-        </div>
-        <div class="breadth-layout">
-          <div id="strategy-card-grid" class="strategy-card-grid"></div>
-          <aside class="side-chart">
-            <h2 data-i18n="strategyRoiBreadth">Strategy ROI breadth</h2>
-            <canvas id="strategy-roi-chart" class="chart side-canvas"></canvas>
-          </aside>
-        </div>
-      </section>
-
-      <section class="slide-page risk-page" data-slide="10">
+      <section class="slide-page risk-page" data-slide="09">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="riskEyebrow">Risk Framework</p>
           <h1 data-i18n="riskTitle">Protect first. Compound second.</h1>
@@ -182,7 +168,7 @@
         </div>
       </section>
 
-      <section class="slide-page infra-page" data-slide="11">
+      <section class="slide-page infra-page" data-slide="10">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="infraEyebrow">Infrastructure</p>
           <h1 data-i18n="infraTitle">An operating system for systematic allocation.</h1>
@@ -197,14 +183,19 @@
         </div>
       </section>
 
-      <section class="slide-page reporting-page" data-slide="12">
+      <section class="slide-page reporting-page" data-slide="11">
         <div class="slide-head compact-head">
           <p class="eyebrow" data-i18n="reportingEyebrow">Reporting Layer</p>
           <h1 data-i18n="reportingTitle">Transparency makes the portfolio investable.</h1>
           <p class="slide-copy" data-i18n="reportingCopy">Investors should be able to review performance, contribution, and monthly behavior without needing to understand the full internal system.</p>
         </div>
         <div class="reporting-layout">
-          <div id="quality-heatmap" class="monthly-heatmap large-heatmap"></div>
+          <div class="reporting-board">
+            <article><span data-i18n="portfolioRoi">Portfolio ROI</span><strong id="reporting-roi">--</strong></article>
+            <article><span data-i18n="positiveMonths">Positive months</span><strong id="reporting-positive">--</strong></article>
+            <article><span data-i18n="strategyEngines">strategy engines</span><strong id="reporting-engines">--</strong></article>
+            <article><span data-i18n="recentRoi">Recent ROI</span><strong id="reporting-recent">--</strong></article>
+          </div>
           <div class="reporting-points">
             <article><strong data-i18n="reportingOneTitle">Portfolio overview</strong><span data-i18n="reportingOneCopy">One place to understand the headline return and active strategy set.</span></article>
             <article><strong data-i18n="reportingTwoTitle">Contribution review</strong><span data-i18n="reportingTwoCopy">Return sources are visible instead of hidden behind a single number.</span></article>
@@ -213,7 +204,7 @@
         </div>
       </section>
 
-      <section class="slide-page expansion-page" data-slide="13">
+      <section class="slide-page expansion-page" data-slide="12">
         <div class="slide-head">
           <p class="eyebrow" data-i18n="marketEyebrow">Expansion</p>
           <h1 data-i18n="marketTitle">The infrastructure is market-agnostic.</h1>
@@ -225,7 +216,7 @@
         </div>
       </section>
 
-      <section class="slide-page closing-page" data-slide="14">
+      <section class="slide-page closing-page" data-slide="13">
         <div class="closing-copy">
           <p class="eyebrow" data-i18n="closeEyebrow">Investor Discussion</p>
           <h1 data-i18n="closeTitle">Systematic by design. Disciplined in execution. Built for long-term compounding.</h1>
@@ -243,11 +234,11 @@
 
       <nav class="mobile-slide-controls" aria-label="Mobile presentation controls">
         <button id="mobile-prev" type="button">Prev</button>
-        <span id="mobile-slide-count">1 / 14</span>
+        <span id="mobile-slide-count">1 / 13</span>
         <button id="mobile-next" type="button">Next</button>
       </nav>
     </main>
 
-    <script src="./overall_strategy.js?v=20260525-expanded-deck-2" type="module"></script>
+    <script src="./overall_strategy.js?v=20260525-merged-deck-1" type="module"></script>
   </body>
 </html>

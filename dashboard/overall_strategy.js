@@ -90,6 +90,12 @@ const TEXT = {
     solutionCopy: "NTS Alpha Labs is presented as a portfolio first. The strategy set is designed so different engines can contribute under different market conditions.",
     strategyEngines: "strategy engines",
     solutionNote: "Same goal: consistent, risk-aware compounding across cycles.",
+    solutionOneTitle: "Portfolio first",
+    solutionOneCopy: "Investors review one allocation profile, not isolated strategy claims.",
+    solutionTwoTitle: "Multiple engines",
+    solutionTwoCopy: "Different return sources are built to participate under different market moods.",
+    solutionThreeTitle: "One reporting layer",
+    solutionThreeCopy: "Performance, contribution, and monthly behavior stay visible in one investor view.",
     performanceEyebrow: "Performance",
     performanceTitle: "Let the return curve speak.",
     performanceSubtitle: "2022-2026 validated portfolio ROI with supporting evidence across yearly, monthly, and strategy-level records.",
@@ -116,12 +122,16 @@ const TEXT = {
     benchmarkMultipleLabel: "ROI multiple over S&P 500",
     singleYearBenchmark: "Single-year ROI: NTS vs S&P 500 vs FD",
     regimeEyebrow: "Market Regimes",
-    regimeTitle: "Performance across different market moods.",
-    regimeCopy: "Bull years, bear years, and mixed years do not behave the same. The stronger point is that the portfolio has produced through more than one cycle.",
+    regimeTitle: "Annual ROI across market moods.",
+    regimeCopy: "Bull years, bear years, and mixed years do not behave the same. The evidence is stronger when annual ROI is shown together with market context.",
     contributionEyebrow: "Portfolio Contribution",
-    contributionTitle: "The return is led, but not singular.",
-    contributionCopy: "A fundable portfolio should show where return comes from. The NTS Alpha Labs profile is anchored by stronger engines, with the broader set adding depth around the headline ROI.",
+    contributionTitle: "Different engines. One portfolio.",
+    contributionCopy: "A fundable portfolio should show both contribution and strategy ROI breadth. The profile is anchored by stronger engines, without presenting the return as a single-source outcome.",
     contributionBarsTitle: "Contribution by engine",
+    monthlyBehaviorEyebrow: "Monthly Behavior",
+    monthlyBehaviorTitle: "Consistency matters.",
+    monthlyBehaviorCopy: "The monthly record turns headline ROI into a more reviewable allocation case: recurring positive months, visible distribution, and a clear pattern over time.",
+    monthlyDistribution: "Monthly ROI distribution",
     strategyEyebrow: "Why Breadth Matters",
     strategyTitle: "Different alpha sources reduce dependence.",
     strategyCopy: "Each engine has a role. The point is not to sell eight separate products, but to show that portfolio return does not rely on one market behavior.",
@@ -250,6 +260,12 @@ const TEXT = {
     solutionCopy: "NTS Alpha Labs 先以 portfolio 呈现。不同策略在不同市场状态下轮流贡献，让整体回报不依赖单一行情。",
     strategyEngines: "个策略引擎",
     solutionNote: "共同目标：跨周期、可复利、风险意识清楚。",
+    solutionOneTitle: "先看组合",
+    solutionOneCopy: "投资人 review 的是一个 allocation profile，不是一堆分散策略叙事。",
+    solutionTwoTitle: "多个引擎",
+    solutionTwoCopy: "不同回报来源负责适应不同市场情绪，而不是押一种行情。",
+    solutionThreeTitle: "统一报告层",
+    solutionThreeCopy: "表现、贡献和月度行为放在同一个投资人视图里。",
     performanceEyebrow: "表现摘要",
     performanceTitle: "让回报曲线说话。",
     performanceSubtitle: "2022-2026 已验证 portfolio ROI，并由年度、月度和策略层面的记录支撑。",
@@ -276,12 +292,16 @@ const TEXT = {
     benchmarkMultipleLabel: "相对 S&P 500 的 ROI 倍数",
     singleYearBenchmark: "单年 ROI：NTS vs S&P 500 vs FD",
     regimeEyebrow: "市场周期",
-    regimeTitle: "不同市场情绪下的表现。",
-    regimeCopy: "牛市、熊市和震荡市不会用同一种节奏运行。更重要的是，组合已经不只在一种市场环境里产生回报。",
+    regimeTitle: "不同市场情绪下的年度 ROI。",
+    regimeCopy: "牛市、熊市和震荡市不会用同一种节奏运行。把年度 ROI 和市场环境放在一起看，证据会更清楚。",
     contributionEyebrow: "组合贡献",
-    contributionTitle: "回报有主线，但不是单点。",
-    contributionCopy: "适合 fundraise 的组合，需要讲清楚回报来自哪里。NTS Alpha Labs 由较强引擎带动 headline ROI，同时其他策略补足组合深度。",
+    contributionTitle: "不同引擎，一个组合。",
+    contributionCopy: "适合 fundraise 的组合，需要同时讲清楚贡献来源和策略 ROI 广度。回报有主线，但不是单一来源。",
     contributionBarsTitle: "各引擎贡献",
+    monthlyBehaviorEyebrow: "月度行为",
+    monthlyBehaviorTitle: "Consistency matters.",
+    monthlyBehaviorCopy: "月度记录让 headline ROI 更适合 review：正回报月份、分布形态和长期行为都能被看见。",
+    monthlyDistribution: "月度 ROI 分布",
     strategyEyebrow: "为什么广度重要",
     strategyTitle: "不同 alpha sources 降低单点依赖。",
     strategyCopy: "每个策略都有自己的角色。重点不是卖八个产品，而是让投资人看到整体组合不是靠单一市场行为撑起来。",
@@ -622,6 +642,54 @@ function drawMonthlyProfileChart() {
   ctx.fillText(data[0].month, x, y + h + 24);
   ctx.textAlign = "right";
   ctx.fillText(data[data.length - 1].month, x + w, y + h + 24);
+  ctx.textAlign = "left";
+}
+
+function drawMonthlyDistributionChart() {
+  const canvas = document.getElementById("monthly-distribution-chart");
+  if (!canvas) return;
+  const { ctx, width, height } = setupCanvas(canvas);
+  const values = DATA.monthly_returns
+    .filter((row) => row.return_pct != null)
+    .map((row) => row.return_pct);
+  const buckets = [
+    { label: "<0%", min: -Infinity, max: 0 },
+    { label: "0-2%", min: 0, max: 2 },
+    { label: "2-4%", min: 2, max: 4 },
+    { label: "4-6%", min: 4, max: 6 },
+    { label: "6%+", min: 6, max: Infinity },
+  ].map((bucket) => ({
+    ...bucket,
+    count: values.filter((value) => value >= bucket.min && value < bucket.max).length,
+  }));
+
+  ctx.clearRect(0, 0, width, height);
+  const pad = { l: 42, r: 22, t: 20, b: 42 };
+  const x = pad.l;
+  const y = pad.t;
+  const w = width - pad.l - pad.r;
+  const h = height - pad.t - pad.b;
+  drawAxes(ctx, x, y, w, h, 3);
+  const max = Math.max(...buckets.map((bucket) => bucket.count), 1) * 1.18;
+  const groupW = w / buckets.length;
+  const barW = Math.max(22, groupW * 0.48);
+
+  buckets.forEach((bucket, index) => {
+    const barH = Math.max(2, (bucket.count / max) * h);
+    const xx = x + index * groupW + (groupW - barW) / 2;
+    const yy = y + h - barH;
+    ctx.fillStyle = index === 0 ? "rgba(184, 137, 53, .72)" : index > 2 ? COLORS.green : COLORS.teal;
+    ctx.beginPath();
+    ctx.roundRect(xx, yy, barW, barH, 7);
+    ctx.fill();
+    ctx.fillStyle = COLORS.ink;
+    ctx.font = "800 13px ui-monospace, Menlo, monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(String(bucket.count), xx + barW / 2, yy - 9);
+    ctx.fillStyle = COLORS.muted;
+    ctx.font = "12px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.fillText(bucket.label, xx + barW / 2, y + h + 24);
+  });
   ctx.textAlign = "left";
 }
 
@@ -1013,6 +1081,14 @@ function renderQuality() {
   ].map(([label, value, note]) => `<article><strong>${value}</strong><span>${label}</span><small>${note}</small></article>`).join(""));
 }
 
+function renderReportingBoard() {
+  const m = monthlyStats();
+  setText("reporting-roi", fmtPct(DATA.portfolio.validated_combo_return_pct));
+  setText("reporting-positive", fmtPct(m.positiveRate, 0));
+  setText("reporting-engines", String(DATA.headline.engine_count));
+  setText("reporting-recent", fmtPct(DATA.portfolio.independent_combo_return_pct));
+}
+
 function renderBenchmark() {
   if (!byId("benchmark-overall-roi")) return;
   const portfolioRoi = DATA.portfolio.validated_combo_return_pct;
@@ -1045,6 +1121,7 @@ function renderPage() {
   renderKpis();
   renderHeatmap("monthly-heatmap");
   renderHeatmap("quality-heatmap");
+  renderHeatmap("monthly-quality-heatmap");
   drawContributionWheel();
   renderBars("solution-bars", DATA.strategy_contribution, Math.max(...DATA.strategy_contribution.map((d) => d.contribution_pct)), "contribution_pct", "%", () => t("contributionShare"));
   renderBars("contribution-bars", DATA.strategy_contribution, Math.max(...DATA.strategy_contribution.map((d) => d.contribution_pct)), "contribution_pct", "%", () => t("portfolioContribution"));
@@ -1052,9 +1129,11 @@ function renderPage() {
   renderBars("composition-bars", DATA.strategy_contribution, Math.max(...DATA.strategy_contribution.map((d) => d.contribution_pct)), "contribution_pct", "%", () => t("contributionShare"));
   renderStrategyCards();
   renderQuality();
+  renderReportingBoard();
   renderBenchmark();
   drawEquityChart();
   drawMonthlyProfileChart();
+  drawMonthlyDistributionChart();
   drawContributionWheel("portfolio-contribution-wheel");
   drawAnnualRoiChart();
   drawMarketCycleChart();
@@ -1077,7 +1156,9 @@ function drawVisibleSlideCharts() {
   if (active.querySelector("#annual-fd-chart")) drawAnnualFdChart();
   if (active.querySelector("#strategy-roi-chart")) drawStrategyRoiChart();
   if (active.querySelector("#quality-heatmap")) renderHeatmap("quality-heatmap");
+  if (active.querySelector("#monthly-quality-heatmap")) renderHeatmap("monthly-quality-heatmap");
   if (active.querySelector("#monthly-profile-chart")) drawMonthlyProfileChart();
+  if (active.querySelector("#monthly-distribution-chart")) drawMonthlyDistributionChart();
   if (active.querySelector("#annual-roi-chart")) drawAnnualRoiChart();
   if (active.querySelector("#market-cycle-chart")) drawMarketCycleChart();
   if (active.querySelector("#regime-cycle-chart")) drawMarketCycleChart("regime-cycle-chart");
