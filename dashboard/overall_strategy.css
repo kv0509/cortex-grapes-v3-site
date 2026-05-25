@@ -11,6 +11,7 @@
   --gold: #a97813;
   --rose: #d8b8ac;
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  --serif: Georgia, "Times New Roman", Times, serif;
   --mono: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
 }
 
@@ -1074,6 +1075,37 @@ h2 {
   display: none;
 }
 
+.problem-list {
+  display: grid;
+  gap: 26px;
+  max-width: 620px;
+  margin-top: 58px;
+}
+
+.problem-list article {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.problem-list article > span {
+  color: #111916;
+  font: 500 25px/1 var(--serif, Georgia, serif);
+}
+
+.problem-list strong {
+  display: block;
+  font-size: 18px;
+}
+
+.problem-list p {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.36;
+}
+
 .zh-mode .deck-subtitle,
 .zh-mode .slide-copy,
 .zh-mode .narrative-list,
@@ -1239,10 +1271,12 @@ h2 {
   .performance-page.is-active,
   .product-page.is-active,
   .benchmark-page.is-active,
+  .problem-page.is-active,
   .strategy-page.is-active,
   .quality-page.is-active,
   .mix-page.is-active,
   .market-page.is-active,
+  .problem-page.is-active,
   .close-page.is-active {
     display: grid;
   }
@@ -1250,6 +1284,7 @@ h2 {
   .performance-page.is-active,
   .product-page.is-active,
   .benchmark-page.is-active,
+  .problem-page.is-active,
   .strategy-page.is-active,
   .quality-page.is-active,
   .mix-page.is-active,
@@ -1376,6 +1411,15 @@ h2 {
   .takeaway-grid,
   .market-grid {
     margin-top: 26px;
+  }
+
+  .problem-list {
+    gap: 18px;
+    margin-top: 28px;
+  }
+
+  .problem-list article {
+    gap: 14px;
   }
 
   .cycle-grid {
@@ -1651,19 +1695,28 @@ h2 {
 
   .slide-head h1,
   .close-page h1 {
+    font-family: var(--serif);
+    font-weight: 500;
     max-width: 940px;
     font-size: clamp(58px, 6vw, 92px);
-    line-height: .9;
+    line-height: .92;
   }
 
   .cover-page {
     grid-template-columns: minmax(0, .88fr) minmax(470px, .78fr);
     gap: 72px;
+    color: #f8f6ef;
+    background:
+      radial-gradient(circle at 76% 42%, rgba(255, 255, 255, .22), transparent 18%),
+      linear-gradient(115deg, rgba(5, 11, 12, .96) 0%, rgba(6, 15, 16, .9) 44%, rgba(8, 20, 22, .38) 74%, rgba(248, 246, 239, .08) 100%),
+      linear-gradient(145deg, #071011 0%, #172120 52%, #e7e4dc 52%, #f8f6ef 100%);
   }
 
   .cover-page h1 {
+    font-family: var(--serif);
+    font-weight: 500;
     font-size: clamp(88px, 9vw, 138px);
-    line-height: .82;
+    line-height: .86;
     max-width: 760px;
   }
 
@@ -1672,16 +1725,19 @@ h2 {
     margin-top: 28px;
     font-size: 24px;
     line-height: 1.22;
+    color: rgba(248, 246, 239, .78);
   }
 
   .cover-page .narrative-list {
     max-width: 540px;
     font-size: 15px;
+    color: rgba(248, 246, 239, .66);
   }
 
   .cover-art {
     padding-left: 60px;
-    background: transparent;
+    background: rgba(248, 246, 239, .96);
+    color: #111916;
   }
 
   .cover-logo-lockup {
@@ -1721,6 +1777,22 @@ h2 {
 
   .product-page {
     align-content: center;
+  }
+
+  .problem-page {
+    align-content: center;
+    background:
+      radial-gradient(circle at 82% 66%, rgba(17, 25, 22, .14), transparent 18%),
+      linear-gradient(90deg, #fff 0%, #fff 66%, #f4f2ec 100%);
+  }
+
+  .problem-page .slide-head h1 {
+    max-width: 720px;
+    font-size: clamp(48px, 4.8vw, 76px);
+  }
+
+  .problem-list {
+    margin-top: 30px;
   }
 
   .product-grid,
@@ -1878,7 +1950,9 @@ h2 {
 
   .close-page {
     color: #f8f6ef;
-    background: #101a16;
+    background:
+      radial-gradient(circle at 78% 42%, rgba(255, 255, 255, .09), transparent 18%),
+      linear-gradient(135deg, #071011 0%, #101a16 58%, #202b29 100%);
   }
 
   .close-page::after {
