@@ -1,16 +1,18 @@
 :root {
-  --paper: #eeeeea;
+  --paper: #f6f4ef;
   --sheet: #ffffff;
-  --ink: #0e1714;
-  --muted: #66706b;
+  --ink: #10211b;
+  --muted: #68736d;
   --soft: #f7f6f1;
-  --line: #dadbd5;
-  --line-strong: #c4c8bf;
-  --green: #064f36;
+  --line: #e5e0d6;
+  --line-strong: #c9c1b3;
+  --green: #006b4f;
   --green-2: #0b7a52;
   --teal: #1b7784;
-  --gold: #bf7d12;
-  --cream: #f7f4ec;
+  --gold: #b88935;
+  --cream: #ebe6dc;
+  --navy: #071412;
+  --navy-2: #0b1f1d;
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
   --serif: Georgia, "Times New Roman", Times, serif;
   --mono: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
@@ -137,7 +139,7 @@ p {
 }
 
 .slide-page::before {
-  content: counter(slide, decimal-leading-zero);
+  content: attr(data-slide);
   position: absolute;
   top: 42px;
   right: 54px;
@@ -1077,34 +1079,42 @@ p {
   .deck-topbar {
     margin: 0 -12px;
     padding: 10px 12px;
+    min-height: 58px;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .brand-lockup {
-    font-size: 11px;
+    font-size: 10px;
+    letter-spacing: .05em;
   }
 
   .brand-logo {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
   }
 
   .header-actions {
-    flex-wrap: wrap;
-    width: 100%;
-    gap: 8px;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-wrap: nowrap;
+    width: auto;
+    gap: 5px;
   }
 
   .as-of {
-    width: 100%;
-    font-size: 12px;
+    width: auto;
+    font-size: 10px;
   }
 
   .lang-switch {
-    height: 34px;
+    height: 30px;
   }
 
   .lang-btn {
-    height: 32px;
+    min-width: 38px;
+    height: 28px;
   }
 
   .slide-page {
@@ -1962,5 +1972,315 @@ p {
 
   .closing-metric span {
     font-size: clamp(48px, 17vw, 66px);
+  }
+}
+
+/* Premium visual system pass */
+.fundraise-deck .slide-page {
+  padding: 72px 88px;
+  background: #fff;
+  border-color: var(--line);
+  box-shadow: 0 16px 46px rgba(16, 33, 27, .035);
+}
+
+.fundraise-deck .slide-page::after {
+  width: 4px;
+  background: var(--green);
+}
+
+.fundraise-deck .slide-page::before {
+  color: rgba(0, 107, 79, .38);
+}
+
+.fundraise-deck .fund-hero-page {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .42), rgba(255, 255, 255, .08)),
+    var(--paper);
+}
+
+.fundraise-deck .fund-problem-page,
+.fundraise-deck .reporting-page {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .68), rgba(255, 255, 255, .36)),
+    #efeee9;
+}
+
+.fundraise-deck .solution-page,
+.fundraise-deck .durability-page,
+.fundraise-deck .breadth-page,
+.fundraise-deck .expansion-page {
+  background:
+    radial-gradient(circle at 82% 20%, rgba(184, 137, 53, .08), transparent 27%),
+    #fff;
+}
+
+.fundraise-deck .curve-page {
+  background: #fff;
+}
+
+.fundraise-deck .risk-page,
+.fundraise-deck .infra-page,
+.fundraise-deck .closing-page {
+  color: #f5f2ea;
+  background:
+    radial-gradient(circle at 78% 24%, rgba(184, 137, 53, .12), transparent 24%),
+    linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 62%, #10221f 100%);
+}
+
+.risk-page::after,
+.infra-page::after,
+.closing-page::after {
+  background: var(--gold);
+}
+
+.risk-page::before,
+.infra-page::before,
+.closing-page::before {
+  color: rgba(245, 242, 234, .25);
+}
+
+.risk-page .eyebrow,
+.infra-page .eyebrow,
+.closing-page .eyebrow {
+  color: rgba(184, 137, 53, .9);
+}
+
+.risk-page .slide-head h1,
+.infra-page .slide-head h1,
+.closing-copy h1 {
+  color: #fffaf0;
+}
+
+.risk-page .slide-copy,
+.infra-page .slide-copy,
+.closing-metric p {
+  color: rgba(245, 242, 234, .68);
+}
+
+.curve-page .panel-head,
+.durability-page .slide-head,
+.closing-copy {
+  position: relative;
+  z-index: 1;
+}
+
+.curve-page .panel-head::before,
+.durability-page .slide-head::before,
+.closing-copy::before {
+  content: "242.79%";
+  position: absolute;
+  z-index: -1;
+  color: var(--green);
+  opacity: .045;
+  font: 900 clamp(112px, 15vw, 210px)/.8 var(--sans);
+  letter-spacing: -.07em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.curve-page .panel-head::before {
+  top: -58px;
+  right: -12px;
+}
+
+.durability-page .slide-head::before {
+  top: -42px;
+  right: -260px;
+}
+
+.closing-copy::before {
+  top: -92px;
+  left: -18px;
+  color: #fffaf0;
+  opacity: .055;
+}
+
+.durability-metrics article,
+.kpi-card,
+.solution-statement,
+.reporting-points article {
+  background: #f7f6f1;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+
+.durability-metrics {
+  gap: 14px;
+  border: 0;
+  background: transparent;
+}
+
+.durability-metrics article {
+  padding: 28px;
+  box-shadow: 0 12px 30px rgba(16, 33, 27, .035);
+}
+
+.solution-statement {
+  padding: 30px 28px;
+  border-top: 1px solid var(--line);
+  box-shadow: 0 12px 30px rgba(16, 33, 27, .035);
+}
+
+.conviction-grid {
+  gap: 14px;
+  border-top: 0;
+}
+
+.conviction-grid article {
+  padding: 28px;
+  min-height: 214px;
+  background: rgba(255, 255, 255, .86);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+
+.risk-page .conviction-grid article,
+.infra-page .conviction-grid article {
+  background: rgba(255, 255, 255, .055);
+  border-color: rgba(245, 242, 234, .16);
+}
+
+.risk-page .conviction-grid article + article,
+.infra-page .conviction-grid article + article,
+.conviction-grid article + article {
+  padding-left: 28px;
+  border-left: 1px solid var(--line);
+}
+
+.risk-page .conviction-grid strong,
+.risk-page .conviction-grid span,
+.infra-page .conviction-grid strong,
+.infra-page .conviction-grid span {
+  color: rgba(245, 242, 234, .88);
+}
+
+.risk-page .conviction-grid span,
+.infra-page .conviction-grid span {
+  color: rgba(245, 242, 234, .62);
+}
+
+.process-rail {
+  border-color: rgba(245, 242, 234, .16);
+}
+
+.process-rail article + article {
+  border-left-color: rgba(245, 242, 234, .14);
+}
+
+.infra-page .process-rail span {
+  color: rgba(184, 137, 53, .9);
+}
+
+.infra-page .process-rail strong {
+  color: #fffaf0;
+}
+
+.reporting-points {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.reporting-points article {
+  padding: 24px;
+}
+
+.closing-metric {
+  padding: 34px 0 34px 48px;
+  border-left-color: rgba(245, 242, 234, .18);
+}
+
+.closing-metric span {
+  color: var(--gold);
+}
+
+@media (max-width: 720px) {
+  .fundraise-deck .slide-page {
+    padding: 28px 18px 28px;
+  }
+
+  .curve-page .panel-head::before,
+  .durability-page .slide-head::before,
+  .closing-copy::before {
+    font-size: 76px;
+    opacity: .035;
+  }
+
+  .curve-page .panel-head::before {
+    top: -20px;
+    right: -44px;
+  }
+
+  .durability-page .slide-head::before {
+    top: -12px;
+    right: -96px;
+  }
+
+  .closing-copy::before {
+    top: -34px;
+    left: -8px;
+  }
+
+  .durability-metrics {
+    gap: 8px;
+  }
+
+  .durability-metrics article,
+  .solution-statement,
+  .reporting-points article,
+  .conviction-grid article {
+    box-shadow: none;
+  }
+
+  .conviction-grid {
+    gap: 7px;
+  }
+
+  .conviction-grid article,
+  .risk-page .conviction-grid article + article,
+  .infra-page .conviction-grid article + article,
+  .conviction-grid article + article {
+    min-height: 0;
+    padding: 13px 14px;
+    border-left: 1px solid var(--line);
+    border-top: 1px solid var(--line);
+  }
+
+  .risk-page .slide-head,
+  .expansion-page .slide-head {
+    margin-bottom: 18px;
+  }
+
+  .risk-page .slide-head h1,
+  .expansion-page .slide-head h1 {
+    font-size: clamp(28px, 8.4vw, 36px);
+    line-height: 1.03;
+  }
+
+  .conviction-grid strong {
+    font-size: 18px;
+    line-height: 1.08;
+  }
+
+  .conviction-grid span {
+    margin-top: 7px;
+    font-size: 13px;
+    line-height: 1.28;
+  }
+
+  .risk-page .conviction-grid article,
+  .infra-page .conviction-grid article {
+    border-color: rgba(245, 242, 234, .16);
+  }
+
+  .process-rail article + article {
+    border-left: 0;
+  }
+
+  .fundraise-deck .slide-page:not(.is-active) {
+    display: none;
+  }
+
+  .fundraise-deck .slide-page.is-active {
+    display: grid;
   }
 }

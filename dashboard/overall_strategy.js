@@ -12,16 +12,16 @@ const SP500_YEARLY_RETURNS = {
 };
 
 const COLORS = {
-  green: "#08784f",
+  green: "#006b4f",
   teal: "#176f80",
-  amber: "#bd7a13",
+  amber: "#b88935",
   red: "#b65349",
-  ink: "#101a16",
-  muted: "#62716b",
-  grid: "#e4e7de",
-  line: "#d8ddd3",
-  panel: "#fffdf8",
-  bg: "#f4f1e9",
+  ink: "#10211b",
+  muted: "#68736d",
+  grid: "#e6e1d8",
+  line: "#e5e0d6",
+  panel: "#f7f6f1",
+  bg: "#f6f4ef",
 };
 
 let DATA = null;
@@ -51,8 +51,8 @@ const MARKET_REGIMES = {
 };
 
 const REGIME_COLORS = {
-  bull: "#08784f",
-  mixed: "#bd7a13",
+  bull: "#006b4f",
+  mixed: "#b88935",
   bear: "#176f80",
 };
 
