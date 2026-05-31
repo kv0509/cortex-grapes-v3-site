@@ -63,6 +63,23 @@ def monthly_from_equity(rows: list[dict[str, str]]) -> tuple[list[dict], dict]:
     return monthly, heatmap
 
 
+def annual_from_equity(rows: list[dict[str, str]]) -> list[dict]:
+    by_year: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for row in rows:
+        year = parse_dt(row["dt"]).strftime("%Y")
+        by_year[year].append(row)
+
+    annual = []
+    previous_end = f(rows[0], "equity") if rows else 0.0
+    for year, items in sorted(by_year.items()):
+        start = previous_end
+        end = f(items[-1], "equity")
+        ret = ((end / start) - 1.0) * 100.0 if start else 0.0
+        annual.append({"year": year, "return_pct": pct(ret), "start_equity": round(start, 2), "end_equity": round(end, 2)})
+        previous_end = end
+    return annual
+
+
 def trade_win_stats(rows: list[dict[str, str]]) -> dict[str, float | int]:
     if not rows:
         return {"winning_trades": 0, "losing_trades": 0, "win_rate_pct": 0.0}
@@ -118,6 +135,7 @@ def main() -> None:
     oos = next(row for row in split_rows if row["period"] == "oos_2025_plus")
 
     monthly, heatmap = monthly_from_equity(equity_rows)
+    annual = annual_from_equity(equity_rows)
     win_stats = trade_win_stats(filled_trade_rows)
 
     strategy_returns = [
@@ -187,6 +205,7 @@ def main() -> None:
             }
             for row in summary_rows
         ],
+        "annual_returns": annual,
         "equity_curve": downsample_equity(equity_rows),
         "monthly_returns": monthly,
         "monthly_heatmap": heatmap,

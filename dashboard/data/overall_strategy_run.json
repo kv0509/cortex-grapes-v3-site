@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "NTS Overall Strategy Run",
-    "updated_at": "2026-05-31 05:42:23 UTC",
+    "updated_at": "2026-05-31 05:54:39 UTC",
     "source": "Research/five_strategy_unified_portfolio_sim_lychee_hold1_20260508",
     "scenario": "no_lychee_25_25_25_25_0_gross_1x",
     "note": "Validated combo is a shared-capital portfolio simulation. 8-engine headline average is standalone breadth, not an 8-engine merged portfolio backtest.",
@@ -107,6 +107,38 @@
       "max_drawdown_pct": -27.13,
       "filled_trades": 395,
       "max_gross_exposure_pct": 84.22
+    }
+  ],
+  "annual_returns": [
+    {
+      "year": "2022",
+      "return_pct": 21.83,
+      "start_equity": 100790.28,
+      "end_equity": 122787.88
+    },
+    {
+      "year": "2023",
+      "return_pct": 33.63,
+      "start_equity": 122787.88,
+      "end_equity": 164087.58
+    },
+    {
+      "year": "2024",
+      "return_pct": 36.63,
+      "start_equity": 164087.58,
+      "end_equity": 224197.98
+    },
+    {
+      "year": "2025",
+      "return_pct": 46.55,
+      "start_equity": 224197.98,
+      "end_equity": 328553.44
+    },
+    {
+      "year": "2026",
+      "return_pct": 5.16,
+      "start_equity": 328553.44,
+      "end_equity": 345499.25
     }
   ],
   "equity_curve": [

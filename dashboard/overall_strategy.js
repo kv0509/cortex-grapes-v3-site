@@ -1,4 +1,4 @@
-const DATA_URL = "./data/overall_strategy_run.json?v=20260531-winrate-1";
+const DATA_URL = "./data/overall_strategy_run.json?v=20260531-annual-1";
 const FD_RETURN = 8.03;
 const SP500_RETURN = 56.1;
 const SP500_YEARLY = { 2022: -19.4, 2023: 24.2, 2024: 23.3, 2025: 16.4, 2026: 6.8 };
@@ -87,6 +87,9 @@ function monthlyStats() {
 }
 
 function annualReturns() {
+  if (Array.isArray(DATA.annual_returns) && DATA.annual_returns.length) {
+    return DATA.annual_returns;
+  }
   const grouped = new Map();
   for (const row of DATA.monthly_returns || []) {
     const year = row.month.slice(0, 4);
@@ -415,6 +418,18 @@ function drawAnnualRegimeChart() {
   const max = Math.max(...rows.map((row) => row.return_pct));
   const pad = { l: 48, r: 26, t: 44, b: 78 };
   const slot = (w - pad.l - pad.r) / rows.length;
+  const compact = w < 520;
+  drawLabel(
+    ctx,
+    compact
+      ? (lang === "zh" ? "复利计算，不是相加。" : "Compounded, not summed.")
+      : (lang === "zh" ? "年度数字以复利方式组成 2022-2026 总 ROI。" : "Annual returns compound into the 2022-2026 total ROI."),
+    pad.l,
+    22,
+    COLORS.muted,
+    12,
+    700
+  );
   rows.forEach((row, i) => {
     const regime = REGIMES[row.year] || REGIMES[2026];
     const bh = (h - pad.t - pad.b) * row.return_pct / max;
@@ -425,10 +440,15 @@ function drawAnnualRegimeChart() {
     ctx.fill();
     drawLabel(ctx, fmtPct(row.return_pct, 0), x + 4, y - 12, COLORS.ink, 15, 820);
     drawLabel(ctx, row.year === "2026" ? "2026 YTD" : row.year, x, h - 46, COLORS.muted, 13, 760);
-    roundRect(ctx, x - 10, h - 30, slot * .52 + 20, 22, 999);
+    const regimeText = compact
+      ? ({ "2022": lang === "zh" ? "熊" : "Bear", "2023": lang === "zh" ? "混" : "Mix", "2024": lang === "zh" ? "牛" : "Bull", "2025": lang === "zh" ? "混" : "Mix", "2026": "YTD" }[row.year] || regime[lang])
+      : regime[lang];
+    const pillW = compact ? Math.min(48, slot * .72) : slot * .52 + 20;
+    const pillX = compact ? x + slot * .26 - pillW / 2 : x - 10;
+    roundRect(ctx, pillX, h - 30, pillW, 22, 999);
     ctx.fillStyle = regime.tone;
     ctx.fill();
-    drawLabel(ctx, regime[lang], x, h - 14, "#fff", 10, 760);
+    drawLabel(ctx, regimeText, pillX + (compact ? 10 : 10), h - 14, "#fff", compact ? 9 : 10, 760);
   });
 }
 
