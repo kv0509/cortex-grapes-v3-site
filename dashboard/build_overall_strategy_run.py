@@ -63,6 +63,18 @@ def monthly_from_equity(rows: list[dict[str, str]]) -> tuple[list[dict], dict]:
     return monthly, heatmap
 
 
+def trade_win_stats(rows: list[dict[str, str]]) -> dict[str, float | int]:
+    if not rows:
+        return {"winning_trades": 0, "losing_trades": 0, "win_rate_pct": 0.0}
+    wins = sum(1 for row in rows if f(row, "realized_pnl_usd") > 0)
+    losses = len(rows) - wins
+    return {
+        "winning_trades": wins,
+        "losing_trades": losses,
+        "win_rate_pct": pct(wins / len(rows) * 100.0),
+    }
+
+
 def downsample_equity(rows: list[dict[str, str]], initial_equity: float = 100000.0, max_points: int = 360) -> list[dict]:
     if len(rows) <= max_points:
         chosen = rows
@@ -99,12 +111,14 @@ def main() -> None:
     split_rows = read_csv(PORTFOLIO_DIR / f"{scenario}_split_metrics.csv")
     contribution_rows = read_csv(PORTFOLIO_DIR / f"{scenario}_strategy_contribution.csv")
     equity_rows = read_csv(PORTFOLIO_DIR / f"{scenario}_equity.csv")
+    filled_trade_rows = read_csv(PORTFOLIO_DIR / f"{scenario}_filled_trades.csv")
 
     summary = next(row for row in summary_rows if row["scenario"] == scenario)
     full = next(row for row in split_rows if row["period"] == "full_common")
     oos = next(row for row in split_rows if row["period"] == "oos_2025_plus")
 
     monthly, heatmap = monthly_from_equity(equity_rows)
+    win_stats = trade_win_stats(filled_trade_rows)
 
     strategy_returns = [
         {"strategy": "Grapes", "return_pct": 442.66, "status": "Production", "role": "Core return engine"},
@@ -152,6 +166,9 @@ def main() -> None:
             "sortino": round(f(summary, "sortino"), 3),
             "max_drawdown_pct": pct(f(summary, "max_drawdown_pct")),
             "filled_trades": int(f(summary, "filled_trades")),
+            "winning_trades": win_stats["winning_trades"],
+            "losing_trades": win_stats["losing_trades"],
+            "win_rate_pct": win_stats["win_rate_pct"],
             "max_open_positions": int(f(summary, "max_open_positions")),
             "max_gross_exposure_pct": pct(f(summary, "max_gross_exposure_pct")),
             "mean_gross_exposure_pct": pct(f(summary, "mean_gross_exposure_pct")),

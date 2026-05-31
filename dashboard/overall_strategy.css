@@ -457,7 +457,7 @@ p { margin: 0; }
 
 .report-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 1px;
   background: rgba(16, 33, 27, .14);
   border: 1px solid rgba(16, 33, 27, .14);
@@ -504,7 +504,7 @@ p { margin: 0; }
 
 .closing-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 32px;
   padding-top: 28px;
   border-top: 1px solid rgba(247, 244, 236, .16);
@@ -749,8 +749,12 @@ p { margin: 0; }
     padding: 20px 16px;
   }
 
+  .report-grid article:last-child {
+    grid-column: 1 / -1;
+  }
+
   .report-grid strong {
-    font-size: clamp(28px, 11vw, 42px);
+    font-size: clamp(30px, 8.8vw, 34px);
   }
 
   .report-grid span {

@@ -1,4 +1,4 @@
-const DATA_URL = "./data/overall_strategy_run.json?v=20260524-product-13";
+const DATA_URL = "./data/overall_strategy_run.json?v=20260531-winrate-1";
 const FD_RETURN = 8.03;
 const SP500_RETURN = 56.1;
 const SP500_YEARLY = { 2022: -19.4, 2023: 24.2, 2024: 23.3, 2025: 16.4, 2026: 6.8 };
@@ -861,9 +861,11 @@ function fillMetrics() {
   setText("total-roi", fmtPct(p.validated_combo_return_pct, 2));
   setText("report-roi", fmtPct(p.validated_combo_return_pct, 2));
   setText("report-positive", fmtPct(stats.positiveRate, 0));
+  setText("report-winrate", fmtPct(p.win_rate_pct, 2));
   setText("report-engines", String(DATA.headline.engine_count));
   setText("report-recent", fmtPct(p.independent_combo_return_pct, 2));
   setText("close-roi", fmtPct(p.validated_combo_return_pct, 2));
+  setText("close-winrate", fmtPct(p.win_rate_pct, 2));
 }
 
 function isMobile() {
