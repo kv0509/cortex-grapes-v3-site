@@ -1,4 +1,4 @@
-const DATA_URL = "./data/overall_strategy_run.json?v=20260531-stress-1";
+const DATA_URL = "./data/overall_strategy_run.json?v=20260531-all8-no-kiwi-1";
 const FD_RETURN = 8.03;
 const SP500_RETURN = 56.1;
 const SP500_YEARLY = { 2022: -19.4, 2023: 24.2, 2024: 23.3, 2025: 16.4, 2026: 6.8 };
@@ -422,8 +422,8 @@ function drawAnnualRegimeChart() {
   drawLabel(
     ctx,
     compact
-      ? (lang === "zh" ? "复利计算，不是相加。" : "Compounded, not summed.")
-      : (lang === "zh" ? "年度数字以复利方式组成 2022-2026 总 ROI。" : "Annual returns compound into the 2022-2026 total ROI."),
+      ? (lang === "zh" ? "年度贡献，合并成总 ROI。" : "Annual contribution to total ROI.")
+      : (lang === "zh" ? "每一年显示对 2022-2026 总 ROI 的贡献。" : "Each year shows its contribution to the 2022-2026 total ROI."),
     pad.l,
     22,
     COLORS.muted,

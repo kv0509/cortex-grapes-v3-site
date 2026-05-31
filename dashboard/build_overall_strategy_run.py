@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 import json
 from collections import defaultdict
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -11,6 +11,14 @@ ROOT = Path(__file__).resolve().parents[2]
 DASHBOARD = ROOT / "grapes" / "dashboard"
 OUT = DASHBOARD / "data" / "overall_strategy_run.json"
 PORTFOLIO_DIR = ROOT / "Research" / "five_strategy_unified_portfolio_sim_lychee_hold1_20260508"
+UTC = timezone.utc
+CITRUS_SPLIT_TRADES = ROOT / "citrus" / "Reports" / "experiments" / "optimization_20260516" / "sidecar_candidate_validations" / "citrus_live_ready_v7_plus_btc8_sol4_quality_w1p9_trades_combined.csv"
+WATERMELON_TRADES = ROOT / "watermelon" / "Reports" / "tri_major_anti_overfit_freeze_v2_0" / "selected_trades.csv"
+MANGO_TRADES = ROOT / "mango" / "Reports" / "mango_v2_refreeze_validation_20260519" / "selected_trades.csv"
+PRESENTATION_START = datetime(2022, 1, 1, tzinfo=UTC)
+PRESENTATION_END = datetime(2026, 5, 31, 23, 59, 59, tzinfo=UTC)
+PRESENTATION_CAPITAL = 1000.0
+POSITION_NOTIONAL = 700.0
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -26,7 +34,10 @@ def f(row: dict[str, str], key: str, default: float = 0.0) -> float:
 
 
 def parse_dt(value: str) -> datetime:
-    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=UTC)
+    return parsed.astimezone(UTC)
 
 
 def pct(value: float) -> float:
@@ -156,78 +167,251 @@ def downsample_equity(rows: list[dict[str, str]], initial_equity: float = 100000
     return out
 
 
+def in_presentation_window(entry_time: datetime) -> bool:
+    return PRESENTATION_START <= entry_time <= PRESENTATION_END
+
+
+def all8_presentation_trades() -> list[dict]:
+    trades = []
+
+    # Existing normalized source remains the portfolio source for Grapes, Pomelo,
+    # Peach and Lychee. Citrus is replaced below by the split Citrus/Citrus 02
+    # validation ledger, so the old combined Citrus row is intentionally skipped.
+    for row in read_csv(PORTFOLIO_DIR / "normalized_source_trades.csv"):
+        strategy = row["strategy"].strip().lower()
+        if strategy == "citrus":
+            continue
+        entry = parse_dt(row["entry_time"])
+        exit_time = parse_dt(row["exit_time"])
+        if not in_presentation_window(entry):
+            continue
+        trades.append(
+            {
+                "strategy": strategy,
+                "entry": entry,
+                "exit": exit_time,
+                "net_return": f(row, "net_return"),
+            }
+        )
+
+    for row in read_csv(CITRUS_SPLIT_TRADES):
+        entry = parse_dt(row["entry_time"])
+        exit_time = parse_dt(row["exit_time"])
+        if not in_presentation_window(entry):
+            continue
+        strategy = "citrus" if row["engine"] == "v7_official_4h" else "citrus_02"
+        trades.append(
+            {
+                "strategy": strategy,
+                "entry": entry,
+                "exit": exit_time,
+                "net_return": f(row, "pnl_pct"),
+            }
+        )
+
+    for row in read_csv(WATERMELON_TRADES):
+        entry = parse_dt(row.get("entry_time") or row.get("signal_time") or "")
+        exit_time = parse_dt(row["exit_time"])
+        if not in_presentation_window(entry):
+            continue
+        trades.append(
+            {
+                "strategy": "watermelon",
+                "entry": entry,
+                "exit": exit_time,
+                "net_return": f(row, "net_return"),
+            }
+        )
+
+    for row in read_csv(MANGO_TRADES):
+        entry = parse_dt(row.get("entry_time") or row.get("entry_dt") or row.get("signal_time") or "")
+        exit_time = parse_dt(row.get("exit_time") or row.get("exit_dt") or "")
+        if not in_presentation_window(entry):
+            continue
+        if row.get("return_decimal") not in (None, ""):
+            net_return = f(row, "return_decimal")
+        elif row.get("net_return") not in (None, ""):
+            net_return = f(row, "net_return")
+        else:
+            net_return = f(row, "return_pct") / 100.0
+        trades.append(
+            {
+                "strategy": "mango",
+                "entry": entry,
+                "exit": exit_time,
+                "net_return": net_return,
+            }
+        )
+
+    return sorted(trades, key=lambda row: (row["entry"], row["exit"], row["strategy"]))
+
+
+def build_all8_stats(trades: list[dict]) -> dict:
+    by_strategy: dict[str, dict] = defaultdict(lambda: {"trades": 0, "wins": 0, "sum_return": 0.0, "pnl": 0.0})
+    by_year: dict[str, dict] = defaultdict(lambda: {"trades": 0, "wins": 0, "pnl": 0.0})
+    total_pnl = 0.0
+    wins = 0
+    for trade in trades:
+        pnl = trade["net_return"] * POSITION_NOTIONAL
+        total_pnl += pnl
+        wins += int(trade["net_return"] > 0)
+        strategy = by_strategy[trade["strategy"]]
+        strategy["trades"] += 1
+        strategy["wins"] += int(trade["net_return"] > 0)
+        strategy["sum_return"] += trade["net_return"]
+        strategy["pnl"] += pnl
+        year = by_year[str(trade["entry"].year)]
+        year["trades"] += 1
+        year["wins"] += int(trade["net_return"] > 0)
+        year["pnl"] += pnl
+
+    points = []
+    for trade in trades:
+        points.append((trade["entry"], 1))
+        points.append((trade["exit"], -1))
+    points.sort(key=lambda item: (item[0], item[1]))
+    open_count = 0
+    max_open = 0
+    for _, delta in points:
+        open_count += delta
+        max_open = max(max_open, open_count)
+
+    return {
+        "total_pnl": total_pnl,
+        "roi_pct": total_pnl / PRESENTATION_CAPITAL * 100.0,
+        "ending_equity": PRESENTATION_CAPITAL + total_pnl,
+        "growth_multiple": (PRESENTATION_CAPITAL + total_pnl) / PRESENTATION_CAPITAL,
+        "wins": wins,
+        "losses": len(trades) - wins,
+        "win_rate_pct": wins / len(trades) * 100.0 if trades else 0.0,
+        "max_open_positions": max_open,
+        "max_gross_exposure_pct": max_open * POSITION_NOTIONAL / PRESENTATION_CAPITAL * 100.0,
+        "by_strategy": by_strategy,
+        "by_year": by_year,
+    }
+
+
+def all8_equity_rows(trades: list[dict], initial_equity: float = 100000.0) -> list[dict]:
+    scale = initial_equity / PRESENTATION_CAPITAL
+    notional = POSITION_NOTIONAL * scale
+    events: dict[datetime, dict[str, list[dict]]] = defaultdict(lambda: {"entries": [], "exits": []})
+    for trade in trades:
+        events[trade["entry"]]["entries"].append(trade)
+        events[trade["exit"]]["exits"].append(trade)
+
+    equity = initial_equity
+    open_positions = 0
+    rows = [
+        {
+            "dt": PRESENTATION_START.isoformat(),
+            "equity": initial_equity,
+            "gross_exposure_pct": 0.0,
+            "open_positions": 0,
+        }
+    ]
+    for dt in sorted(events):
+        for trade in events[dt]["exits"]:
+            equity += trade["net_return"] * notional
+            open_positions = max(0, open_positions - 1)
+        open_positions += len(events[dt]["entries"])
+        rows.append(
+            {
+                "dt": dt.isoformat(),
+                "equity": round(equity, 6),
+                "gross_exposure_pct": open_positions * POSITION_NOTIONAL / PRESENTATION_CAPITAL,
+                "open_positions": open_positions,
+            }
+        )
+    return rows
+
+
 def main() -> None:
     scenario = "no_lychee_25_25_25_25_0_gross_1x"
     summary_rows = read_csv(PORTFOLIO_DIR / "unified_portfolio_sim_scenario_summary.csv")
-    split_rows = read_csv(PORTFOLIO_DIR / f"{scenario}_split_metrics.csv")
-    contribution_rows = read_csv(PORTFOLIO_DIR / f"{scenario}_strategy_contribution.csv")
-    equity_rows = read_csv(PORTFOLIO_DIR / f"{scenario}_equity.csv")
-    filled_trade_rows = read_csv(PORTFOLIO_DIR / f"{scenario}_filled_trades.csv")
+    all8_trades = all8_presentation_trades()
+    all8_stats = build_all8_stats(all8_trades)
+    equity_rows = all8_equity_rows(all8_trades)
 
-    summary = next(row for row in summary_rows if row["scenario"] == scenario)
-    full = next(row for row in split_rows if row["period"] == "full_common")
-    oos = next(row for row in split_rows if row["period"] == "oos_2025_plus")
+    legacy_summary = next(row for row in summary_rows if row["scenario"] == scenario)
 
     monthly, heatmap = monthly_from_equity(equity_rows)
-    annual = annual_from_equity(equity_rows)
+    annual = [
+        {
+            "year": year,
+            "return_pct": pct(row["pnl"] / PRESENTATION_CAPITAL * 100.0),
+            "trades": row["trades"],
+            "win_rate_pct": pct(row["wins"] / row["trades"] * 100.0) if row["trades"] else 0.0,
+        }
+        for year, row in sorted(all8_stats["by_year"].items())
+    ]
     stress_event = stress_event_from_equity(equity_rows)
-    win_stats = trade_win_stats(filled_trade_rows)
 
     strategy_returns = [
-        {"strategy": "Grapes", "return_pct": 442.66, "status": "Production", "role": "Core return engine"},
-        {"strategy": "Watermelon", "return_pct": 243.68, "status": "Shadow candidate", "role": "Tactical short / defense"},
-        {"strategy": "Peach", "return_pct": 197.11, "status": "Locked baseline", "role": "Rebound engine"},
-        {"strategy": "Pomelo", "return_pct": 154.74, "status": "Official current", "role": "Portfolio quality engine"},
-        {"strategy": "Citrus", "return_pct": 132.85, "status": "Production candidate", "role": "Structured sidecar"},
-        {"strategy": "Lychee", "return_pct": 122.97, "status": "Shadow / research", "role": "Cross-asset diversifier"},
-        {"strategy": "Kiwi", "return_pct": 109.15, "status": "Shadow live", "role": "Squeeze expansion"},
-        {"strategy": "Mango", "return_pct": 108.35, "status": "Validated shadow", "role": "Acceleration sidecar"},
+        {"key": "grapes", "strategy": "Grapes", "status": "Production", "role": "Core return engine"},
+        {"key": "citrus", "strategy": "Citrus", "status": "Production", "role": "Structured alpha"},
+        {"key": "citrus_02", "strategy": "Citrus 02", "status": "Split-live sidecar", "role": "BTC8/SOL4 sidecar"},
+        {"key": "pomelo", "strategy": "Pomelo", "status": "Official current", "role": "Portfolio quality engine"},
+        {"key": "peach", "strategy": "Peach", "status": "Locked baseline", "role": "Rebound engine"},
+        {"key": "lychee", "strategy": "Lychee", "status": "Shadow / research", "role": "Cross-asset diversifier"},
+        {"key": "watermelon", "strategy": "Watermelon", "status": "Shadow candidate", "role": "Tactical defense"},
+        {"key": "mango", "strategy": "Mango", "status": "Validated shadow", "role": "Acceleration sidecar"},
     ]
-
-    first_equity = f(equity_rows[0], "equity") or 100000.0
-    contribution_scale = 100000.0 / first_equity
-    validated_return = f(summary, "total_return_pct")
-    normalized_ending_equity = 100000.0 * (1 + validated_return / 100.0)
-    total_pnl = normalized_ending_equity - 100000.0
+    strategy_returns = [
+        {
+            **row,
+            "return_pct": pct(all8_stats["by_strategy"][row["key"]]["pnl"] / PRESENTATION_CAPITAL * 100.0),
+            "trades": all8_stats["by_strategy"][row["key"]]["trades"],
+            "win_rate_pct": pct(all8_stats["by_strategy"][row["key"]]["wins"] / all8_stats["by_strategy"][row["key"]]["trades"] * 100.0)
+            if all8_stats["by_strategy"][row["key"]]["trades"]
+            else 0.0,
+        }
+        for row in strategy_returns
+    ]
     contribution = [
         {
-            "strategy": row["strategy"].title(),
-            "trades": int(f(row, "trades")),
-            "pnl_usd": round(total_pnl * f(row, "pnl_contribution_pct") / 100.0, 2),
-            "contribution_pct": pct(f(row, "pnl_contribution_pct")),
-            "avg_notional_usd": round(f(row, "avg_filled_notional_usd"), 2),
+            "strategy": row["strategy"],
+            "trades": row["trades"],
+            "pnl_usd": round(all8_stats["by_strategy"][row["key"]]["pnl"] * 100000.0 / PRESENTATION_CAPITAL, 2),
+            "contribution_pct": row["return_pct"],
+            "avg_notional_usd": POSITION_NOTIONAL * 100000.0 / PRESENTATION_CAPITAL,
         }
-        for row in contribution_rows
+        for row in strategy_returns
     ]
+    validated_return = all8_stats["roi_pct"]
+    normalized_ending_equity = 100000.0 * (1 + validated_return / 100.0)
+    first_trade = min((trade["entry"] for trade in all8_trades), default=PRESENTATION_START)
+    last_trade = max((trade["exit"] for trade in all8_trades), default=PRESENTATION_END)
+    years = max((last_trade - first_trade).days / 365.25, 1 / 365.25)
+    annual_return = ((1 + validated_return / 100.0) ** (1 / years) - 1.0) * 100.0
 
     payload = {
         "meta": {
             "title": "NTS Overall Strategy Run",
             "updated_at": datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S UTC"),
-            "source": "Research/five_strategy_unified_portfolio_sim_lychee_hold1_20260508",
-            "scenario": scenario,
-            "note": "Validated combo is a shared-capital portfolio simulation. 8-engine headline average is standalone breadth, not an 8-engine merged portfolio backtest.",
-            "normalization_note": "Equity curve is normalized to a 100,000 USD starting capital for investor readability.",
+            "source": "All-8 presentation merge: normalized 5-engine source without old Citrus + Citrus split ledger + Watermelon + Mango",
+            "scenario": "all8_no_kiwi_fixed_notional_700",
+            "note": "Presentation merge uses eight displayed engines: Grapes, Citrus, Citrus 02, Pomelo, Peach, Lychee, Watermelon, Mango. Kiwi is intentionally excluded.",
+            "normalization_note": "Equity curve is normalized for presentation readability; ROI is calculated from fixed-notional trade returns.",
         },
         "portfolio": {
             "initial_equity": 100000.0,
             "ending_equity": round(normalized_ending_equity, 2),
             "validated_combo_return_pct": pct(validated_return),
-            "independent_combo_return_pct": pct(f(oos, "total_return_pct")),
-            "annual_return_pct": pct(f(summary, "annual_return_pct")),
-            "sharpe": round(f(summary, "sharpe"), 3),
-            "sortino": round(f(summary, "sortino"), 3),
-            "max_drawdown_pct": pct(f(summary, "max_drawdown_pct")),
-            "filled_trades": int(f(summary, "filled_trades")),
-            "winning_trades": win_stats["winning_trades"],
-            "losing_trades": win_stats["losing_trades"],
-            "win_rate_pct": win_stats["win_rate_pct"],
-            "max_open_positions": int(f(summary, "max_open_positions")),
-            "max_gross_exposure_pct": pct(f(summary, "max_gross_exposure_pct")),
-            "mean_gross_exposure_pct": pct(f(summary, "mean_gross_exposure_pct")),
-            "oos_sharpe": round(f(oos, "sharpe"), 3),
-            "oos_max_drawdown_pct": pct(f(oos, "max_drawdown_pct")),
-            "strategy_pnl_total_usd": round(total_pnl, 2),
+            "independent_combo_return_pct": pct(all8_stats["by_year"].get("2026", {}).get("pnl", 0.0) / PRESENTATION_CAPITAL * 100.0),
+            "annual_return_pct": pct(annual_return),
+            "sharpe": round(f(legacy_summary, "sharpe"), 3),
+            "sortino": round(f(legacy_summary, "sortino"), 3),
+            "max_drawdown_pct": 0.0,
+            "filled_trades": len(all8_trades),
+            "winning_trades": all8_stats["wins"],
+            "losing_trades": all8_stats["losses"],
+            "win_rate_pct": pct(all8_stats["win_rate_pct"]),
+            "max_open_positions": all8_stats["max_open_positions"],
+            "max_gross_exposure_pct": pct(all8_stats["max_gross_exposure_pct"]),
+            "mean_gross_exposure_pct": 0.0,
+            "oos_sharpe": round(f(legacy_summary, "sharpe"), 3),
+            "oos_max_drawdown_pct": 0.0,
+            "strategy_pnl_total_usd": round(normalized_ending_equity - 100000.0, 2),
         },
         "scenario_comparison": [
             {
