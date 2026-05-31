@@ -1,4 +1,4 @@
-const DATA_URL = "./data/overall_strategy_run.json?v=20260531-annual-1";
+const DATA_URL = "./data/overall_strategy_run.json?v=20260531-stress-1";
 const FD_RETURN = 8.03;
 const SP500_RETURN = 56.1;
 const SP500_YEARLY = { 2022: -19.4, 2023: 24.2, 2024: 23.3, 2025: 16.4, 2026: 6.8 };
@@ -515,6 +515,70 @@ function drawRegimeExplainerChart() {
   drawLabel(ctx, "Return rhythm changes with market structure; the portfolio adapts by engine participation.", chartX, h - 28, COLORS.muted, 14, 720);
 }
 
+function drawStressSurvivalChart() {
+  const canvas = $("stress-survival-chart");
+  const state = clear(canvas);
+  if (!state) return;
+  const { ctx, w, h } = state;
+  const event = DATA.stress_event || {};
+  const points = event.points || [];
+  const compact = w < 520;
+  const pad = compact ? { l: 34, r: 22, t: 42, b: 68 } : { l: 54, r: 34, t: 62, b: 82 };
+  const values = points.map((point) => Number(point.equity_index || 0));
+  const min = Math.min(-0.2, ...values);
+  const max = Math.max(1.8, ...values);
+  const sx = (i) => pad.l + i * (w - pad.l - pad.r) / Math.max(1, points.length - 1);
+  const sy = (v) => h - pad.b - (v - min) / (max - min || 1) * (h - pad.t - pad.b);
+
+  ctx.strokeStyle = "rgba(247,244,236,.14)";
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 4; i++) {
+    const y = pad.t + i * (h - pad.t - pad.b) / 3;
+    ctx.beginPath();
+    ctx.moveTo(pad.l, y);
+    ctx.lineTo(w - pad.r, y);
+    ctx.stroke();
+  }
+
+  const eventIndex = Math.max(0, points.findIndex((point) => point.date === event.date));
+  const eventX = sx(eventIndex);
+  ctx.strokeStyle = COLORS.gold;
+  ctx.lineWidth = 2;
+  ctx.setLineDash([5, 7]);
+  ctx.beginPath();
+  ctx.moveTo(eventX, pad.t);
+  ctx.lineTo(eventX, h - pad.b + 22);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.strokeStyle = "#f7f4ec";
+  ctx.lineWidth = compact ? 3 : 4;
+  ctx.beginPath();
+  points.forEach((point, i) => {
+    const x = sx(i);
+    const y = sy(Number(point.equity_index || 0));
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  drawLabel(ctx, lang === "zh" ? "2025年10月11日" : "11 Oct 2025", eventX + 8, pad.t + 16, COLORS.gold, compact ? 11 : 13, 820);
+  drawLabel(ctx, lang === "zh" ? "清算冲击窗口" : "Liquidation shock window", pad.l, pad.t - 18, "rgba(247,244,236,.7)", compact ? 11 : 13, 760);
+
+  const metrics = [
+    [lang === "zh" ? "窗口后状态" : "Window outcome", fmtPct(event.window_return_pct || 0, 2)],
+    [lang === "zh" ? "最大持仓数" : "Max open positions", String(event.max_open_positions || 0)],
+    [lang === "zh" ? "冲击窗口" : "Shock window", lang === "zh" ? "接近持平" : "Near-flat"],
+  ];
+  const boxW = compact ? (w - 40) / 3 : (w - 80) / 3;
+  metrics.forEach(([label, value], i) => {
+    const x = (compact ? 20 : 40) + i * boxW;
+    const y = h - (compact ? 48 : 58);
+    drawLabel(ctx, value, x, y, "#f7f4ec", compact ? 18 : 24, 860);
+    drawLabel(ctx, label, x, y + 18, "rgba(247,244,236,.55)", compact ? 8 : 10, 760);
+  });
+}
+
 function drawMonthlyDistribution() {
   const canvas = $("monthly-distribution-chart");
   const state = clear(canvas);
@@ -865,6 +929,7 @@ function drawAllCharts() {
   drawBenchmarkChart();
   drawAnnualRegimeChart();
   drawRegimeExplainerChart();
+  drawStressSurvivalChart();
   drawMonthlyDistribution();
   drawContributionWheel();
   drawStrategyRoiChart();
@@ -909,6 +974,7 @@ function visibleCharts() {
   if (active.querySelector("#benchmark-chart")) drawBenchmarkChart();
   if (active.querySelector("#annual-regime-chart")) drawAnnualRegimeChart();
   if (active.querySelector("#regime-explainer-chart")) drawRegimeExplainerChart();
+  if (active.querySelector("#stress-survival-chart")) drawStressSurvivalChart();
   if (active.querySelector("#monthly-distribution-chart")) drawMonthlyDistribution();
   if (active.querySelector("#contribution-wheel")) drawContributionWheel();
   if (active.querySelector("#strategy-roi-chart")) drawStrategyRoiChart();

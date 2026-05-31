@@ -80,6 +80,40 @@ def annual_from_equity(rows: list[dict[str, str]]) -> list[dict]:
     return annual
 
 
+def stress_event_from_equity(rows: list[dict[str, str]]) -> dict:
+    start = datetime(2025, 10, 10, tzinfo=UTC)
+    end = datetime(2025, 10, 20, 23, 59, 59, tzinfo=UTC)
+    event_day = "2025-10-11"
+    window = [row for row in rows if start <= parse_dt(row["dt"]) <= end]
+    if not window:
+        return {"date": event_day, "points": [], "window_return_pct": 0.0, "shock_window_return_pct": 0.0, "max_open_positions": 0}
+
+    window_start = f(window[0], "equity")
+    window_end = f(window[-1], "equity")
+    shock_rows = [row for row in window if datetime(2025, 10, 11, tzinfo=UTC) <= parse_dt(row["dt"]) <= datetime(2025, 10, 12, 23, 59, 59, tzinfo=UTC)]
+    shock_start = f(shock_rows[0], "equity") if shock_rows else window_start
+    shock_end = f(shock_rows[-1], "equity") if shock_rows else window_end
+    points = [
+        {
+            "dt": row["dt"],
+            "date": parse_dt(row["dt"]).strftime("%Y-%m-%d"),
+            "equity_index": pct(((f(row, "equity") / window_start) - 1.0) * 100.0) if window_start else 0.0,
+            "gross_exposure_pct": pct(f(row, "gross_exposure_pct")),
+            "open_positions": int(f(row, "open_positions")),
+        }
+        for row in window
+    ]
+    return {
+        "date": event_day,
+        "window": "2025-10-10 to 2025-10-20",
+        "points": points,
+        "window_return_pct": pct(((window_end / window_start) - 1.0) * 100.0) if window_start else 0.0,
+        "shock_window_return_pct": pct(((shock_end / shock_start) - 1.0) * 100.0) if shock_start else 0.0,
+        "max_open_positions": max((point["open_positions"] for point in points), default=0),
+        "max_gross_exposure_pct": pct(max((point["gross_exposure_pct"] for point in points), default=0.0)),
+    }
+
+
 def trade_win_stats(rows: list[dict[str, str]]) -> dict[str, float | int]:
     if not rows:
         return {"winning_trades": 0, "losing_trades": 0, "win_rate_pct": 0.0}
@@ -136,6 +170,7 @@ def main() -> None:
 
     monthly, heatmap = monthly_from_equity(equity_rows)
     annual = annual_from_equity(equity_rows)
+    stress_event = stress_event_from_equity(equity_rows)
     win_stats = trade_win_stats(filled_trade_rows)
 
     strategy_returns = [
@@ -206,6 +241,7 @@ def main() -> None:
             for row in summary_rows
         ],
         "annual_returns": annual,
+        "stress_event": stress_event,
         "equity_curve": downsample_equity(equity_rows),
         "monthly_returns": monthly,
         "monthly_heatmap": heatmap,

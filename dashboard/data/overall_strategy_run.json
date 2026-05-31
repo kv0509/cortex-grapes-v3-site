@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "NTS Overall Strategy Run",
-    "updated_at": "2026-05-31 05:54:39 UTC",
+    "updated_at": "2026-05-31 07:26:00 UTC",
     "source": "Research/five_strategy_unified_portfolio_sim_lychee_hold1_20260508",
     "scenario": "no_lychee_25_25_25_25_0_gross_1x",
     "note": "Validated combo is a shared-capital portfolio simulation. 8-engine headline average is standalone breadth, not an 8-engine merged portfolio backtest.",
@@ -141,6 +141,478 @@
       "end_equity": 345499.25
     }
   ],
+  "stress_event": {
+    "date": "2025-10-11",
+    "window": "2025-10-10 to 2025-10-20",
+    "points": [
+      {
+        "dt": "2025-10-10 00:00:00+00:00",
+        "date": "2025-10-10",
+        "equity_index": 0.0,
+        "gross_exposure_pct": 0.05,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-10 04:00:00+00:00",
+        "date": "2025-10-10",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-10 08:00:00+00:00",
+        "date": "2025-10-10",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-10 12:00:00+00:00",
+        "date": "2025-10-10",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-10 16:00:00+00:00",
+        "date": "2025-10-10",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-10 20:00:00+00:00",
+        "date": "2025-10-10",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-11 00:00:00+00:00",
+        "date": "2025-10-11",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-11 04:00:00+00:00",
+        "date": "2025-10-11",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-11 08:00:00+00:00",
+        "date": "2025-10-11",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-11 12:00:00+00:00",
+        "date": "2025-10-11",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-11 16:00:00+00:00",
+        "date": "2025-10-11",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-11 20:00:00+00:00",
+        "date": "2025-10-11",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-12 00:00:00+00:00",
+        "date": "2025-10-12",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-12 04:00:00+00:00",
+        "date": "2025-10-12",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-12 08:00:00+00:00",
+        "date": "2025-10-12",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-12 12:00:00+00:00",
+        "date": "2025-10-12",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-12 16:00:00+00:00",
+        "date": "2025-10-12",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-12 20:00:00+00:00",
+        "date": "2025-10-12",
+        "equity_index": -0.05,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-13 00:00:00+00:00",
+        "date": "2025-10-13",
+        "equity_index": -0.04,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-13 04:00:00+00:00",
+        "date": "2025-10-13",
+        "equity_index": -0.09,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-13 08:00:00+00:00",
+        "date": "2025-10-13",
+        "equity_index": 0.0,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-13 12:00:00+00:00",
+        "date": "2025-10-13",
+        "equity_index": -0.01,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-13 16:00:00+00:00",
+        "date": "2025-10-13",
+        "equity_index": -0.11,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-13 20:00:00+00:00",
+        "date": "2025-10-13",
+        "equity_index": -0.07,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-14 00:00:00+00:00",
+        "date": "2025-10-14",
+        "equity_index": 0.05,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-14 04:00:00+00:00",
+        "date": "2025-10-14",
+        "equity_index": 0.18,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-14 08:00:00+00:00",
+        "date": "2025-10-14",
+        "equity_index": 0.21,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-14 12:00:00+00:00",
+        "date": "2025-10-14",
+        "equity_index": 0.1,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-14 16:00:00+00:00",
+        "date": "2025-10-14",
+        "equity_index": 0.12,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-14 20:00:00+00:00",
+        "date": "2025-10-14",
+        "equity_index": 0.09,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-15 00:00:00+00:00",
+        "date": "2025-10-15",
+        "equity_index": 0.16,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-15 04:00:00+00:00",
+        "date": "2025-10-15",
+        "equity_index": 0.12,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-15 08:00:00+00:00",
+        "date": "2025-10-15",
+        "equity_index": 0.17,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-15 12:00:00+00:00",
+        "date": "2025-10-15",
+        "equity_index": 0.25,
+        "gross_exposure_pct": 0.08,
+        "open_positions": 1
+      },
+      {
+        "dt": "2025-10-15 16:00:00+00:00",
+        "date": "2025-10-15",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-15 20:00:00+00:00",
+        "date": "2025-10-15",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-16 00:00:00+00:00",
+        "date": "2025-10-16",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-16 04:00:00+00:00",
+        "date": "2025-10-16",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-16 08:00:00+00:00",
+        "date": "2025-10-16",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-16 12:00:00+00:00",
+        "date": "2025-10-16",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-16 16:00:00+00:00",
+        "date": "2025-10-16",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-16 20:00:00+00:00",
+        "date": "2025-10-16",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-17 00:00:00+00:00",
+        "date": "2025-10-17",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-17 04:00:00+00:00",
+        "date": "2025-10-17",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-17 08:00:00+00:00",
+        "date": "2025-10-17",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-17 12:00:00+00:00",
+        "date": "2025-10-17",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-17 16:00:00+00:00",
+        "date": "2025-10-17",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-17 20:00:00+00:00",
+        "date": "2025-10-17",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-18 00:00:00+00:00",
+        "date": "2025-10-18",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-18 04:00:00+00:00",
+        "date": "2025-10-18",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-18 08:00:00+00:00",
+        "date": "2025-10-18",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-18 12:00:00+00:00",
+        "date": "2025-10-18",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-18 16:00:00+00:00",
+        "date": "2025-10-18",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-18 20:00:00+00:00",
+        "date": "2025-10-18",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-19 00:00:00+00:00",
+        "date": "2025-10-19",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-19 04:00:00+00:00",
+        "date": "2025-10-19",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-19 08:00:00+00:00",
+        "date": "2025-10-19",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-19 12:00:00+00:00",
+        "date": "2025-10-19",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-19 16:00:00+00:00",
+        "date": "2025-10-19",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-19 20:00:00+00:00",
+        "date": "2025-10-19",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-20 00:00:00+00:00",
+        "date": "2025-10-20",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-20 04:00:00+00:00",
+        "date": "2025-10-20",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-20 08:00:00+00:00",
+        "date": "2025-10-20",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-20 12:00:00+00:00",
+        "date": "2025-10-20",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-20 16:00:00+00:00",
+        "date": "2025-10-20",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      },
+      {
+        "dt": "2025-10-20 20:00:00+00:00",
+        "date": "2025-10-20",
+        "equity_index": 0.22,
+        "gross_exposure_pct": 0.0,
+        "open_positions": 0
+      }
+    ],
+    "window_return_pct": 0.22,
+    "shock_window_return_pct": -0.04,
+    "max_open_positions": 1,
+    "max_gross_exposure_pct": 0.08
+  },
   "equity_curve": [
     {
       "dt": "2022-01-16 20:00:00+00:00",
